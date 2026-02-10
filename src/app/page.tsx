@@ -1,94 +1,46 @@
 'use client'
+import React from 'react';
+// Importamos los iconos necesarios
+import { Zap, Bot, GraduationCap, Newspaper, Users, Lock } from 'lucide-react';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Lock } from 'lucide-react'
-
-export default function AdminLogin() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
-    const router = useRouter()
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setError('')
-
-        try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
-            })
-
-            if (res.ok) {
-                router.push('/admin/dashboard')
-                router.refresh()
-            } else {
-                const data = await res.json()
-                setError(data.error || 'Login failed')
-            }
-        } catch (err) {
-            setError('An error occurred')
-        }
-    }
-
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white">
-            <div className="w-full max-w-md p-8 space-y-8 bg-gray-900 rounded-lg border border-gray-800 shadow-2xl">
-                <div className="text-center">
-                    <div className="mx-auto h-12 w-12 bg-cyan-500 rounded-full flex items-center justify-center mb-4 shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-                        <Lock className="text-black" size={24} />
-                    </div>
-                    <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
-                        Admin Portal
-                    </h2>
-                    <p className="mt-2 text-gray-400">Partners IA Solutions</p>
-                </div>
-
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    {error && (
-                        <div className="bg-red-900/50 border border-red-500 text-red-200 text-sm p-3 rounded">
-                            {error}
-                        </div>
-                    )}
-                    <div className="space-y-4">
-                        <div>
-                            <label htmlFor="username" className="block text-sm font-medium text-gray-300">
-                                Username
-                            </label>
-                            <input
-                                id="username"
-                                type="text"
-                                required
-                                className="mt-1 w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-300">
-                                Password
-                            </label>
-                            <input
-                                id="password"
-                                type="password"
-                                required
-                                className="mt-1 w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-colors shadow-[0_0_10px_rgba(6,182,212,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.5)]"
-                    >
-                        Sign in
-                    </button>
-                </form>
-            </div>
+export default function Home() {
+  return (
+    <div className="bg-white text-black min-h-screen font-sans">
+      {/* Navegación */}
+      <nav className="flex justify-between items-center p-6 max-w-7xl mx-auto">
+        <div className="flex items-center gap-2">
+          <div className="bg-black text-white p-2 rounded-lg font-bold">P</div>
+          <span className="font-bold text-xl">PartnersIA</span>
         </div>
-    )
+        <div className="hidden md:flex gap-8 text-gray-600">
+          <a href="#">Soluciones</a>
+          <a href="#">Escuela</a>
+          <a href="#">Noticias IA</a>
+          <a href="#">Podcast</a>
+          <a href="#">Contacto</a>
+        </div>
+        <div className="flex items-center gap-4">
+          <button className="text-gray-600">Acceso</button>
+          <button className="bg-black text-white px-6 py-2 rounded-full">Contactar</button>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <main className="text-center py-20 px-4">
+        <div className="inline-flex items-center gap-2 border border-gray-200 rounded-full px-4 py-1 mb-8">
+          <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+          <span className="text-sm font-medium">Liderando la Revolución de la IA</span>
+        </div>
+        
+        <h1 className="text-5xl md:text-7xl font-bold mb-6">
+          Transformamos el Futuro<br />
+          <span className="text-blue-600">Con Inteligencia Artificial</span>
+        </h1>
+        
+        <p className="max-w-2xl mx-auto text-xl text-gray-500 mb-10">
+          Diseñamos, construimos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.
+        </p>
+      </main>
+    </div>
+  );
 }
