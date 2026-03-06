@@ -112,7 +112,7 @@ export default function NewsPage() {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5, delay: idx * 0.05 }}
-                                    className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-xl transition-all flex flex-col h-full"
+                                    className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-xl transition-all flex flex-col h-full items-center md:items-start text-center md:text-left"
                                 >
                                     {/* Cover Image */}
                                     <div className="h-48 bg-gray-100 relative overflow-hidden">

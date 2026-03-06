@@ -104,7 +104,7 @@ export default function HomePage() {
             {/* FEATURED SOLUTIONS SECTION */}
             <section className="py-12 lg:py-16 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="text-center mb-10">
+                    <div className="text-center mb-10 px-4">
                         <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-3 tracking-tight">
                             Soluciones Destacadas
                         </h2>
@@ -126,7 +126,7 @@ export default function HomePage() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                    className="group p-6 lg:p-8 rounded-2xl bg-white border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all"
+                                    className="group p-6 lg:p-8 rounded-2xl bg-white border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all flex flex-col items-center md:items-start text-center md:text-left"
                                 >
                                     {solution.multimedia && (
                                         <div className="w-full h-40 mb-4 rounded-xl overflow-hidden bg-gray-100">

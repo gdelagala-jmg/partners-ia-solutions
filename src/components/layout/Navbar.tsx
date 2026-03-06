@@ -154,7 +154,7 @@ export default function Navbar({ session }: { session?: any }) {
                             key={item.name}
                             href={item.href}
                             onClick={() => setIsOpen(false)}
-                            className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all ${pathname === item.href || pathname.startsWith(item.href)
+                            className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all text-center ${pathname === item.href || pathname.startsWith(item.href)
                                 ? 'text-gray-900 bg-gray-100'
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                 }`}

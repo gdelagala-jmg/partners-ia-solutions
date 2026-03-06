@@ -100,7 +100,7 @@ export default function SectorDashboard() {
                                 {/* Content Overlay */}
                                 <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                                     <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl transform transition-all duration-500 group-hover:bg-white/20 group-hover:scale-105 shadow-2xl">
-                                        <h3 className="text-xl md:text-2xl font-bold tracking-tight !text-white drop-shadow-lg">
+                                        <h3 className="text-xl md:text-2xl font-bold tracking-tight !text-white drop-shadow-lg px-2">
                                             {sector.name}
                                         </h3>
                                         <div className="mt-1 text-[10px] text-blue-200 font-bold uppercase tracking-[0.2em]">

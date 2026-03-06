@@ -87,19 +87,19 @@ export default function ContactPage() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="space-y-6"
+                            className="space-y-6 flex flex-col items-center md:items-start w-full"
                         >
-                            <div className="bg-gray-50 border border-gray-200 p-6 lg:p-8 rounded-2xl">
-                                <h3 className="text-xl font-semibold text-gray-900 mb-6">Información de Contacto</h3>
+                            <div className="bg-gray-50 border border-gray-200 p-6 lg:p-8 rounded-2xl w-[90%] md:w-full shadow-sm">
+                                <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center md:text-left">Información de Contacto</h3>
 
                                 <div className="space-y-5">
                                     <div className="flex items-start">
                                         <div className="flex-shrink-0 h-10 w-10 bg-white rounded-xl flex items-center justify-center border border-gray-200">
                                             <Mail className="text-gray-900" size={18} />
                                         </div>
-                                        <div className="ml-4">
+                                        <div className="ml-4 overflow-hidden">
                                             <p className="text-xs font-medium text-gray-600">Email</p>
-                                            <p className="text-base text-gray-900 font-medium">info@partnersiasolutions.com</p>
+                                            <p className="text-sm md:text-base text-gray-900 font-medium break-words">info@partnersiasolutions.com</p>
                                         </div>
                                     </div>
 
@@ -126,8 +126,8 @@ export default function ContactPage() {
                             </div>
 
                             {/* Social Links */}
-                            <div className="bg-gray-50 border border-gray-200 p-6 lg:p-8 rounded-2xl">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-4">Síguenos</h3>
+                            <div className="bg-gray-50 border border-gray-200 p-6 lg:p-8 rounded-2xl w-[90%] md:w-full shadow-sm">
+                                <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center md:text-left">Síguenos</h3>
                                 <div className="grid grid-cols-3 gap-3">
                                     {socialLinks.map((social) => (
                                         <Link
@@ -152,7 +152,7 @@ export default function ContactPage() {
                             transition={{ duration: 0.6 }}
                         >
                             <div className="bg-white border border-gray-200 p-6 lg:p-8 rounded-2xl shadow-sm">
-                                <h3 className="text-xl font-semibold text-gray-900 mb-5">Envíanos un Mensaje</h3>
+                                <h3 className="text-xl font-semibold text-gray-900 mb-5 text-center md:text-left">Envíanos un Mensaje</h3>
 
                                 {isSuccess && (
                                     <div className="mb-5 p-4 bg-green-50 border border-green-200 rounded-xl text-green-800 text-sm">

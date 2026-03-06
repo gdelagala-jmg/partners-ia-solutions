@@ -43,7 +43,7 @@ export default function LatestNewsSection() {
     return (
         <section className="py-12 lg:py-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 px-4 text-center md:text-left items-center md:items-end">
                     <div>
                         <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 tracking-tight">
                             Últimas Noticias

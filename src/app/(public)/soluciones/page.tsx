@@ -60,7 +60,7 @@ export default function SolutionsPage() {
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Nuestras <span className="text-blue-500">Soluciones</span>
                         </h1>
-                        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4 leading-relaxed">
                             Explora nuestro catálogo de agentes inteligentes y proyectos experimentales del LAB IA.
                         </p>
                     </motion.div>
@@ -108,7 +108,7 @@ export default function SolutionsPage() {
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, scale: 0.9 }}
                                         transition={{ duration: 0.3 }}
-                                        className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-xl transition-all flex flex-col h-full"
+                                        className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-xl transition-all flex flex-col h-full items-center md:items-start text-center md:text-left"
                                     >
                                         {/* Image */}
                                         <div className="h-48 bg-gray-100 relative overflow-hidden">

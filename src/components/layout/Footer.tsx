@@ -42,9 +42,9 @@ export default function Footer() {
         <footer className="bg-gray-50 border-t border-gray-200">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Main Footer Content */}
-                <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8 text-center md:text-left">
                     {/* Brand Section */}
-                    <div className="lg:col-span-2">
+                    <div className="lg:col-span-2 flex flex-col items-center md:items-start">
                         <Link href="/" className="inline-flex items-center group mb-6">
                             <img
                                 src="/logo_footer_new.png"
@@ -75,7 +75,7 @@ export default function Footer() {
 
                     {/* Footer Links */}
                     {footerSections.map((section) => (
-                        <div key={section.title}>
+                        <div key={section.title} className="flex flex-col items-center md:items-start">
                             <h3 className="text-sm font-semibold text-gray-900 mb-4 tracking-wide">
                                 {section.title}
                             </h3>
