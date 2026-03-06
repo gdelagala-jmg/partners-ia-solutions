@@ -4,6 +4,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "IA Solutions - Transformación con Inteligencia Artificial",
   description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/favicon.ico',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({
