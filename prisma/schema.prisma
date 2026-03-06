@@ -1,0 +1,154 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Sector {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String     @unique
+  image       String     // Required as per specs
+  externalUrl String     // Required as per specs
+  description String?
+  order       Int        @default(0)
+  active      Boolean    @default(true)
+  solutions   Solution[] // Implicit many-to-many
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Solution {
+  id               String     @id @default(uuid())
+  type             String     @default("SOLUTION") // SOLUTION, LAB
+  title            String
+  slug             String     @unique
+  description      String     // Maps to shortDescription
+  longDescription  String?
+  multimedia       String?    // URL to image or video
+  ctaUrl           String?    // Maps to url_detalle or url_externa
+  tags             String?    // Comma separated tags
+  order            Int        @default(0)
+  published        Boolean    @default(false) // Maps to estado (activo/inactivo)
+  featured         Boolean    @default(false) // Featured on homepage
+  featuredOrder    Int?       // Order on homepage (1, 2, 3)
+  sectors          Sector[]   // Implicit many-to-many
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model NewsPost {
+  id           String   @id @default(uuid())
+  title        String
+  slug         String   @unique
+  category     String   // Noticia, Novedad, etc.
+  aiType       String?  // Generative, ML, NLP, etc.
+  businessArea String?  // Finance, Healthcare, etc.
+  sector       String?  // Banking, Pharma, etc.
+  profession   String?  // Developers, Marketers, etc.
+  coverImage  String?
+  content     String   // RichText / Markdown
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TeamMember {
+  id          String   @id @default(uuid())
+  name        String
+  role        String
+  bio         String
+  photoUrl    String?
+  socialLinks String   @default("{}") // JSON string of social links
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SuccessCase {
+  id          String   @id @default(uuid())
+  partnerName String
+  logoUrl     String?
+  description String
+  referenceUrl String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MediaItem {
+  id          String   @id @default(uuid())
+  type        String   @default("VIDEO") // VIDEO, PODCAST
+  title       String
+  url         String?  // YouTube embed or Spotify link (optional if embedHtml is present)
+  embedHtml   String?  // Raw HTML embed code
+  thumbnail   String?
+  published   Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteSetting {
+  key   String @id
+  value String
+}
+
+model Partner {
+  id          String   @id @default(uuid())
+  name        String
+  logoUrl     String?
+  description String?
+  websiteUrl  String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Lead {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  status    String   @default("NEW") // NEW, CONTACTED, ARCHIVED
+  createdAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String
+  level       String   // Principiante, Intermedio, Avanzado
+  duration    String   // e.g. "4 semanas"
+  price       String?  // e.g. "Gratis" or "$99"
+  coverImage  String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model IADailyNews {
+  id          String   @id @default(uuid())
+  title       String
+  url         String   @unique
+  source      String   // OpenAI, Google, etc.
+  publishedAt DateTime
+  summary     String?  // 200 character summary in Spanish
+  createdAt   DateTime @default(now())
+}
