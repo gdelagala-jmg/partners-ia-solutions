@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -16,7 +16,7 @@ model Sector {
   slug        String     @unique
   image       String     // Required as per specs
   externalUrl String     // Required as per specs
-  description String?
+  description String?    @db.Text
   order       Int        @default(0)
   active      Boolean    @default(true)
   solutions   Solution[] // Implicit many-to-many
@@ -29,11 +29,11 @@ model Solution {
   type             String     @default("SOLUTION") // SOLUTION, LAB
   title            String
   slug             String     @unique
-  description      String     // Maps to shortDescription
-  longDescription  String?
+  description      String     @db.Text // Maps to shortDescription
+  longDescription  String?    @db.Text
   multimedia       String?    // URL to image or video
   ctaUrl           String?    // Maps to url_detalle or url_externa
-  tags             String?    // Comma separated tags
+  tags             String?    @db.Text // Comma separated tags
   order            Int        @default(0)
   published        Boolean    @default(false) // Maps to estado (activo/inactivo)
   featured         Boolean    @default(false) // Featured on homepage
@@ -53,7 +53,7 @@ model NewsPost {
   sector       String?  // Banking, Pharma, etc.
   profession   String?  // Developers, Marketers, etc.
   coverImage  String?
-  content     String   // RichText / Markdown
+  content     String   @db.LongText // RichText / Markdown
   published   Boolean  @default(false)
   publishedAt DateTime?
   createdAt   DateTime @default(now())
@@ -64,9 +64,9 @@ model TeamMember {
   id          String   @id @default(uuid())
   name        String
   role        String
-  bio         String
+  bio         String   @db.Text
   photoUrl    String?
-  socialLinks String   @default("{}") // JSON string of social links
+  socialLinks String   @default("{}") @db.Text // JSON string of social links
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -76,7 +76,7 @@ model SuccessCase {
   id          String   @id @default(uuid())
   partnerName String
   logoUrl     String?
-  description String
+  description String   @db.Text
   referenceUrl String?
   order       Int      @default(0)
   createdAt   DateTime @default(now())
@@ -88,7 +88,7 @@ model MediaItem {
   type        String   @default("VIDEO") // VIDEO, PODCAST
   title       String
   url         String?  // YouTube embed or Spotify link (optional if embedHtml is present)
-  embedHtml   String?  // Raw HTML embed code
+  embedHtml   String?  @db.Text // Raw HTML embed code
   thumbnail   String?
   published   Boolean  @default(false)
   order       Int      @default(0)
@@ -98,14 +98,14 @@ model MediaItem {
 
 model SiteSetting {
   key   String @id
-  value String
+  value String @db.Text
 }
 
 model Partner {
   id          String   @id @default(uuid())
   name        String
   logoUrl     String?
-  description String?
+  description String?  @db.Text
   websiteUrl  String?
   order       Int      @default(0)
   createdAt   DateTime @default(now())
@@ -117,7 +117,7 @@ model Lead {
   name      String
   email     String
   phone     String?
-  message   String
+  message   String   @db.Text
   status    String   @default("NEW") // NEW, CONTACTED, ARCHIVED
   createdAt DateTime @default(now())
 }
@@ -133,7 +133,7 @@ model Course {
   id          String   @id @default(uuid())
   title       String
   slug        String   @unique
-  description String
+  description String   @db.Text
   level       String   // Principiante, Intermedio, Avanzado
   duration    String   // e.g. "4 semanas"
   price       String?  // e.g. "Gratis" or "$99"
@@ -146,9 +146,9 @@ model Course {
 model IADailyNews {
   id          String   @id @default(uuid())
   title       String
-  url         String   @unique
+  url         String   @unique @db.VarChar(500)
   source      String   // OpenAI, Google, etc.
   publishedAt DateTime
-  summary     String?  // 200 character summary in Spanish
+  summary     String?  @db.Text // 200 character summary in Spanish
   createdAt   DateTime @default(now())
 }
