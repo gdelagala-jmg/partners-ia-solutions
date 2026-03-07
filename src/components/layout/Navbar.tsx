@@ -10,7 +10,6 @@ const navItems = [
     { name: 'Soluciones', href: '/soluciones' },
     { name: 'Escuela', href: '/escuela' },
     { name: 'Noticias IA', href: '/noticias' },
-    { name: 'Contacto', href: '/contacto' },
 ]
 
 export default function Navbar({ session }: { session?: any }) {
