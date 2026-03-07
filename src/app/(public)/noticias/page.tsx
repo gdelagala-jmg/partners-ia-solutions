@@ -112,10 +112,10 @@ export default function NewsPage() {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5, delay: idx * 0.05 }}
-                                    className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-xl transition-all flex flex-col h-full items-center md:items-start text-center md:text-left"
+                                    className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-xl transition-all flex flex-col h-full items-start text-left w-full"
                                 >
                                     {/* Cover Image */}
-                                    <div className="h-48 bg-gray-100 relative overflow-hidden">
+                                    <div className="h-48 bg-gray-100 relative overflow-hidden w-full">
                                         {post.coverImage ? (
                                             <img
                                                 src={post.coverImage}
@@ -135,7 +135,7 @@ export default function NewsPage() {
                                     </div>
 
                                     {/* Content */}
-                                    <div className="p-5 lg:p-6 flex-1 flex flex-col">
+                                    <div className="p-5 lg:p-6 flex-1 flex flex-col w-full">
                                         {/* Tags */}
                                         <div className="flex flex-wrap gap-1.5 mb-3">
                                             {post.aiType && (
@@ -166,7 +166,7 @@ export default function NewsPage() {
                                         </p>
 
                                         {/* Meta */}
-                                        <div className="pt-3 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+                                        <div className="pt-3 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500 mt-auto">
                                             <span className="flex items-center">
                                                 <Calendar size={12} className="mr-1.5" />
                                                 {new Date(post.createdAt).toLocaleDateString('es-ES')}

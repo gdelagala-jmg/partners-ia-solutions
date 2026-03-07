@@ -5,10 +5,10 @@ import { useState, useEffect } from 'react'
 import { Filter, SlidersHorizontal, X } from 'lucide-react'
 
 const filters = {
-    aiType: ['Generative AI', 'Machine Learning', 'NLP', 'Computer Vision', 'Robotics'],
-    businessArea: ['Finance', 'Healthcare', 'Education', 'Retail', 'Manufacturing', 'Technology'],
-    sector: ['Banking', 'Pharma', 'Universities', 'Ecommerce', 'Automotive', 'Software'],
-    profession: ['Executives', 'Developers', 'Marketers', 'Doctors', 'Teachers', 'Designers'],
+    aiType: ['IA Generativa', 'Machine Learning', 'Procesamiento de Lenguaje Natural (PLN)', 'Visión Artificial', 'Robótica'],
+    businessArea: ['Finanzas', 'Salud', 'Educación', 'Retail', 'Manufactura', 'Tecnología'],
+    sector: ['Banca', 'Farmacéutica', 'Universidades', 'Comercio Electrónico', 'Automoción', 'Software'],
+    profession: ['Ejecutivos', 'Desarrolladores', 'Especialistas en Marketing', 'Médicos', 'Profesores', 'Diseñadores'],
 }
 
 export default function NewsFilterBar() {
@@ -56,59 +56,86 @@ export default function NewsFilterBar() {
         router.push('/noticias')
     }
 
+    const getFilterLabel = (key: string) => {
+        switch (key) {
+            case 'aiType': return 'TIPO DE IA';
+            case 'businessArea': return 'ÁREA NEGOCIO';
+            case 'sector': return 'SECTOR';
+            case 'profession': return 'PROFESIÓN';
+            default: return key;
+        }
+    }
+
     return (
         <div className="w-full mb-8">
-            {/* Main Filter Bar */}
-            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                <div className="flex flex-col md:flex-row gap-4 w-full flex-1">
+            <div className="flex flex-col gap-6 p-5 bg-white sm:bg-gray-50 rounded-2xl sm:border border-gray-100">
+                {/* Top Row: Select Filters */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+                    {Object.entries(filters).map(([key, options]) => (
+                        <div key={key} className="flex flex-col w-full">
+                            <label className="text-[11px] font-bold text-blue-600/80 mb-1.5 ml-1 tracking-wider uppercase">
+                                {getFilterLabel(key)}
+                            </label>
+                            <select
+                                value={searchParams.get(key) || ''}
+                                onChange={(e) => handleFilterChange(key, e.target.value)}
+                                className="bg-white border border-gray-200 text-gray-900 text-sm rounded-xl hover:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 block w-full px-3 py-2.5 transition-all outline-none shadow-sm cursor-pointer truncate"
+                                style={{
+                                    WebkitAppearance: 'none',
+                                    MozAppearance: 'none',
+                                    appearance: 'none',
+                                    backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231a202c%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'right 0.75rem top 50%',
+                                    backgroundSize: '0.65rem auto',
+                                    paddingRight: '2rem'
+                                }}
+                            >
+                                <option value="">Seleccionar...</option>
+                                {options.map((opt) => (
+                                    <option key={opt} value={opt}>{opt}</option>
+                                ))}
+                            </select>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Bottom Row: Search & Actions */}
+                <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between w-full pt-2 sm:pt-4 border-t border-gray-100">
+
                     {/* Search Input */}
-                    <div className="relative flex-1 min-w-[200px]">
+                    <div className="relative flex-1 w-full sm:max-w-md">
                         <input
                             type="text"
                             placeholder="Buscar noticias..."
                             value={searchParams.get('q') || ''}
                             onChange={(e) => handleFilterChange('q', e.target.value)}
-                            className="bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-10 transition-all outline-none shadow-sm"
+                            className="bg-white border border-gray-200 text-gray-900 text-sm rounded-xl hover:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 block w-full py-2.5 px-3 pl-10 transition-all outline-none shadow-sm"
                         />
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Filter size={18} className="text-gray-400" />
+                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <Filter size={16} className="text-gray-400" />
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-[2]">
-                        {Object.entries(filters).map(([key, options]) => (
-                            <select
-                                key={key}
-                                value={searchParams.get(key) || ''}
-                                onChange={(e) => handleFilterChange(key, e.target.value)}
-                                className="bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition-all outline-none shadow-sm"
+                    {/* Action Buttons */}
+                    <div className="flex flex-row items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
+                        {Array.from(searchParams.values()).some(Boolean) && (
+                            <button
+                                onClick={clearFilters}
+                                className="px-3 py-2 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg flex items-center transition-colors font-medium"
                             >
-                                <option value="">{key === 'businessArea' ? 'Área Negocio' : key === 'sector' ? 'Sector' : key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</option>
-                                {options.map((opt) => (
-                                    <option key={opt} value={opt}>{opt}</option>
-                                ))}
-                            </select>
-                        ))}
-                    </div>
-                </div>
+                                <X size={16} className="mr-1.5" /> Limpiar
+                            </button>
+                        )}
 
-                <div className="flex items-center gap-2 w-full lg:w-auto mt-2 lg:mt-0">
-                    {Array.from(searchParams.values()).some(Boolean) && (
                         <button
-                            onClick={clearFilters}
-                            className="px-4 py-2 text-sm text-gray-500 hover:text-gray-900 flex items-center transition-colors font-medium"
+                            onClick={() => setShowPreferences(true)}
+                            className="flex-1 sm:flex-none flex items-center justify-center px-4 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 rounded-xl transition-all font-semibold text-sm shadow-sm whitespace-nowrap"
                         >
-                            <X size={16} className="mr-1" /> Limpiar
+                            <SlidersHorizontal size={18} className="mr-2" />
+                            Mis Preferencias
                         </button>
-                    )}
-
-                    <button
-                        onClick={() => setShowPreferences(true)}
-                        className="w-full md:w-auto flex items-center justify-center px-4 py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all font-medium text-sm shadow-sm"
-                    >
-                        <SlidersHorizontal size={18} className="mr-2" />
-                        Mis Preferencias
-                    </button>
+                    </div>
                 </div>
             </div>
 
@@ -130,14 +157,14 @@ export default function NewsFilterBar() {
                             {Object.entries(filters).map(([key, options]) => (
                                 <div key={key}>
                                     <label className="block mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">
-                                        {key === 'businessArea' ? 'Área Negocio' : key === 'sector' ? 'Sector' : key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')} Preferido
+                                        {getFilterLabel(key)} Preferido
                                     </label>
                                     <select
                                         value={(preferences as any)[key]}
                                         onChange={(e) => setPreferences({ ...preferences, [key]: e.target.value })}
                                         className="bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 outline-none"
                                     >
-                                        <option value="">Cualquiera</option>
+                                        <option value="">Seleccionar...</option>
                                         {options.map((opt) => (
                                             <option key={opt} value={opt}>{opt}</option>
                                         ))}
