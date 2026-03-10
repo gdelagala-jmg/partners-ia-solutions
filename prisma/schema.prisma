@@ -114,13 +114,18 @@ model Partner {
 }
 
 model Lead {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  phone     String?
-  message   String   @db.Text
-  status    String   @default("NEW") // NEW, CONTACTED, ARCHIVED
-  createdAt DateTime @default(now())
+  id            String   @id @default(uuid())
+  name          String
+  email         String
+  phone         String?
+  message       String   @db.Text
+  source        String   @default("CONTACT") // CONTACT, LEAD_CAPTURE
+  scope         String?  // Gestión Profesional/Negocio, Organización Personal, Modelo Híbrido
+  bottleneck    String?  @db.Text // Main obstacle
+  urgency       Int?     // Scale 1-10
+  desiredResult String?  @db.Text // Desired improvement
+  status        String   @default("NEW") // NEW, CONTACTED, ARCHIVED
+  createdAt     DateTime @default(now())
 }
 
 model AdminUser {

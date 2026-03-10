@@ -7,6 +7,7 @@ import PodcastHomeSection from '@/components/sections/PodcastHomeSection'
 import LatestNewsSection from '@/components/sections/LatestNewsSection'
 import { useEffect, useState } from 'react'
 import { getSolutionImage } from '@/lib/utils/images'
+import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 
 const iconMap: any = {
     'Target': Target,
@@ -91,13 +92,21 @@ export default function HomePage() {
                             Agendar Consultoría
                         </Link>
                     </motion.div>
-                </div>
 
-                {/* Scroll Indicator */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-                    <div className="w-5 h-8 rounded-full border-2 border-gray-300 flex items-start justify-center p-1.5">
-                        <div className="w-1 h-2.5 bg-gray-400 rounded-full" />
-                    </div>
+                    {/* Scroll Indicator */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 1 }}
+                        className="flex flex-col items-center gap-2 mt-12"
+                    >
+                        <div className="animate-bounce flex flex-col items-center gap-1.5">
+                            <div className="w-6 h-10 rounded-full border-2 border-gray-300 flex items-start justify-center pt-2">
+                                <div className="w-1 h-2.5 bg-gray-400 rounded-full animate-[bounce_1.5s_ease-in-out_infinite]" />
+                            </div>
+                            <span className="text-[10px] font-medium text-gray-400 tracking-widest uppercase">Scroll</span>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 
@@ -187,6 +196,9 @@ export default function HomePage() {
                     </motion.div>
                 </div>
             </section>
+
+            {/* LEAD CAPTURE SECTION */}
+            <LeadCaptureSection />
         </div>
     )
 }
