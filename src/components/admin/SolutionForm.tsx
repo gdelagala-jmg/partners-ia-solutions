@@ -110,13 +110,13 @@ export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
                                 key={sector.id}
                                 type="button"
                                 onClick={() => toggleSector(sector.id)}
-                                className={`px-3 py-1 rounded-full text-sm font-medium transition-all flex items-center ${isSelected
-                                    ? 'bg-blue-100 text-blue-800 shadow-sm'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center ${isSelected
+                                    ? 'bg-blue-600 text-white shadow-md shadow-blue-100'
+                                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100'
                                     }`}
                             >
-                                {isSelected && <Check size={14} className="mr-1" />}
-                                {sector.name}
+                                {isSelected && <Check size={14} className="mr-1.5 shrink-0" />}
+                                <span className="break-words line-clamp-2 text-left">{sector.name}</span>
                             </button>
                         )
                     })}
@@ -139,7 +139,7 @@ export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
                     <label className="block text-sm font-medium text-gray-700">Multimedia URL (Imagen/Video)</label>
                     <input
                         {...register('multimedia')}
-                        className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 overflow-hidden"
                     />
                 </div>
             </div>

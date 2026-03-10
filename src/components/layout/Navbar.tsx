@@ -46,15 +46,14 @@ export default function Navbar({ session }: { session?: any }) {
 
     return (
         <nav
-            className={`fixed w-full z-50 top-0 transition-all duration-300 ${scrolled
-                ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm'
-                : 'bg-white/60 backdrop-blur-md'
+            className={`fixed w-full z-[100] top-0 transition-all duration-300 ${scrolled
+                ? 'bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm'
+                : 'bg-white/60 backdrop-blur-md border-b border-transparent'
                 }`}
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="flex items-center justify-between py-5">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center group">
+                    <Link href="/" className="flex items-center group shrink-0">
                         <img
                             src="/logo-ias.png"
                             alt="IA Solutions"

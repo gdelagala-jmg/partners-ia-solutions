@@ -151,15 +151,15 @@ export default function SolutionsPage() {
 
     return (
         <div className="space-y-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Gestión de Soluciones</h1>
-                    <p className="text-gray-500 mt-2">Administra los servicios y proyectos de LAB IA con eficiencia.</p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="flex-1 min-w-0">
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight truncate sm:whitespace-normal">Gestión de Soluciones</h1>
+                    <p className="text-gray-500 mt-2 max-w-2xl">Administra los servicios y proyectos de LAB IA con eficiencia.</p>
                 </div>
                 {!isEditing && (
                     <button
                         onClick={handleCreate}
-                        className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-bold shadow-lg shadow-blue-100"
+                        className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-bold shadow-lg shadow-blue-100 whitespace-nowrap shrink-0"
                     >
                         <Plus size={20} className="mr-2" />
                         Nueva Solución

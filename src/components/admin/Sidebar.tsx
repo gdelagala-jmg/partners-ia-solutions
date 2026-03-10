@@ -15,10 +15,14 @@ import {
     Handshake,
     LogOut,
     ExternalLink,
-    X
+    X,
+    Settings,
+    ShieldAlert,
+    ShieldCheck
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
 const menuItems = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -40,6 +44,35 @@ interface SidebarProps {
 export default function Sidebar({ onCloseMobile }: SidebarProps) {
     const pathname = usePathname()
     const router = useRouter()
+    const [isMaintenance, setIsMaintenance] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        fetch('/api/settings?key=maintenance_mode')
+            .then(res => res.json())
+            .then(data => {
+                setIsMaintenance(data.value === 'true')
+                setLoading(false)
+            })
+            .catch(() => setLoading(false))
+    }, [])
+
+    const toggleMaintenance = async () => {
+        const newValue = !isMaintenance
+        try {
+            const res = await fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: 'maintenance_mode', value: newValue.toString() })
+            })
+            if (res.ok) {
+                setIsMaintenance(newValue)
+                router.refresh()
+            }
+        } catch (error) {
+            console.error('Error toggling maintenance:', error)
+        }
+    }
 
     const handleLogout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' })
@@ -104,6 +137,35 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
 
             {/* Footer Actions */}
             <div className="p-6 border-t border-gray-50 space-y-2">
+                {/* Maintenance Toggle */}
+                {!loading && (
+                    <button
+                        onClick={toggleMaintenance}
+                        className={clsx(
+                            "flex w-full items-center px-4 py-3 text-sm font-bold rounded-xl transition-all border group mb-4",
+                            isMaintenance 
+                                ? "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100" 
+                                : "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                        )}
+                    >
+                        {isMaintenance ? (
+                            <ShieldAlert size={18} className="mr-3 text-amber-600" />
+                        ) : (
+                            <ShieldCheck size={18} className="mr-3 text-green-600" />
+                        )}
+                        <span className="flex-1 text-left">Mantenimiento</span>
+                        <div className={clsx(
+                            "w-10 h-5 rounded-full relative transition-colors duration-300",
+                            isMaintenance ? "bg-amber-600" : "bg-green-500"
+                        )}>
+                            <div className={clsx(
+                                "absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300",
+                                isMaintenance ? "left-6" : "left-1"
+                            )} />
+                        </div>
+                    </button>
+                )}
+
                 <Link
                     href="/"
                     target="_blank"
