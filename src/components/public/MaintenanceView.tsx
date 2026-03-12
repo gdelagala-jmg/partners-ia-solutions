@@ -49,7 +49,7 @@ export default function MaintenanceView() {
     }
 
     return (
-        <div className="min-h-screen bg-[#F5F5F7] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden font-sans">
+        <div className="min-h-screen bg-[#F5F5F7] flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 text-center relative overflow-hidden font-sans">
             {/* Admin Access Icon */}
             <motion.a
                 href="/admin/login"
@@ -58,10 +58,10 @@ export default function MaintenanceView() {
                 transition={{ delay: 1, duration: 0.5 }}
                 whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
                 whileTap={{ scale: 0.95 }}
-                className="absolute top-8 right-8 z-50 w-12 h-12 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.05)] flex items-center justify-center text-[#86868B] hover:text-[#0071E3] transition-colors"
+                className="absolute top-4 right-4 md:top-8 md:right-8 z-50 w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.05)] flex items-center justify-center text-[#86868B] hover:text-[#0071E3] transition-colors"
                 title="Acceso Admin"
             >
-                <User size={22} />
+                <User size={20} className="md:w-[22px] md:h-[22px]" />
             </motion.a>
 
             {/* Dynamic Background Elements */}
@@ -117,20 +117,20 @@ export default function MaintenanceView() {
                         <span>Evolución en Progreso</span>
                     </motion.div>
                     
-                    <h1 className="text-4xl md:text-6xl font-extrabold text-[#1D1D1F] tracking-tight leading-[1.1] px-4">
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-[#1D1D1F] tracking-tight leading-[1.1] px-2 md:px-4">
                         Redefiniendo el <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">futuro digital</span> a través de la IA.
                     </h1>
                     
-                    <p className="text-lg md:text-xl text-[#6E6E73] max-w-xl mx-auto leading-relaxed px-6 font-medium">
+                    <p className="text-base md:text-xl text-[#6E6E73] max-w-xl mx-auto leading-relaxed px-4 md:px-6 font-medium">
                         Estamos integrando capas avanzadas de inteligencia para elevar tu experiencia. Estaremos de vuelta en unos momentos.
                     </p>
                 </div>
 
                 {/* Glassmorphism Form Container */}
-                <div className="relative max-w-md mx-auto w-full px-4">
+                <div className="relative max-w-full md:max-w-md mx-auto w-full px-1 md:px-4">
                     <motion.div 
                         layout
-                        className="bg-white/70 backdrop-blur-2xl border border-white/40 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden relative"
+                        className="bg-white/70 backdrop-blur-2xl border border-white/40 rounded-[1.5rem] md:rounded-[2.5rem] p-5 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden relative"
                     >
                         <AnimatePresence mode="wait">
                             {submitted ? (
@@ -209,16 +209,16 @@ export default function MaintenanceView() {
                 </div>
 
                 {/* Social Media Links */}
-                <div className="flex items-center justify-center gap-6 pt-8">
+                <div className="flex items-center justify-center gap-4 md:gap-6 pt-4 md:pt-8">
                     <motion.a 
                         href="https://www.instagram.com/pgf.iasolutions/"
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={{ y: -4, scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center hover:shadow-xl transition-all border border-[#E8E8ED] text-[#86868B] hover:text-[#E4405F]"
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white shadow-sm flex items-center justify-center hover:shadow-xl transition-all border border-[#E8E8ED] text-[#86868B] hover:text-[#E4405F]"
                     >
-                        <Instagram size={22} />
+                        <Instagram size={20} className="md:w-[22px] md:h-[22px]" />
                     </motion.a>
 
                     <motion.a 
@@ -227,9 +227,9 @@ export default function MaintenanceView() {
                         rel="noopener noreferrer"
                         whileHover={{ y: -4, scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center hover:shadow-xl transition-all border border-[#E8E8ED] text-[#86868B] hover:text-[#1877F2]"
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white shadow-sm flex items-center justify-center hover:shadow-xl transition-all border border-[#E8E8ED] text-[#86868B] hover:text-[#1877F2]"
                     >
-                        <Facebook size={22} />
+                        <Facebook size={20} className="md:w-[22px] md:h-[22px]" />
                     </motion.a>
 
                     <motion.a 
@@ -238,9 +238,9 @@ export default function MaintenanceView() {
                         rel="noopener noreferrer"
                         whileHover={{ y: -4, scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center hover:shadow-xl transition-all border border-[#E8E8ED] text-[#86868B] hover:text-[#0A66C2]"
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white shadow-sm flex items-center justify-center hover:shadow-xl transition-all border border-[#E8E8ED] text-[#86868B] hover:text-[#0A66C2]"
                     >
-                        <Linkedin size={22} />
+                        <Linkedin size={20} className="md:w-[22px] md:h-[22px]" />
                     </motion.a>
                 </div>
             </motion.div>
