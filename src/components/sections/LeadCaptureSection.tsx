@@ -96,7 +96,7 @@ export default function LeadCaptureSection() {
                 >
                     <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5">
                         <Zap size={14} className="mr-2 text-blue-500" />
-                        Lead_Capture_Intelligent_Management
+                        Solicita tu Estrategia Digital Optimizada con IA
                     </div>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-4 tracking-tight leading-tight">
                         Da el paso hacia una{' '}

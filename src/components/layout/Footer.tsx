@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { Linkedin, Facebook, Instagram, Youtube, MessageCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 const footerSections = [
     {
@@ -38,6 +41,48 @@ const socialLinks = [
 ]
 
 export default function Footer() {
+    const [navLinks, setNavLinks] = useState<any[]>([])
+
+    useEffect(() => {
+        const fetchNavLinks = async () => {
+            try {
+                const res = await fetch('/api/navigation')
+                if (res.ok) {
+                    const data = await res.json()
+                    if (Array.isArray(data)) {
+                        setNavLinks(data.filter((link: any) => link.active))
+                    } else {
+                        setNavLinks([])
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching navigation links:', error)
+            }
+        }
+        fetchNavLinks()
+    }, [])
+
+    const dynamicFooterSections = [
+        {
+            title: 'Explora',
+            links: navLinks
+                .filter(l => l.location === 'FOOTER_EXPLORA')
+                .map(link => ({ name: link.name, href: link.href }))
+        },
+        {
+            title: 'Soluciones',
+            links: navLinks
+                .filter(l => l.location === 'FOOTER_SOLUCIONES')
+                .map(link => ({ name: link.name, href: link.href }))
+        },
+        {
+            title: 'Empresa',
+            links: navLinks
+                .filter(l => l.location === 'FOOTER_EMPRESA')
+                .map(link => ({ name: link.name, href: link.href }))
+        }
+    ]
+
     return (
         <footer className="bg-gray-50 border-t border-gray-200">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -74,25 +119,47 @@ export default function Footer() {
                     </div>
 
                     {/* Footer Links */}
-                    {footerSections.map((section) => (
-                        <div key={section.title} className="flex flex-col items-center md:items-start">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-4 tracking-wide">
-                                {section.title}
-                            </h3>
-                            <ul className="space-y-3">
-                                {section.links.map((link) => (
-                                    <li key={link.name}>
-                                        <Link
-                                            href={link.href}
-                                            className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-                                        >
-                                            {link.name}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
+                    {navLinks.length > 0 ? (
+                        dynamicFooterSections.map((section) => (
+                            <div key={section.title} className="flex flex-col items-center md:items-start">
+                                <h3 className="text-sm font-semibold text-gray-900 mb-4 tracking-wide">
+                                    {section.title}
+                                </h3>
+                                <ul className="space-y-3">
+                                    {section.links.map((link) => (
+                                        <li key={link.name}>
+                                            <Link
+                                                href={link.href}
+                                                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                                            >
+                                                {link.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
+                    ) : (
+                        footerSections.map((section) => (
+                            <div key={section.title} className="flex flex-col items-center md:items-start">
+                                <h3 className="text-sm font-semibold text-gray-900 mb-4 tracking-wide">
+                                    {section.title}
+                                </h3>
+                                <ul className="space-y-3">
+                                    {section.links.map((link) => (
+                                        <li key={link.name}>
+                                            <Link
+                                                href={link.href}
+                                                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                                            >
+                                                {link.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
+                    )}
                 </div>
 
                 {/* Bottom Bar */}
@@ -102,10 +169,10 @@ export default function Footer() {
                             © {new Date().getFullYear()} Partners IA Solutions. Todos los derechos reservados.
                         </p>
                         <div className="flex items-center space-x-6">
-                            <Link href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                            <Link href="/privacidad" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
                                 Privacidad
                             </Link>
-                            <Link href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                            <Link href="/terminos" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
                                 Términos
                             </Link>
                         </div>

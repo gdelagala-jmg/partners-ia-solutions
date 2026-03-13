@@ -16,9 +16,9 @@ import {
     LogOut,
     ExternalLink,
     X,
-    Settings,
+    ShieldCheck,
     ShieldAlert,
-    ShieldCheck
+    Link2
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
@@ -27,6 +27,8 @@ import { useState, useEffect } from 'react'
 const menuItems = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Sectores', href: '/admin/sectors', icon: Box },
+    { name: 'Clientes', href: '/admin/clientes', icon: Users },
+    { name: 'Navegación', href: '/admin/navegacion', icon: Link2 },
     { name: 'Soluciones', href: '/admin/soluciones', icon: Puzzle },
     { name: 'Academia', href: '/admin/escuela', icon: BookOpen },
     { name: 'Noticias', href: '/admin/noticias', icon: FileText },

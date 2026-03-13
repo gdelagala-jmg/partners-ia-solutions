@@ -5,20 +5,35 @@ import { useState, useEffect, useRef } from 'react'
 import { Menu, X, User, ChevronDown, LayoutDashboard, LogOut } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 
-const navItems = [
-    { name: 'Inicio', href: '/' },
-    { name: 'Soluciones', href: '/soluciones' },
-    { name: 'Escuela', href: '/escuela' },
-    { name: 'Noticias IA', href: '/noticias' },
-]
+
 
 export default function Navbar({ session }: { session?: any }) {
+    const [navLinks, setNavLinks] = useState<any[]>([])
     const [isOpen, setIsOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
     const pathname = usePathname()
     const router = useRouter()
     const menuRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const fetchNavLinks = async () => {
+            try {
+                const res = await fetch('/api/navigation')
+                if (res.ok) {
+                    const data = await res.json()
+                    if (Array.isArray(data)) {
+                        setNavLinks(data.filter((link: any) => link.active && link.location === 'HEADER'))
+                    } else {
+                        setNavLinks([])
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching navigation links:', error)
+            }
+        }
+        fetchNavLinks()
+    }, [])
 
     useEffect(() => {
         const handleScroll = () => {
@@ -63,11 +78,11 @@ export default function Navbar({ session }: { session?: any }) {
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-1">
-                        {navItems.map((item) => (
+                        {navLinks.map((item) => (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${pathname === item.href || pathname.startsWith(item.href)
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
                                     ? 'text-gray-900 bg-gray-100'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                     }`}
@@ -77,7 +92,7 @@ export default function Navbar({ session }: { session?: any }) {
                         ))}
                     </div>
 
-                    {/* Right Side Actions */}
+                    {/* Right Side Actions ... (rest of the code remains same) */}
                     <div className="flex items-center space-x-1 md:space-x-3">
                         <Link
                             href="/contacto"
@@ -147,12 +162,12 @@ export default function Navbar({ session }: { session?: any }) {
                     }`}
             >
                 <div className="px-6 py-4 bg-white border-t border-gray-200 space-y-1">
-                    {navItems.map((item) => (
+                    {navLinks.map((item) => (
                         <Link
                             key={item.name}
                             href={item.href}
                             onClick={() => setIsOpen(false)}
-                            className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all text-center ${pathname === item.href || pathname.startsWith(item.href)
+                            className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all text-center ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
                                 ? 'text-gray-900 bg-gray-100'
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                 }`}
@@ -160,6 +175,7 @@ export default function Navbar({ session }: { session?: any }) {
                             {item.name}
                         </Link>
                     ))}
+
                     <div className="pt-4 space-y-2 border-t border-gray-200">
                         <Link
                             href="/contacto"

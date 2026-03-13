@@ -1,13 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-// Version: 1.0.1 - Hybrid MySQL Deployment
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -15,98 +11,98 @@ model Sector {
   id          String     @id @default(uuid())
   name        String
   slug        String     @unique
-  image       String     // Required as per specs
-  externalUrl String     // Required as per specs
-  description String?    @db.Text
+  image       String
+  externalUrl String
+  description String?
   order       Int        @default(0)
   active      Boolean    @default(true)
-  solutions   Solution[] // Implicit many-to-many
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  solutions   Solution[] @relation("SectorToSolution")
 }
 
 model Solution {
-  id               String     @id @default(uuid())
-  type             String     @default("SOLUTION") // SOLUTION, LAB
-  title            String
-  slug             String     @unique
-  description      String     @db.Text // Maps to shortDescription
-  longDescription  String?    @db.Text
-  multimedia       String?    // URL to image or video
-  ctaUrl           String?    // Maps to url_detalle or url_externa
-  tags             String?    @db.Text // Comma separated tags
-  order            Int        @default(0)
-  published        Boolean    @default(false) // Maps to estado (activo/inactivo)
-  featured         Boolean    @default(false) // Featured on homepage
-  featuredOrder    Int?       // Order on homepage (1, 2, 3)
-  sectors          Sector[]   // Implicit many-to-many
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  id              String   @id @default(uuid())
+  type            String   @default("SOLUTION")
+  title           String
+  slug            String   @unique
+  description     String
+  longDescription String?
+  multimedia      String?
+  ctaUrl          String?
+  tags            String?
+  order           Int      @default(0)
+  published       Boolean  @default(false)
+  featured        Boolean  @default(false)
+  featuredOrder   Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  sectors         Sector[] @relation("SectorToSolution")
 }
 
 model NewsPost {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   title        String
-  slug         String   @unique
-  category     String   // Noticia, Novedad, etc.
-  aiType       String?  // Generative, ML, NLP, etc.
-  businessArea String?  // Finance, Healthcare, etc.
-  sector       String?  // Banking, Pharma, etc.
-  profession   String?  // Developers, Marketers, etc.
-  coverImage  String?
-  content     String   @db.LongText // RichText / Markdown
-  published   Boolean  @default(false)
-  publishedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  slug         String    @unique
+  category     String
+  coverImage   String?
+  content      String
+  published    Boolean   @default(false)
+  publishedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  aiType       String?
+  businessArea String?
+  profession   String?
+  sector       String?
 }
 
 model TeamMember {
   id          String   @id @default(uuid())
   name        String
   role        String
-  bio         String   @db.Text
+  bio         String
   photoUrl    String?
-  socialLinks String   @default("{}") @db.Text // JSON string of social links
+  socialLinks String   @default("{}")
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model SuccessCase {
-  id          String   @id @default(uuid())
-  partnerName String
-  logoUrl     String?
-  description String   @db.Text
+  id           String   @id @default(uuid())
+  partnerName  String
+  logoUrl      String?
+  description  String
   referenceUrl String?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model MediaItem {
-  id          String   @id @default(uuid())
-  type        String   @default("VIDEO") // VIDEO, PODCAST
-  title       String
-  url         String?  // YouTube embed or Spotify link (optional if embedHtml is present)
-  embedHtml   String?  @db.Text // Raw HTML embed code
-  thumbnail   String?
-  published   Boolean  @default(false)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  type      String   @default("VIDEO")
+  title     String
+  url       String?
+  embedHtml String?
+  thumbnail String?
+  published Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model SiteSetting {
   key   String @id
-  value String @db.Text
+  value String
 }
 
 model Partner {
   id          String   @id @default(uuid())
   name        String
   logoUrl     String?
-  description String?  @db.Text
+  description String?
   websiteUrl  String?
   order       Int      @default(0)
   createdAt   DateTime @default(now())
@@ -118,13 +114,13 @@ model Lead {
   name          String
   email         String
   phone         String?
-  message       String   @db.Text
-  source        String   @default("CONTACT") // CONTACT, LEAD_CAPTURE
-  scope         String?  // Gestión Profesional/Negocio, Organización Personal, Modelo Híbrido
-  bottleneck    String?  @db.Text // Main obstacle
-  urgency       Int?     // Scale 1-10
-  desiredResult String?  @db.Text // Desired improvement
-  status        String   @default("NEW") // NEW, CONTACTED, ARCHIVED
+  message       String
+  source        String   @default("CONTACT")
+  scope         String?
+  bottleneck    String?
+  urgency       Int?
+  desiredResult String?
+  status        String   @default("NEW")
   createdAt     DateTime @default(now())
 }
 
@@ -139,10 +135,10 @@ model Course {
   id          String   @id @default(uuid())
   title       String
   slug        String   @unique
-  description String   @db.Text
-  level       String   // Principiante, Intermedio, Avanzado
-  duration    String   // e.g. "4 semanas"
-  price       String?  // e.g. "Gratis" or "$99"
+  description String
+  level       String
+  duration    String
+  price       String?
   coverImage  String?
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
@@ -152,9 +148,35 @@ model Course {
 model IADailyNews {
   id          String   @id @default(uuid())
   title       String
-  url         String   @unique @db.VarChar(500)
-  source      String   // OpenAI, Google, etc.
+  url         String   @unique
+  source      String
   publishedAt DateTime
-  summary     String?  @db.Text // 200 character summary in Spanish
+  summary     String?
   createdAt   DateTime @default(now())
+}
+
+model Client {
+  id           String   @id @default(uuid())
+  companyName  String
+  taxId        String?
+  address      String?
+  website      String?
+  sector       String?
+  contactName  String?
+  contactPhone String?
+  logoUrl      String?
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model NavLink {
+  id        String   @id @default(uuid())
+  name      String
+  href      String
+  location  String   @default("HEADER")
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

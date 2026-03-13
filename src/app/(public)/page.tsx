@@ -8,6 +8,7 @@ import LatestNewsSection from '@/components/sections/LatestNewsSection'
 import { useEffect, useState } from 'react'
 import { getSolutionImage } from '@/lib/utils/images'
 import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
+import ClientCarousel from '@/components/sections/ClientCarousel'
 
 const iconMap: any = {
     'Target': Target,
@@ -184,15 +185,10 @@ export default function HomePage() {
                         <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">
                             ¿Listo para escalar?
                         </h2>
-                        <p className="text-base text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-base text-gray-600 mb-2 max-w-2xl mx-auto leading-relaxed">
                             Únete a las empresas que ya están utilizando nuestros agentes de IA para reducir costes y multiplicar ingresos.
                         </p>
-                        <Link
-                            href="/contacto"
-                            className="inline-block px-8 py-4 bg-black text-white font-medium rounded-xl hover:bg-gray-800 transition-all hover:scale-105 shadow-lg hover:shadow-xl"
-                        >
-                            Hablemos Ahora
-                        </Link>
+                        <ClientCarousel />
                     </motion.div>
                 </div>
             </section>
