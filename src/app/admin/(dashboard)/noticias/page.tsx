@@ -85,9 +85,13 @@ export default function NewsAdminPage() {
             if (res.ok) {
                 setIsEditing(false)
                 fetchPosts()
+            } else {
+                const errData = await res.json()
+                alert(`Error al guardar: ${errData.error || 'Desconocido'}`)
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving post:', error)
+            alert(`Error de red: ${error.message}`)
         }
     }
 

@@ -33,7 +33,7 @@ export async function PUT(request: Request, { params }: { params: Params }) {
                 content: body.content,
                 coverImage: body.coverImage,
                 published: body.published,
-                publishedAt: body.published ? new Date(body.publishedAt) : null,
+                publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.published ? new Date() : null),
             },
         })
         return NextResponse.json(post)

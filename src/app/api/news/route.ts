@@ -62,7 +62,7 @@ export async function POST(request: Request) {
                 content: body.content,
                 coverImage: body.coverImage,
                 published: body.published || false,
-                publishedAt: body.published ? new Date() : null,
+                publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.published ? new Date() : null),
             },
         })
 
