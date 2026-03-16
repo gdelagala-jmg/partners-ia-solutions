@@ -255,11 +255,11 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
         formData.append('file', file)
         try {
             const res = await fetch('/api/upload', { method: 'POST', body: formData })
-            if (!res.ok) throw new Error('Upload failed')
             const data = await res.json()
+            if (!res.ok) throw new Error(data.error || 'Upload failed')
             setValue('coverImage', data.url)
-        } catch {
-            alert('Error al subir la imagen')
+        } catch (err: any) {
+            alert(err.message || 'Error al subir la imagen')
         } finally {
             setUploading(false)
         }
@@ -274,11 +274,11 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
         formData.append('file', file)
         try {
             const res = await fetch('/api/upload', { method: 'POST', body: formData })
-            if (!res.ok) throw new Error('Upload failed')
             const data = await res.json()
+            if (!res.ok) throw new Error(data.error || 'Upload failed')
             setValue('coverImage', data.url)
-        } catch {
-            alert('Error al subir la imagen')
+        } catch (err: any) {
+            alert(err.message || 'Error al subir la imagen')
         } finally {
             setUploading(false)
         }
