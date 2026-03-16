@@ -168,12 +168,15 @@ export default function Footer() {
                         <p className="text-sm text-gray-500">
                             © {new Date().getFullYear()} Partners IA Solutions. Todos los derechos reservados.
                         </p>
-                        <div className="flex items-center space-x-6">
-                            <Link href="/privacidad" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <div className="flex items-center gap-4 md:gap-6 flex-wrap justify-center mt-4 md:mt-0">
+                            <Link href="/aviso-legal" className="text-sm text-gray-500 hover:text-gray-900 transition-colors whitespace-nowrap">
+                                Aviso Legal
+                            </Link>
+                            <Link href="/politica-privacidad" className="text-sm text-gray-500 hover:text-gray-900 transition-colors whitespace-nowrap">
                                 Privacidad
                             </Link>
-                            <Link href="/terminos" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                                Términos
+                            <Link href="/politica-cookies" className="text-sm text-gray-500 hover:text-gray-900 transition-colors whitespace-nowrap">
+                                Cookies
                             </Link>
                         </div>
                     </div>
