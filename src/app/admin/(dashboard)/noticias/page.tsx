@@ -86,8 +86,15 @@ export default function NewsAdminPage() {
                 setIsEditing(false)
                 fetchPosts()
             } else {
-                const errData = await res.json()
-                alert(`Error al guardar: ${errData.error || 'Desconocido'}`)
+                const contentType = res.headers.get('content-type')
+                if (contentType && contentType.includes('application/json')) {
+                    const errData = await res.json()
+                    alert(`Error al guardar: ${errData.error || 'Desconocido'}`)
+                } else {
+                    const errorText = await res.text()
+                    console.error('Server error (non-JSON):', errorText)
+                    alert('Error en el servidor. Es posible que tu sesión haya caducado. Por favor, refresca la página (F5) e intenta de nuevo.')
+                }
             }
         } catch (error: any) {
             console.error('Error saving post:', error)
