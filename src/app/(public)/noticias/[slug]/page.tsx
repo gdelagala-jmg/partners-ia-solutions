@@ -83,10 +83,11 @@ export default function NewsDetailPage() {
     }
 
     const publishDate = post.publishedAt || post.createdAt
-    const readingMinutes = Math.max(1, Math.ceil(post.content.split(' ').length / 200))
-
-    // Render content paragraphs
-    const paragraphs = post.content.split('\n').filter(p => p.trim().length > 0)
+    // Strip HTML tags to count words for reading time
+    const plainText = post.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+    const readingMinutes = Math.max(1, Math.ceil(plainText.split(' ').length / 200))
+    // Only show first category in badge
+    const primaryCategory = post.category?.split(',')[0]?.trim() || 'Noticia'
 
     return (
         <div className="min-h-screen bg-white">
@@ -129,7 +130,7 @@ export default function NewsDetailPage() {
                     className="flex flex-wrap gap-2 mb-4"
                 >
                     <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-black text-white">
-                        {post.category}
+                        {primaryCategory}
                     </span>
                     {post.aiType && (
                         <span className="inline-flex items-center text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-lg border border-blue-200">
@@ -184,50 +185,14 @@ export default function NewsDetailPage() {
                     </span>
                 </motion.div>
 
-                {/* Content */}
+                {/* Content — rendered as HTML from Quill editor */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="prose prose-gray max-w-none"
-                >
-                    {paragraphs.map((paragraph, idx) => {
-                        // Detect headings (lines starting with #)
-                        if (paragraph.startsWith('## ')) {
-                            return (
-                                <h2 key={idx} className="text-xl md:text-2xl font-semibold text-gray-900 mt-8 mb-3">
-                                    {paragraph.replace('## ', '')}
-                                </h2>
-                            )
-                        }
-                        if (paragraph.startsWith('# ')) {
-                            return (
-                                <h2 key={idx} className="text-2xl md:text-3xl font-semibold text-gray-900 mt-8 mb-3">
-                                    {paragraph.replace('# ', '')}
-                                </h2>
-                            )
-                        }
-                        // Bullet lists
-                        if (paragraph.startsWith('- ') || paragraph.startsWith('* ')) {
-                            return (
-                                <p key={idx} className="flex items-start gap-2 text-gray-700 leading-relaxed text-base mb-2">
-                                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
-                                    {paragraph.replace(/^[-*]\s/, '')}
-                                </p>
-                            )
-                        }
-                        // Horizontal rule
-                        if (paragraph === '---' || paragraph === '***') {
-                            return <hr key={idx} className="my-8 border-gray-200" />
-                        }
-                        // Regular paragraph
-                        return (
-                            <p key={idx} className="text-gray-700 leading-relaxed text-base mb-5">
-                                {paragraph}
-                            </p>
-                        )
-                    })}
-                </motion.div>
+                    className="news-article-body"
+                    dangerouslySetInnerHTML={{ __html: post.content }}
+                />
 
                 {/* Footer CTA */}
                 <motion.div

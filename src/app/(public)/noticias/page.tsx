@@ -129,7 +129,7 @@ export default function NewsPage() {
                                         )}
                                         <div className="absolute top-3 left-3">
                                             <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-black/70 backdrop-blur-md text-white border border-white/10">
-                                                {post.category}
+                                                {post.category?.split(',')[0]?.trim()}
                                             </span>
                                         </div>
                                     </div>
@@ -162,7 +162,7 @@ export default function NewsPage() {
                                         </h2>
 
                                         <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-1 leading-relaxed">
-                                            {post.content.substring(0, 150)}...
+                                            {post.content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 150)}...
                                         </p>
 
                                         {/* Meta */}

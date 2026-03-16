@@ -273,3 +273,139 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =============================================
+   NEWS ARTICLE BODY — Quill HTML Renderer
+   ============================================= */
+.news-article-body {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: #374151;
+}
+
+.news-article-body p {
+  margin-bottom: 1.25rem;
+  color: #374151;
+  line-height: 1.8;
+}
+
+.news-article-body h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #111827;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.news-article-body h2 {
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  font-weight: 700;
+  color: #111827;
+  margin-top: 2rem;
+  margin-bottom: 0.625rem;
+  line-height: 1.3;
+}
+
+.news-article-body h3 {
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.news-article-body strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+.news-article-body em {
+  font-style: italic;
+}
+
+.news-article-body ul,
+.news-article-body ol {
+  margin: 1rem 0 1.25rem 1.5rem;
+}
+
+.news-article-body ul {
+  list-style-type: disc;
+}
+
+.news-article-body ol {
+  list-style-type: decimal;
+}
+
+.news-article-body li {
+  margin-bottom: 0.4rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+.news-article-body blockquote {
+  border-left: 4px solid #0071E3;
+  padding: 0.75rem 1.25rem;
+  margin: 1.5rem 0;
+  background: #eff6ff;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: #1e40af;
+  font-style: italic;
+}
+
+.news-article-body pre,
+.news-article-body code {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 0.5rem;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.875rem;
+}
+
+.news-article-body pre {
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.news-article-body code:not(pre code) {
+  padding: 0.15rem 0.4rem;
+  background: #f1f5f9;
+  color: #0f172a;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.news-article-body a {
+  color: #0071E3;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.news-article-body a:hover {
+  color: #0077ED;
+}
+
+.news-article-body hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+.news-article-body img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  margin: 1.5rem auto;
+  display: block;
+}
+
+/* remove quill inline colour styles for readability */
+.news-article-body span {
+  background-color: transparent !important;
+  color: inherit;
+}
+
+.news-article-body span strong {
+  color: #111827;
+}
