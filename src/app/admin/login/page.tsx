@@ -35,7 +35,7 @@ export default function AdminLogin() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#F5F5F7] text-[#1D1D1F] selection:bg-blue-100 selection:text-blue-700 p-4 font-sans">
-            <div className="w-full max-w-sm p-6 sm:p-8 space-y-6 bg-white rounded-3xl border border-[#E8E8ED] shadow-xl shadow-gray-200/50 animate-in fade-in zoom-in duration-500">
+            <div className="w-full max-w-sm p-4 sm:p-5 space-y-4 bg-white rounded-3xl border border-[#E8E8ED] shadow-xl shadow-gray-200/50 animate-in fade-in zoom-in duration-500">
                 <div className="text-center space-y-3">
                     <div className="mx-auto h-12 w-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-xl shadow-blue-100 rotate-3 hover:rotate-0 transition-transform duration-500">
                         <Lock className="text-white" size={24} />
@@ -99,7 +99,7 @@ export default function AdminLogin() {
 
                 <div className="pt-2 text-center">
                     <p className="text-[9px] text-[#98989D] font-bold uppercase tracking-[0.2em]">
-                        © 2024 Partners IA
+                        © 2026 Partners IA
                     </p>
                 </div>
             </div>
