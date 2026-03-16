@@ -99,7 +99,7 @@ export default function AdminLogin() {
 
                 <div className="pt-2 text-center">
                     <p className="text-[9px] text-[#98989D] font-bold uppercase tracking-[0.2em]">
-                        © 2026 Partners IA
+                        © 2026 Partners IA Solutions
                     </p>
                 </div>
             </div>
