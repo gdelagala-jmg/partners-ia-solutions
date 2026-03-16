@@ -76,46 +76,44 @@ export default function SectorDashboard() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {sectors.map((sector, idx) => (
-                            <motion.a
-                                key={sector.id}
-                                href={sector.externalUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                                className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300"
-                            >
-                                {/* Background Image */}
-                                <div className="absolute inset-0">
-                                    <img
-                                        src={getSectorImage(sector)}
-                                        alt={sector.name}
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                                </div>
-
-                                {/* Content Overlay */}
-                                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                                    <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl transform transition-all duration-500 group-hover:bg-white/20 group-hover:scale-105 shadow-2xl">
-                                        <h3 className="text-xl md:text-2xl font-bold tracking-tight !text-white drop-shadow-lg px-2">
-                                            {sector.name}
-                                        </h3>
-                                        <div className="mt-1 text-[10px] text-blue-200 font-bold uppercase tracking-[0.2em]">
-                                            {sector._count?.solutions || 0} Soluciones
-                                        </div>
+                            <Link href={`/soluciones/${sector.slug}`} passHref key={sector.id} legacyBehavior>
+                                <motion.a
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                                    className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 block"
+                                >
+                                    {/* Background Image */}
+                                    <div className="absolute inset-0">
+                                        <img
+                                            src={getSectorImage(sector)}
+                                            alt={sector.name}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                                     </div>
 
-                                    {/* Arrow Indicator */}
-                                    <div className="absolute bottom-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                                        <div className="bg-white text-black p-2 rounded-full shadow-xl">
-                                            <ArrowRight size={18} />
+                                    {/* Content Overlay */}
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl transform transition-all duration-500 group-hover:bg-white/20 group-hover:scale-105 shadow-2xl">
+                                            <h3 className="text-xl md:text-2xl font-bold tracking-tight !text-white drop-shadow-lg px-2">
+                                                {sector.name}
+                                            </h3>
+                                            <div className="mt-1 text-[10px] text-blue-200 font-bold uppercase tracking-[0.2em]">
+                                                {sector._count?.solutions || 0} Soluciones
+                                            </div>
+                                        </div>
+
+                                        {/* Arrow Indicator */}
+                                        <div className="absolute bottom-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                                            <div className="bg-white text-black p-2 rounded-full shadow-xl">
+                                                <ArrowRight size={18} />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </motion.a>
+                                </motion.a>
+                            </Link>
                         ))}
                     </div>
                 )}
