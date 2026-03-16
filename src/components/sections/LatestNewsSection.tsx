@@ -93,7 +93,7 @@ export default function LatestNewsSection() {
                                     )}
                                     <div className="absolute top-3 left-3">
                                         <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md rounded-full text-xs font-bold text-white border border-white/10">
-                                            {post.category}
+                                            {post.category?.split(',')[0]?.trim() || 'Noticia'}
                                         </span>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@ export default function LatestNewsSection() {
                                     </h3>
 
                                     <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed flex-1">
-                                        {post.content.substring(0, 150)}...
+                                        {post.content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 150)}...
                                     </p>
 
                                     <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">

@@ -281,12 +281,37 @@ html {
   font-size: 1.0625rem;
   line-height: 1.8;
   color: #374151;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .news-article-body p {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   color: #374151;
-  line-height: 1.8;
+}
+
+.news-article-body * {
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+.news-article-body img {
+  height: auto !important;
+  max-width: 100% !important;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 0.75rem;
+}
+
+/* remove quill inline background and forced nowrap styles often from pasting */
+.news-article-body span, 
+.news-article-body strong, 
+.news-article-body em {
+  white-space: normal !important;
+  background-color: transparent !important;
+  color: inherit !important;
 }
 
 .news-article-body h1 {
