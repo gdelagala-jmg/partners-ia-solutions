@@ -43,7 +43,7 @@ export async function POST(request: Request) {
         if (process.env.BLOB_READ_WRITE_TOKEN) {
             const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
             const blob = await put(filename, file, {
-                access: 'encrypted',
+                // Remove access property to let Vercel use the store's default
             })
 
             return NextResponse.json({ url: blob.url })
