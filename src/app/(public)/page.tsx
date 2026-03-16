@@ -36,7 +36,7 @@ export default function HomePage() {
         fetch('/api/sectors?active=true')
             .then(res => res.json())
             .then(data => {
-                setSectors(data.slice(0, 3)) // Mostramos 3 sectores destacados en home
+                setSectors(data) // Mostramos todos los sectores activos en home
                 setLoading(false)
             })
             .catch(err => {

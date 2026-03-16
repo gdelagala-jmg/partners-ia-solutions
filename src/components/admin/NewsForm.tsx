@@ -47,7 +47,7 @@ type NewsFormValues = z.infer<typeof newsSchema>
 const CATEGORY_PRESETS = ['Noticia', 'Análisis', 'Tutorial', 'Caso de Estudio', 'Opinión', 'Tendencias']
 const aiTypes = ['Generative AI', 'Machine Learning', 'NLP', 'Computer Vision', 'Robotics', 'Agentic AI']
 const businessAreas = ['Finance', 'Healthcare', 'Education', 'Retail', 'Manufacturing', 'Technology']
-const sectors = ['Banking', 'Pharma', 'Universities', 'Ecommerce', 'Automotive', 'Software']
+const sectors = ['Banking', 'Pharma', 'Universities', 'Ecommerce', 'Automotive', 'Software', 'Legal', 'Education', 'Food & Beverage', 'Leisure']
 const professions = ['Executives', 'Developers', 'Marketers', 'Doctors', 'Teachers', 'Designers']
 
 // --- Chip Input Component ---

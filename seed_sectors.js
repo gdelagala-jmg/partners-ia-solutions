@@ -39,6 +39,38 @@ async function main() {
             externalUrl: 'https://partnersiasolutions.com/manufactura',
             description: 'Mantenimiento predictivo y automatización.',
             active: true
+        },
+        {
+            name: 'Legal',
+            slug: 'legal',
+            image: '/uploads/sector_legal.png',
+            externalUrl: 'https://partnersiasolutions.com/sectores/legal',
+            description: 'Automatización de documentos y análisis jurídico con IA.',
+            active: true
+        },
+        {
+            name: 'Formación',
+            slug: 'formacion',
+            image: '/uploads/sector_formacion.png',
+            externalUrl: 'https://partnersiasolutions.com/sectores/formacion',
+            description: 'Educación personalizada y tutores inteligentes con LLMs.',
+            active: true
+        },
+        {
+            name: 'Gastronomía',
+            slug: 'gastronomia',
+            image: '/uploads/sector_gastronomia.png',
+            externalUrl: 'https://partnersiasolutions.com/sectores/gastronomia',
+            description: 'Optimización de menús y gestión inteligente de cocina.',
+            active: true
+        },
+        {
+            name: 'Ocio',
+            slug: 'ocio',
+            image: '/uploads/sector_ocio.png',
+            externalUrl: 'https://partnersiasolutions.com/sectores/ocio',
+            description: 'Experiencias inmersivas y recomendaciones personalizadas.',
+            active: true
         }
     ]
 
