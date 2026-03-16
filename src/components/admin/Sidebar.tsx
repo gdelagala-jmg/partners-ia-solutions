@@ -18,7 +18,8 @@ import {
     X,
     ShieldCheck,
     ShieldAlert,
-    Link2
+    Link2,
+    Bot
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
@@ -26,6 +27,7 @@ import { useState, useEffect } from 'react'
 
 const menuItems = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Asistente AI', href: '/admin/asistente', icon: Bot },
     { name: 'Sectores', href: '/admin/sectors', icon: Box },
     { name: 'Clientes', href: '/admin/clientes', icon: Users },
     { name: 'Navegación', href: '/admin/navegacion', icon: Link2 },
