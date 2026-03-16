@@ -39,33 +39,34 @@ export async function POST(request: Request) {
             }, { status: 400 })
         }
 
-        // Use Vercel Blob in production, or gracefully fallback
+        /* 
+        // Desactivado temporalmente debido a conflicto de permisos (Private Store) en Vercel Blob.
+        // Se usará el almacenamiento local en public/uploads por ahora.
         if (process.env.BLOB_READ_WRITE_TOKEN) {
             const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
             const blob = await put(filename, file, {
                 access: 'public',
             })
-
             return NextResponse.json({ url: blob.url })
-        } else {
-            // Fallback for local development if BLOB token is not set
-            const { writeFile, mkdir } = await import('fs/promises')
+        } 
+        */
 
-            const bytes = await file.arrayBuffer()
-            const buffer = Buffer.from(bytes)
+        // Almacenamiento local (Hostinger / Local)
+        const { writeFile, mkdir } = await import('fs/promises')
+        const bytes = await file.arrayBuffer()
+        const buffer = Buffer.from(bytes)
 
-            // Sanitize filename
-            const filename = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+        // Sanitize filename
+        const filename = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
 
-            // Ensure directory exists
-            const uploadDir = path.join(process.cwd(), 'public/uploads')
-            await mkdir(uploadDir, { recursive: true })
+        // Ensure directory exists
+        const uploadDir = path.join(process.cwd(), 'public/uploads')
+        await mkdir(uploadDir, { recursive: true })
 
-            const filepath = path.join(uploadDir, filename)
-            await writeFile(filepath, buffer)
+        const filepath = path.join(uploadDir, filename)
+        await writeFile(filepath, buffer)
 
-            return NextResponse.json({ url: `/uploads/${filename}` })
-        }
+        return NextResponse.json({ url: `/uploads/${filename}` })
 
     } catch (error: any) {
         console.error('Error uploading file:', error)
