@@ -1,7 +1,7 @@
 export default function PoliticaPrivacidadPage() {
   return (
     <div className="min-h-screen bg-white">
-      <main className="max-w-4xl mx-auto px-6 py-20 lg:px-8">
+      <main className="max-w-4xl mx-auto px-6 py-8 lg:px-8">
         <div className="space-y-8 text-gray-700">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-4 text-center">

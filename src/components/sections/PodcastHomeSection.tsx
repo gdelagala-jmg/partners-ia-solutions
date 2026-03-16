@@ -28,7 +28,7 @@ export default function PodcastHomeSection() {
     if (!loading && !mainChannelHtml) return null
 
     return (
-        <section className="py-12 lg:py-16 bg-white">
+        <section className="py-8 lg:py-8 bg-white">
             <div className="max-w-6xl mx-auto px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

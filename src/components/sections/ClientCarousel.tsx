@@ -28,13 +28,13 @@ export default function ClientCarousel() {
     const displayClients = [...clients, ...clients, ...clients]
 
     return (
-        <div className="w-full overflow-hidden py-10 relative">
+        <div className="w-full overflow-hidden py-8 relative">
             {/* Gradient Mask for edges */}
             <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
             <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
             <motion.div
-                className="flex items-center gap-12 sm:gap-20 whitespace-nowrap"
+                className="flex items-center gap-10 sm:gap-16 whitespace-nowrap"
                 animate={{
                     x: [0, -1035], // Adjust based on content width roughly
                 }}

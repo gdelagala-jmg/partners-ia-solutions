@@ -53,7 +53,7 @@ export default function NewsDetailPage() {
     if (loading) {
         return (
             <div className="min-h-screen bg-white">
-                <div className="max-w-4xl mx-auto px-6 py-16 animate-pulse">
+                <div className="max-w-4xl mx-auto px-6 py-8 animate-pulse">
                     <div className="h-8 bg-gray-100 rounded-xl w-24 mb-8" />
                     <div className="h-64 bg-gray-100 rounded-2xl mb-8" />
                     <div className="h-8 bg-gray-100 rounded-xl w-3/4 mb-4" />
@@ -103,7 +103,7 @@ export default function NewsDetailPage() {
             )}
 
             {/* Article Container */}
-            <div className="max-w-4xl mx-auto px-6 lg:px-8 py-10">
+            <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
 
                 {/* Back Button */}
                 <motion.div

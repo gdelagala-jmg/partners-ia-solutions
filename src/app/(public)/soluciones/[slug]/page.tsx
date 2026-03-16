@@ -111,10 +111,10 @@ export default function SectorSolutionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-16">
         
       {/* Dynamic Header */}
-      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-white border-b border-gray-100 overflow-hidden">
+      <div className="relative pt-28 pb-16 lg:pt-28 lg:pb-24 bg-white border-b border-gray-100 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 pointer-events-none" />
         <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
             <Link href="/soluciones" className="inline-flex items-center text-sm font-medium text-gray-400 hover:text-blue-600 mb-8 transition-colors">
@@ -133,7 +133,7 @@ export default function SectorSolutionPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             
             {/* Left SEO Content */}
             <div className="lg:col-span-7 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">

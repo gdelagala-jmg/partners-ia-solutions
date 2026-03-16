@@ -57,7 +57,7 @@ export default function ContactPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-10 lg:py-14 bg-gray-50">
+            <section className="py-8 lg:py-8 bg-gray-50">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -79,7 +79,7 @@ export default function ContactPage() {
             </section>
 
             {/* Contact Section */}
-            <section className="py-10 lg:py-14">
+            <section className="py-8 lg:py-8">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Contact Info */}

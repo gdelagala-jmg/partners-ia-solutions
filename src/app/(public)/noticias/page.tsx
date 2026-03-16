@@ -54,7 +54,7 @@ export default function NewsPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-10 lg:py-14 bg-gray-50">
+            <section className="py-8 lg:py-8 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,7 @@ export default function NewsPage() {
             </section>
 
             {/* News Grid */}
-            <section className="py-10 lg:py-14">
+            <section className="py-8 lg:py-8">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     {loading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -99,7 +99,7 @@ export default function NewsPage() {
                             ))}
                         </div>
                     ) : posts.length === 0 ? (
-                        <div className="text-center py-16 bg-gray-50 rounded-3xl border border-gray-200">
+                        <div className="text-center py-8 bg-gray-50 rounded-3xl border border-gray-200">
                             <Newspaper size={48} className="mx-auto text-gray-300 mb-4" />
                             <h3 className="text-xl font-semibold text-gray-900 mb-2">No hay noticias</h3>
                             <p className="text-gray-600 text-sm">Intenta ajustar tus filtros de búsqueda.</p>

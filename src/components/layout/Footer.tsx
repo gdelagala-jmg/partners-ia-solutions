@@ -87,7 +87,7 @@ export default function Footer() {
         <footer className="bg-gray-50 border-t border-gray-200">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Main Footer Content */}
-                <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8 text-center md:text-left">
+                <div className="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8 text-center md:text-left">
                     {/* Brand Section */}
                     <div className="lg:col-span-2 flex flex-col items-center md:items-start">
                         <Link href="/" className="inline-flex items-center group mb-6">

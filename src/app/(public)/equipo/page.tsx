@@ -2,7 +2,7 @@ import { Users } from 'lucide-react'
 
 export default function TeamPage() {
     return (
-        <div className="min-h-screen bg-white py-14 lg:py-20">
+        <div className="min-h-screen bg-white py-8 lg:py-8">
             <div className="container mx-auto px-6 text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-50 rounded-2xl mb-4 border border-gray-200">
                     <Users className="text-gray-900" size={26} />

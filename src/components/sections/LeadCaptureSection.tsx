@@ -83,7 +83,7 @@ export default function LeadCaptureSection() {
     }
 
     return (
-        <section className="py-16 lg:py-24 bg-gray-50">
+        <section className="py-8 lg:py-8 bg-gray-50">
             <div className="max-w-5xl mx-auto px-6 lg:px-8">
 
                 {/* Header */}
@@ -116,7 +116,7 @@ export default function LeadCaptureSection() {
                     className="bg-white border border-gray-200 rounded-3xl shadow-xl overflow-hidden"
                 >
                     {status === 'success' ? (
-                        <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
+                        <div className="flex flex-col items-center justify-center py-8 px-8 text-center">
                             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-5 border border-green-100">
                                 <CheckCircle2 size={32} className="text-green-500" />
                             </div>

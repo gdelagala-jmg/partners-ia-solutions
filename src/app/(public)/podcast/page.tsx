@@ -48,7 +48,7 @@ export default function PodcastPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-10 lg:py-14 bg-gray-50">
+            <section className="py-8 lg:py-8 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -71,7 +71,7 @@ export default function PodcastPage() {
 
             {/* Main Channel Section */}
             {mainChannelHtml && (
-                <section className="py-10 lg:py-14 bg-white">
+                <section className="py-8 lg:py-8 bg-white">
                     <div className="max-w-5xl mx-auto px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ export default function PodcastPage() {
             )}
 
             {/* Media Grid */}
-            <section className="py-10 lg:py-14 bg-gray-50">
+            <section className="py-8 lg:py-8 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-8">
                         <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight">
@@ -126,7 +126,7 @@ export default function PodcastPage() {
                             ))}
                         </div>
                     ) : mediaItems.length === 0 ? (
-                        <div className="text-center py-16 bg-white rounded-3xl border border-gray-200">
+                        <div className="text-center py-8 bg-white rounded-3xl border border-gray-200">
                             <Video size={48} className="mx-auto text-gray-300 mb-4" />
                             <h3 className="text-xl font-semibold text-gray-900 mb-2">Próximamente</h3>
                             <p className="text-gray-600 text-sm">Estamos preparando nuevo contenido multimedia.</p>

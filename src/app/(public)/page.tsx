@@ -54,7 +54,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
-                <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center py-20 lg:py-28">
+                <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center py-8 lg:py-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -124,7 +124,7 @@ export default function HomePage() {
             </section>
 
             {/* FEATURED SOLUTIONS SECTION */}
-            <section className="py-16 lg:py-24 bg-gray-50 border-b border-gray-100">
+            <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-12 px-4">
                         <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">
@@ -142,7 +142,7 @@ export default function HomePage() {
                             ))}
                         </div>
                     ) : sectors.length === 0 ? (
-                        <div className="text-center text-gray-500 bg-white py-12 rounded-3xl border border-gray-100">Pronto publicaremos nuestras soluciones especializadas.</div>
+                        <div className="text-center text-gray-500 bg-white py-8 rounded-3xl border border-gray-100">Pronto publicaremos nuestras soluciones especializadas.</div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {sectors.map((sector, idx) => (
@@ -198,7 +198,7 @@ export default function HomePage() {
             <LatestNewsSection />
 
             {/* CTA SECTION */}
-            <section className="py-12 lg:py-16 bg-white">
+            <section className="py-8 lg:py-8 bg-white">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}

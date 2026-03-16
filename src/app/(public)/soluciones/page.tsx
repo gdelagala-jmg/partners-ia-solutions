@@ -52,7 +52,7 @@ export default function SolutionsPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-16 lg:py-20 bg-gray-50 border-b border-gray-100">
+            <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -70,7 +70,7 @@ export default function SolutionsPage() {
             </section>
 
             {/* Sectors Grid as Solutions */}
-            <section className="py-12 lg:py-20 bg-white">
+            <section className="py-8 lg:py-8 bg-white">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     {loading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -79,7 +79,7 @@ export default function SolutionsPage() {
                             ))}
                         </div>
                     ) : sectors.length === 0 ? (
-                        <div className="text-center py-20 bg-gray-50 rounded-3xl border border-gray-100">
+                        <div className="text-center py-8 bg-gray-50 rounded-3xl border border-gray-100">
                             <Box size={48} className="mx-auto text-gray-300 mb-4" />
                             <h3 className="text-xl font-semibold text-gray-900">Catalogo en preparación</h3>
                             <p className="text-gray-500 mt-2">Pronto publicaremos nuestras soluciones especializadas.</p>
