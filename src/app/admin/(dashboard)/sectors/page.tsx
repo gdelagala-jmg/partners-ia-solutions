@@ -128,6 +128,16 @@ export default function SectorsPage() {
             )
         },
         {
+            header: 'Orden',
+            accessor: (sector: any) => (
+                <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
+                        {sector.order}
+                    </span>
+                </div>
+            )
+        },
+        {
             header: 'Soluciones',
             accessor: (sector: any) => (
                 <div className="flex items-center gap-2">

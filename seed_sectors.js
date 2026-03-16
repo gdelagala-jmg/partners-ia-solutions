@@ -14,7 +14,8 @@ async function main() {
             image: '/uploads/sector_finanzas.png',
             externalUrl: 'https://partnersiasolutions.com/sectores/finanzas',
             description: 'Soluciones de IA para el sector financiero y bancario.',
-            active: true
+            active: true,
+            order: 1
         },
         {
             name: 'Salud',
@@ -22,7 +23,8 @@ async function main() {
             image: '/uploads/sector_salud.png',
             externalUrl: 'https://partnersiasolutions.com/sectores/salud',
             description: 'Transformación digital y salud inteligente impulsada por IA.',
-            active: true
+            active: true,
+            order: 2
         },
         {
             name: 'Retail',
@@ -30,7 +32,8 @@ async function main() {
             image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1000',
             externalUrl: 'https://partnersiasolutions.com/retail',
             description: 'Personalización y optimización de inventario.',
-            active: true
+            active: true,
+            order: 3
         },
         {
             name: 'Manufactura',
@@ -38,7 +41,8 @@ async function main() {
             image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000',
             externalUrl: 'https://partnersiasolutions.com/manufactura',
             description: 'Mantenimiento predictivo y automatización.',
-            active: true
+            active: true,
+            order: 4
         },
         {
             name: 'Legal',
@@ -46,7 +50,8 @@ async function main() {
             image: '/uploads/sector_legal.png',
             externalUrl: 'https://partnersiasolutions.com/sectores/legal',
             description: 'Automatización de documentos y análisis jurídico con IA.',
-            active: true
+            active: true,
+            order: 5
         },
         {
             name: 'Formación',
@@ -54,7 +59,8 @@ async function main() {
             image: '/uploads/sector_formacion.png',
             externalUrl: 'https://partnersiasolutions.com/sectores/formacion',
             description: 'Educación personalizada y tutores inteligentes con LLMs.',
-            active: true
+            active: true,
+            order: 6
         },
         {
             name: 'Gastronomía',
@@ -62,7 +68,8 @@ async function main() {
             image: '/uploads/sector_gastronomia.png',
             externalUrl: 'https://partnersiasolutions.com/sectores/gastronomia',
             description: 'Optimización de menús y gestión inteligente de cocina.',
-            active: true
+            active: true,
+            order: 7
         },
         {
             name: 'Ocio',
@@ -70,18 +77,18 @@ async function main() {
             image: '/uploads/sector_ocio.png',
             externalUrl: 'https://partnersiasolutions.com/sectores/ocio',
             description: 'Experiencias inmersivas y recomendaciones personalizadas.',
-            active: true
+            active: true,
+            order: 8
         }
     ]
 
     for (const data of sectorsData) {
-        const existing = await prisma.sector.findUnique({ where: { slug: data.slug } })
-        if (!existing) {
-            await prisma.sector.create({ data })
-            console.log(`Created sector: ${data.name}`)
-        } else {
-            console.log(`Sector ${data.name} already exists`)
-        }
+        await prisma.sector.upsert({
+            where: { slug: data.slug },
+            update: { order: data.order },
+            create: data
+        })
+        console.log(`Synced sector: ${data.name} (Order: ${data.order})`)
     }
 
     // Associate Solutions to Sectors
