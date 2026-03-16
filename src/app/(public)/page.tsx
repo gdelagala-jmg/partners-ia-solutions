@@ -17,18 +17,30 @@ const iconMap: any = {
 }
 
 export default function HomePage() {
-    const [featuredSolutions, setFeaturedSolutions] = useState<any[]>([])
+    const [sectors, setSectors] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
 
+    const getSectorImage = (sector: any) => {
+        if (sector.image && sector.image !== '/logo-ias.png' && !sector.image.includes('placeholder')) {
+            return sector.image
+        }
+        const name = sector.name?.toLowerCase() || ''
+        const slug = sector.slug?.toLowerCase() || ''
+        if (name.includes('legal') || slug.includes('legal')) return '/images/visuals/sector-legal.png'
+        if (name.includes('inmobil') || name.includes('real estate') || slug.includes('estate')) return '/images/visuals/sector-real-estate.png'
+        if (name.includes('finan') || name.includes('banc') || slug.includes('finan')) return '/images/visuals/sector-finance.png'
+        return sector.image || '/logo-ias.png'
+    }
+
     useEffect(() => {
-        fetch('/api/solutions?featured=true&limit=3')
+        fetch('/api/sectors?active=true')
             .then(res => res.json())
             .then(data => {
-                setFeaturedSolutions(data)
+                setSectors(data.slice(0, 3)) // Mostramos 3 sectores destacados en home
                 setLoading(false)
             })
             .catch(err => {
-                console.error('Error fetching featured solutions:', err)
+                console.error('Error fetching sectors:', err)
                 setLoading(false)
             })
     }, [])
@@ -112,55 +124,67 @@ export default function HomePage() {
             </section>
 
             {/* FEATURED SOLUTIONS SECTION */}
-            <section className="py-12 lg:py-16 bg-gray-50">
+            <section className="py-16 lg:py-24 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="text-center mb-10 px-4">
-                        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-3 tracking-tight">
+                    <div className="text-center mb-12 px-4">
+                        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Soluciones Destacadas
                         </h2>
-                        <p className="text-base text-gray-600 max-w-2xl mx-auto">
-                            Servicios diseñados para impulsar tu transformación digital
+                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                            Ecosistemas de Inteligencia Artificial diseñados para resolver los retos específicos de tu industria
                         </p>
                     </div>
 
                     {loading ? (
-                        <div className="text-center text-gray-500">Cargando soluciones...</div>
-                    ) : featuredSolutions.length === 0 ? (
-                        <div className="text-center text-gray-500">No hay soluciones destacadas disponibles.</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className="h-[420px] bg-white rounded-[2rem] animate-pulse border border-gray-100 shadow-sm" />
+                            ))}
+                        </div>
+                    ) : sectors.length === 0 ? (
+                        <div className="text-center text-gray-500 bg-white py-12 rounded-3xl border border-gray-100">Pronto publicaremos nuestras soluciones especializadas.</div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {featuredSolutions.map((solution, idx) => (
-                                <motion.div
-                                    key={solution.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                    className="group p-6 lg:p-8 rounded-2xl bg-white border border-gray-200 hover:border-gray-300 hover:shadow-xl transition-all flex flex-col items-center md:items-start text-center md:text-left"
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {sectors.map((sector, idx) => (
+                                <Link
+                                    key={sector.id}
+                                    href={`/soluciones/${sector.slug}`}
+                                    className="group flex flex-col h-[420px] rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-200 bg-white relative"
                                 >
-                                    {solution.multimedia && (
-                                        <div className="w-full h-40 mb-4 rounded-xl overflow-hidden bg-gray-100">
-                                            <img
-                                                src={getSolutionImage(solution)}
-                                                alt={solution.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                            />
+                                    {/* Image Section */}
+                                    <div className="h-[55%] w-full relative overflow-hidden bg-gray-100">
+                                        <div className="absolute inset-0 bg-blue-900/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                                        <img
+                                            src={getSectorImage(sector)}
+                                            alt={`Soluciones IA para ${sector.name}`}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div className="absolute top-5 left-5 z-20">
+                                            <span className="px-4 py-2 bg-white/95 backdrop-blur-md text-sm font-semibold rounded-xl shadow-sm text-gray-900 border border-white/20">
+                                                {sector.name}
+                                            </span>
                                         </div>
-                                    )}
-                                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                                        {solution.title}
-                                    </h3>
-                                    <p className="text-gray-600 leading-relaxed mb-5 text-sm">
-                                        {solution.description}
-                                    </p>
-                                    <Link
-                                        href={solution.ctaUrl || "/soluciones"}
-                                        className="inline-flex items-center text-blue-500 font-medium hover:text-blue-600 transition-colors group-hover:translate-x-1 transition-transform text-sm"
-                                    >
-                                        Ver más
-                                        <ArrowRight size={15} className="ml-1.5" />
-                                    </Link>
-                                </motion.div>
+                                    </div>
+                                    
+                                    {/* Content Section */}
+                                    <div className="h-[45%] p-6 lg:p-8 flex flex-col justify-between bg-white relative z-20">
+                                        <div>
+                                            {sector.description ? (
+                                                <p className="text-gray-600 line-clamp-3 leading-relaxed text-[15px]">
+                                                    {sector.description}
+                                                </p>
+                                            ) : (
+                                                <p className="text-gray-600 line-clamp-3 leading-relaxed text-[15px]">
+                                                    Descubre cómo la IA automatiza tus operaciones, analiza datos predictivos y mejora las métricas del sector {sector.name}.
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center text-[15px] font-semibold text-blue-600 group-hover:text-black transition-colors">
+                                            Descubrir Soluciones
+                                            <ArrowRight size={18} className="ml-2 transform group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </div>
+                                </Link>
                             ))}
                         </div>
                     )}
