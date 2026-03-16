@@ -36,7 +36,7 @@ export default function HomePage() {
         fetch('/api/sectors?active=true')
             .then(res => res.json())
             .then(data => {
-                setSectors(data) // Mostramos todos los sectores activos en home
+                setSectors(data.slice(0, 6)) // Mostramos solo los 6 primeros sectores en home
                 setLoading(false)
             })
             .catch(err => {
@@ -188,6 +188,17 @@ export default function HomePage() {
                             ))}
                         </div>
                     )}
+
+                    {/* VIEW ALL SOLUTIONS BUTTON */}
+                    <div className="mt-12 text-center">
+                        <Link
+                            href="/soluciones"
+                            className="inline-flex items-center px-8 py-3 bg-white text-gray-900 font-bold rounded-2xl border border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm hover:shadow-md group"
+                        >
+                            Ver Todas las Soluciones
+                            <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
                 </div>
             </section>
 
