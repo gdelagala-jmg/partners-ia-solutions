@@ -281,7 +281,7 @@ html {
   font-size: 1.0625rem;
   line-height: 1.8;
   color: #374151;
-  word-break: break-word;
+  word-break: normal;
   overflow-wrap: break-word;
 }
 
@@ -293,8 +293,7 @@ html {
 .news-article-body * {
   max-width: 100% !important;
   overflow-wrap: break-word !important;
-  word-wrap: break-word !important;
-  word-break: break-word !important;
+  word-break: normal !important;
 }
 
 .news-article-body img {
