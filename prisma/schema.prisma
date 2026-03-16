@@ -45,6 +45,7 @@ model NewsPost {
   title        String
   slug         String    @unique
   category     String
+  tags         String?
   coverImage   String?
   content      String    @db.LongText
   published    Boolean   @default(false)

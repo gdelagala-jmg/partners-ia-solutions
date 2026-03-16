@@ -191,7 +191,13 @@ export default function NewsDetailPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="news-article-body"
-                    dangerouslySetInnerHTML={{ __html: post.content }}
+                    dangerouslySetInnerHTML={{ 
+                        __html: post.content
+                            .replace(/&nbsp;/g, ' ')
+                            .replace(/\s+/g, ' ')
+                            .replace(/<span[^>]*>/g, '') // remove span to avoid nested dirty styles
+                            .replace(/<\/span>/g, '')
+                    }}
                 />
 
                 {/* Footer CTA */}

@@ -25,6 +25,7 @@ export async function PUT(request: Request, { params }: { params: Params }) {
                 title: body.title,
                 slug: body.slug,
                 category: body.category,
+                tags: body.tags,
                 aiType: body.aiType,
                 businessArea: body.businessArea,
                 sector: body.sector,
@@ -32,7 +33,7 @@ export async function PUT(request: Request, { params }: { params: Params }) {
                 content: body.content,
                 coverImage: body.coverImage,
                 published: body.published,
-                publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
+                publishedAt: body.published ? new Date(body.publishedAt) : null,
             },
         })
         return NextResponse.json(post)

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { Calendar, Upload, X, Loader2, Tag, Plus, Code2, Eye } from 'lucide-react'
+import { Calendar, Upload, X, Loader2, Tag, Plus, Code2, Eye, Zap } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
 // Dynamic import so SSR doesn't try to load browser-only Quill
@@ -32,6 +32,7 @@ const newsSchema = z.object({
     slug: z.string().min(1, 'El slug es obligatorio'),
     content: z.string().min(1, 'El contenido es obligatorio'),
     category: z.string().min(1, 'La categoría es obligatoria'),
+    tags: z.string().optional(),
     aiType: z.string().optional(),
     businessArea: z.string().optional(),
     sector: z.string().optional(),
@@ -175,6 +176,62 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
         setHtmlContent(e.target.value)
         setValue('content', e.target.value)
     }
+
+    // --- Smart Analysis Logic ---
+    const analyzeContent = useCallback(() => {
+        const text = htmlContent.replace(/<[^>]*>/g, ' ').toLowerCase()
+        
+        // 1. Detect AI Types
+        const detectedAiType = aiTypes.find(t => text.includes(t.toLowerCase()))
+        if (detectedAiType) setValue('aiType', detectedAiType)
+
+        // 2. Detect Business Areas
+        const detectedArea = businessAreas.find(a => text.includes(a.toLowerCase()))
+        if (detectedArea) setValue('businessArea', detectedArea)
+
+        // 3. Detect Sectors
+        const detectedSector = sectors.find(s => text.includes(s.toLowerCase()))
+        if (detectedSector) setValue('sector', detectedSector)
+
+        // 4. Detect Professions
+        const detectedProf = professions.find(p => text.includes(p.toLowerCase()))
+        if (detectedProf) setValue('profession', detectedProf)
+
+        // 5. Detect Categories from presets
+        const newCats = [...categories]
+        CATEGORY_PRESETS.forEach(cat => {
+            if (text.includes(cat.toLowerCase()) && !newCats.includes(cat)) {
+                newCats.push(cat)
+            }
+        })
+        if (newCats.length > categories.length) setCategories(newCats)
+
+        // 6. Generate tags based on common IA and business terms
+        const commonTerms = [
+            'OpenAI', 'Google', 'Microsoft', 'Nvidia', 'Meta', 'Tesla', 'Amazon',
+            'SaaS', 'B2B', 'B2C', 'Startups', 'Productividad', 'Automatización',
+            'Eficiencia', 'Inversión', 'Futuro', 'Ética', 'Seguridad', 'Cloud',
+            'Data', 'Agentes', 'LLM', 'GPT', 'Innovación', 'Transformación Digital'
+        ]
+        const newTags = [...tags]
+        commonTerms.forEach(term => {
+            if (text.includes(term.toLowerCase()) && !newTags.includes(term)) {
+                newTags.push(term)
+            }
+        })
+        setTags(newTags)
+    }, [htmlContent, categories, tags, setValue])
+
+    // --- Auto-Analysis on Paste ---
+    const lastContentLength = useRef(htmlContent.length)
+    useEffect(() => {
+        const currentLength = htmlContent.length
+        // If content jumps significantly (more than 200 chars), it's likely a paste
+        if (currentLength > 200 && lastContentLength.current < 50) {
+            analyzeContent()
+        }
+        lastContentLength.current = currentLength
+    }, [htmlContent, analyzeContent])
 
     // Sync categories to form field
     useEffect(() => {
@@ -376,7 +433,16 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
             {/* Content Editor — Visual / HTML toggle */}
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Contenido</label>
+                    <div className="flex items-center gap-3">
+                        <label className="block text-sm font-medium text-gray-700">Contenido</label>
+                        <button
+                            type="button"
+                            onClick={analyzeContent}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold hover:bg-blue-100 transition-colors border border-blue-100"
+                        >
+                            <Zap size={12} className="fill-blue-600" /> Autogenerar Categorías/Etiquetas
+                        </button>
+                    </div>
                     {/* Toggle tabs */}
                     <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden text-xs">
                         <button

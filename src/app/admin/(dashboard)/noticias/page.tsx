@@ -118,11 +118,13 @@ export default function NewsAdminPage() {
             accessor: (post: any) => (
                 <div className="space-y-1">
                     <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-50 text-blue-600 rounded-full uppercase tracking-wider block w-fit">
-                        {post.category}
+                        {post.category?.split(',')[0]}
                     </span>
-                    <div className="flex gap-1 flex-wrap">
+                    <div className="flex gap-1 flex-wrap max-w-[150px]">
                         {post.aiType && <span className="text-[10px] text-gray-400 italic">#{post.aiType}</span>}
-                        {post.sector && <span className="text-[10px] text-gray-400 italic">#{post.sector}</span>}
+                        {post.tags && post.tags.split(',').slice(0, 3).map((tag: string) => (
+                            <span key={tag} className="text-[10px] text-blue-400">#{tag.trim()}</span>
+                        ))}
                     </div>
                 </div>
             )
@@ -237,9 +239,14 @@ export default function NewsAdminPage() {
                                         <h3 className="font-bold text-gray-900 truncate pr-2">{post.title}</h3>
                                         <div className="flex items-center gap-2 mt-1">
                                             <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">
-                                                {post.category}
+                                                {post.category?.split(',')[0]}
                                             </span>
-                                            <span className="text-[10px] text-gray-400">
+                                            {post.tags && (
+                                                <span className="text-[10px] text-gray-400 italic truncate max-w-[100px]">
+                                                    #{post.tags.split(',')[0]}
+                                                </span>
+                                            )}
+                                            <span className="text-[10px] text-gray-400 ml-auto text-right">
                                                 {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
                                             </span>
                                         </div>

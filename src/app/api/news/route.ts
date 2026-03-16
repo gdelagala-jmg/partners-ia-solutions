@@ -54,6 +54,7 @@ export async function POST(request: Request) {
                 title: body.title,
                 slug: body.slug,
                 category: body.category,
+                tags: body.tags,
                 aiType: body.aiType,
                 businessArea: body.businessArea,
                 sector: body.sector,
