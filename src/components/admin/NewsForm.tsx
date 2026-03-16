@@ -296,17 +296,26 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
         }
     }, [])
 
+    const onError = (errors: any) => {
+        console.error('Validation errors:', errors)
+        const errorMessages = Object.values(errors).map((err: any) => err.message).join('\n')
+        alert(`No se puede guardar la noticia. Corrige lo siguiente:\n${errorMessages}`)
+    }
+
     const handleFormSubmit = (data: NewsFormValues) => {
-        onSubmit({
+        // Sanitize publishedAt: if it's an empty string, send as null
+        const sanitizedData = {
             ...data,
             content: htmlContent,
             category: categories.join(', ') || 'Noticia',
             tags: tags.join(', '),
-        })
+            publishedAt: data.publishedAt || null
+        }
+        onSubmit(sanitizedData)
     }
 
     return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+        <form onSubmit={handleSubmit(handleFormSubmit, onError)} className="space-y-6 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             {/* Title + Slug */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
