@@ -39,34 +39,36 @@ export async function POST(request: Request) {
             }, { status: 400 })
         }
 
-        /* 
-        // Desactivado temporalmente debido a conflicto de permisos (Private Store) en Vercel Blob.
-        // Se usará el almacenamiento local en public/uploads por ahora.
+        // Use Vercel Blob in production
         if (process.env.BLOB_READ_WRITE_TOKEN) {
-            const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
-            const blob = await put(filename, file, {
-                access: 'public',
-            })
-            return NextResponse.json({ url: blob.url })
-        } 
-        */
+            try {
+                const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
+                const blob = await put(filename, file, {
+                    access: 'public',
+                })
+                return NextResponse.json({ url: blob.url })
+            } catch (blobError: any) {
+                if (blobError.message.includes('public access on a private store')) {
+                    throw new Error('Tu almacén de Vercel está configurado como PRIVADO. Por favor, cámbialo a PÚBLICO en el panel de Vercel.')
+                }
+                throw blobError
+            }
+        }
 
-        // Almacenamiento local (Hostinger / Local)
-        const { writeFile, mkdir } = await import('fs/promises')
-        const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
+        // Fallback solo para desarrollo LOCAL (no funcionará en Vercel)
+        if (process.env.NODE_ENV === 'development') {
+            const { writeFile, mkdir } = await import('fs/promises')
+            const bytes = await file.arrayBuffer()
+            const buffer = Buffer.from(bytes)
+            const filename = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+            const uploadDir = path.join(process.cwd(), 'public/uploads')
+            await mkdir(uploadDir, { recursive: true })
+            const filepath = path.join(uploadDir, filename)
+            await writeFile(filepath, buffer)
+            return NextResponse.json({ url: `/uploads/${filename}` })
+        }
 
-        // Sanitize filename
-        const filename = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-
-        // Ensure directory exists
-        const uploadDir = path.join(process.cwd(), 'public/uploads')
-        await mkdir(uploadDir, { recursive: true })
-
-        const filepath = path.join(uploadDir, filename)
-        await writeFile(filepath, buffer)
-
-        return NextResponse.json({ url: `/uploads/${filename}` })
+        throw new Error('No hay almacenamiento configurado para producción.')
 
     } catch (error: any) {
         console.error('Error uploading file:', error)
