@@ -11,12 +11,6 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico',
     apple: '/icon.png',
   },
-  openGraph: {
-    title: "IA Solutions | Transformación Digital con IA",
-    description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
-    images: ['/logo-ias.png'],
-    siteName: 'IA Solutions',
-  },
 };
 
 export default function RootLayout({
