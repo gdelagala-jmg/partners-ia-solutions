@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../../lib/prisma'
 
 export async function GET(request: Request) {
     try {
@@ -12,7 +12,7 @@ export async function GET(request: Request) {
             where.published = true
         }
 
-        const apps = await prisma.app.findMany({
+        const apps = await prisma.application.findMany({
             where,
             orderBy: { order: 'asc' },
         })
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
         return NextResponse.json(apps)
     } catch (error) {
         console.error('Error fetching apps:', error)
-        return NextResponse.json({ error: 'Failed to fetch apps' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to fetch apps', details: error instanceof Error ? error.message : String(error) }, { status: 500 })
     }
 }
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json()
-        const app = await prisma.app.create({
+        const app = await prisma.application.create({
             data: {
                 name: body.name,
                 slug: body.slug,

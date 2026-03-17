@@ -194,7 +194,7 @@ model AssistantLead {
   updatedAt         DateTime @updatedAt
 }
 
-model App {
+model Application {
   id          String   @id @default(uuid())
   name        String
   slug        String   @unique

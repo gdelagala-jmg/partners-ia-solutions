@@ -2,10 +2,11 @@ import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     try {
-        const app = await prisma.app.findUnique({
-            where: { id: params.id },
+        const app = await prisma.application.findUnique({
+            where: { id },
         })
 
         if (!app) {
@@ -19,7 +20,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const session = await getSession()
     if (!session) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -27,8 +29,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     try {
         const body = await request.json()
-        const app = await prisma.app.update({
-            where: { id: params.id },
+        const app = await prisma.application.update({
+            where: { id },
             data: {
                 name: body.name,
                 slug: body.slug,
@@ -51,15 +53,16 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const session = await getSession()
     if (!session) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     try {
-        await prisma.app.delete({
-            where: { id: params.id },
+        await prisma.application.delete({
+            where: { id },
         })
 
         return NextResponse.json({ message: 'App deleted' })

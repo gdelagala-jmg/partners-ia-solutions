@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LayoutGrid, ArrowRight, ExternalLink, Globe, FileText, Bot, Zap, Box } from 'lucide-react'
+import { LayoutGrid, ArrowRight, ExternalLink, Globe, FileText, Bot, Zap, Box, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 interface App {

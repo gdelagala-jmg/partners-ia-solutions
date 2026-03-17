@@ -1,11 +1,15 @@
-import { prisma } from '@/lib/prisma'
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Share2, Info, LayoutGrid, Zap, Globe, Sparkles } from 'lucide-react'
 
-export default async function AppLandingPage({ params }: { params: { slug: string } }) {
-    const app = await prisma.app.findUnique({
-        where: { slug: params.slug },
+export default async function AppLandingPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
+    
+    // Attempt to find the app using the 'application' model
+    const app = await (prisma as any).application.findUnique({
+        where: { slug },
     })
 
     if (!app || !app.published) {
