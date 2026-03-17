@@ -13,20 +13,26 @@ export default async function PublicLayout({
 }) {
     const session = await getSession()
     const headersList = await headers()
+    
+    // Get info from middleware headers
     const pathname = headersList.get('x-url-path') || ''
+    const isBot = headersList.get('x-is-bot') === 'true'
 
-    // Check maintenance mode
+    // Check maintenance mode from database
     const maintenanceSetting = await prisma.siteSetting.findUnique({
         where: { key: 'maintenance_mode' }
     })
 
     const isMaintenance = maintenanceSetting?.value === 'true'
     
-    // Bypass maintenance for news path
+    // Bypass maintenance if:
+    // 1. It's an admin session
+    // 2. It's a news path (/noticias)
+    // 3. It's a recognized bot crawler
     const isNewsPath = pathname.startsWith('/noticias')
+    const shouldBypass = session || isNewsPath || isBot
 
-    // Bypass for admins or news paths
-    if (isMaintenance && !session && !isNewsPath) {
+    if (isMaintenance && !shouldBypass) {
         return <MaintenanceView />
     }
 

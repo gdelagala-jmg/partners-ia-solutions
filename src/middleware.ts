@@ -4,10 +4,17 @@ import { getSession } from './lib/auth'
 
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname
+    const userAgent = request.headers.get('user-agent') || ''
     
-    // Set headers to access pathname in server components
+    // Set headers to access pathname and bot status in server components
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set('x-url-path', path)
+    
+    // Comprehensive bot detection
+    const isBot = /bot|googlebot|crawler|spider|robot|crawling|whatsapp|facebook|twitter|linkedin|slack|notebooklm|openai|bingbot|yandex/i.test(userAgent)
+    if (isBot) {
+        requestHeaders.set('x-is-bot', 'true')
+    }
 
     // Public paths inside admin that don't need auth
     if (path === '/admin/login') {
@@ -34,5 +41,14 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'], // Match all paths except static/api
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
 }
