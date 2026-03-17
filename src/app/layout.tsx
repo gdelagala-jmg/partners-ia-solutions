@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.partnersiasolutions.com'),
-  title: "IA Solutions | Transformación Digital con IA",
+  title: "IA Solutions | V2 - Digital IA",
+
   description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
   icons: {
     icon: '/icon.png',
