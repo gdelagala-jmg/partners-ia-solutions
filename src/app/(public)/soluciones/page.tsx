@@ -60,7 +60,7 @@ export default function SolutionsPage() {
                         transition={{ duration: 0.6 }}
                     >
                         <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">
-                            Soluciones de IA para <br className="hidden md:block"/> <span className="text-blue-600">cada Industria</span>
+                            Soluciones de IA para <br className="hidden md:block"/> <span className="text-blue-600">cada Sector</span>
                         </h1>
                         <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
                             Descubre cómo nuestros agentes inteligentes diseñados a medida están transformando la productividad y la estrategia en tu sector específico.
