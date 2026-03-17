@@ -236,9 +236,9 @@ export default function AppsAdminPage() {
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     {app.externalUrl ? (
-                                                        <Globe size={14} className="text-blue-400" title="Integración Externa" />
+                                                        <Globe size={14} className="text-blue-400" />
                                                     ) : (
-                                                        <FileText size={14} className="text-amber-400" title="Landing Page Propia" />
+                                                        <FileText size={14} className="text-amber-400" />
                                                     )}
                                                 </div>
                                             </div>

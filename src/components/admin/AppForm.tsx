@@ -20,10 +20,10 @@ const appSchema = z.object({
     externalUrl: z.string().optional().nullable(),
     content: z.string().optional().nullable(),
     published: z.boolean().optional(),
-    order: z.number().int().optional().default(0),
+    order: z.number().default(0),
 })
 
-type AppFormValues = z.infer<typeof appSchema>
+type AppFormValues = any
 
 export default function AppForm({ initialData, onSubmit, onCancel }: any) {
     const [uploading, setUploading] = useState(false)
@@ -32,7 +32,7 @@ export default function AppForm({ initialData, onSubmit, onCancel }: any) {
         resolver: zodResolver(appSchema),
         defaultValues: initialData ? {
             ...initialData,
-            order: initialData.order ?? 0,
+            order: Number(initialData.order || 0),
         } : {
             name: '',
             slug: '',
@@ -103,7 +103,7 @@ export default function AppForm({ initialData, onSubmit, onCancel }: any) {
                         placeholder="Ej: Chatbot Avanzado"
                         className="block w-full bg-white border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none shadow-sm"
                     />
-                    {errors.name && <p className="text-red-500 text-xs mt-1.5 ml-1">{errors.name.message}</p>}
+                    {errors.name && <p className="text-red-500 text-xs mt-1.5 ml-1">{(errors.name as any).message}</p>}
                 </div>
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Slug / URL amigable</label>
@@ -114,7 +114,7 @@ export default function AppForm({ initialData, onSubmit, onCancel }: any) {
                             className="block w-full bg-gray-50 border-gray-300 rounded-xl pl-16 pr-4 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                         />
                     </div>
-                    {errors.slug && <p className="text-red-500 text-xs mt-1.5 ml-1">{errors.slug.message}</p>}
+                    {errors.slug && <p className="text-red-500 text-xs mt-1.5 ml-1">{(errors.slug as any).message}</p>}
                 </div>
             </div>
 
