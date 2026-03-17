@@ -66,7 +66,7 @@ export default function Navbar({ session }: { session?: any }) {
                 : 'bg-white/60 backdrop-blur-md border-b border-transparent'
                 }`}
         >
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
                 <div className="flex items-center justify-between py-5">
                     <Link href="/" className="flex items-center group shrink-0">
                         <img
@@ -101,49 +101,6 @@ export default function Navbar({ session }: { session?: any }) {
                             Contactar
                         </Link>
 
-                        {session ? (
-                            <div className="relative" ref={menuRef}>
-                                <button
-                                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                                    className="flex flex-row items-center space-x-1 p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-all font-medium"
-                                >
-                                    <User size={20} />
-                                    <ChevronDown size={14} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
-                                </button>
-
-                                {isUserMenuOpen && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg py-2 z-50">
-                                        <div className="px-4 py-2 border-b border-gray-50 mb-2">
-                                            <p className="text-xs text-gray-500 uppercase font-semibold">Admin</p>
-                                        </div>
-                                        <Link
-                                            href="/admin/dashboard"
-                                            onClick={() => setIsUserMenuOpen(false)}
-                                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                                        >
-                                            <LayoutDashboard size={16} className="mr-2" />
-                                            Dashboard
-                                        </Link>
-                                        <button
-                                            onClick={handleLogout}
-                                            className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                                        >
-                                            <LogOut size={16} className="mr-2" />
-                                            Cerrar Sesión
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <Link
-                                href="/admin/login"
-                                className="p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-all"
-                                title="Acceso Admin"
-                            >
-                                <User size={20} />
-                            </Link>
-                        )}
-
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -153,6 +110,52 @@ export default function Navbar({ session }: { session?: any }) {
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
                     </div>
+                </div>
+
+                {/* Login / Acceso Admin Discreto (Solo Desktop) */}
+                <div className="hidden md:block absolute top-1 right-2 lg:right-4 opacity-20 hover:opacity-100 transition-all duration-500">
+                    {session ? (
+                        <div className="relative" ref={menuRef}>
+                            <button
+                                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                className="flex flex-row items-center space-x-0.5 p-1 text-gray-400 hover:text-gray-900 rounded transition-all"
+                            >
+                                <User size={15} />
+                                <ChevronDown size={10} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {isUserMenuOpen && (
+                                <div className="absolute right-0 mt-1 w-48 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-[150]">
+                                    <div className="px-4 py-2 border-b border-gray-50 mb-2">
+                                        <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest">Administración</p>
+                                    </div>
+                                    <Link
+                                        href="/admin/dashboard"
+                                        onClick={() => setIsUserMenuOpen(false)}
+                                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                                    >
+                                        <LayoutDashboard size={14} className="mr-2" />
+                                        Dashboard
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex w-full items-center px-4 py-2 text-[13px] text-red-500 hover:bg-red-50 transition-colors font-medium"
+                                    >
+                                        <LogOut size={14} className="mr-2" />
+                                        Cerrar Sesión
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <Link
+                            href="/admin/login"
+                            className="p-1 text-gray-300 hover:text-gray-900 rounded transition-all"
+                            title="Acceso"
+                        >
+                            <User size={15} />
+                        </Link>
+                    )}
                 </div>
             </div>
 
