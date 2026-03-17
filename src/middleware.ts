@@ -4,10 +4,18 @@ import { getSession } from './lib/auth'
 
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname
+    
+    // Set headers to access pathname in server components
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-url-path', path)
 
     // Public paths inside admin that don't need auth
     if (path === '/admin/login') {
-        return NextResponse.next()
+        return NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            },
+        })
     }
 
     // Protect all /admin routes
@@ -18,9 +26,13 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    return NextResponse.next()
+    return NextResponse.next({
+        request: {
+            headers: requestHeaders,
+        },
+    })
 }
 
 export const config = {
-    matcher: ['/admin/:path*'],
+    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'], // Match all paths except static/api
 }

@@ -4,6 +4,7 @@ import FlashNewsTicker from '@/components/news/FlashNewsTicker'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import MaintenanceView from '@/components/public/MaintenanceView'
+import { headers } from 'next/headers'
 
 export default async function PublicLayout({
     children,
@@ -11,6 +12,8 @@ export default async function PublicLayout({
     children: React.ReactNode
 }) {
     const session = await getSession()
+    const headersList = await headers()
+    const pathname = headersList.get('x-url-path') || ''
 
     // Check maintenance mode
     const maintenanceSetting = await prisma.siteSetting.findUnique({
@@ -18,9 +21,12 @@ export default async function PublicLayout({
     })
 
     const isMaintenance = maintenanceSetting?.value === 'true'
+    
+    // Bypass maintenance for news path
+    const isNewsPath = pathname.startsWith('/noticias')
 
-    // Bypass for admins
-    if (isMaintenance && !session) {
+    // Bypass for admins or news paths
+    if (isMaintenance && !session && !isNewsPath) {
         return <MaintenanceView />
     }
 
