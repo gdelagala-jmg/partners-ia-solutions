@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import MaintenanceView from '@/components/public/MaintenanceView'
 import { headers } from 'next/headers'
 
+export const dynamic = 'force-dynamic'
+
 export default async function ProtectedPublicLayout({
     children,
 }: {

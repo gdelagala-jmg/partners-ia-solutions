@@ -4,6 +4,8 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Share2, Info, LayoutGrid, Zap, Globe, Sparkles } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AppLandingPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
     
