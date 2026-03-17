@@ -8,6 +8,7 @@ export async function middleware(request: NextRequest) {
     
     // Set headers to access pathname and bot status in server components
     const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-antigravity-version', '3.0')
     requestHeaders.set('x-url-path', path)
     
     // Comprehensive bot detection
@@ -33,11 +34,14 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    return NextResponse.next({
+    const response = NextResponse.next({
         request: {
             headers: requestHeaders,
         },
     })
+    
+    response.headers.set('x-antigravity-version', '3.0')
+    return response
 }
 
 export const config = {
