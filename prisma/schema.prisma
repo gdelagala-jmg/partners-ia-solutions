@@ -193,3 +193,17 @@ model AssistantLead {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+
+model App {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  image       String?
+  externalUrl String?  @db.Text
+  content     String?  @db.LongText
+  published   Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

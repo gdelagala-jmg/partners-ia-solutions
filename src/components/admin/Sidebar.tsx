@@ -19,7 +19,8 @@ import {
     ShieldCheck,
     ShieldAlert,
     Link2,
-    Bot
+    Bot,
+    LayoutGrid
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
@@ -31,6 +32,7 @@ const menuItems = [
     { name: 'Sectores', href: '/admin/sectors', icon: Box },
     { name: 'Clientes', href: '/admin/clientes', icon: Users },
     { name: 'Navegación', href: '/admin/navegacion', icon: Link2 },
+    { name: 'Aplicaciones', href: '/admin/apps', icon: LayoutGrid },
     { name: 'Soluciones', href: '/admin/soluciones', icon: Puzzle },
     { name: 'Academia', href: '/admin/escuela', icon: BookOpen },
     { name: 'Noticias', href: '/admin/noticias', icon: FileText },
