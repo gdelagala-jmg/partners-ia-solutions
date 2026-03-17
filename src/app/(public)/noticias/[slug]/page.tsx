@@ -23,21 +23,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         .trim()
         .substring(0, 160) + '...'
 
+    const url = `https://www.partnersiasolutions.com/noticias/${slug}`
+    const imageUrl = post.coverImage ? 
+        (post.coverImage.startsWith('http') ? post.coverImage : `https://www.partnersiasolutions.com${post.coverImage}`) : 
+        'https://www.partnersiasolutions.com/logo-ias.png'
+
     return {
         title: `${post.title} | IA Solutions`,
         description,
+        alternates: {
+            canonical: url,
+        },
         openGraph: {
             title: post.title,
             description,
+            url,
+            siteName: 'IA Solutions',
             type: 'article',
             publishedTime: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
-            images: post.coverImage ? [{ url: post.coverImage }] : [],
+            images: [{
+                url: imageUrl,
+                width: 1200,
+                height: 630,
+                alt: post.title,
+            }],
         },
         twitter: {
             card: 'summary_large_image',
             title: post.title,
             description,
-            images: post.coverImage ? [post.coverImage] : [],
+            images: [imageUrl],
         },
     }
 }
