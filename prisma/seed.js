@@ -22,80 +22,87 @@ async function main() {
     }
 
     // 2. Solutions (Featured)
-    const solutionsData = [
-        {
-            title: 'AI Customer Support',
-            slug: 'ai-customer-support',
-            description: 'Automate your customer support with our advanced AI agents.',
-            type: 'SOLUTION',
-            published: true,
-            featured: true,
-            featuredOrder: 1,
-            multimedia: '/images/solutions/support.webp'
-        },
-        {
-            title: 'Predictive Analytics',
-            slug: 'predictive-analytics',
-            description: 'Anticipate market trends and customer behavior with Machine Learning.',
-            type: 'SOLUTION',
-            published: true,
-            featured: true,
-            featuredOrder: 2,
-            multimedia: '/images/solutions/analytics.webp'
-        },
-        {
-            title: 'Process Automation',
-            slug: 'process-automation',
-            description: 'Reduce manual work by up to 80% using intelligent RPA solutions.',
-            type: 'SOLUTION',
-            published: true,
-            featured: true,
-            featuredOrder: 3,
-            multimedia: '/images/solutions/automation.webp'
-        }
-    ]
+    const countSolutions = await prisma.solution.count()
+    if (countSolutions === 0) {
+        const solutionsData = [
+            {
+                title: 'AI Customer Support',
+                slug: 'ai-customer-support',
+                description: 'Automate your customer support with our advanced AI agents.',
+                type: 'SOLUTION',
+                published: true,
+                featured: true,
+                featuredOrder: 1,
+                multimedia: '/images/solutions/support.webp'
+            },
+            {
+                title: 'Predictive Analytics',
+                slug: 'predictive-analytics',
+                description: 'Anticipate market trends and customer behavior with Machine Learning.',
+                type: 'SOLUTION',
+                published: true,
+                featured: true,
+                featuredOrder: 2,
+                multimedia: '/images/solutions/analytics.webp'
+            },
+            {
+                title: 'Process Automation',
+                slug: 'process-automation',
+                description: 'Reduce manual work by up to 80% using intelligent RPA solutions.',
+                type: 'SOLUTION',
+                published: true,
+                featured: true,
+                featuredOrder: 3,
+                multimedia: '/images/solutions/automation.webp'
+            }
+        ]
 
-    for (const sol of solutionsData) {
-        await prisma.solution.upsert({
-            where: { slug: sol.slug },
-            update: sol,
-            create: sol,
-        })
+        console.log('Seeding initial solutions...')
+        for (const sol of solutionsData) {
+            await prisma.solution.create({
+                data: sol,
+            })
+        }
+    } else {
+        console.log('Solutions already exist, skipping seeding.')
     }
-    console.log('Seeded solutions')
 
     // 3. News
-    const newsData = [
-        {
-            title: 'The Future of Generative AI in Banking',
-            slug: 'future-of-gen-ai',
-            category: 'Análisis',
-            aiType: 'Generative AI',
-            sector: 'Finance',
-            content: 'Generative AI is transforming how banks interact with customers by providing personalized advice...',
-            published: true,
-            publishedAt: new Date()
-        },
-        {
-            title: 'ML in Medical Diagnostics',
-            slug: 'ml-healthcare-diagnostics',
-            category: 'Tecnología',
-            aiType: 'Machine Learning',
-            businessArea: 'Healthcare',
-            content: 'New ML models are achieving higher accuracy in early detection of complex diseases...',
-            published: true,
-            publishedAt: new Date()
-        }
-    ]
+    const countNews = await prisma.newsPost.count()
+    if (countNews === 0) {
+        const newsData = [
+            {
+                title: 'The Future of Generative AI in Banking',
+                slug: 'future-of-gen-ai',
+                category: 'Análisis',
+                aiType: 'Generative AI',
+                sector: 'Finance',
+                content: 'Generative AI is transforming how banks interact with customers by providing personalized advice...',
+                published: true,
+                publishedAt: new Date()
+            },
+            {
+                title: 'ML in Medical Diagnostics',
+                slug: 'ml-healthcare-diagnostics',
+                category: 'Tecnología',
+                aiType: 'Machine Learning',
+                businessArea: 'Healthcare',
+                content: 'New ML models are achieving higher accuracy in early detection of complex diseases...',
+                published: true,
+                publishedAt: new Date()
+            }
+        ]
 
-    for (const news of newsData) {
-        await prisma.newsPost.upsert({
-            where: { slug: news.slug },
-            update: news,
-            create: news,
-        })
+        console.log('Seeding initial news...')
+        for (const news of newsData) {
+            await prisma.newsPost.create({
+                data: news,
+            })
+        }
+    } else {
+        console.log('News already exist, skipping seeding.')
     }
-    console.log('Seeded news')
+
 
     // 4. Navigation Links
     const countLinks = await prisma.navLink.count()
