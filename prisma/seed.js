@@ -98,40 +98,43 @@ async function main() {
     console.log('Seeded news')
 
     // 4. Navigation Links
-    const navLinks = [
-        // Header
-        { name: 'Inicio', href: '/', location: 'HEADER', order: 1 },
-        { name: 'Soluciones', href: '/soluciones', location: 'HEADER', order: 2 },
-        { name: 'Escuela', href: '/escuela', location: 'HEADER', order: 3 },
-        { name: 'Noticias IA', href: '/noticias', location: 'HEADER', order: 4 },
-        
-        // Footer - Explora
-        { name: 'Inicio', href: '/', location: 'FOOTER_EXPLORA', order: 1 },
-        { name: 'Soluciones', href: '/soluciones', location: 'FOOTER_EXPLORA', order: 2 },
-        { name: 'Casos de Éxito', href: '/casos-exito', location: 'FOOTER_EXPLORA', order: 3 },
-        { name: 'Blog', href: '/noticias', location: 'FOOTER_EXPLORA', order: 4 },
+    const countLinks = await prisma.navLink.count()
+    if (countLinks === 0) {
+        const navLinks = [
+            // Header
+            { name: 'Inicio', href: '/', location: 'HEADER', order: 1 },
+            { name: 'Soluciones', href: '/soluciones', location: 'HEADER', order: 2 },
+            { name: 'Escuela', href: '/escuela', location: 'HEADER', order: 3 },
+            { name: 'Noticias IA', href: '/noticias', location: 'HEADER', order: 4 },
+            
+            // Footer - Explora
+            { name: 'Inicio', href: '/', location: 'FOOTER_EXPLORA', order: 1 },
+            { name: 'Soluciones', href: '/soluciones', location: 'FOOTER_EXPLORA', order: 2 },
+            { name: 'Casos de Éxito', href: '/casos-exito', location: 'FOOTER_EXPLORA', order: 3 },
+            { name: 'Blog', href: '/noticias', location: 'FOOTER_EXPLORA', order: 4 },
 
-        // Footer - Soluciones
-        { name: 'IA Consulting', href: '/soluciones#consulting', location: 'FOOTER_SOLUCIONES', order: 1 },
-        { name: 'Custom AI Agents', href: '/soluciones#agents', location: 'FOOTER_SOLUCIONES', order: 2 },
-        { name: 'Data Strategy', href: '/soluciones#data', location: 'FOOTER_SOLUCIONES', order: 3 },
+            // Footer - Soluciones
+            { name: 'IA Consulting', href: '/soluciones#consulting', location: 'FOOTER_SOLUCIONES', order: 1 },
+            { name: 'Custom AI Agents', href: '/soluciones#agents', location: 'FOOTER_SOLUCIONES', order: 2 },
+            { name: 'Data Strategy', href: '/soluciones#data', location: 'FOOTER_SOLUCIONES', order: 3 },
 
-        // Footer - Empresa
-        { name: 'Sobre Nosotros', href: '/equipo', location: 'FOOTER_EMPRESA', order: 1 },
-        { name: 'Contacto', href: '/contacto', location: 'FOOTER_EMPRESA', order: 2 },
-        { name: 'Privacidad', href: '/privacidad', location: 'FOOTER_EMPRESA', order: 3 },
-        { name: 'Términos', href: '/terminos', location: 'FOOTER_EMPRESA', order: 4 }
-    ]
+            // Footer - Empresa
+            { name: 'Sobre Nosotros', href: '/equipo', location: 'FOOTER_EMPRESA', order: 1 },
+            { name: 'Contacto', href: '/contacto', location: 'FOOTER_EMPRESA', order: 2 },
+            { name: 'Privacidad', href: '/privacidad', location: 'FOOTER_EMPRESA', order: 3 },
+            { name: 'Términos', href: '/terminos', location: 'FOOTER_EMPRESA', order: 4 }
+        ]
 
-    console.log('Cleaning existing nav links...')
-    await prisma.navLink.deleteMany({})
-
-    for (const link of navLinks) {
-        await prisma.navLink.create({
-            data: link
-        })
+        console.log('Seeding navigation links because table is empty...')
+        for (const link of navLinks) {
+            await prisma.navLink.create({
+                data: link
+            })
+        }
+        console.log('Seeded navigation links')
+    } else {
+        console.log('Navigation links already exist, skipping seeding.')
     }
-    console.log('Seeded navigation links')
 
     console.log('Seeding finished.')
 }

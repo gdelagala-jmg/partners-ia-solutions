@@ -13,6 +13,12 @@ export default function NavigationPage() {
     const [loading, setLoading] = useState(true)
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [editingLink, setEditingLink] = useState<any>(null)
+    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+
+    const showMessage = (type: 'success' | 'error', text: string) => {
+        setMessage({ type, text })
+        setTimeout(() => setMessage(null), 5000)
+    }
 
     const fetchLinks = async () => {
         try {
@@ -45,9 +51,13 @@ export default function NavigationPage() {
             if (res.ok) {
                 setIsFormOpen(false)
                 fetchLinks()
+                showMessage('success', 'Enlace creado correctamente')
+            } else {
+                showMessage('error', 'Error al crear el enlace')
             }
         } catch (error) {
             console.error('Error creating link:', error)
+            showMessage('error', 'Error de red al crear el enlace')
         }
     }
 
@@ -62,9 +72,13 @@ export default function NavigationPage() {
                 setEditingLink(null)
                 setIsFormOpen(false)
                 fetchLinks()
+                showMessage('success', 'Enlace actualizado correctamente')
+            } else {
+                showMessage('error', 'Error al actualizar el enlace')
             }
         } catch (error) {
             console.error('Error updating link:', error)
+            showMessage('error', 'Error de red al actualizar el enlace')
         }
     }
 
@@ -161,6 +175,19 @@ export default function NavigationPage() {
                     Nuevo Enlace
                 </button>
             </div>
+
+            {message && (
+                <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className={`p-4 rounded-xl border flex items-center gap-3 font-bold text-sm ${
+                        message.type === 'success' ? 'bg-green-50 border-green-100 text-green-700' : 'bg-red-50 border-red-100 text-red-700'
+                    }`}
+                >
+                    <div className={`w-2 h-2 rounded-full ${message.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
+                    {message.text}
+                </motion.div>
+            )}
 
             <AnimatePresence>
                 {isFormOpen && (
