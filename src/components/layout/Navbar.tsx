@@ -112,15 +112,15 @@ export default function Navbar({ session }: { session?: any }) {
                     </div>
                 </div>
 
-                {/* Login / Acceso Admin Discreto (Solo Desktop) */}
-                <div className="hidden md:block absolute top-1 right-2 lg:right-4 opacity-20 hover:opacity-100 transition-all duration-500">
+                {/* Login / Acceso Admin Discreto (Desktop y Móvil) */}
+                <div className="absolute top-1 right-2 lg:right-4 opacity-10 md:opacity-20 hover:opacity-100 transition-all duration-500">
                     {session ? (
                         <div className="relative" ref={menuRef}>
                             <button
                                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                                 className="flex flex-row items-center space-x-0.5 p-1 text-gray-400 hover:text-gray-900 rounded transition-all"
                             >
-                                <User size={15} />
+                                <User size={14} />
                                 <ChevronDown size={10} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                             </button>
 
@@ -131,7 +131,10 @@ export default function Navbar({ session }: { session?: any }) {
                                     </div>
                                     <Link
                                         href="/admin/dashboard"
-                                        onClick={() => setIsUserMenuOpen(false)}
+                                        onClick={() => {
+                                            setIsUserMenuOpen(false)
+                                            setIsOpen(false)
+                                        }}
                                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
                                     >
                                         <LayoutDashboard size={14} className="mr-2" />
@@ -153,7 +156,7 @@ export default function Navbar({ session }: { session?: any }) {
                             className="p-1 text-gray-300 hover:text-gray-900 rounded transition-all"
                             title="Acceso"
                         >
-                            <User size={15} />
+                            <User size={14} />
                         </Link>
                     )}
                 </div>
@@ -187,6 +190,26 @@ export default function Navbar({ session }: { session?: any }) {
                         >
                             Contactar
                         </Link>
+                        
+                        {session && (
+                            <div className="pt-2">
+                                <Link
+                                    href="/admin/dashboard"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-center px-4 py-3 bg-blue-50 text-blue-600 text-sm font-bold rounded-lg hover:bg-blue-100 transition-all"
+                                >
+                                    <LayoutDashboard size={16} className="mr-2" />
+                                    Panel de Control
+                                </Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full mt-2 flex items-center justify-center px-4 py-2 text-xs text-red-500 font-medium"
+                                >
+                                    <LogOut size={14} className="mr-2" />
+                                    Cerrar Sesión
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
