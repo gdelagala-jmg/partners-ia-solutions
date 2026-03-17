@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.partnersiasolutions.com'),
-  title: "IA Solutions - Transformación con Inteligencia Artificial",
+  title: "IA Solutions | Transformación Digital con IA",
   description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
   icons: {
     icon: '/icon.png',
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     apple: '/icon.png',
   },
   openGraph: {
-    title: "IA Solutions - Transformación con Inteligencia Artificial",
+    title: "IA Solutions | Transformación Digital con IA",
     description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
     images: ['/logo-ias.png'],
     siteName: 'IA Solutions',
