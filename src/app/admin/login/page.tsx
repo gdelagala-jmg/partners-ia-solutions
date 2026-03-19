@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Lock } from 'lucide-react'
 
 export default function AdminLogin() {
@@ -98,9 +99,9 @@ export default function AdminLogin() {
                 </form>
 
                 <div className="pt-2 text-center">
-                    <p className="text-[9px] text-[#98989D] font-bold uppercase tracking-[0.2em]">
+                    <Link href="/" className="text-[9px] text-[#98989D] font-bold uppercase tracking-[0.2em] hover:text-blue-600 transition-colors">
                         © 2026 Partners IA Solutions
-                    </p>
+                    </Link>
                 </div>
             </div>
         </div>
