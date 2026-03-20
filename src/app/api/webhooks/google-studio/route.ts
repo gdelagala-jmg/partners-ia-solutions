@@ -2,40 +2,20 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { slugify } from '@/lib/utils/slugify'
 
-const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Authorization, Accept, Origin, X-Requested-With',
-    'Access-Control-Max-Age': '86400',
-}
-
-export async function OPTIONS() {
-    return new Response(null, { 
-        status: 204,
-        headers: corsHeaders 
-    })
-}
-
 export async function POST(request: Request) {
     const authHeader = request.headers.get('x-api-key')
     const webhookKey = process.env.GOOGLE_STUDIO_WEBHOOK_KEY
 
     // Basic security check
     if (!authHeader || authHeader !== webhookKey) {
-        return NextResponse.json({ error: 'Unauthorized' }, { 
-            status: 401,
-            headers: corsHeaders 
-        })
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     try {
         const body = await request.json()
         
         if (!body.title || !body.content) {
-            return NextResponse.json({ error: 'Missing title or content' }, { 
-                status: 400,
-                headers: corsHeaders
-            })
+            return NextResponse.json({ error: 'Missing title or content' }, { status: 400 })
         }
 
         const title = body.title
@@ -66,17 +46,12 @@ export async function POST(request: Request) {
                 slug: post.slug,
                 title: post.title
             }
-        }, {
-            headers: corsHeaders
         })
     } catch (error: any) {
         console.error('Webhook Error:', error)
         return NextResponse.json({ 
             error: 'Failed to create news post', 
             details: error.message 
-        }, { 
-            status: 500,
-            headers: corsHeaders
-        })
+        }, { status: 500 })
     }
 }
