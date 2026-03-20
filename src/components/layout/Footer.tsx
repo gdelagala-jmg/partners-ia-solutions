@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { Linkedin, Facebook, Instagram, Youtube, MessageCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
@@ -40,27 +41,31 @@ const socialLinks = [
     { name: 'YouTube', href: 'https://www.youtube.com/@PGF.IASolutions', icon: Youtube },
 ]
 
-export default function Footer() {
-    const [navLinks, setNavLinks] = useState<any[]>([])
+export default function Footer({ 
+    initialNavLinks = [] 
+}: { 
+    initialNavLinks?: any[] 
+}) {
+    const [navLinks, setNavLinks] = useState<any[]>(initialNavLinks.length > 0 ? initialNavLinks.filter((link: any) => link.active) : [])
 
     useEffect(() => {
-        const fetchNavLinks = async () => {
-            try {
-                const res = await fetch('/api/navigation')
-                if (res.ok) {
-                    const data = await res.json()
-                    if (Array.isArray(data)) {
-                        setNavLinks(data.filter((link: any) => link.active))
-                    } else {
-                        setNavLinks([])
+        if (initialNavLinks.length === 0) {
+            const fetchNavLinks = async () => {
+                try {
+                    const res = await fetch('/api/navigation')
+                    if (res.ok) {
+                        const data = await res.json()
+                        if (Array.isArray(data)) {
+                            setNavLinks(data.filter((link: any) => link.active))
+                        }
                     }
+                } catch (error) {
+                    console.error('Error fetching navigation links:', error)
                 }
-            } catch (error) {
-                console.error('Error fetching navigation links:', error)
             }
+            fetchNavLinks()
         }
-        fetchNavLinks()
-    }, [])
+    }, [initialNavLinks])
 
     const dynamicFooterSections = [
         {
@@ -91,11 +96,14 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="lg:col-span-2 flex flex-col items-center md:items-start">
                         <Link href="/" className="inline-flex items-center group mb-6">
-                            <img
-                                src="/logo_footer_new.png"
-                                alt="Partners IA Solutions"
-                                className="h-16 w-auto object-contain transition-transform group-hover:scale-105"
-                            />
+                            <div className="relative h-16 w-48">
+                                <Image
+                                    src="/logo_footer_new.png"
+                                    alt="Partners IA Solutions"
+                                    fill
+                                    className="object-contain transition-transform group-hover:scale-105"
+                                />
+                            </div>
                         </Link>
                         <p className="text-sm text-gray-600 leading-relaxed max-w-sm mb-8">
                             Transformamos negocios con soluciones de Inteligencia Artificial de última generación.

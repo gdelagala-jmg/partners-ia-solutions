@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Calendar, Tag, Newspaper } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -81,17 +82,18 @@ export default function LatestNewsSection() {
                                 {/* Cover Image */}
                                 <div className="h-40 bg-gray-100 relative overflow-hidden">
                                     {post.coverImage ? (
-                                        <img
+                                        <Image
                                             src={post.coverImage}
                                             alt={post.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            fill
+                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 text-gray-300">
                                             <Newspaper size={28} />
                                         </div>
                                     )}
-                                    <div className="absolute top-3 left-3">
+                                    <div className="absolute top-3 left-3 z-20">
                                         <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md rounded-full text-xs font-bold text-white border border-white/10">
                                             {post.category?.split(',')[0]?.trim() || 'Noticia'}
                                         </span>

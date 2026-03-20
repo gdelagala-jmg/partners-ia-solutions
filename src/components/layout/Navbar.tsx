@@ -1,14 +1,19 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { Menu, X, User, ChevronDown, LayoutDashboard, LogOut } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 
-
-
-export default function Navbar({ session }: { session?: any }) {
-    const [navLinks, setNavLinks] = useState<any[]>([])
+export default function Navbar({ 
+    session, 
+    initialNavLinks = [] 
+}: { 
+    session?: any, 
+    initialNavLinks?: any[] 
+}) {
+    const [navLinks, setNavLinks] = useState<any[]>(initialNavLinks.length > 0 ? initialNavLinks.filter((link: any) => link.active && link.location === 'HEADER') : [])
     const [isOpen, setIsOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
@@ -17,23 +22,25 @@ export default function Navbar({ session }: { session?: any }) {
     const menuRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        const fetchNavLinks = async () => {
-            try {
-                const res = await fetch('/api/navigation')
-                if (res.ok) {
-                    const data = await res.json()
-                    if (Array.isArray(data)) {
-                        setNavLinks(data.filter((link: any) => link.active && link.location === 'HEADER'))
-                    } else {
-                        setNavLinks([])
+        // If initialNavLinks are provided, we don't necessarily need to fetch again immediately
+        // but we can do it to ensure we have the most up-to-date data if needed.
+        if (initialNavLinks.length === 0) {
+            const fetchNavLinks = async () => {
+                try {
+                    const res = await fetch('/api/navigation')
+                    if (res.ok) {
+                        const data = await res.json()
+                        if (Array.isArray(data)) {
+                            setNavLinks(data.filter((link: any) => link.active && link.location === 'HEADER'))
+                        }
                     }
+                } catch (error) {
+                    console.error('Error fetching navigation links:', error)
                 }
-            } catch (error) {
-                console.error('Error fetching navigation links:', error)
             }
+            fetchNavLinks()
         }
-        fetchNavLinks()
-    }, [])
+    }, [initialNavLinks])
 
     useEffect(() => {
         const handleScroll = () => {
@@ -69,11 +76,15 @@ export default function Navbar({ session }: { session?: any }) {
             <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
                 <div className="flex items-center justify-between py-5">
                     <Link href="/" className="flex items-center group shrink-0">
-                        <img
-                            src="/logo-ias.png"
-                            alt="IA Solutions"
-                            className="h-16 w-auto object-contain transition-transform group-hover:scale-105"
-                        />
+                        <div className="relative h-16 w-48">
+                            <Image
+                                src="/logo-ias.png"
+                                alt="IA Solutions"
+                                fill
+                                className="object-contain transition-transform group-hover:scale-105"
+                                priority
+                            />
+                        </div>
                     </Link>
 
                     {/* Desktop Navigation */}

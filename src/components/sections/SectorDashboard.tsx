@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowRight, Box } from 'lucide-react'
 
@@ -85,13 +86,14 @@ export default function SectorDashboard() {
                                     className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 block"
                                 >
                                     {/* Background Image */}
-                                    <div className="absolute inset-0">
-                                        <img
+                                    <div className="absolute inset-0 z-0">
+                                        <Image
                                             src={getSectorImage(sector)}
                                             alt={sector.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
                                     </div>
 
                                     {/* Content Overlay */}

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
     LayoutDashboard,
@@ -91,11 +92,15 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
             {/* Header */}
             <div className="p-8 border-b border-gray-50 hidden lg:block">
                 <Link href="/" className="flex items-center group">
-                    <img
-                        src="/logo-ias.png"
-                        alt="IA Solutions Admin"
-                        className="h-10 w-auto object-contain transition-transform group-hover:scale-105"
-                    />
+                    <div className="relative h-10 w-48">
+                        <Image
+                            src="/logo-ias.png"
+                            alt="IA Solutions Admin"
+                            fill
+                            className="object-contain transition-transform group-hover:scale-105"
+                            priority
+                        />
+                    </div>
                 </Link>
             </div>
 

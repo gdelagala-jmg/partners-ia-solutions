@@ -12,15 +12,27 @@ export default async function PublicLayout({
     children: React.ReactNode
 }) {
     const session = await getSession()
+    
+    // Fetch navigation links on the server to avoid client-side fetch delay
+    let navLinks: any[] = []
+    try {
+        navLinks = await prisma.navLink.findMany({
+            orderBy: {
+                order: 'asc'
+            }
+        })
+    } catch (error) {
+        console.error('Error fetching nav links in layout:', error)
+    }
 
     return (
         <div className="min-h-screen flex flex-col bg-white text-gray-900 selection:bg-blue-100 selection:text-blue-900">
-            <Navbar session={session} />
+            <Navbar session={session} initialNavLinks={navLinks} />
             <main className="flex-1 pt-16">
                 {children}
             </main>
             <FlashNewsTicker />
-            <Footer />
+            <Footer initialNavLinks={navLinks} />
         </div>
     )
 }

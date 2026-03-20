@@ -3,6 +3,7 @@
 import { Mail, Send, Lock, CheckCircle2, AlertCircle, Instagram, Facebook, Linkedin, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 
 export default function MaintenanceView() {
     const [mounted, setMounted] = useState(false)
@@ -97,11 +98,15 @@ export default function MaintenanceView() {
                 >
                     <div className="relative group">
                         <div className="absolute -inset-4 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all duration-500" />
-                        <img 
-                            src="/logo-ias.png" 
-                            alt="IA Solutions" 
-                            className="h-20 md:h-28 w-auto object-contain relative drop-shadow-sm" 
-                        />
+                        <div className="relative h-20 md:h-28 w-48">
+                            <Image 
+                                src="/logo-ias.png" 
+                                alt="IA Solutions" 
+                                fill
+                                className="object-contain relative drop-shadow-sm" 
+                                priority
+                            />
+                        </div>
                     </div>
                 </motion.div>
 
