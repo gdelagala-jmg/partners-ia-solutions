@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Calendar, Tag, ArrowLeft, Clock } from 'lucide-react'
+import { Calendar, Tag, ArrowLeft, Clock, Linkedin, Facebook, Twitter, MessageCircle, Mail, Link2 } from 'lucide-react'
 
 interface NewsPost {
     id: string
@@ -139,11 +139,89 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                     }}
                 />
 
-                {/* Footer CTA */}
+                {/* Social Sharing */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
+                    className="mt-12 pt-8 border-t border-gray-100"
+                >
+                    <p className="text-sm font-semibold text-gray-500 mb-6 uppercase tracking-wider">
+                        Compartir esta noticia
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                        {/* LinkedIn */}
+                        <a
+                            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#0077b5] hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="LinkedIn"
+                        >
+                            <Linkedin size={20} className="group-hover:scale-110 transition-transform" />
+                        </a>
+
+                        {/* Facebook */}
+                        <a
+                            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#1877f2] hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="Facebook"
+                        >
+                            <Facebook size={20} className="group-hover:scale-110 transition-transform" />
+                        </a>
+
+                        {/* X (Twitter) */}
+                        <a
+                            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(post.title)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-black hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="X (Twitter)"
+                        >
+                            <Twitter size={20} className="group-hover:scale-110 transition-transform" />
+                        </a>
+
+                        {/* WhatsApp */}
+                        <a
+                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} ${typeof window !== 'undefined' ? window.location.href : ''}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#25d366] hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="WhatsApp"
+                        >
+                            <MessageCircle size={20} className="group-hover:scale-110 transition-transform" />
+                        </a>
+
+                        {/* Email */}
+                        <a
+                            href={`mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-red-500 hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="Email"
+                        >
+                            <Mail size={20} className="group-hover:scale-110 transition-transform" />
+                        </a>
+
+                        {/* Copy Link */}
+                        <button
+                            onClick={() => {
+                                navigator.clipboard.writeText(window.location.href);
+                                alert('¡Enlace copiado al portapapeles!');
+                            }}
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-800 hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="Copiar enlace"
+                        >
+                            <Link2 size={20} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                    </div>
+                </motion.div>
+
+                {/* Footer CTA */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
                     className="mt-12 pt-8 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4"
                 >
                     <Link
@@ -164,3 +242,4 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
         </div>
     )
 }
+
