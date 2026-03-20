@@ -7,8 +7,8 @@ export const metadata: Metadata = {
     default: "IA Solutions | Ecosistemas Inteligentes y Automatización IA",
     template: "%s | Partners IA Solutions"
   },
-  description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios mediante Agentes de IA y soluciones personalizadas.",
-  keywords: ["IA Solutions", "Inteligencia Artificial", "Agentes de IA", "Automatización", "Ecosistemas Inteligentes", "Transformación Digital"],
+  description: "Consultores expertos en IA. Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios mediante Agentes de IA y soluciones personalizadas.",
+  keywords: ["Consultoría IA", "IA Solutions", "Inteligencia Artificial", "Agentes de IA", "Automatización", "Ecosistemas Inteligentes", "Transformación Digital"],
   authors: [{ name: "Partners IA Solutions" }],
   creator: "Partners IA Solutions",
   publisher: "Partners IA Solutions",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "IA Solutions | Ecosistemas Inteligentes",
-    description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
+    description: "Consultores expertos en IA. Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
     url: 'https://www.partnersiasolutions.com',
     siteName: 'Partners IA Solutions',
     locale: 'es_ES',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "IA Solutions | Ecosistemas Inteligentes",
-    description: "Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
+    description: "Consultores expertos en IA. Diseñamos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
     creator: '@partnersiasol',
     images: ['/logo-ias.png'],
   },
