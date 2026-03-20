@@ -2,32 +2,36 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { slugify } from '@/lib/utils/slugify'
 
-export async function POST(request: Request) {
-    // CORS Preflight headers
-    if (request.method === 'OPTIONS') {
-        return new NextResponse(null, {
-            status: 200,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
-            },
-        })
-    }
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+}
 
+export async function OPTIONS() {
+    return NextResponse.json({}, { headers: corsHeaders })
+}
+
+export async function POST(request: Request) {
     const authHeader = request.headers.get('x-api-key')
     const webhookKey = process.env.GOOGLE_STUDIO_WEBHOOK_KEY
 
     // Basic security check
     if (!authHeader || authHeader !== webhookKey) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json({ error: 'Unauthorized' }, { 
+            status: 401,
+            headers: corsHeaders 
+        })
     }
 
     try {
         const body = await request.json()
         
         if (!body.title || !body.content) {
-            return NextResponse.json({ error: 'Missing title or content' }, { status: 400 })
+            return NextResponse.json({ error: 'Missing title or content' }, { 
+                status: 400,
+                headers: corsHeaders
+            })
         }
 
         const title = body.title
@@ -59,11 +63,7 @@ export async function POST(request: Request) {
                 title: post.title
             }
         }, {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
-            }
+            headers: corsHeaders
         })
     } catch (error: any) {
         console.error('Webhook Error:', error)
@@ -72,11 +72,7 @@ export async function POST(request: Request) {
             details: error.message 
         }, { 
             status: 500,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
-            }
+            headers: corsHeaders
         })
     }
 }
