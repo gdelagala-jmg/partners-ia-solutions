@@ -4,12 +4,16 @@ import { slugify } from '@/lib/utils/slugify'
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Authorization, Accept, Origin, X-Requested-With',
+    'Access-Control-Max-Age': '86400',
 }
 
 export async function OPTIONS() {
-    return NextResponse.json({}, { headers: corsHeaders })
+    return new Response(null, { 
+        status: 204,
+        headers: corsHeaders 
+    })
 }
 
 export async function POST(request: Request) {
