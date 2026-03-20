@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Calendar, Tag, ArrowLeft, Clock, Linkedin, Facebook, Twitter, MessageCircle, Mail, Link2 } from 'lucide-react'
+import { Calendar, Tag, ArrowLeft, Clock, Linkedin, Facebook, Twitter, MessageCircle, Mail, Link2, Send, AtSign, Printer } from 'lucide-react'
 
 interface NewsPost {
     id: string
@@ -183,6 +183,28 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                             <Twitter size={20} className="group-hover:scale-110 transition-transform" />
                         </a>
 
+                        {/* Telegram */}
+                        <a
+                            href={`https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(post.title)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#0088cc] hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="Telegram"
+                        >
+                            <Send size={20} className="group-hover:scale-110 transition-transform" />
+                        </a>
+
+                        {/* Threads */}
+                        <a
+                            href={`https://threads.net/intent/post?text=${encodeURIComponent(`${post.title} ${typeof window !== 'undefined' ? window.location.href : ''}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-black hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="Threads"
+                        >
+                            <AtSign size={20} className="group-hover:scale-110 transition-transform" />
+                        </a>
+
                         {/* WhatsApp */}
                         <a
                             href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} ${typeof window !== 'undefined' ? window.location.href : ''}`)}`}
@@ -202,6 +224,15 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                         >
                             <Mail size={20} className="group-hover:scale-110 transition-transform" />
                         </a>
+
+                        {/* Print / PDF */}
+                        <button
+                            onClick={() => window.print()}
+                            className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-600 hover:text-white transition-all shadow-sm border border-gray-100 group"
+                            title="Imprimir / PDF"
+                        >
+                            <Printer size={20} className="group-hover:scale-110 transition-transform" />
+                        </button>
 
                         {/* Copy Link */}
                         <button
