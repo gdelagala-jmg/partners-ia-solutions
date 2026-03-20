@@ -2,37 +2,65 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { slugify } from '@/lib/utils/slugify'
 
+function getCorsHeaders(origin: string | null) {
+    // Reflect the requesting origin for max compatibility
+    // Security is handled by the x-api-key header
+    const allowOrigin = origin || '*'
+    return {
+        'Access-Control-Allow-Origin': allowOrigin,
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Max-Age': '86400',
+    }
+}
+
+export async function OPTIONS(request: Request) {
+    const origin = request.headers.get('origin')
+    return new Response(null, {
+        status: 204,
+        headers: getCorsHeaders(origin)
+    })
+}
+
 export async function POST(request: Request) {
+    const origin = request.headers.get('origin')
+    const corsHeaders = getCorsHeaders(origin)
+    
+    // Check if it's the right origin (optional logging for debugging)
+    console.log('Webhook request from origin:', origin)
+
     const authHeader = request.headers.get('x-api-key')
     const webhookKey = process.env.GOOGLE_STUDIO_WEBHOOK_KEY
 
     // Basic security check
     if (!authHeader || authHeader !== webhookKey) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders })
     }
 
     try {
         const body = await request.json()
         
         if (!body.title || !body.content) {
-            return NextResponse.json({ error: 'Missing title or content' }, { status: 400 })
+            return NextResponse.json({ error: 'Missing title or content' }, { status: 400, headers: corsHeaders })
         }
 
         const title = body.title
         const slug = body.slug || `${slugify(title)}-${Math.random().toString(36).substring(2, 7)}`
+
+        // Map tags if it's an array to a string (as per current schema)
+        const tags = Array.isArray(body.tags) ? body.tags.join(', ') : body.tags
 
         const post = await prisma.newsPost.create({
             data: {
                 title: title,
                 slug: slug,
                 category: body.category || 'IA News',
-                tags: body.tags,
+                tags: tags || null,
                 content: body.content,
-                coverImage: body.coverImage,
-                aiType: body.aiType,
-                businessArea: body.businessArea,
-                profession: body.profession,
-                sector: body.sector,
+                coverImage: body.imageUrl || body.coverImage || null, // Handle both field names
+                aiType: body.aiType || null,
+                businessArea: body.businessArea || null,
                 published: body.published !== undefined ? body.published : true,
                 publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
             },
@@ -46,12 +74,13 @@ export async function POST(request: Request) {
                 slug: post.slug,
                 title: post.title
             }
-        })
+        }, { headers: corsHeaders })
     } catch (error: any) {
         console.error('Webhook Error:', error)
         return NextResponse.json({ 
             error: 'Failed to create news post', 
             details: error.message 
-        }, { status: 500 })
+        }, { status: 500, headers: corsHeaders })
     }
 }
+
