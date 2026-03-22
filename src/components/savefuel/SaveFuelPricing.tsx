@@ -3,103 +3,93 @@
 import { motion } from 'framer-motion'
 import { Check, Zap } from 'lucide-react'
 
-const tiers = [
-    {
-        name: 'Gratis',
-        price: '0',
-        description: 'Ideal para conductores ocasionales.',
-        features: [
-            '3 rutas de prueba',
-            'Tu país',
-            'Ver ahorro detectado',
-            '6 idiomas',
-        ],
-        cta: 'Empezar Gratis',
-        featured: false,
-    },
-    {
-        name: 'PRO',
-        price: '9,99',
-        description: 'Todo el potencial del ahorro europeo.',
-        features: [
-            'Rutas ilimitadas 10 países',
-            'Sincronización Navi voz IA',
-            'Modo Multi-repostaje',
-            'Historial de ahorro detallado',
-            'Misiones y Gamificación',
-            'Acceso anticipado a funciones',
-            'Sin publicidad',
-        ],
-        cta: 'Suscribirse Ahora',
-        featured: true,
-    },
-]
-
 export default function SaveFuelPricing() {
     return (
-        <section id="pricing" className="py-[80px] bg-white font-outfit">
-            <div className="max-w-[900px] mx-auto px-[24px]">
-                <div className="text-center mb-[48px]">
-                    <h2 className="text-[36px] md:text-[48px] font-black text-[#0f172a] mb-[12px] tracking-tight">
-                        Planes de <span className="text-emerald-600">Ahorro</span>
-                    </h2>
-                    <p className="text-[17px] text-gray-500 max-w-[480px] mx-auto font-normal leading-[1.7]">
-                        Elige el plan que mejor se adapte a tus kilómetros.
-                    </p>
-                </div>
+        <section id="pricing" className="py-24 bg-white font-sans overflow-hidden">
+            <div className="max-w-6xl mx-auto px-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[900px] mx-auto items-stretch">
+                    
+                    {/* Gratis Card */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="bg-white border border-gray-100 rounded-[32px] p-10 flex flex-col shadow-xl shadow-gray-100/50"
+                    >
+                        <div className="mb-10">
+                            <h3 className="text-[32px] font-bold text-[#0f172a] mb-2">Gratis</h3>
+                            <p className="text-gray-400 text-[18px]">Ideal para conductores ocasionales.</p>
+                        </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] max-w-[800px] mx-auto">
-                    {tiers.map((tier, idx) => (
-                        <motion.div
-                            key={tier.name}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: idx * 0.1 }}
-                            className={`relative p-[32px] rounded-[24px] flex flex-col h-full transition-all ${
-                                tier.featured 
-                                ? 'bg-gray-900 text-white shadow-2xl shadow-emerald-200/50 border-2 border-emerald-500' 
-                                : 'bg-white text-gray-900 border border-gray-100 shadow-md'
-                            }`}
-                        >
-                            {tier.featured && (
-                                <div className="absolute -top-[18px] left-1/2 -translate-x-1/2 bg-emerald-500 text-white px-[16px] py-[4px] rounded-full text-[11px] font-bold uppercase tracking-widest flex items-center gap-[4px]">
-                                    <Zap size={11} /> RECOMENDADO
-                                </div>
-                            )}
-
-                            <div className="mb-[24px]">
-                                <h3 className="text-[22px] font-bold mb-[6px]">{tier.name}</h3>
-                                <p className={`text-[14px] ${tier.featured ? 'text-gray-400' : 'text-slate-500'} font-normal`}>
-                                    {tier.description}
-                                </p>
+                        <div className="mb-10">
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-[64px] font-black text-[#0f172a]">0€</span>
+                                <span className="text-[24px] text-slate-400 font-medium">/mes</span>
                             </div>
+                        </div>
 
-                            <div className="mb-[24px] flex items-baseline select-none">
-                                <span className="text-[48px] font-black tracking-tighter">{tier.price}€</span>
-                                <span className={`ml-[4px] text-[18px] font-medium ${tier.featured ? 'text-gray-400' : 'text-slate-500'}`}>{tier.name === 'PRO' ? '/año' : '/mes'}</span>
+                        <ul className="space-y-5 mb-12 flex-1">
+                            <PricingFeature text="3 rutas de prueba" />
+                            <PricingFeature text="Tu país" />
+                            <PricingFeature text="Ver ahorro detectado" />
+                            <PricingFeature text="6 idiomas" />
+                        </ul>
+
+                        <button className="w-full py-5 bg-[#F1F3F5] text-[#0f172a] font-bold text-[20px] rounded-[20px] border-2 border-[#1c7ed6] transition-all hover:bg-gray-100">
+                            Empezar Gratis
+                        </button>
+                    </motion.div>
+
+                    {/* PRO Card */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="relative bg-[#1A1A1A] border-2 border-[#00D28A] rounded-[32px] p-10 flex flex-col shadow-2xl"
+                    >
+                        {/* Green Badge */}
+                        <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#00D28A] text-white px-6 py-2 rounded-2xl text-[14px] font-bold flex items-center gap-2 shadow-lg">
+                            <Zap size={16} fill="white" />
+                            RECOMENDADO
+                        </div>
+
+                        <div className="mb-10 pt-4">
+                            <h3 className="text-[32px] font-bold text-white mb-2">PRO</h3>
+                            <p className="text-gray-500 text-[18px]">Todo el potencial del ahorro europeo.</p>
+                        </div>
+
+                        <div className="mb-10">
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-[64px] font-black text-white">9,99€</span>
+                                <span className="text-[24px] text-gray-500 font-medium">/año</span>
                             </div>
+                        </div>
 
-                            <ul className="space-y-[12px] mb-[32px] flex-1">
-                                {tier.features.map((feature) => (
-                                    <li key={feature} className="flex items-center text-[14px] font-normal gap-[10px]">
-                                        <Check size={16} className={`flex-shrink-0 ${tier.featured ? 'text-emerald-400' : 'text-emerald-600'}`} />
-                                        {feature}
-                                    </li>
-                                ))}
-                            </ul>
+                        <ul className="space-y-5 mb-12 flex-1 text-white">
+                            <PricingFeature text="Rutas ilimitadas 10 países" pro />
+                            <PricingFeature text="Sincronización Navi voz IA" pro />
+                            <PricingFeature text="Modo Multi-repostaje" pro />
+                            <PricingFeature text="Historial de ahorro detallado" pro />
+                            <PricingFeature text="Misiones y Gamificación" pro />
+                            <PricingFeature text="Acceso anticipado a funciones" pro />
+                            <PricingFeature text="Sin publicidad" pro />
+                        </ul>
 
-                            <button className={`w-full py-[14px] rounded-[14px] font-semibold text-[15px] transition-all ${
-                                tier.featured 
-                                ? 'bg-emerald-500 hover:bg-emerald-400 text-white hover:scale-[1.02]' 
-                                : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                            }`}>
-                                {tier.cta}
-                            </button>
-                        </motion.div>
-                    ))}
+                        <button className="w-full py-5 bg-[#00D28A] hover:bg-[#00bf7d] text-white font-bold text-[20px] rounded-[24px] transition-all hover:scale-[1.02] shadow-xl shadow-emerald-900/20">
+                            Suscribirse Ahora
+                        </button>
+                    </motion.div>
                 </div>
             </div>
         </section>
+    )
+}
+
+function PricingFeature({ text, pro = false }: { text: string, pro?: boolean }) {
+    return (
+        <li className="flex items-center gap-4 text-[17px] font-medium">
+            <Check size={22} className="text-[#00D28A] flex-shrink-0" />
+            <span className={pro ? 'text-gray-300' : 'text-slate-700'}>{text}</span>
+        </li>
     )
 }
