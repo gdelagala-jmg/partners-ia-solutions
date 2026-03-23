@@ -133,6 +133,7 @@ export default function NewsAdminPage() {
                     </span>
                     <div className="flex gap-1 flex-wrap max-w-[150px]">
                         {post.aiType && <span className="text-[10px] text-gray-400 italic">#{post.aiType}</span>}
+                        {post.aiTool && <span className="text-[10px] text-purple-400 italic font-medium">#{post.aiTool}</span>}
                         {post.tags && post.tags.split(',').slice(0, 3).map((tag: string) => (
                             <span key={tag} className="text-[10px] text-blue-400">#{tag.trim()}</span>
                         ))}
@@ -252,6 +253,11 @@ export default function NewsAdminPage() {
                                             <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">
                                                 {post.category?.split(',')[0]}
                                             </span>
+                                            {post.aiTool && (
+                                                <span className="text-[10px] text-purple-400 italic font-medium truncate max-w-[80px]">
+                                                    #{post.aiTool}
+                                                </span>
+                                            )}
                                             {post.tags && (
                                                 <span className="text-[10px] text-gray-400 italic truncate max-w-[100px]">
                                                     #{post.tags.split(',')[0]}

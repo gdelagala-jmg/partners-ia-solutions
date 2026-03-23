@@ -5,10 +5,12 @@ import { useState, useEffect } from 'react'
 import { Filter, SlidersHorizontal, X } from 'lucide-react'
 
 const filters = {
-    aiType: ['IA Generativa', 'Machine Learning', 'Procesamiento de Lenguaje Natural (PLN)', 'Visión Artificial', 'Robótica'],
-    businessArea: ['Finanzas', 'Salud', 'Educación', 'Retail', 'Manufactura', 'Tecnología'],
-    sector: ['Banca', 'Farmacéutica', 'Universidades', 'Comercio Electrónico', 'Automoción', 'Software'],
-    profession: ['Ejecutivos', 'Desarrolladores', 'Especialistas en Marketing', 'Médicos', 'Profesores', 'Diseñadores'],
+    company: ['OpenAI', 'Google', 'Microsoft', 'Nvidia', 'Meta', 'Tesla', 'Amazon', 'IBM', 'Apple', 'Anthropic', 'Hugging Face', 'xAI', 'Mistral', 'Cohere', 'Adobe', 'Salesforce'],
+    aiTool: ['ChatGPT', 'Gemini', 'Claude', 'Midjourney', 'Copilot', 'Cursor', 'Perplexity', 'Stable Diffusion', 'Whisper', 'DALL-E', 'Sora', 'Llama', 'Grok', 'Runway', 'Flux', 'Mistral'],
+    aiType: ['IA Generativa', 'Machine Learning', 'NLP / PLN', 'Visión Artificial', 'Robótica', 'IA Agéntica'],
+    businessArea: ['Finanzas', 'Salud', 'Educación', 'Retail', 'Manufactura', 'Tecnología', 'Marketing', 'Recursos Humanos', 'Legal'],
+    sector: ['Banca', 'Farmacéutica', 'Universidades', 'Ecommerce', 'Automoción', 'Software', 'Legal', 'Educación', 'Alimentación', 'Ocio'],
+    profession: ['Ejecutivos', 'Desarrolladores', 'Marketers', 'Médicos', 'Profesores', 'Diseñadores', 'Abogados']
 }
 
 export default function NewsFilterBar() {
@@ -16,6 +18,8 @@ export default function NewsFilterBar() {
     const searchParams = useSearchParams()
     const [showPreferences, setShowPreferences] = useState(false)
     const [preferences, setPreferences] = useState({
+        company: '',
+        aiTool: '',
         aiType: '',
         businessArea: '',
         sector: '',
@@ -58,10 +62,12 @@ export default function NewsFilterBar() {
 
     const getFilterLabel = (key: string) => {
         switch (key) {
+            case 'company': return 'EMPRESAS';
             case 'aiType': return 'TIPO DE IA';
             case 'businessArea': return 'ÁREA NEGOCIO';
             case 'sector': return 'SECTOR';
             case 'profession': return 'PROFESIÓN';
+            case 'aiTool': return 'HERRAMIENTA IA';
             default: return key;
         }
     }
@@ -70,7 +76,7 @@ export default function NewsFilterBar() {
         <div className="w-full mb-8">
             <div className="flex flex-col gap-6 p-5 bg-white sm:bg-gray-50 rounded-2xl sm:border border-gray-100">
                 {/* Top Row: Select Filters */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 w-full">
                     {Object.entries(filters).map(([key, options]) => (
                         <div key={key} className="flex flex-col w-full">
                             <label className="text-[11px] font-bold text-blue-600/80 mb-1.5 ml-1 tracking-wider uppercase">
@@ -142,7 +148,7 @@ export default function NewsFilterBar() {
             {/* Preferences Modal */}
             {showPreferences && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-                    <div className="bg-white border border-gray-200 rounded-3xl w-full max-w-md p-8 shadow-2xl relative">
+                    <div className="bg-white border border-gray-200 rounded-3xl w-full max-w-md p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
                         <button
                             onClick={() => setShowPreferences(false)}
                             className="absolute top-6 right-6 text-gray-400 hover:text-gray-900 transition-colors"

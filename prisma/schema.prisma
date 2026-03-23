@@ -57,6 +57,8 @@ model NewsPost {
   businessArea String?
   profession   String?
   sector       String?
+  aiTool       String?
+  company      String?
 }
 
 model TeamMember {

@@ -15,6 +15,7 @@ interface NewsPost {
     businessArea: string | null
     sector: string | null
     profession: string | null
+    aiTool: string | null
     createdAt: string | Date
     publishedAt: string | Date | null
 }
@@ -24,7 +25,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
     
     // Strip HTML tags to count words for reading time
     const plainText = post.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
-    const readingMinutes = Math.max(1, Math.ceil(plainText.split(' ').length / 200))
+    const readingMinutes = Math.max(1, Math.ceil(plainText.split(' ').length / 250))
     // Only show first category in badge
     const primaryCategory = post.category?.split(',')[0]?.trim() || 'Noticia'
 
@@ -84,6 +85,11 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                     {post.sector && (
                         <span className="text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg border border-blue-200">
                             {post.sector}
+                        </span>
+                    )}
+                    {post.aiTool && (
+                        <span className="text-xs font-bold bg-purple-50 text-purple-700 px-2.5 py-1 rounded-lg border border-purple-200 uppercase tracking-tight">
+                            {post.aiTool}
                         </span>
                     )}
                     {post.profession && (

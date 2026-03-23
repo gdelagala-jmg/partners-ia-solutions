@@ -13,6 +13,7 @@ interface NewsPost {
     category: string
     coverImage: string | null
     aiType: string | null
+    aiTool: string | null
     createdAt: string
     publishedAt: string | null
     content: string
@@ -106,6 +107,11 @@ export default function LatestNewsSection() {
                                         {post.aiType && (
                                             <span className="inline-flex items-center text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">
                                                 <Tag size={10} className="mr-1" /> {post.aiType}
+                                            </span>
+                                        )}
+                                        {post.aiTool && (
+                                            <span className="inline-flex items-center text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200 ml-2">
+                                                {post.aiTool}
                                             </span>
                                         )}
                                     </div>

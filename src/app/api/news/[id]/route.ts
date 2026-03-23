@@ -26,10 +26,18 @@ export async function PUT(request: Request, { params }: { params: Params }) {
                 slug: body.slug,
                 category: body.category,
                 tags: body.tags,
+                // @ts-ignore
                 aiType: body.aiType,
+                // @ts-ignore
                 businessArea: body.businessArea,
+                // @ts-ignore
                 sector: body.sector,
+                // @ts-ignore
                 profession: body.profession,
+                // @ts-ignore
+                aiTool: body.aiTool,
+                // @ts-ignore
+                company: body.company,
                 content: body.content,
                 coverImage: body.coverImage,
                 published: body.published,
@@ -39,8 +47,9 @@ export async function PUT(request: Request, { params }: { params: Params }) {
             },
         })
         return NextResponse.json(post)
-    } catch (error) {
-        return NextResponse.json({ error: 'Error updating post' }, { status: 500 })
+    } catch (error: any) {
+        console.error('SERVER ERROR UPDATE:', error)
+        return NextResponse.json({ error: 'Error updating post: ' + error.message }, { status: 500 })
     }
 }
 

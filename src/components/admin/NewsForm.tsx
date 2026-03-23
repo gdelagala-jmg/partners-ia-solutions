@@ -37,18 +37,21 @@ const newsSchema = z.object({
     businessArea: z.string().nullable().optional(),
     sector: z.string().nullable().optional(),
     profession: z.string().nullable().optional(),
+    aiTool: z.string().nullable().optional(),
+    company: z.string().nullable().optional(),
     coverImage: z.string().nullable().optional(),
     published: z.boolean().optional(),
     publishedAt: z.string().optional().nullable(),
 })
 
 type NewsFormValues = z.infer<typeof newsSchema>
-
 const CATEGORY_PRESETS = ['Noticia', 'Análisis', 'Tutorial', 'Caso de Estudio', 'Opinión', 'Tendencias']
-const aiTypes = ['Generative AI', 'Machine Learning', 'NLP', 'Computer Vision', 'Robotics', 'Agentic AI']
-const businessAreas = ['Finance', 'Healthcare', 'Education', 'Retail', 'Manufacturing', 'Technology']
-const sectors = ['Banking', 'Pharma', 'Universities', 'Ecommerce', 'Automotive', 'Software', 'Legal', 'Education', 'Food & Beverage', 'Leisure']
-const professions = ['Executives', 'Developers', 'Marketers', 'Doctors', 'Teachers', 'Designers']
+const AI_TYPES_LIST = ['IA Generativa', 'Machine Learning', 'NLP / PLN', 'Visión Artificial', 'Robótica', 'IA Agéntica']
+const BUSINESS_AREAS_LIST = ['Finanzas', 'Salud', 'Educación', 'Retail', 'Manufactura', 'Tecnología', 'Marketing', 'Recursos Humanos', 'Legal']
+const SECTORS_LIST = ['Banca', 'Farmacéutica', 'Universidades', 'Ecommerce', 'Automoción', 'Software', 'Legal', 'Educación', 'Alimentación', 'Ocio']
+const PROFESSIONS_LIST = ['Ejecutivos', 'Desarrolladores', 'Marketers', 'Médicos', 'Profesores', 'Diseñadores', 'Abogados']
+const AI_TOOLS_LIST = ['ChatGPT', 'Gemini', 'Claude', 'Midjourney', 'Copilot', 'Cursor', 'Perplexity', 'Stable Diffusion', 'Whisper', 'DALL-E', 'Sora', 'Llama', 'Grok', 'Runway', 'Flux', 'Mistral']
+const COMPANIES_LIST = ['OpenAI', 'Google', 'Microsoft', 'Nvidia', 'Meta', 'Tesla', 'Amazon', 'IBM', 'Apple', 'Anthropic', 'Hugging Face', 'xAI', 'Mistral', 'Cohere', 'Adobe', 'Salesforce']
 
 // --- Chip Input Component ---
 function ChipInput({
@@ -129,6 +132,8 @@ function ChipInput({
 
 export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     const [uploading, setUploading] = useState(false)
+    const [analyzing, setAnalyzing] = useState(false)
+    const [analysedFields, setAnalysedFields] = useState<string[]>([])
     const [editorMode, setEditorMode] = useState<'visual' | 'html'>('visual')
     const [htmlContent, setHtmlContent] = useState(initialData?.content || '')
     const [categories, setCategories] = useState<string[]>(
@@ -179,48 +184,128 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
 
     // --- Smart Analysis Logic ---
     const analyzeContent = useCallback(() => {
-        const text = htmlContent.replace(/<[^>]*>/g, ' ').toLowerCase()
+        setAnalyzing(true)
+        setAnalysedFields([])
         
-        // 1. Detect AI Types
-        const detectedAiType = aiTypes.find(t => text.includes(t.toLowerCase()))
-        if (detectedAiType) setValue('aiType', detectedAiType)
+        setTimeout(() => {
+            const titleText = watch('title') || ''
+            const textToAnalyze = (titleText + ' ' + htmlContent.replace(/<[^>]*>/g, ' ')).toLowerCase()
+            
+            const fieldsDetected: string[] = []
 
-        // 2. Detect Business Areas
-        const detectedArea = businessAreas.find(a => text.includes(a.toLowerCase()))
-        if (detectedArea) setValue('businessArea', detectedArea)
-
-        // 3. Detect Sectors
-        const detectedSector = sectors.find(s => text.includes(s.toLowerCase()))
-        if (detectedSector) setValue('sector', detectedSector)
-
-        // 4. Detect Professions
-        const detectedProf = professions.find(p => text.includes(p.toLowerCase()))
-        if (detectedProf) setValue('profession', detectedProf)
-
-        // 5. Detect Categories from presets
-        const newCats = [...categories]
-        CATEGORY_PRESETS.forEach(cat => {
-            if (text.includes(cat.toLowerCase()) && !newCats.includes(cat)) {
-                newCats.push(cat)
+            // Mapping Configuration
+            const MAPPINGS = {
+                aiType: [
+                    { label: 'IA Generativa', kw: ['generativa', 'genai', 'gpt', 'generador', 'creación', 'contenido', 'frontera', 'llm', 'openai', 'inteligencia artificial', 'ia', 'exponencial', 'curva'] },
+                    { label: 'Machine Learning', kw: ['aprendizaje', 'machine', 'learning', 'predicción', 'datos', 'algoritmo', 'entrenamiento', 'anticipar', 'exponencial'] },
+                    { label: 'NLP / PLN', kw: ['lenguaje', 'texto', 'habla', 'nlp', 'pln', 'conversación', 'escritura', 'idioma', 'resumen'] },
+                    { label: 'IA Agéntica', kw: ['agente', 'autónomo', 'workflow', 'razonamiento', 'planeación', 'multi-agente', 'autonomía'] },
+                    { label: 'Visión Artificial', kw: ['imagen', 'vídeo', 'visión', 'reconocimiento', 'detección', 'video', 'facial', 'objetos'] }
+                ],
+                businessArea: [
+                    { label: 'Finanzas', kw: ['banco', 'ahorro', 'dinero', 'finanzas', 'inversión', 'contabilidad', 'gestión', 'fiscal', 'mercado', 'empresa', 'negocio'] },
+                    { label: 'Salud', kw: ['médico', 'hospital', 'salud', 'paciente', 'diagnóstico', 'terapia', 'clínica', 'biotech', 'biología'] },
+                    { label: 'Marketing', kw: ['ventas', 'marketing', 'publicidad', 'contenido', 'campaña', 'redes', 'seo', 'growth', 'audiencia', 'cliente'] },
+                    { label: 'Tecnología', kw: ['software', 'tecnología', 'tech', 'computación', 'nube', 'cloud', 'digital', 'it', 'sistemas'] },
+                    { label: 'Recursos Humanos', kw: ['contratación', 'personal', 'rrhh', 'gestión', 'productividad', 'equipo', 'talento', 'empleo', 'hiring', 'trabajo'] },
+                    { label: 'Legal', kw: ['ley', 'abogado', 'legal', 'normativa', 'contrato', 'jurídico', 'compliance', 'regulación'] }
+                ],
+                sector: [
+                    { label: 'Banca', kw: ['banco', 'pagos', 'seguro', 'fraud', 'bancario', 'fintech', 'financiero'] },
+                    { label: 'Ecommerce', kw: ['tienda', 'venta', 'carrito', 'retail', 'negocio', 'consumo', 'online', 'tiendas', 'retail'] },
+                    { label: 'Software', kw: ['app', 'herramienta', 'saas', 'tecnológico', 'digita', 'plataforma', 'nube', 'devops'] },
+                    { label: 'Educación', kw: ['aprendizaje', 'estudiante', 'clase', 'universidad', 'escuela', 'enseñanza', 'formación', 'edtech', 'curso'] },
+                    { label: 'Alimentación', kw: ['comida', 'food', 'restaurante', 'bebida', 'agro', 'agrícola', 'nutrición'] },
+                    { label: 'Ocio', kw: ['viaje', 'turismo', 'cine', 'deporte', 'entretenimiento', 'ocio', 'gaming'] }
+                ],
+                professions: [
+                    { label: 'Ejecutivos', kw: ['ceo', 'director', 'gestión', 'manager', 'gerente', 'líder', 'estratégica', 'jefe', 'pm', 'product manager', 'owner'] },
+                    { label: 'Desarrolladores', kw: ['código', 'programador', 'ingeniero', 'software', 'dev', 'frontend', 'backend', 'fullstack', 'it engineer'] },
+                    { label: 'Marketers', kw: ['marketing', 'analista', 'creativo', 'ventas', 'especialista', 'growth', 'comunicación'] },
+                    { label: 'Médicos', kw: ['doctor', 'médico', 'paciente', 'enfermero', 'salud', 'clínico', 'cirujano'] },
+                    { label: 'Profesores', kw: ['maestro', 'profesor', 'estudiante', 'docente', 'formador', 'tutor', 'mentor'] },
+                    { label: 'Abogados', kw: ['abogado', 'legal', 'jurídico', 'consultor', 'notario', 'fiscal'] }
+                ],
+                aiTool: [
+                    { label: 'ChatGPT', kw: ['chatgpt', 'openai', 'gpt-4o', 'gpt-4', 'gpt-3', 'dall-e'] },
+                    { label: 'Gemini', kw: ['google', 'gemini', 'gemini pro', 'ultra', 'vertex'] },
+                    { label: 'Claude', kw: ['anthropic', 'claude', 'sonnet', 'opus', 'haiku'] },
+                    { label: 'Midjourney', kw: ['imagen', 'dibujo', 'diseño', 'midjourney', 'artístico'] },
+                    { label: 'Copilot', kw: ['microsoft', 'copilot', 'github'] },
+                    { label: 'Cursor', kw: ['editor', 'cursor', 'programar', 'ide'] },
+                    { label: 'Perplexity', kw: ['búsqueda', 'search', 'perplexity'] },
+                    { label: 'Llama', kw: ['meta', 'llama', 'llama3', 'llama2', 'open-source'] },
+                    { label: 'Runway', kw: ['vídeo', 'video', 'runway', 'gen-3', 'gen-2'] },
+                    { label: 'Sora', kw: ['sora', 'generación de video', 'openai video'] },
+                    { label: 'Mistral', kw: ['mistral', 'mixtral', 'le chat', 'la plateforme'] }
+                ],
+                company: [
+                    { label: 'OpenAI', kw: ['openai', 'sam altman'] },
+                    { label: 'Google', kw: ['google', 'alphabet', 'deepmind'] },
+                    { label: 'Microsoft', kw: ['microsoft', 'satya nadella'] },
+                    { label: 'Nvidia', kw: ['nvidia', 'jensen huang', 'gpu'] },
+                    { label: 'Meta', kw: ['meta', 'facebook', 'mark zuckerberg'] },
+                    { label: 'Anthropic', kw: ['anthropic', 'dario amodei'] },
+                    { label: 'Mistral', kw: ['mistral', 'mistral ai'] },
+                    { label: 'xAI', kw: ['xai', 'elon musk'] },
+                    { label: 'Amazon', kw: ['amazon', 'aws'] },
+                    { label: 'IBM', kw: ['ibm', 'watson'] },
+                    { label: 'Apple', kw: ['apple', 'apple intelligence'] },
+                    { label: 'Hugging Face', kw: ['hugging face', 'huggingface'] },
+                    { label: 'Cohere', kw: ['cohere'] }
+                ]
             }
-        })
-        if (newCats.length > categories.length) setCategories(newCats)
 
-        // 6. Generate tags based on common IA and business terms
-        const commonTerms = [
-            'OpenAI', 'Google', 'Microsoft', 'Nvidia', 'Meta', 'Tesla', 'Amazon',
-            'SaaS', 'B2B', 'B2C', 'Startups', 'Productividad', 'Automatización',
-            'Eficiencia', 'Inversión', 'Futuro', 'Ética', 'Seguridad', 'Cloud',
-            'Data', 'Agentes', 'LLM', 'GPT', 'Innovación', 'Transformación Digital'
-        ]
-        const newTags = [...tags]
-        commonTerms.forEach(term => {
-            if (text.includes(term.toLowerCase()) && !newTags.includes(term)) {
-                newTags.push(term)
-            }
-        })
-        setTags(newTags)
-    }, [htmlContent, categories, tags, setValue])
+            // Processing Loops
+            Object.entries(MAPPINGS).forEach(([field, mapping]) => {
+                const targetField = (field === 'professions' ? 'profession' : field) as any
+                let match: any = null;
+
+                // Si estamos buscando Herramienta IA, darle extra prioridad a la "fuente" si existe
+                if (field === 'aiTool' && textToAnalyze.includes('fuente:')) {
+                    const parts = textToAnalyze.split('fuente:');
+                    if (parts.length > 1) {
+                         const sourceText = parts[1].trim();
+                         // 1. Check strict match in the source ONLY
+                         match = mapping.find(m => m.kw.some(k => sourceText.includes(k.toLowerCase())));
+                    }
+                }
+                
+                // Si no hay match por fuente (o no es aiTool), buscar en todo el texto
+                if (!match) {
+                    match = mapping.find(m => m.kw.some(k => textToAnalyze.includes(k.toLowerCase())));
+                }
+
+                if (match) {
+                    setValue(targetField, match.label, { shouldDirty: true, shouldValidate: true })
+                    fieldsDetected.push(match.label)
+                }
+            })
+
+            // Meta Tags & Categories
+            const newCats = [...categories]
+            CATEGORY_PRESETS.forEach(cat => {
+                if (textToAnalyze.includes(cat.toLowerCase()) && !newCats.includes(cat)) {
+                    newCats.push(cat)
+                    fieldsDetected.push(cat)
+                }
+            })
+            if (newCats.length > categories.length) setCategories(newCats)
+
+            const commonTerms = ['OpenAI', 'Google', 'Microsoft', 'Nvidia', 'Meta', 'Tesla', 'Amazon', 'IBM', 'Apple', 'Anthropic', 'Hugging Face', 'xAI', 'Mistral', 'Cohere', 'Startups', 'Innovación']
+            const newTags = [...tags]
+            commonTerms.forEach(term => {
+                if (textToAnalyze.includes(term.toLowerCase()) && !newTags.includes(term)) {
+                    newTags.push(term)
+                    fieldsDetected.push(term)
+                }
+            })
+            setTags(newTags)
+            
+            setAnalysedFields(fieldsDetected)
+            setAnalyzing(false)
+        }, 600)
+    }, [htmlContent, watch, categories, tags, setValue])
 
     // --- Auto-Analysis on Paste ---
     const lastContentLength = useRef(htmlContent.length)
@@ -353,6 +438,7 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
                     onAdd={v => setTags(prev => [...prev, v])}
                     onRemove={v => setTags(prev => prev.filter(t => t !== v))}
                     placeholder="Escribe una etiqueta..."
+                    presets={['OpenAI', 'Google', 'Microsoft', 'Nvidia', 'Meta', 'Tesla', 'Amazon', 'IBM', 'Apple', 'Anthropic', 'Hugging Face', 'xAI', 'Mistral', 'Cohere']}
                 />
             </div>
 
@@ -408,34 +494,77 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
             </div>
 
             {/* AI Meta Tags */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <div>
-                    <label className="block text-xs font-medium text-blue-600 mb-2 uppercase">Tipo de IA</label>
-                    <select {...register('aiType')} className="block w-full text-sm bg-white border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500">
-                        <option value="">Seleccionar...</option>
-                        {aiTypes.map(t => <option key={t} value={t}>{t}</option>)}
-                    </select>
+            <div className="bg-gray-50/80 p-5 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+                <div className="flex items-center justify-between border-b border-gray-200/60 pb-4">
+                    <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                        <Zap size={18} className="text-blue-600 fill-blue-600/20" />
+                        Metadatos Inteligentes
+                    </h3>
+                    <div className="flex flex-col items-center sm:items-end gap-2 text-right">
+                        <button
+                            type="button"
+                            onClick={analyzeContent}
+                            disabled={analyzing}
+                            className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                            {analyzing ? (
+                                <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                                <Zap size={16} className="fill-white" />
+                            )}
+                            {analyzing ? 'Procesando Magia...' : 'Generar Mágicamente'}
+                        </button>
+                        {analysedFields.length > 0 && (
+                            <p className="text-[10px] text-green-600 font-medium animate-fade-in pr-2">
+                                ✨ Detectado: {analysedFields.slice(0, 3).join(', ')}{analysedFields.length > 3 ? '...' : ''}
+                            </p>
+                        )}
+                    </div>
                 </div>
-                <div>
-                    <label className="block text-xs font-medium text-blue-600 mb-2 uppercase">Área Negocio</label>
-                    <select {...register('businessArea')} className="block w-full text-sm bg-white border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500">
-                        <option value="">Seleccionar...</option>
-                        {businessAreas.map(t => <option key={t} value={t}>{t}</option>)}
-                    </select>
-                </div>
-                <div>
-                    <label className="block text-xs font-medium text-blue-600 mb-2 uppercase">Sector</label>
-                    <select {...register('sector')} className="block w-full text-sm bg-white border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500">
-                        <option value="">Seleccionar...</option>
-                        {sectors.map(t => <option key={t} value={t}>{t}</option>)}
-                    </select>
-                </div>
-                <div>
-                    <label className="block text-xs font-medium text-blue-600 mb-2 uppercase">Profesión</label>
-                    <select {...register('profession')} className="block w-full text-sm bg-white border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500">
-                        <option value="">Seleccionar...</option>
-                        {professions.map(t => <option key={t} value={t}>{t}</option>)}
-                    </select>
+                
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                    <div>
+                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Empresas</label>
+                        <select {...register('company')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
+                            <option value="">Seleccionar...</option>
+                            {COMPANIES_LIST.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Herramienta IA</label>
+                        <select {...register('aiTool')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
+                            <option value="">Seleccionar...</option>
+                            {AI_TOOLS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Tipo de IA</label>
+                        <select {...register('aiType')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
+                            <option value="">Seleccionar...</option>
+                            {AI_TYPES_LIST.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Área Negocio</label>
+                        <select {...register('businessArea')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
+                            <option value="">Seleccionar...</option>
+                            {BUSINESS_AREAS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Sector</label>
+                        <select {...register('sector')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
+                            <option value="">Seleccionar...</option>
+                            {SECTORS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Profesión</label>
+                        <select {...register('profession')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
+                            <option value="">Seleccionar...</option>
+                            {PROFESSIONS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -444,13 +573,6 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
                         <label className="block text-sm font-medium text-gray-700">Contenido</label>
-                        <button
-                            type="button"
-                            onClick={analyzeContent}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold hover:bg-blue-100 transition-colors border border-blue-100"
-                        >
-                            <Zap size={12} className="fill-blue-600" /> Autogenerar Categorías/Etiquetas
-                        </button>
                     </div>
                     {/* Toggle tabs */}
                     <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden text-xs">

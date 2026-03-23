@@ -61,6 +61,9 @@ export async function POST(request: Request) {
                 coverImage: body.imageUrl || body.coverImage || null, // Handle both field names
                 aiType: body.aiType || null,
                 businessArea: body.businessArea || null,
+                sector: body.sector || null,
+                profession: body.profession || null,
+                aiTool: body.aiTool || null,
                 published: body.published !== undefined ? body.published : true,
                 publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
             },

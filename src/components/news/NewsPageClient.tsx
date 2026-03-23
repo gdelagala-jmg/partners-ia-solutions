@@ -19,13 +19,21 @@ interface NewsPost {
     businessArea: string | null
     sector: string | null
     profession: string | null
+    aiTool: string | null
     createdAt: string
 }
 
 export default function NewsPageClient() {
     const [posts, setPosts] = useState<NewsPost[]>([])
     const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
     const searchParams = useSearchParams()
+
+    // Reset page to 1 when filters change natively
+    useEffect(() => {
+        setPage(1)
+    }, [searchParams])
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -37,11 +45,23 @@ export default function NewsPageClient() {
                 if (searchParams.get('businessArea')) params.set('businessArea', searchParams.get('businessArea')!)
                 if (searchParams.get('sector')) params.set('sector', searchParams.get('sector')!)
                 if (searchParams.get('profession')) params.set('profession', searchParams.get('profession')!)
+                if (searchParams.get('aiTool')) params.set('aiTool', searchParams.get('aiTool')!)
+                if (searchParams.get('company')) params.set('company', searchParams.get('company')!)
+                
+                params.set('page', page.toString())
+                params.set('limit', '20')
 
                 const res = await fetch(`/api/news?${params.toString()}`)
                 if (res.ok) {
                     const data = await res.json()
-                    setPosts(data)
+                    if (data.data) {
+                        setPosts(data.data)
+                        setTotalPages(data.totalPages)
+                    } else {
+                        // Fallback in case of old API return format
+                        setPosts(Array.isArray(data) ? data : [])
+                        setTotalPages(1)
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching news:', error)
@@ -50,7 +70,10 @@ export default function NewsPageClient() {
             }
         }
         fetchNews()
-    }, [searchParams])
+    }, [searchParams, page])
+
+    const handlePrevious = () => setPage((p) => Math.max(1, p - 1))
+    const handleNext = () => setPage((p) => Math.min(totalPages, p + 1))
 
     return (
         <div className="min-h-screen bg-white">
@@ -76,12 +99,6 @@ export default function NewsPageClient() {
                 </div>
             </section>
 
-            {/* Flash News Section */}
-            <section className="py-2 bg-white antialiased">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-4">
-                    <FlashNewsList />
-                </div>
-            </section>
 
             {/* Filter Bar */}
             <section className="py-5 bg-white border-b border-gray-200">
@@ -94,8 +111,8 @@ export default function NewsPageClient() {
             <section className="py-8 lg:py-8">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     {loading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                                 <div key={i} className="h-80 bg-gray-100 rounded-2xl animate-pulse" />
                             ))}
                         </div>
@@ -106,7 +123,7 @@ export default function NewsPageClient() {
                             <p className="text-gray-600 text-sm">Intenta ajustar tus filtros de búsqueda.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {posts.map((post, idx) => (
                                 <motion.article
                                     key={post.id}
@@ -119,7 +136,7 @@ export default function NewsPageClient() {
                                     <Link href={`/noticias/${post.slug}`} className="absolute inset-0 z-10" />
 
                                     {/* Cover Image */}
-                                    <div className="h-56 bg-gray-50 relative overflow-hidden w-full">
+                                    <div className="h-44 bg-gray-50 relative overflow-hidden w-full">
                                         {post.coverImage ? (
                                             <img
                                                 src={post.coverImage}
@@ -146,9 +163,9 @@ export default function NewsPageClient() {
                                     </div>
 
                                     {/* Content */}
-                                    <div className="p-6 lg:p-7 flex-1 flex flex-col w-full">
+                                    <div className="p-4 lg:p-5 flex-1 flex flex-col w-full">
                                         {/* Tags */}
-                                        <div className="flex flex-wrap gap-2 mb-4">
+                                        <div className="flex flex-wrap gap-2 mb-3">
                                             {post.aiType && (
                                                 <span className="inline-flex items-center text-[10px] font-bold bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg border border-blue-100 uppercase tracking-tight">
                                                     <div className="w-1 h-1 rounded-full bg-blue-500 mr-2 animate-pulse" /> {post.aiType}
@@ -159,25 +176,30 @@ export default function NewsPageClient() {
                                                     {post.sector}
                                                 </span>
                                             )}
+                                            {post.aiTool && (
+                                                <span className="inline-flex items-center text-[10px] font-black bg-purple-50 text-purple-600 px-2.5 py-1 rounded-lg border border-purple-100 uppercase tracking-tight">
+                                                    {post.aiTool}
+                                                </span>
+                                            )}
                                         </div>
 
-                                        <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight">
+                                        <div className="text-[28px] font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
                                             {post.title}
-                                        </h2>
+                                        </div>
 
-                                        <p className="text-gray-500 text-sm mb-6 line-clamp-3 flex-1 leading-relaxed font-medium">
+                                        <p className="text-gray-500 text-sm mb-4 line-clamp-3 flex-1 leading-relaxed font-medium">
                                             {post.content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 150)}...
                                         </p>
 
                                         {/* Meta */}
-                                        <div className="pt-4 border-t border-gray-50 flex items-center justify-between text-[11px] text-gray-400 font-bold uppercase tracking-wider">
+                                        <div className="pt-3 border-t border-gray-50 flex items-center justify-between text-[11px] text-gray-400 font-bold uppercase tracking-wider">
                                             <span className="flex items-center gap-2">
                                                 <Calendar size={14} className="text-blue-500" />
                                                 {new Date(post.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
                                             </span>
                                             <div className="flex items-center gap-1.5 px-2 py-1 bg-gray-50 rounded-lg">
                                                 <div className="w-1 h-1 rounded-full bg-gray-300" />
-                                                <span>Lectura 5 min</span>
+                                                <span>Lectura {Math.max(1, Math.ceil((post.content.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length || 1) / 250))} min</span>
                                             </div>
                                         </div>
                                     </div>
@@ -186,6 +208,38 @@ export default function NewsPageClient() {
                             ))}
                         </div>
                     )}
+
+                    {/* Pagination Controls */}
+                    {!loading && totalPages > 1 && (
+                        <div className="mt-12 flex justify-center items-center gap-4">
+                            <button
+                                onClick={handlePrevious}
+                                disabled={page === 1}
+                                className="px-5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                            >
+                                Anterior
+                            </button>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-gray-500">
+                                    Página <span className="text-gray-900 font-bold">{page}</span> de {totalPages}
+                                </span>
+                            </div>
+                            <button
+                                onClick={handleNext}
+                                disabled={page === totalPages}
+                                className="px-5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                            >
+                                Siguiente
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            {/* Flash News Section (Moved below grid) */}
+            <section className="py-12 bg-white antialiased border-t border-gray-100">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <FlashNewsList />
                 </div>
             </section>
         </div>

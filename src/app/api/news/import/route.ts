@@ -117,6 +117,7 @@ export async function POST(request: Request) {
                         businessArea: post.businessArea || null,
                         sector: post.sector || null,
                         profession: post.profession || null,
+                        aiTool: post.aiTool || null,
                         content: post.content || '',
                         coverImage: coverImageUrl,
                         published: post.published !== undefined ? post.published : false,
