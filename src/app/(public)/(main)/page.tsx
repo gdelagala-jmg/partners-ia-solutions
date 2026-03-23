@@ -59,7 +59,7 @@ export default function HomePage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="inline-flex items-center px-4 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-sm font-medium text-gray-700 mb-5"
+                        className="inline-flex items-center px-4 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-sm font-medium text-black mb-5"
                     >
                         <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2" />
                         Liderando la Revolución de la IA
@@ -69,7 +69,7 @@ export default function HomePage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-5 tracking-tight leading-[1.1]"
+                        className="text-4xl md:text-5xl lg:text-6xl font-semibold text-[#000000] mb-5 tracking-tight leading-[1.1]"
                     >
                         Transformamos el Futuro
                         <br />
@@ -127,7 +127,7 @@ export default function HomePage() {
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-12 px-4">
-                        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">
+                        <h2 className="text-3xl md:text-4xl font-semibold text-[#000000] mb-4 tracking-tight">
                             Soluciones Destacadas
                         </h2>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -160,7 +160,7 @@ export default function HomePage() {
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
                                         <div className="absolute top-5 left-5 z-20">
-                                            <span className="px-4 py-2 bg-white/95 backdrop-blur-md text-sm font-semibold rounded-xl shadow-sm text-gray-900 border border-white/20">
+                                            <span className="px-4 py-2 bg-white/95 backdrop-blur-md text-sm font-semibold rounded-xl shadow-sm text-black border border-white/20">
                                                 {sector.name}
                                             </span>
                                         </div>
@@ -193,7 +193,7 @@ export default function HomePage() {
                     <div className="mt-12 text-center">
                         <Link
                             href="/soluciones"
-                            className="inline-flex items-center px-8 py-3 bg-white text-gray-900 font-bold rounded-2xl border border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm hover:shadow-md group"
+                            className="inline-flex items-center px-8 py-3 bg-white text-black font-bold rounded-2xl border border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm hover:shadow-md group"
                         >
                             Ver Todas las Soluciones
                             <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -217,7 +217,7 @@ export default function HomePage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4 tracking-tight">
+                        <h2 className="text-3xl md:text-4xl font-semibold text-[#000000] mb-4 tracking-tight">
                             ¿Listo para escalar?
                         </h2>
                         <p className="text-base text-gray-600 mb-2 max-w-2xl mx-auto leading-relaxed">
