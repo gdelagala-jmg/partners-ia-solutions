@@ -88,7 +88,7 @@ export default function Navbar({
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center space-x-1">
+                    <div className="hidden lg:flex items-center space-x-1">
                         {navLinks.map((item) => (
                             <Link
                                 key={item.name}
@@ -104,10 +104,10 @@ export default function Navbar({
                     </div>
 
                     {/* Right Side Actions ... (rest of the code remains same) */}
-                    <div className="flex items-center space-x-1 md:space-x-3">
+                    <div className="flex items-center space-x-1 lg:space-x-3">
                         <Link
                             href="/contacto"
-                            className="hidden md:block px-5 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all hover:scale-105 shadow-sm"
+                            className="hidden lg:block px-5 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all hover:scale-105 shadow-sm"
                         >
                             Contactar
                         </Link>
@@ -115,7 +115,7 @@ export default function Navbar({
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
+                            className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
                             aria-label="Toggle menu"
                         >
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -175,7 +175,7 @@ export default function Navbar({
 
             {/* Mobile Menu */}
             <div
-                className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+                className={`lg:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
                     }`}
             >
                 <div className="px-6 py-4 bg-white border-t border-gray-200 space-y-1">

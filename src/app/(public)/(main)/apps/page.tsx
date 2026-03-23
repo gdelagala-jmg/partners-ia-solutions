@@ -105,78 +105,56 @@ export default function AppsIndexPage() {
                                     initial={{ opacity: 0, y: 40 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                                    className="group relative flex flex-col h-[520px] bg-white rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-500/5 hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-700 overflow-hidden"
+                                    className="group relative flex flex-col h-[480px] bg-white rounded-[2.5rem] border border-gray-200 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] hover:shadow-2xl hover:shadow-gray-200 transition-all duration-500 overflow-hidden"
                                 >
-                                    {/* Floating Tags */}
-                                    <div className="absolute top-6 left-6 z-20 flex gap-2">
-                                        <span className="px-4 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-blue-600 border border-blue-50 shadow-lg">
-                                            {app.externalUrl ? 'Integration' : 'Native App'}
-                                        </span>
-                                    </div>
-
-                                    {/* Image / Media area */}
-                                    <div className={`relative h-[65%] w-full overflow-hidden ${mediaAreaPadding}`}>
-                                        <div className={`w-full h-full relative shadow-2xl shadow-black/5 rounded-[2rem] overflow-hidden border ${mediaContainerClasses}`}>
-                                            {isSaveFuel ? (
-                                                <>
-                                                    {/* Sophisticated Glassmorphism Backdrop */}
-                                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent)]" />
-                                                    <iframe
-                                                        className="absolute inset-0 w-full h-full object-contain pointer-events-none transition-transform duration-700 group-hover:scale-105"
-                                                        src="https://www.youtube.com/embed/OnTcspCEy1E?autoplay=1&mute=1&loop=1&playlist=OnTcspCEy1E&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0&iv_load_policy=3"
-                                                        title="SaveFuel Preview"
-                                                        frameBorder="0"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                    ></iframe>
-                                                    
-                                                    {/* Visual Bezel Effect */}
-                                                    <div className="absolute inset-0 border-[0.5px] border-white/10 rounded-[2rem] pointer-events-none" />
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:opacity-40 transition-opacity duration-700 z-10" />
-                                                    <img
-                                                        src={app.image || '/logo-ias.png'}
-                                                        alt={app.name}
-                                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                                        onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/600x800?text=Application')}
-                                                    />
-                                                </>
-                                            )}
-                                            
-                                            {/* Hover Overlay Icon */}
-                                            <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 group-hover:scale-100 scale-90 transition-all duration-500 pointer-events-none">
-                                                <div className="p-5 bg-white shadow-2xl rounded-3xl">
-                                                    {app.externalUrl ? <Globe size={32} className="text-blue-600" /> : <Bot size={32} className="text-indigo-600" />}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Content area */}
-                                    <div className="flex-1 p-8 pt-4 flex flex-col justify-between">
-                                        <div>
-                                            <h3 className="text-3xl font-black text-gray-900 tracking-tighter group-hover:text-blue-600 mb-3 transition-colors">
+                                    {/* Top Image / Media Area */}
+                                    <div className="relative h-[55%] w-full overflow-hidden bg-gray-50 shrink-0">
+                                        {/* Floating Tag Overlay */}
+                                        <div className="absolute top-5 left-5 z-20">
+                                            <span className="inline-flex items-center px-6 py-3 bg-white/95 backdrop-blur-md rounded-[1.25rem] text-[15px] font-bold text-gray-900 shadow-[0_4px_20px_rgba(0,0,0,0.1)]">
                                                 {app.name}
-                                            </h3>
-                                            <p className="text-gray-500 text-base font-medium leading-relaxed line-clamp-2">
-                                                {app.description || 'Una herramienta innovadora diseñada para optimizar procesos mediante IA avanzada.'}
-                                            </p>
+                                            </span>
                                         </div>
 
-                                        <div className="flex items-center justify-between pt-6 mt-4 border-t border-gray-50">
-                                            <Link
-                                                href={app.externalUrl ? app.externalUrl : `/apps/${app.slug}`}
-                                                target={app.externalUrl ? "_blank" : "_self"}
-                                                className="inline-flex items-center gap-3 px-8 py-3.5 bg-gray-900 group-hover:bg-blue-600 text-white rounded-2xl text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-xl shadow-gray-900/10 group-hover:shadow-blue-500/20"
-                                            >
-                                                {app.externalUrl ? (
-                                                    <>Acceso Externo <ExternalLink size={16} /></>
-                                                ) : (
-                                                    <>Explorar App <ChevronRight size={18} className="translate-x-0 group-hover:translate-x-1 transition-transform" /></>
-                                                )}
-                                            </Link>
-                                        </div>
+                                        {isSaveFuel ? (
+                                            <>
+                                                {/* SaveFuel Custom Design */}
+                                                <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black z-0" />
+                                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent)] z-0" />
+                                                <iframe
+                                                    className="absolute inset-0 w-full h-full object-contain pointer-events-none transition-transform duration-700 group-hover:scale-105 z-10 p-4"
+                                                    src="https://www.youtube.com/embed/OnTcspCEy1E?autoplay=1&mute=1&loop=1&playlist=OnTcspCEy1E&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0&iv_load_policy=3"
+                                                    title="SaveFuel Preview"
+                                                    frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                ></iframe>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img
+                                                    src={app.image || '/logo-ias.png'}
+                                                    alt={app.name}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                    onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/600x800?text=Application')}
+                                                />
+                                            </>
+                                        )}
+                                    </div>
+
+                                    {/* Bottom Content Area */}
+                                    <div className="flex-1 p-8 sm:p-10 flex flex-col justify-center bg-white relative z-10">
+                                        <p className="text-gray-500 text-[1.1rem] font-medium leading-[1.6] line-clamp-3 mb-4">
+                                            {app.description || 'Una herramienta innovadora diseñada para optimizar procesos mediante IA avanzada.'}
+                                        </p>
+
+                                        <Link
+                                            href={app.externalUrl ? app.externalUrl : `/apps/${app.slug}`}
+                                            target={app.externalUrl ? "_blank" : "_self"}
+                                            className="inline-flex items-center gap-3 text-blue-600 font-bold text-base group-hover:text-blue-700 transition-colors"
+                                        >
+                                            {app.externalUrl ? 'Acceso Externo' : 'Descubrir Soluciones'} 
+                                            <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+                                        </Link>
                                     </div>
                                 </motion.div>
                             );
