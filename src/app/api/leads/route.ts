@@ -43,6 +43,16 @@ export async function POST(request: Request) {
             } as any,
         })
 
+        // Log Consent
+        await prisma.consentLog.create({
+            data: {
+                email,
+                action: 'LEAD_CAPTURE',
+                ipAddress: request.headers.get('x-forwarded-for') || null,
+                userAgent: request.headers.get('user-agent') || null,
+            }
+        })
+
         return NextResponse.json(lead, { status: 201 })
     } catch (error) {
         console.error('Error creating lead:', error)

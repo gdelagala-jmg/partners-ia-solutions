@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Zap, ChevronDown, Send, CheckCircle2, AlertCircle } from 'lucide-react'
 
@@ -18,14 +19,16 @@ export default function LeadCaptureSection() {
         desiredResult: '',
         name: '',
         email: '',
+        privacyAccepted: false,
     })
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
     const [errorMsg, setErrorMsg] = useState('')
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-        const { name, value } = e.target
-        setForm(prev => ({ ...prev, [name]: value }))
+        const target = e.target as HTMLInputElement
+        const { name, value, type, checked } = target
+        setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
     }
 
     function handleUrgencyChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -34,6 +37,13 @@ export default function LeadCaptureSection() {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
+        
+        if (!form.privacyAccepted) {
+            setStatus('error')
+            setErrorMsg('Debes aceptar la Política de Privacidad para continuar')
+            return
+        }
+
         setLoading(true)
         setStatus('idle')
         setErrorMsg('')
@@ -60,7 +70,7 @@ export default function LeadCaptureSection() {
             }
 
             setStatus('success')
-            setForm({ scope: '', bottleneck: '', urgency: 5, desiredResult: '', name: '', email: '' })
+            setForm({ scope: '', bottleneck: '', urgency: 5, desiredResult: '', name: '', email: '', privacyAccepted: false })
         } catch (err: any) {
             setStatus('error')
             setErrorMsg(err.message || 'Error inesperado. Inténtalo de nuevo.')
@@ -84,7 +94,7 @@ export default function LeadCaptureSection() {
 
     return (
         <section className="py-6 lg:py-12 bg-gray-50">
-            <div className="max-w-5xl mx-auto px-6 lg:px-8">
+            <div className="max-w-5xl mx-auto px-5 md:px-6 lg:px-8">
 
                 {/* Header */}
                 <motion.div
@@ -132,7 +142,7 @@ export default function LeadCaptureSection() {
                             </button>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} className="p-6 lg:p-10">
+                        <form onSubmit={handleSubmit} className="p-5 md:p-8 lg:p-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                                 {/* Scope */}
@@ -260,11 +270,31 @@ export default function LeadCaptureSection() {
                                     />
                                 </div>
 
+                                {/* Privacy Checkbox */}
+                                <div className="md:col-span-2">
+                                    <label className="flex items-start space-x-3 cursor-pointer">
+                                        <div className="flex items-center h-5 mt-0.5">
+                                            <input
+                                                type="checkbox"
+                                                name="privacyAccepted"
+                                                checked={form.privacyAccepted}
+                                                onChange={handleChange}
+                                                className="w-4 h-4 bg-gray-50 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 accent-blue-600 transition-all cursor-pointer"
+                                            />
+                                        </div>
+                                        <div className="text-sm">
+                                            <span className="text-gray-700">He leído y acepto la </span>
+                                            <Link href="/politica-privacidad" className="text-blue-600 hover:underline" target="_blank">Política de Privacidad</Link>
+                                            <span className="text-blue-500 ml-1">*</span>
+                                        </div>
+                                    </label>
+                                </div>
+
                                 {/* Error */}
                                 {status === 'error' && (
                                     <div className="md:col-span-2 flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm">
-                                        <AlertCircle size={16} />
-                                        {errorMsg}
+                                        <AlertCircle size={16} className="shrink-0" />
+                                        <span>{errorMsg}</span>
                                     </div>
                                 )}
 
@@ -287,9 +317,13 @@ export default function LeadCaptureSection() {
                                             </>
                                         )}
                                     </button>
-                                    <p className="mt-3 text-xs text-gray-400">
-                                        Al enviar, aceptas que nuestro equipo se ponga en contacto contigo. Sin spam, solo valor.
-                                    </p>
+                                    
+                                    {/* Primera Capa Informativa */}
+                                    <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded-xl text-xs text-gray-500 space-y-2">
+                                        <p><strong>Responsable:</strong> Partners IA Solutions S.L.</p>
+                                        <p><strong>Finalidad:</strong> Atender tu consulta y enviar la información solicitada.</p>
+                                        <p><strong>Derechos:</strong> Tienes derecho a acceder, rectificar y suprimir los datos, así como otros derechos, tal y como se explica en la <Link href="/politica-privacidad" className="text-blue-600 hover:underline" target="_blank">Política de Privacidad</Link>. Puedes consultar la información adicional detallada en ella.</p>
+                                    </div>
                                 </div>
                             </div>
                         </form>

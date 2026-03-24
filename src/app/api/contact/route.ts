@@ -17,6 +17,16 @@ export async function POST(request: Request) {
             },
         })
 
+        // 1.5 Log Consent
+        await prisma.consentLog.create({
+            data: {
+                email,
+                action: 'CONTACT_FORM_SUBMIT',
+                ipAddress: request.headers.get('x-forwarded-for') || null,
+                userAgent: request.headers.get('user-agent') || null,
+            }
+        })
+
         // 2. Send Email
         // Only try to send if SMTP vars are present, otherwise log meaningful warning
         if (process.env.SMTP_HOST && process.env.SMTP_USER) {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CookieBanner from "@/components/layout/CookieBanner";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.partnersiasolutions.com'),
@@ -70,6 +71,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         {children}
+        <CookieBanner />
       </body>
     </html>
   );

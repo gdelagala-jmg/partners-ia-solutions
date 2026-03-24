@@ -13,6 +13,9 @@ const contactSchema = z.object({
     email: z.string().email('Email inválido'),
     phone: z.string().optional(),
     message: z.string().min(10, 'El mensaje debe tener al menos 10 caracteres'),
+    privacyAccepted: z.boolean().refine(val => val === true, {
+        message: 'Debes aceptar la Política de Privacidad para continuar'
+    }),
 })
 
 type ContactFormValues = z.infer<typeof contactSchema>
@@ -212,6 +215,24 @@ export default function ContactPage() {
                                         {errors.message && <p className="mt-1.5 text-xs text-red-600">{errors.message.message}</p>}
                                     </div>
 
+                                    <div>
+                                        <label className="flex items-start space-x-3 cursor-pointer">
+                                            <div className="flex items-center h-5 mt-0.5">
+                                                <input
+                                                    {...register('privacyAccepted')}
+                                                    type="checkbox"
+                                                    className="w-4 h-4 bg-gray-50 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 accent-blue-600 transition-all cursor-pointer"
+                                                />
+                                            </div>
+                                            <div className="text-sm">
+                                                <span className="text-gray-700">He leído y acepto la </span>
+                                                <Link href="/politica-privacidad" className="text-blue-600 hover:underline" target="_blank">Política de Privacidad</Link>
+                                                <span className="text-blue-500 ml-1">*</span>
+                                            </div>
+                                        </label>
+                                        {errors.privacyAccepted && <p className="mt-1.5 text-xs text-red-600">{errors.privacyAccepted.message}</p>}
+                                    </div>
+
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
@@ -229,6 +250,13 @@ export default function ContactPage() {
                                             </>
                                         )}
                                     </button>
+                                    
+                                    {/* Primera Capa Informativa */}
+                                    <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded-xl text-xs text-gray-500 space-y-2">
+                                        <p><strong>Responsable:</strong> Partners IA Solutions S.L.</p>
+                                        <p><strong>Finalidad:</strong> Atender tu consulta o solicitud de contacto.</p>
+                                        <p><strong>Derechos:</strong> Tienes derecho a acceder, rectificar y suprimir los datos, así como otros derechos, tal y como se explica en la <Link href="/politica-privacidad" className="text-blue-600 hover:underline" target="_blank">Política de Privacidad</Link>. Puedes consultar la información adicional detallada en ella.</p>
+                                    </div>
                                 </form>
                             </div>
                         </motion.div>
