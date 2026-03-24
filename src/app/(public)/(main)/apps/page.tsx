@@ -16,7 +16,10 @@ interface App {
     order: number
 }
 
+import { redirect } from 'next/navigation'
+
 export default function AppsIndexPage() {
+    redirect('/')
     const [apps, setApps] = useState<App[]>([])
     const [loading, setLoading] = useState(true)
 

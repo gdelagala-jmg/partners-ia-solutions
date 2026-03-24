@@ -15,7 +15,10 @@ import SaveFuelPricing from '@/components/savefuel/SaveFuelPricing'
 import SaveFuelFAQ from '@/components/savefuel/SaveFuelFAQ'
 import SaveFuelFooter from '@/components/savefuel/SaveFuelFooter'
 
+import { redirect } from 'next/navigation'
+
 export default function SaveFuelPage() {
+    redirect('/')
     return (
         <main className="relative">
             <SaveFuelNavbar />

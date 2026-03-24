@@ -7,6 +7,7 @@ import { ArrowLeft, Share2, Info, LayoutGrid, Zap, Globe, Sparkles } from 'lucid
 export const dynamic = 'force-dynamic'
 
 export default async function AppLandingPage({ params }: { params: Promise<{ slug: string }> }) {
+    redirect('/')
     const { slug } = await params
     
     // Attempt to find the app using the 'application' model

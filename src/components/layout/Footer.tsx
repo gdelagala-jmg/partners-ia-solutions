@@ -2,8 +2,20 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Linkedin, Facebook, Instagram, Youtube, MessageCircle } from 'lucide-react'
+import { Linkedin, Facebook, Instagram, Youtube, MessageCircle, Music, Podcast, Share2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
+
+const SpotifyIcon = ({ size = 18 }: { size?: number }) => (
+    <svg 
+        width={size} 
+        height={size} 
+        viewBox="0 0 24 24" 
+        fill="currentColor" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.11 17.3c-.22.34-.67.45-1.01.23-2.82-1.72-6.37-2.11-10.55-1.16-.38.09-.77-.15-.86-.53-.09-.38.15-.77.53-.86 4.6-.96 8.52-.52 11.66 1.41.34.22.45.67.23 1.01zm1.37-3.26c-.28.45-.87.59-1.32.31-3.22-1.98-8.12-2.55-11.93-1.39-.51.15-1.05-.14-1.2-.65-.15-.51.14-1.05.65-1.2 4.35-1.32 9.76-.68 13.49 1.62.45.28.59.87.31 1.32zm.12-3.41c-3.86-2.29-10.25-2.5-13.98-1.37-.59.18-1.22-.16-1.4-.75-.18-.59.16-1.22.75-1.4 4.29-1.3 11.33-1.05 15.79 1.59.53.31.7.99.39 1.52-.31.53-.99.7-1.55.43z"/>
+    </svg>
+)
 
 const footerSections = [
     {
@@ -35,6 +47,7 @@ const footerSections = [
 
 const socialLinks = [
     { name: 'LinkedIn', href: 'https://www.linkedin.com/company/109997641/', icon: Linkedin },
+    { name: 'Spotify', href: 'https://open.spotify.com/show/2L0NV7YhTyXzUEcP7VAv7H?si=7SS5OfphRfW84JlvOJT2ig&nd=1&dlsi=dc071a205d6c41b7', icon: SpotifyIcon },
     { name: 'WhatsApp', href: 'https://api.whatsapp.com/send?phone=34639023805', icon: MessageCircle },
     { name: 'Facebook', href: 'https://www.facebook.com/pgf.iasolutions', icon: Facebook },
     { name: 'Instagram', href: 'https://www.instagram.com/pgf.iasolutions/', icon: Instagram },

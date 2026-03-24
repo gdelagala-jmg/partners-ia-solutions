@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     try {
         // 2. Rutas Dinámicas: Noticias (Blog)
         const news = await prisma.newsPost.findMany({
-            where: { status: 'PUBLISHED' },
+            where: { published: true },
             select: { slug: true, updatedAt: true },
         })
 
@@ -53,7 +53,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.9,
         }))
 
-        // 4. Rutas Dinámicas: Apps/Proyectos Internos públicos
+        // 4. Rutas Dinámicas: Apps/Proyectos Internos públicos (DESHABILITADAS TEMPORALMENTE)
+        /*
         const apps = await prisma.app.findMany({
             where: { isInternal: false }, // Only public apps
             select: { slug: true, updatedAt: true },
@@ -65,8 +66,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: 'monthly' as const,
             priority: 0.8,
         }))
+        */
 
-        return [...staticUrls, ...newsUrls, ...solutionUrls, ...appUrls]
+        return [...staticUrls, ...newsUrls, ...solutionUrls]
 
     } catch (error) {
         console.error("Sitemap generation error:", error)
