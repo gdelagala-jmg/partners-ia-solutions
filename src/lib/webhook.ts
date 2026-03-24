@@ -22,7 +22,7 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
             slug: post.slug,
             category: post.category,
             content: cleanContent,
-            coverImage: post.coverImage,
+            coverImage: post.coverImage || 'https://www.partnersiasolutions.com/logo-ias.png', // Fallback brand image
             url: `https://www.partnersiasolutions.com/noticias/${post.slug}`,
             publishedAt: post.publishedAt
         };
