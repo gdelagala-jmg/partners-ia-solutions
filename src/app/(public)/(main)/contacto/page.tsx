@@ -61,7 +61,7 @@ export default function ContactPage() {
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
             <section className="py-8 lg:py-8 bg-gray-50">
-                <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ export default function ContactPage() {
 
             {/* Contact Section */}
             <section className="py-8 lg:py-8">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Contact Info */}
                         <motion.div
@@ -92,7 +92,7 @@ export default function ContactPage() {
                             transition={{ duration: 0.6 }}
                             className="space-y-6 flex flex-col items-center md:items-start w-full"
                         >
-                            <div className="bg-gray-50 border border-gray-200 p-6 lg:p-8 rounded-2xl w-[90%] md:w-full shadow-sm">
+                            <div className="bg-gray-50 border border-gray-200 p-5 md:p-6 lg:p-8 rounded-2xl w-full shadow-sm">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center md:text-left">Información de Contacto</h3>
 
                                 <div className="space-y-5">
@@ -129,7 +129,7 @@ export default function ContactPage() {
                             </div>
 
                             {/* Social Links */}
-                            <div className="bg-gray-50 border border-gray-200 p-6 lg:p-8 rounded-2xl w-[90%] md:w-full shadow-sm">
+                            <div className="bg-gray-50 border border-gray-200 p-5 md:p-6 lg:p-8 rounded-2xl w-full shadow-sm">
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center md:text-left">Síguenos</h3>
                                 <div className="grid grid-cols-3 gap-3">
                                     {socialLinks.map((social) => (
@@ -154,7 +154,7 @@ export default function ContactPage() {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6 }}
                         >
-                            <div className="bg-white border border-gray-200 p-6 lg:p-8 rounded-2xl shadow-sm">
+                            <div className="bg-white border border-gray-200 p-5 md:p-6 lg:p-8 rounded-2xl shadow-sm">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-5 text-center md:text-left">Envíanos un Mensaje</h3>
 
                                 {isSuccess && (
