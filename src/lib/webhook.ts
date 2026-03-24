@@ -11,10 +11,13 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
 
     try {
         // Formato de texto limpio sin HTML para Google Business
-        let cleanContent = post.content || '';
-        if (cleanContent.length > 500) {
-            cleanContent = cleanContent.substring(0, 500) + '...';
-        }
+        // Limpiar contenido HTML pero manteniendo el texto plano legible
+        const cleanContent = (post.content || '')
+            .replace(/<[^>]*>?/gm, '')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .substring(0, 1500) + '...';
 
         const payload = {
             id: post.id,
