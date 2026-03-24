@@ -11,6 +11,12 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
 
     try {
         // Formato de texto limpio sin HTML para Google Business
+        const cleanTitle = (post.title || '')
+            .replace(/<[^>]*>?/gm, '')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
         // Limpiar contenido HTML pero manteniendo el texto plano legible
         const cleanContent = (post.content || '')
             .replace(/<[^>]*>?/gm, '')
@@ -19,13 +25,26 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
             .trim()
             .substring(0, 1500) + '...';
 
+        // Manejo de compatibilidad de imágenes para Google Business (Sólo soporta PNG/JPG/JPEG)
+        let finalImageUrl = 'https://www.partnersiasolutions.com/logo-ias.png';
+        const rawImageUrl = post.coverImage || '';
+        
+        if (rawImageUrl) {
+            const isSupported = /\.(jpg|jpeg|png)$/i.test(rawImageUrl);
+            if (isSupported) {
+                finalImageUrl = rawImageUrl.startsWith('http') 
+                    ? rawImageUrl 
+                    : `https://www.partnersiasolutions.com${rawImageUrl}`;
+            }
+        }
+
         const payload = {
             id: post.id,
-            title: post.title,
+            title: cleanTitle,
             slug: post.slug,
             category: post.category,
             content: cleanContent,
-            coverImage: post.coverImage || 'https://www.partnersiasolutions.com/logo-ias.png', // Fallback brand image
+            coverImage: finalImageUrl,
             url: `https://www.partnersiasolutions.com/noticias/${post.slug}`,
             publishedAt: post.publishedAt
         };
