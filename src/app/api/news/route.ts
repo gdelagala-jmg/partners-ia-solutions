@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { triggerMakeWebhook } from '@/lib/webhook'
 
 // GET /api/news - List all with optional filters
 export async function GET(request: Request) {
@@ -102,6 +103,10 @@ export async function POST(request: Request) {
                 publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.published ? new Date() : null),
             },
         })
+
+        if (post.published) {
+            await triggerMakeWebhook(post, true)
+        }
 
         return NextResponse.json(post)
     } catch (error: any) {

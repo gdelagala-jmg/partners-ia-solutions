@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { triggerMakeWebhook } from '@/lib/webhook'
 type Params = Promise<{ id: string }>
 
 export async function GET(request: Request, { params }: { params: Params }) {
@@ -19,6 +20,10 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     try {
         const { id } = await params
         const body = await request.json()
+        
+        const existing = await prisma.newsPost.findUnique({ where: { id } })
+        if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
         const post = await prisma.newsPost.update({
             where: { id },
             data: {
@@ -46,6 +51,12 @@ export async function PUT(request: Request, { params }: { params: Params }) {
                     : (body.published ? new Date() : null),
             },
         })
+
+        // Detectar si la noticia acaba de ser publicada ahora (false -> true)
+        const isNewPublish = !existing.published && post.published
+        if (isNewPublish) {
+            await triggerMakeWebhook(post, true)
+        }
         return NextResponse.json(post)
     } catch (error: any) {
         console.error('SERVER ERROR UPDATE:', error)
