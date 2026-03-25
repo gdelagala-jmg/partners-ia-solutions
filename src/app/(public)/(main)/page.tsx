@@ -124,11 +124,20 @@ export default function HomePage() {
             </section>
 
             {/* FEATURED SOLUTIONS SECTION */}
-            <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
+            <section className="py-8 lg:py-16 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-12 px-4">
-                        <h2 className="text-3xl md:text-4xl font-semibold text-[#000000] mb-4 tracking-tight">
-                            Soluciones Destacadas
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5"
+                        >
+                            <Sparkles size={14} className="mr-2 text-blue-500" />
+                            Ecosistemas IA de Alto Rendimiento
+                        </motion.div>
+                        <h2 className="text-3xl md:text-5xl font-semibold text-[#000000] mb-4 tracking-tight">
+                            Soluciones <span className="text-blue-500">Destacadas</span>
                         </h2>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                             Ecosistemas de Inteligencia Artificial diseñados para resolver los retos específicos de tu industria
