@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import NewsFilterBar from '@/components/news/NewsFilterBar'
 import FlashNewsList from '@/components/news/FlashNewsList'
 import Link from 'next/link'
-import { Calendar, Tag, Newspaper } from 'lucide-react'
+import { Calendar, Tag, Newspaper, Building2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 
@@ -20,6 +20,7 @@ interface NewsPost {
     sector: string | null
     profession: string | null
     aiTool: string | null
+    company: string | null
     createdAt: string
 }
 
@@ -165,20 +166,25 @@ export default function NewsPageClient() {
                                     {/* Content */}
                                     <div className="p-4 lg:p-5 flex-1 flex flex-col w-full">
                                         {/* Tags */}
-                                        <div className="flex flex-wrap gap-2 mb-3">
-                                            {post.aiType && (
-                                                <span className="inline-flex items-center text-[10px] font-bold bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg border border-blue-100 uppercase tracking-tight">
-                                                    <div className="w-1 h-1 rounded-full bg-blue-500 mr-2 animate-pulse" /> {post.aiType}
-                                                </span>
-                                            )}
-                                            {post.sector && (
-                                                <span className="inline-flex items-center text-[10px] font-bold bg-gray-50 text-gray-500 px-2.5 py-1 rounded-lg border border-gray-100 uppercase tracking-tight">
-                                                    {post.sector}
+                                        <div className="flex flex-wrap gap-2 mb-3 items-center">
+                                            {post.company && (
+                                                <span className="inline-flex items-center text-[10px] font-bold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full border border-gray-100 uppercase tracking-tight">
+                                                    <Building2 size={10} className="mr-1.5 opacity-70" /> {post.company}
                                                 </span>
                                             )}
                                             {post.aiTool && (
-                                                <span className="inline-flex items-center text-[10px] font-black bg-purple-50 text-purple-600 px-2.5 py-1 rounded-lg border border-purple-100 uppercase tracking-tight">
+                                                <span className="inline-flex items-center text-[10px] font-bold bg-purple-50 text-purple-600 px-2.5 py-1 rounded-full border border-purple-100/50 uppercase tracking-tight">
                                                     {post.aiTool}
+                                                </span>
+                                            )}
+                                            {post.aiType && (
+                                                <span className="inline-flex items-center text-[10px] font-bold bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full border border-blue-100/50 uppercase tracking-tight">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2" /> {post.aiType}
+                                                </span>
+                                            )}
+                                            {post.sector && !post.company && (
+                                                <span className="inline-flex items-center text-[10px] font-bold bg-gray-50 text-gray-400 px-2.5 py-1 rounded-full border border-gray-100 uppercase tracking-tight">
+                                                    {post.sector}
                                                 </span>
                                             )}
                                         </div>

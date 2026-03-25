@@ -130,12 +130,109 @@ function ChipInput({
     )
 }
 
+// --- Selectable Metadata Component ---
+function SelectableMetadata({
+    label,
+    value,
+    onChange,
+    options,
+    onAddOption,
+    placeholder = "Escribir..."
+}: {
+    label: string
+    value: string
+    onChange: (val: string) => void
+    options: string[]
+    onAddOption: (val: string) => void
+    placeholder?: string
+}) {
+    const [isOpen, setIsOpen] = useState(false)
+    const [localValue, setLocalValue] = useState(value || '')
+
+    useEffect(() => {
+        setLocalValue(value || '')
+    }, [value])
+
+    const filteredOptions = options.filter(opt =>
+        opt.toLowerCase().includes(localValue.toLowerCase())
+    )
+
+    const handleSelect = (opt: string) => {
+        onChange(opt)
+        setIsOpen(false)
+    }
+
+    const handleManualChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value
+        setLocalValue(val)
+        onChange(val)
+        setIsOpen(true)
+    }
+
+    return (
+        <div className="relative">
+            <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">{label}</label>
+            <div className="relative">
+                <input
+                    type="text"
+                    value={localValue}
+                    onChange={handleManualChange}
+                    onFocus={() => setIsOpen(true)}
+                    onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+                    placeholder={placeholder}
+                    className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10 px-3 pr-8"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                    <Plus size={14} className="text-gray-400" />
+                </div>
+
+                {isOpen && (filteredOptions.length > 0 || (localValue && !options.includes(localValue))) && (
+                    <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-48 overflow-y-auto py-1 animate-in fade-in zoom-in-95 duration-100">
+                        {filteredOptions.map(opt => (
+                            <button
+                                key={opt}
+                                type="button"
+                                onMouseDown={() => handleSelect(opt)}
+                                className={`w-full text-left px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors ${value === opt ? 'bg-blue-50 text-blue-700 font-medium' : ''}`}
+                            >
+                                {opt}
+                            </button>
+                        ))}
+                        {localValue && !options.includes(localValue) && (
+                            <button
+                                key="add-new"
+                                type="button"
+                                onMouseDown={() => {
+                                    onAddOption(localValue)
+                                    handleSelect(localValue)
+                                }}
+                                className="w-full text-left px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors border-t border-gray-100 italic"
+                            >
+                                <Plus size={12} className="inline mr-1" /> Añadir "{localValue}"
+                            </button>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}
+
 export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     const [uploading, setUploading] = useState(false)
     const [analyzing, setAnalyzing] = useState(false)
     const [analysedFields, setAnalysedFields] = useState<string[]>([])
     const [editorMode, setEditorMode] = useState<'visual' | 'html'>('visual')
     const [htmlContent, setHtmlContent] = useState(initialData?.content || '')
+
+    // Stateful lists for metadata
+    const [companiesList, setCompaniesList] = useState(COMPANIES_LIST)
+    const [aiToolsList, setAiToolsList] = useState(AI_TOOLS_LIST)
+    const [aiTypesList, setAiTypesList] = useState(AI_TYPES_LIST)
+    const [businessAreasList, setBusinessAreasList] = useState(BUSINESS_AREAS_LIST)
+    const [sectorsList, setSectorsList] = useState(SECTORS_LIST)
+    const [professionsList, setProfessionsList] = useState(PROFESSIONS_LIST)
+
     const [categories, setCategories] = useState<string[]>(
         initialData?.category
             ? initialData.category.split(',').map((c: string) => c.trim()).filter(Boolean)
@@ -169,6 +266,12 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     })
 
     const coverImageUrl = watch('coverImage')
+    const company = watch('company')
+    const aiTool = watch('aiTool')
+    const aiType = watch('aiType')
+    const businessArea = watch('businessArea')
+    const sector = watch('sector')
+    const profession = watch('profession')
 
     // Keep form value in sync with rich editor
     const handleQuillChange = (val: string) => {
@@ -523,48 +626,48 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
                 </div>
                 
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-                    <div>
-                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Empresas</label>
-                        <select {...register('company')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
-                            <option value="">Seleccionar...</option>
-                            {COMPANIES_LIST.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Herramienta IA</label>
-                        <select {...register('aiTool')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
-                            <option value="">Seleccionar...</option>
-                            {AI_TOOLS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Tipo de IA</label>
-                        <select {...register('aiType')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
-                            <option value="">Seleccionar...</option>
-                            {AI_TYPES_LIST.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Área Negocio</label>
-                        <select {...register('businessArea')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
-                            <option value="">Seleccionar...</option>
-                            {BUSINESS_AREAS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Sector</label>
-                        <select {...register('sector')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
-                            <option value="">Seleccionar...</option>
-                            {SECTORS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">Profesión</label>
-                        <select {...register('profession')} className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10">
-                            <option value="">Seleccionar...</option>
-                            {PROFESSIONS_LIST.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                    </div>
+                    <SelectableMetadata
+                        label="Empresas"
+                        value={company || ''}
+                        onChange={val => setValue('company', val, { shouldDirty: true })}
+                        options={companiesList}
+                        onAddOption={val => setCompaniesList(prev => [...prev, val])}
+                    />
+                    <SelectableMetadata
+                        label="Herramienta IA"
+                        value={aiTool || ''}
+                        onChange={val => setValue('aiTool', val, { shouldDirty: true })}
+                        options={aiToolsList}
+                        onAddOption={val => setAiToolsList(prev => [...prev, val])}
+                    />
+                    <SelectableMetadata
+                        label="Tipo de IA"
+                        value={aiType || ''}
+                        onChange={val => setValue('aiType', val, { shouldDirty: true })}
+                        options={aiTypesList}
+                        onAddOption={val => setAiTypesList(prev => [...prev, val])}
+                    />
+                    <SelectableMetadata
+                        label="Área Negocio"
+                        value={businessArea || ''}
+                        onChange={val => setValue('businessArea', val, { shouldDirty: true })}
+                        options={businessAreasList}
+                        onAddOption={val => setBusinessAreasList(prev => [...prev, val])}
+                    />
+                    <SelectableMetadata
+                        label="Sector"
+                        value={sector || ''}
+                        onChange={val => setValue('sector', val, { shouldDirty: true })}
+                        options={sectorsList}
+                        onAddOption={val => setSectorsList(prev => [...prev, val])}
+                    />
+                    <SelectableMetadata
+                        label="Profesión"
+                        value={profession || ''}
+                        onChange={val => setValue('profession', val, { shouldDirty: true })}
+                        options={professionsList}
+                        onAddOption={val => setProfessionsList(prev => [...prev, val])}
+                    />
                 </div>
             </div>
 

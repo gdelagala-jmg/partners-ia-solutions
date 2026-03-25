@@ -76,7 +76,7 @@ export default function PodcastHomeSection() {
                         <div className="hidden sm:block h-4 w-px bg-gray-200" />
                         <div className="flex items-center text-gray-600 text-sm">
                             <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2" />
-                            <span>Actualizado Semanalmente</span>
+                            <span>actualizado diariamente</span>
                         </div>
                     </div>
                 </motion.div>

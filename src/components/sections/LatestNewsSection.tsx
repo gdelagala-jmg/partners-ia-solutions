@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Calendar, Tag, Newspaper } from 'lucide-react'
+import { ArrowRight, Calendar, Tag, Newspaper, Building2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 interface NewsPost {
@@ -14,6 +14,7 @@ interface NewsPost {
     coverImage: string | null
     aiType: string | null
     aiTool: string | null
+    company: string | null
     createdAt: string
     publishedAt: string | null
     content: string
@@ -103,15 +104,22 @@ export default function LatestNewsSection() {
 
                                 {/* Content */}
                                 <div className="p-5 flex-1 flex flex-col">
-                                    <div className="mb-2">
-                                        {post.aiType && (
-                                            <span className="inline-flex items-center text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">
-                                                <Tag size={10} className="mr-1" /> {post.aiType}
+                                    <div className="mb-3 flex flex-wrap gap-2 items-center">
+                                        {post.company && (
+                                            <span className="inline-flex items-center text-[10px] font-bold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                                <Building2 size={10} className="mr-1.5 opacity-70" />
+                                                {post.company}
                                             </span>
                                         )}
                                         {post.aiTool && (
-                                            <span className="inline-flex items-center text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200 ml-2">
+                                            <span className="inline-flex items-center text-[10px] font-bold bg-purple-50 text-purple-600 px-2.5 py-1 rounded-full uppercase tracking-wider border border-purple-100/50">
                                                 {post.aiTool}
+                                            </span>
+                                        )}
+                                        {post.aiType && (
+                                            <span className="inline-flex items-center text-[10px] font-bold bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full uppercase tracking-wider border border-blue-100/50">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2" />
+                                                {post.aiType}
                                             </span>
                                         )}
                                     </div>
