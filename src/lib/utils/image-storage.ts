@@ -9,17 +9,36 @@ import { mkdir, writeFile } from 'fs/promises'
  * In development, it saves to public/uploads.
  */
 export async function downloadAndStoreImage(url: string, prefix: string = 'news'): Promise<string | null> {
-    if (!url || !url.startsWith('http')) return null
+    if (!url) return null
 
     try {
-        const response = await fetch(url)
-        if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`)
-        
-        const contentType = response.headers.get('content-type') || 'image/jpeg'
-        const extension = contentType.split('/')[1] || 'jpg'
+        let buffer: Buffer
+        let contentType: string
+        let extension: string
+
+        if (url.startsWith('data:image/')) {
+            // Handle Base64 Data URL
+            const matches = url.match(/^data:([^;]+);base64,(.+)$/)
+            if (!matches || matches.length !== 3) {
+                throw new Error('Invalid base64 image data')
+            }
+            contentType = matches[1]
+            extension = contentType.split('/')[1] || 'jpg'
+            buffer = Buffer.from(matches[2], 'base64')
+        } else if (url.startsWith('http')) {
+            // Handle External URL
+            const response = await fetch(url)
+            if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`)
+            
+            contentType = response.headers.get('content-type') || 'image/jpeg'
+            extension = contentType.split('/')[1] || 'jpg'
+            buffer = Buffer.from(await response.arrayBuffer())
+        } else {
+            // Unknown format or already local path
+            return null
+        }
+
         const fileName = `${prefix}-${Date.now()}.${extension}`
-        
-        const buffer = Buffer.from(await response.arrayBuffer())
 
         // 1. Production: Vercel Blob
         if (process.env.BLOB_READ_WRITE_TOKEN) {

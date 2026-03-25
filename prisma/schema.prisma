@@ -47,7 +47,7 @@ model NewsPost {
   slug         String    @unique
   category     String
   tags         String?
-  coverImage   String?
+  coverImage   String?   @db.Text
   content      String    @db.LongText
   published    Boolean   @default(false)
   publishedAt  DateTime?
