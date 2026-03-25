@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { triggerMakeWebhook } from '@/lib/webhook'
+import { syncPodcastToFeed } from '@/lib/utils/podcast-sync'
 type Params = Promise<{ id: string }>
 
 export async function GET(request: Request, { params }: { params: Params }) {
@@ -45,12 +46,29 @@ export async function PUT(request: Request, { params }: { params: Params }) {
                 company: body.company,
                 content: body.content,
                 coverImage: body.coverImage,
+                podcastAudioUrl: body.podcastAudioUrl,
                 published: body.published,
                 publishedAt: (body.publishedAt && !isNaN(new Date(body.publishedAt).getTime())) 
                     ? new Date(body.publishedAt) 
                     : (body.published ? new Date() : null),
             },
         })
+
+        // Si se ha añadido o cambiado el audio del podcast, sincronizar a RSS
+        if (body.podcastAudioUrl && body.podcastAudioUrl !== existing.podcastAudioUrl) {
+            try {
+                await syncPodcastToFeed({
+                    title: post.title,
+                    content: post.content,
+                    audioUrl: body.podcastAudioUrl,
+                    newsPostId: post.id,
+                    sourceName: body.company || 'IA Solutions',
+                    sourceUrl: `/noticias/${post.slug}`
+                })
+            } catch (err) {
+                console.error('Error syncing podcast on update:', err)
+            }
+        }
 
         // Detectar si la noticia acaba de ser publicada ahora (false -> true)
         const isNewPublish = !existing.published && post.published

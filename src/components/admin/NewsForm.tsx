@@ -40,6 +40,7 @@ const newsSchema = z.object({
     aiTool: z.string().nullable().optional(),
     company: z.string().nullable().optional(),
     coverImage: z.string().nullable().optional(),
+    podcastAudioUrl: z.string().nullable().optional(),
     published: z.boolean().optional(),
     publishedAt: z.string().optional().nullable(),
 })
@@ -592,6 +593,22 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
                                 </button>
                             </div>
                         )}
+                    </div>
+                </div>
+
+                <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-start gap-3">
+                    <Zap size={20} className="text-blue-500 mt-0.5 shrink-0" />
+                    <div className="flex-1">
+                        <label className="block text-sm font-semibold text-blue-900 mb-1">Enlace Audio Podcast (NotebookLM)</label>
+                        <input
+                            {...register('podcastAudioUrl')}
+                            placeholder="https://notebooklm.google.com/..."
+                            className="block w-full bg-white border-blue-200 rounded-lg shadow-sm text-blue-900 focus:ring-blue-500 text-sm h-10 px-3"
+                        />
+                        <p className="text-[11px] text-blue-600 mt-1.5 leading-relaxed">
+                            Pega aquí el enlace de descarga o la URL del resumen de audio de NotebookLM. 
+                            Al guardar, el sistema lo procesará y lo enviará automáticamente a tu canal de Spotify.
+                        </p>
                     </div>
                 </div>
             </div>

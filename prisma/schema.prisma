@@ -59,6 +59,7 @@ model NewsPost {
   sector       String?
   aiTool       String?
   company      String?
+  podcastAudioUrl String? @db.Text
 }
 
 model TeamMember {
@@ -218,4 +219,19 @@ model ConsentLog {
   acceptedAt DateTime @default(now())
   ipAddress  String?
   userAgent  String?
+}
+
+model PodcastEpisode {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  audioUrl    String   @db.Text
+  duration    Int?
+  fileSize    Int?
+  pubDate     DateTime @default(now())
+  guid        String   @unique @default(uuid())
+  coverImage  String?  @db.Text
+  link        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

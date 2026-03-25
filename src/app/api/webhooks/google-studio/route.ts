@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { slugify } from '@/lib/utils/slugify'
 import { downloadAndStoreImage } from '@/lib/utils/image-storage'
+import { syncPodcastToFeed } from '@/lib/utils/podcast-sync'
 
 function getCorsHeaders(origin: string | null) {
     // Reflect the requesting origin for max compatibility
@@ -73,13 +74,32 @@ export async function POST(request: Request) {
             },
         })
 
+        // Chained Podcast Sync
+        let podcastEpisode = null
+        if (body.podcastAudioUrl) {
+            try {
+                podcastEpisode = await syncPodcastToFeed({
+                    title: post.title,
+                    content: post.content,
+                    audioUrl: body.podcastAudioUrl,
+                    newsPostId: post.id,
+                    sourceName: body.sourceName || body.company || 'IA Solutions',
+                    sourceUrl: body.sourceUrl
+                })
+            } catch (pError) {
+                console.error('Failed to sync podcast:', pError)
+                // We don't fail the news creation if podcast sync fails, just log it
+            }
+        }
+
         return NextResponse.json({
             success: true,
             message: 'News post created via webhook',
             post: {
                 id: post.id,
                 slug: post.slug,
-                title: post.title
+                title: post.title,
+                podcastSynced: !!podcastEpisode
             }
         }, { headers: corsHeaders })
     } catch (error: any) {
