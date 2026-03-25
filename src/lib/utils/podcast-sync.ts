@@ -34,10 +34,11 @@ export async function syncPodcastToFeed({
 
     // 2. Format the description as per user's style
     // Para 1: First paragraph of content (sanitized)
-    const paragraphs = content.split('\n').filter(p => p.trim().length > 0);
+    const strippedContent = content.replace(/<[^>]*>?/gm, '');
+    const paragraphs = strippedContent.split('\n').filter(p => p.trim().length > 0);
     const summary = paragraphs[0] || '';
     
-    const description = `${summary}\n\nFuente: IA Solutions\n\nFuente: ${sourceName || 'Original'}`;
+    const description = `${summary.substring(0, 500)}\n\nFuente: IA Solutions\n\nFuente: ${sourceName || 'Original'}`;
 
     // 3. Create the PodcastEpisode record
     const episode = await prisma.podcastEpisode.create({
