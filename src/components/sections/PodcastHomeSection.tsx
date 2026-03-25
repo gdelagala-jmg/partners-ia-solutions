@@ -37,11 +37,17 @@ export default function PodcastHomeSection() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-8"
                 >
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-50 rounded-2xl mb-4 border border-gray-200">
-                        <Radio className="text-gray-900" size={22} />
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5 shadow-sm"
+                    >
+                        <Radio size={12} className="mr-2 text-blue-500" />
+                        Noticias & Podcast 24/7
+                    </motion.div>
 
-                    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight">
+                    <h2 className="text-3xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-tight">
                         Nuestra <span className="text-blue-500">Voz IA</span>
                     </h2>
 

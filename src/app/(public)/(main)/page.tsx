@@ -131,9 +131,9 @@ export default function HomePage() {
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5"
+                            className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5 shadow-sm"
                         >
-                            <Sparkles size={14} className="mr-2 text-blue-500" />
+                            <Sparkles size={12} className="mr-2 text-blue-500" />
                             Ecosistemas IA de Alto Rendimiento
                         </motion.div>
                         <h2 className="text-3xl md:text-5xl font-semibold text-[#000000] mb-4 tracking-tight">
