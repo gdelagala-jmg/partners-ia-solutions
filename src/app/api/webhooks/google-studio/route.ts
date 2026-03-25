@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { slugify } from '@/lib/utils/slugify'
+import { downloadAndStoreImage } from '@/lib/utils/image-storage'
 
 function getCorsHeaders(origin: string | null) {
     // Reflect the requesting origin for max compatibility
@@ -51,6 +52,9 @@ export async function POST(request: Request) {
         // Map tags if it's an array to a string (as per current schema)
         const tags = Array.isArray(body.tags) ? body.tags.join(', ') : body.tags
 
+        const imageUrl = body.imageUrl || body.coverImage || null
+        const persistedImageUrl = imageUrl ? await downloadAndStoreImage(imageUrl, `gs-${slugify(title).substring(0, 30)}`) : null
+
         const post = await prisma.newsPost.create({
             data: {
                 title: title,
@@ -58,7 +62,7 @@ export async function POST(request: Request) {
                 category: body.category || 'IA News',
                 tags: tags || null,
                 content: body.content,
-                coverImage: body.imageUrl || body.coverImage || null, // Handle both field names
+                coverImage: persistedImageUrl || imageUrl, // Use persisted if successful, fallback to original
                 aiType: body.aiType || null,
                 businessArea: body.businessArea || null,
                 sector: body.sector || null,
