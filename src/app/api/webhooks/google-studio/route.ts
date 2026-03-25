@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         }
 
         const title = body.title
-        const slug = body.slug || `${slugify(title)}-${Math.random().toString(36).substring(2, 7)}`
+        const slug = body.slug || slugify(title)
 
         // Map tags if it's an array to a string (as per current schema)
         const tags = Array.isArray(body.tags) ? body.tags.join(', ') : body.tags
