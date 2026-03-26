@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   const protocol = host?.includes('localhost') ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}`;
   
-  const showTitle = 'IA Solutions Daily Podcast';
+  const showTitle = 'IA Solution - Partners IA Solutions';
   const showDescription = getSetting('podcast_description') || 'Explora las últimas noticias sobre inteligencia artificial, automatizaciones y herramientas innovadoras con IA Solutions. Información diaria para el profesional moderno.';
   const showAuthor = getSetting('podcast_author') || 'Partners IA Solutions';
   const showImage = getSetting('podcast_cover_image') || 'https://gogiwitxbidr7wlk.public.blob.vercel-storage.com/1774528978390-podcast_cover_ias_1774522790637.png';
