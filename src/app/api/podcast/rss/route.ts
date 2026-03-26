@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const settings = await prisma.siteSetting.findMany({
     where: {
       key: {
-        in: ['podcast_cover_image', 'podcast_description', 'podcast_email']
+        in: ['podcast_cover_image', 'podcast_description', 'podcast_email', 'podcast_author', 'podcast_category']
       }
     }
   });
@@ -21,12 +21,14 @@ export async function GET(request: Request) {
   const protocol = host?.includes('localhost') ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}`;
   
-  const showTitle = 'IA Solutions';
-  const showDescription = getSetting('podcast_description') || 'Podcast sobre inteligencia artificial con noticias, eventos, novedades y herramientas para aplicar en tu vida profesional y personal.';
-  const showImage = getSetting('podcast_cover_image') || 'https://i.scdn.co/image/ab6765630000ba8aaf34a3644917ccfc95460a89';
+  const showTitle = 'IA Solutions Daily Podcast';
+  const showDescription = getSetting('podcast_description') || 'Explora las últimas noticias sobre inteligencia artificial, automatizaciones y herramientas innovadoras con IA Solutions. Información diaria para el profesional moderno.';
+  const showAuthor = getSetting('podcast_author') || 'Partners IA Solutions';
+  const showImage = getSetting('podcast_cover_image') || 'https://gogiwitxbidr7wlk.public.blob.vercel-storage.com/1774528978390-podcast_cover_ias_1774522790637.png';
   const showLanguage = 'es-ES';
   const showLink = 'https://open.spotify.com/show/2L0NV7YhTyXzUEcP7VAv7H';
   const showEmail = getSetting('podcast_email') || 'contacto@partners-ia.com';
+  const showCategory = getSetting('podcast_category') || 'Technology';
 
   const rssItems = episodes
     .map((ep) => {
@@ -49,21 +51,19 @@ export async function GET(request: Request) {
   const rssFeed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" 
     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" 
-    xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title><![CDATA[${showTitle}]]></title>
-    <description><![CDATA[${showDescription}]]></description>
+    <atom:link href="${baseUrl}/api/podcast/rss" rel="self" type="application/rss+xml" />
+    <title>${showTitle}</title>
+    <description>${showDescription}</description>
     <link>${showLink}</link>
     <language>${showLanguage}</language>
-    <itunes:author>Partners IA Solutions</itunes:author>
-    <itunes:summary><![CDATA[${showDescription}]]></itunes:summary>
-    <itunes:type>episodic</itunes:type>
-    <itunes:owner>
-      <itunes:name>Partners IA Solutions</itunes:name>
-      <itunes:email>${showEmail}</itunes:email>
-    </itunes:owner>
+    <copyright>Partners IA Solutions</copyright>
+    <itunes:author>${showAuthor}</itunes:author>
+    <itunes:summary>${showDescription}</itunes:summary>
     <itunes:explicit>no</itunes:explicit>
-    <itunes:category text="Technology" />
+    <itunes:category text="${showCategory}" />
     <itunes:image href="${showImage}" />
     <image>
       <url>${showImage}</url>
