@@ -7,15 +7,26 @@ export async function GET(request: Request) {
     take: 100,
   });
 
+  const settings = await prisma.siteSetting.findMany({
+    where: {
+      key: {
+        in: ['podcast_cover_image', 'podcast_description', 'podcast_email']
+      }
+    }
+  });
+
+  const getSetting = (key: string) => settings.find(s => s.key === key)?.value;
+
   const host = request.headers.get('host');
   const protocol = host?.includes('localhost') ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}`;
   
   const showTitle = 'IA Solutions';
-  const showDescription = 'Podcast sobre inteligencia artificial con noticias, eventos, novedades y herramientas para aplicar en tu vida profesional y personal.';
-  const showImage = 'https://i.scdn.co/image/ab6765630000ba8aaf34a3644917ccfc95460a89';
+  const showDescription = getSetting('podcast_description') || 'Podcast sobre inteligencia artificial con noticias, eventos, novedades y herramientas para aplicar en tu vida profesional y personal.';
+  const showImage = getSetting('podcast_cover_image') || 'https://i.scdn.co/image/ab6765630000ba8aaf34a3644917ccfc95460a89';
   const showLanguage = 'es-ES';
   const showLink = 'https://open.spotify.com/show/2L0NV7YhTyXzUEcP7VAv7H';
+  const showEmail = getSetting('podcast_email') || 'contacto@partners-ia.com';
 
   const rssItems = episodes
     .map((ep) => {
@@ -49,7 +60,7 @@ export async function GET(request: Request) {
     <itunes:type>episodic</itunes:type>
     <itunes:owner>
       <itunes:name>Partners IA Solutions</itunes:name>
-      <itunes:email>contacto@partners-ia.com</itunes:email>
+      <itunes:email>${showEmail}</itunes:email>
     </itunes:owner>
     <itunes:explicit>no</itunes:explicit>
     <itunes:category text="Technology" />
