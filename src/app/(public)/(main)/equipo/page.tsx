@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 
 import PageBadge from '@/components/ui/PageBadge'
+import TeamCircles from '@/components/sections/TeamCircles'
 
 const skills = [
     {
@@ -232,6 +233,10 @@ export default function TeamPage() {
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* Team Member Photo Circles */}
+                    <TeamCircles />
+
                 </div>
             </section>
 
