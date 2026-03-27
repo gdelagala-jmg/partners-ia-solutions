@@ -8,48 +8,38 @@ import { Zap, Settings, Rocket, Gem, Handshake } from 'lucide-react'
 const members = [
     {
         id: 1,
-        name: 'Estratega',
-        role: 'Estrategia y Visión',
+        name: 'Álvaro',
         image: '/team/member-1.jpg',
         icon: Zap,
         color: 'from-amber-400 to-orange-500',
-        ring: 'ring-amber-400',
     },
     {
         id: 2,
-        name: 'Ingeniero',
-        role: 'Ingeniería y Ops',
+        name: 'José',
         image: '/team/member-2.jpg',
         icon: Settings,
         color: 'from-blue-400 to-indigo-500',
-        ring: 'ring-blue-400',
     },
     {
         id: 3,
-        name: 'Innovador',
-        role: 'Transformación Digital',
+        name: 'Diego',
         image: '/team/member-3.jpg',
         icon: Rocket,
         color: 'from-purple-400 to-pink-500',
-        ring: 'ring-purple-400',
     },
     {
         id: 4,
-        name: 'Consultor',
-        role: 'Consultoría Senior',
+        name: 'Jaime',
         image: '/team/member-4.jpg',
         icon: Gem,
         color: 'from-emerald-400 to-teal-500',
-        ring: 'ring-emerald-400',
     },
     {
         id: 5,
-        name: 'Conector',
-        role: 'Estrategia Comercial',
+        name: 'Gonzalo',
         image: '/team/member-5.jpg',
         icon: Handshake,
         color: 'from-rose-400 to-red-500',
-        ring: 'ring-rose-400',
     },
 ]
 
@@ -139,10 +129,9 @@ export default function TeamCircles() {
                                 </div>
                             </div>
 
-                            {/* Nombre + rol */}
+                            {/* Nombre */}
                             <div className="text-center">
                                 <p className="text-xs font-semibold text-slate-700 leading-tight">{member.name}</p>
-                                <p className="text-[10px] text-slate-400 leading-tight">{member.role}</p>
                             </div>
                         </motion.div>
                     )
