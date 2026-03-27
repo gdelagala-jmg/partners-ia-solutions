@@ -2,42 +2,44 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Zap, Settings, Rocket, Gem, Handshake } from 'lucide-react'
 
-// Para fotos de cuerpo entero se usa scale + transformOrigin para hacer zoom al rostro
-// José (member-2) es la referencia: headshot perfecto, sin zoom
 const members = [
     {
         id: 1,
         name: 'Álvaro',
         image: '/team/member-1.jpg',
-        style: { objectPosition: '50% 8%', transform: 'scale(1.15)', transformOrigin: '50% 8%' },
+        icon: Zap,
+        color: 'from-amber-400 to-orange-500',
     },
     {
         id: 2,
         name: 'José',
         image: '/team/member-2.jpg',
-        style: { objectPosition: '50% 15%', transform: 'scale(1.0)', transformOrigin: '50% 15%' },
+        icon: Settings,
+        color: 'from-blue-400 to-indigo-500',
     },
     {
         id: 3,
         name: 'Diego',
         image: '/team/member-3.jpg',
-        // Cuerpo entero: zoom fuerte + centrado en cabeza (parte superior izquierda del frame)
-        style: { objectPosition: '50% 0%', transform: 'scale(3.2)', transformOrigin: '48% 14%' },
+        icon: Rocket,
+        color: 'from-purple-400 to-pink-500',
     },
     {
         id: 4,
         name: 'Jaime',
         image: '/team/member-4.jpg',
-        // Gran sala, persona aparece pequeña: zoom mayor
-        style: { objectPosition: '50% 0%', transform: 'scale(4.0)', transformOrigin: '46% 13%' },
+        icon: Gem,
+        color: 'from-emerald-400 to-teal-500',
     },
     {
         id: 5,
         name: 'Gonzalo',
         image: '/team/member-5.jpg',
-        style: { objectPosition: '50% 8%', transform: 'scale(1.2)', transformOrigin: '50% 8%' },
+        icon: Handshake,
+        color: 'from-rose-400 to-red-500',
     },
 ]
 
@@ -56,11 +58,16 @@ export default function TeamCircles() {
     const [cycleKey, setCycleKey] = useState(0)
 
     const cycle = useCallback(() => {
+        // 1. Apagar
         setVisible(false)
+
+        // 2. Reordenar aleatoriamente mientras están "apagados"
         setTimeout(() => {
             setOrder(shuffleArray(members))
             setCycleKey(k => k + 1)
         }, 700)
+
+        // 3. Encender con nuevo orden
         setTimeout(() => {
             setVisible(true)
         }, 1100)
@@ -79,41 +86,56 @@ export default function TeamCircles() {
             </p>
 
             {/* Círculos */}
-            <div className="flex flex-wrap justify-center gap-5 md:gap-7 lg:gap-10 px-4">
-                {order.map((member, idx) => (
-                    <motion.div
-                        key={`${cycleKey}-${member.id}`}
-                        initial={{ opacity: 0, scale: 0.85 }}
-                        animate={
-                            visible
-                                ? { opacity: 1, scale: 1 }
-                                : { opacity: 0, scale: 0.85 }
-                        }
-                        transition={{
-                            duration: 0.5,
-                            delay: visible ? idx * 0.08 : (4 - idx) * 0.05,
-                            ease: 'easeInOut',
-                        }}
-                        className="flex flex-col items-center gap-2 group"
-                    >
-                        {/* Círculo foto — sin borde de color, solo sombra */}
-                        <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden shadow-md group-hover:shadow-lg transition-shadow duration-300">
-                            <Image
-                                src={member.image}
-                                alt={member.name}
-                                fill
-                                className="object-cover"
-                                style={member.style}
-                                sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
-                            />
-                        </div>
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8 px-4">
+                {order.map((member, idx) => {
+                    const Icon = member.icon
+                    return (
+                        <motion.div
+                            key={`${cycleKey}-${member.id}`}
+                            initial={{ opacity: 0, scale: 0.85 }}
+                            animate={
+                                visible
+                                    ? { opacity: 1, scale: 1 }
+                                    : { opacity: 0, scale: 0.85 }
+                            }
+                            transition={{
+                                duration: 0.5,
+                                delay: visible ? idx * 0.08 : (4 - idx) * 0.05,
+                                ease: 'easeInOut',
+                            }}
+                            className="flex flex-col items-center gap-2 group"
+                        >
+                            {/* Círculo foto */}
+                            <div className="relative">
+                                {/* Anillo de color de skill */}
+                                <div
+                                    className={`absolute -inset-1 rounded-full bg-gradient-to-br ${member.color} opacity-70 blur-sm group-hover:opacity-100 group-hover:blur-0 transition-all duration-300`}
+                                />
+                                <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden border-[3px] border-white shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                                    <Image
+                                        src={member.image}
+                                        alt={member.name}
+                                        fill
+                                        className="object-cover object-top"
+                                        sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
+                                    />
+                                </div>
 
-                        {/* Nombre */}
-                        <p className="text-xs font-semibold text-slate-700 leading-tight">
-                            {member.name}
-                        </p>
-                    </motion.div>
-                ))}
+                                {/* Icono skill en badge */}
+                                <div
+                                    className={`absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-gradient-to-br ${member.color} flex items-center justify-center shadow-md border-2 border-white`}
+                                >
+                                    <Icon size={13} className="text-white" />
+                                </div>
+                            </div>
+
+                            {/* Nombre */}
+                            <div className="text-center">
+                                <p className="text-xs font-semibold text-slate-700 leading-tight">{member.name}</p>
+                            </div>
+                        </motion.div>
+                    )
+                })}
             </div>
 
             {/* Indicador de ciclo */}
@@ -122,8 +144,8 @@ export default function TeamCircles() {
                     {[...Array(5)].map((_, i) => (
                         <div
                             key={i}
-                            className={`h-1.5 rounded-full transition-all duration-300 ${
-                                i === 0 ? 'bg-slate-400 w-3' : 'bg-slate-200 w-1.5'
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                i === 0 ? 'bg-blue-500 w-3' : 'bg-slate-300'
                             }`}
                         />
                     ))}
