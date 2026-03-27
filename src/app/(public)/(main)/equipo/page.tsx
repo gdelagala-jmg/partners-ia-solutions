@@ -284,28 +284,28 @@ export default function TeamPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 px-6 relative bg-slate-50">
+            <section className="py-12 md:py-24 px-5 md:px-6 relative bg-slate-50">
                 <div className="container mx-auto max-w-4xl relative">
                     <motion.div 
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="bg-white rounded-[3rem] p-12 text-center border border-slate-100 shadow-xl"
+                        className="bg-white rounded-3xl md:rounded-[3rem] p-6 md:p-12 text-center border border-slate-100 shadow-xl"
                     >
-                        <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-8 leading-tight">
-                            "¿Hablamos de soluciones reales? <br />
+                        <h2 className="text-2xl md:text-5xl font-bold text-slate-900 mb-6 md:mb-8 leading-tight">
+                            "¿Hablamos de soluciones reales?{' '}
                             <span className="text-blue-600">Convirtamos la IA en tu ventaja competitiva.</span>"
                         </h2>
                         <motion.button 
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="inline-flex items-center gap-3 bg-slate-100 text-slate-900 px-10 py-5 rounded-full font-bold text-lg shadow-sm hover:bg-slate-200 transition-all border border-slate-200"
+                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-900 px-6 md:px-10 py-4 md:py-5 rounded-2xl md:rounded-full font-bold text-base md:text-lg shadow-sm hover:bg-slate-200 transition-all border border-slate-200"
                         >
-                            <Calendar size={20} className="text-blue-600" />
-                            Agendar Consultoría Estratégica
+                            <Calendar size={18} className="text-blue-600 flex-shrink-0" />
+                            <span>Agendar Consultoría Estratégica</span>
                         </motion.button>
                         
-                        <p className="mt-8 text-slate-500 text-sm font-medium">
+                        <p className="mt-6 md:mt-8 text-slate-500 text-sm font-medium">
                             Sin compromiso · 100% pragmático · Resultados medibles
                         </p>
                     </motion.div>
