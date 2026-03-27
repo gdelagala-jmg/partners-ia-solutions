@@ -4,39 +4,40 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
-// objectPosition: ajusta el encuadre de cada foto manualmente
-// José (member-2) es la referencia → "50% 15%"
-// Diego y Jaime tienen foto de cuerpo entero → usar % más bajos para subir al rostro
+// Para fotos de cuerpo entero se usa scale + transformOrigin para hacer zoom al rostro
+// José (member-2) es la referencia: headshot perfecto, sin zoom
 const members = [
     {
         id: 1,
         name: 'Álvaro',
         image: '/team/member-1.jpg',
-        objectPosition: '50% 10%', // retrato cercano, ligero ajuste
+        style: { objectPosition: '50% 8%', transform: 'scale(1.15)', transformOrigin: '50% 8%' },
     },
     {
         id: 2,
         name: 'José',
         image: '/team/member-2.jpg',
-        objectPosition: '50% 15%', // referencia: headshot perfecto
+        style: { objectPosition: '50% 15%', transform: 'scale(1.0)', transformOrigin: '50% 15%' },
     },
     {
         id: 3,
         name: 'Diego',
         image: '/team/member-3.jpg',
-        objectPosition: '50% 3%',  // cuerpo entero → subir para mostrar solo rostro
+        // Cuerpo entero: zoom fuerte + centrado en cabeza (parte superior izquierda del frame)
+        style: { objectPosition: '50% 0%', transform: 'scale(3.2)', transformOrigin: '48% 14%' },
     },
     {
         id: 4,
         name: 'Jaime',
         image: '/team/member-4.jpg',
-        objectPosition: '50% 2%',  // cuerpo entero en sala grande → subir al máximo
+        // Gran sala, persona aparece pequeña: zoom mayor
+        style: { objectPosition: '50% 0%', transform: 'scale(4.0)', transformOrigin: '46% 13%' },
     },
     {
         id: 5,
         name: 'Gonzalo',
         image: '/team/member-5.jpg',
-        objectPosition: '50% 8%',  // plano medio, ligero ajuste
+        style: { objectPosition: '50% 8%', transform: 'scale(1.2)', transformOrigin: '50% 8%' },
     },
 ]
 
@@ -95,22 +96,16 @@ export default function TeamCircles() {
                         }}
                         className="flex flex-col items-center gap-2 group"
                     >
-                        {/* Círculo foto */}
-                        <div className="relative">
-                            {/* Halo azul hover */}
-                            <div className="absolute -inset-1 rounded-full bg-blue-600 opacity-0 blur-sm group-hover:opacity-20 transition-all duration-300" />
-
-                            {/* Imagen circular con borde azul */}
-                            <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden border-[3px] border-blue-600 shadow-lg group-hover:shadow-xl group-hover:border-blue-500 transition-all duration-300">
-                                <Image
-                                    src={member.image}
-                                    alt={member.name}
-                                    fill
-                                    className="object-cover"
-                                    style={{ objectPosition: member.objectPosition }}
-                                    sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
-                                />
-                            </div>
+                        {/* Círculo foto — sin borde de color, solo sombra */}
+                        <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                            <Image
+                                src={member.image}
+                                alt={member.name}
+                                fill
+                                className="object-cover"
+                                style={member.style}
+                                sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
+                            />
                         </div>
 
                         {/* Nombre */}
@@ -128,7 +123,7 @@ export default function TeamCircles() {
                         <div
                             key={i}
                             className={`h-1.5 rounded-full transition-all duration-300 ${
-                                i === 0 ? 'bg-blue-600 w-3' : 'bg-slate-200 w-1.5'
+                                i === 0 ? 'bg-slate-400 w-3' : 'bg-slate-200 w-1.5'
                             }`}
                         />
                     ))}
