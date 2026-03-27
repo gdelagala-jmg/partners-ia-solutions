@@ -73,7 +73,7 @@ export default function Navbar({
                 : 'bg-white/60 backdrop-blur-md border-b border-transparent'
                 }`}
         >
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
+            <div className="max-w-7xl mx-auto px-6 xl:px-8 relative">
                 <div className="flex items-center justify-between py-5">
                     <Link href="/" className="flex items-center group shrink-0">
                         <div className="relative h-16 w-48">
@@ -88,12 +88,12 @@ export default function Navbar({
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center space-x-1">
+                    <div className="hidden xl:flex items-center space-x-1">
                         {navLinks.map((item) => (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
                                     ? 'text-gray-900 bg-gray-100'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                     }`}
@@ -103,11 +103,11 @@ export default function Navbar({
                         ))}
                     </div>
 
-                    {/* Right Side Actions ... (rest of the code remains same) */}
-                    <div className="flex items-center space-x-1 lg:space-x-3">
+                    {/* Right Side Actions */}
+                    <div className="flex items-center space-x-1 xl:space-x-3">
                         <Link
                             href="/contacto"
-                            className="hidden lg:block px-5 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all hover:scale-105 shadow-sm"
+                            className="hidden xl:block px-5 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all hover:scale-105 shadow-sm"
                         >
                             Contactar
                         </Link>
@@ -115,7 +115,7 @@ export default function Navbar({
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
+                            className="xl:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
                             aria-label="Toggle menu"
                         >
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -124,7 +124,7 @@ export default function Navbar({
                 </div>
 
                 {/* Login / Acceso Admin Discreto (Desktop y Móvil) */}
-                <div className="absolute top-1 right-2 lg:right-4 opacity-10 md:opacity-20 hover:opacity-100 transition-all duration-500">
+                <div className="absolute top-1 right-2 xl:right-4 opacity-10 md:opacity-20 hover:opacity-100 transition-all duration-500">
                     {session ? (
                         <div className="relative" ref={menuRef}>
                             <button
@@ -175,7 +175,7 @@ export default function Navbar({
 
             {/* Mobile Menu */}
             <div
-                className={`lg:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+                className={`xl:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
                     }`}
             >
                 <div className="px-6 py-4 bg-white border-t border-gray-200 space-y-1">

@@ -124,20 +124,11 @@ export default function HomePage() {
             </section>
 
             {/* FEATURED SOLUTIONS SECTION */}
-            <section className="py-8 lg:py-16 bg-gray-50 border-b border-gray-100">
+            <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-12 px-4">
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5 shadow-sm"
-                        >
-                            <Sparkles size={12} className="mr-2 text-blue-500" />
-                            Ecosistemas IA de Alto Rendimiento
-                        </motion.div>
-                        <h2 className="text-3xl md:text-5xl font-semibold text-[#000000] mb-4 tracking-tight">
-                            Soluciones <span className="text-blue-500">Destacadas</span>
+                        <h2 className="text-3xl md:text-4xl font-semibold text-[#000000] mb-4 tracking-tight">
+                            Soluciones Destacadas
                         </h2>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                             Ecosistemas de Inteligencia Artificial diseñados para resolver los retos específicos de tu industria
@@ -218,7 +209,7 @@ export default function HomePage() {
             <LatestNewsSection />
 
             {/* CTA SECTION */}
-            <section className="py-12 lg:py-16 bg-white">
+            <section className="py-8 lg:py-8 bg-white">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -226,14 +217,10 @@ export default function HomePage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-6 shadow-sm">
-                            <Zap size={12} className="mr-2 text-blue-500" />
-                            Escalado Inteligente Garantizado
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-semibold text-[#000000] mb-5 tracking-tight">
-                            ¿Listo para <span className="text-blue-500">escalar?</span>
+                        <h2 className="text-3xl md:text-4xl font-semibold text-[#000000] mb-4 tracking-tight">
+                            ¿Listo para escalar?
                         </h2>
-                        <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-base text-gray-600 mb-2 max-w-2xl mx-auto leading-relaxed">
                             Únete a las empresas que ya están utilizando nuestros agentes de IA para reducir costes y multiplicar ingresos.
                         </p>
                         <ClientCarousel />
