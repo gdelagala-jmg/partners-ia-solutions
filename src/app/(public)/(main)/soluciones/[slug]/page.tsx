@@ -145,7 +145,7 @@ export default function SectorSolutionPage() {
 
             {/* Right Form Component */}
             <div className="lg:col-span-5 sticky top-24">
-                <div className="bg-white p-8 rounded-3xl shadow-xl shadow-blue-900/5 border border-gray-100">
+                <div className="bg-white p-5 md:p-8 rounded-3xl shadow-xl shadow-blue-900/5 border border-gray-100">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="p-3 bg-blue-100 text-blue-600 rounded-2xl">
                             <Mail size={24} />
@@ -163,7 +163,7 @@ export default function SectorSolutionPage() {
                                 type="text" 
                                 required
                                 placeholder="Ej: Clínica San José"
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
                             />
                         </div>
                         <div>
@@ -172,7 +172,7 @@ export default function SectorSolutionPage() {
                                 type="email" 
                                 required
                                 placeholder="ejemplo@empresa.com"
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
                             />
                         </div>
                         <div>
@@ -180,7 +180,7 @@ export default function SectorSolutionPage() {
                             <textarea 
                                 rows={3}
                                 placeholder="Me gustaría conocer más sobre las soluciones predictivas..."
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none custom-scrollbar"
+                                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none custom-scrollbar"
                             />
                         </div>
                         <button 

@@ -13,6 +13,8 @@ import {
     Calendar
 } from 'lucide-react'
 
+import PageBadge from '@/components/ui/PageBadge'
+
 const skills = [
     {
         title: "Estrategia y Visión Exponencial",
@@ -50,9 +52,12 @@ export default function TeamPage() {
     return (
         <div className="min-h-screen bg-slate-50 overflow-hidden">
             {/* Hero Section */}
-            <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32 px-6">
+            <section className="relative py-8 lg:py-8 px-6">
                 <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent pointer-events-none" />
                 <div className="container mx-auto max-w-6xl relative">
+                    <div className="flex justify-center mb-0">
+                        <PageBadge text="Expertos en Innovación Inteligente" />
+                    </div>
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

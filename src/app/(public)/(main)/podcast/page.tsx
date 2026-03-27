@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Video, Mic, Radio, Play } from 'lucide-react'
 import { motion } from 'framer-motion'
+import PageBadge from '@/components/ui/PageBadge'
 
 interface MediaItem {
     id: string
@@ -55,10 +56,7 @@ export default function PodcastPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5">
-                            <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2" />
-                            Intelligence Broadcast
-                        </div>
+                        <PageBadge text="Intelligence Broadcast" />
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Podcast & <span className="text-blue-500">Videos</span>
                         </h1>

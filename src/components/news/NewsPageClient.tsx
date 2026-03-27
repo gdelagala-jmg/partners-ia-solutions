@@ -8,6 +8,8 @@ import { Calendar, Tag, Newspaper, Building2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 
+import PageBadge from '@/components/ui/PageBadge'
+
 interface NewsPost {
     id: string
     title: string
@@ -86,10 +88,7 @@ export default function NewsPageClient() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5">
-                            <Newspaper size={15} className="mr-2" />
-                            Intelligence Hub
-                        </div>
+                        <PageBadge text="Intelligence Hub" />
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Noticias & <span className="text-blue-500">Insights</span>
                         </h1>

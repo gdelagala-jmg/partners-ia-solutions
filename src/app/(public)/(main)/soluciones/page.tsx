@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Box } from 'lucide-react'
 import Link from 'next/link'
 
+import PageBadge from '@/components/ui/PageBadge'
+
 interface Sector {
     id: string
     name: string
@@ -54,6 +56,8 @@ export default function SolutionsPage() {
             {/* Hero Section */}
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+                    <PageBadge text="Ecosistemas de IA a Medida" />
+
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

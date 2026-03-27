@@ -10,6 +10,8 @@ import { getSolutionImage } from '@/lib/utils/images'
 import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 import ClientCarousel from '@/components/sections/ClientCarousel'
 
+import PageBadge from '@/components/ui/PageBadge'
+
 const iconMap: any = {
     'Target': Target,
     'Sparkles': Sparkles,
@@ -55,15 +57,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
                 <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center py-8 lg:py-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="inline-flex items-center px-4 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-sm font-medium text-black mb-5"
-                    >
-                        <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2" />
-                        Liderando la Revolución de la IA
-                    </motion.div>
+                    <PageBadge text="Liderando la Revolución de la IA" />
 
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}

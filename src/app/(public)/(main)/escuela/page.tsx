@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Clock, BarChart, Lock, GraduationCap } from 'lucide-react'
 import { motion } from 'framer-motion'
+import PageBadge from '@/components/ui/PageBadge'
 
 interface Course {
     id: string
@@ -47,9 +48,8 @@ export default function SchoolPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5">
-                            <GraduationCap size={15} className="mr-2" />
-                            Partners IA Academy
+                        <div className="flex justify-center">
+                            <PageBadge text="Academy" />
                         </div>
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Domina la <span className="text-blue-500">Inteligencia Artificial</span>
