@@ -109,7 +109,7 @@ export default function TeamCircles() {
                             <div className="relative">
                                 {/* Anillo de color de skill */}
                                 <div
-                                    className={`absolute -inset-1 rounded-full bg-gradient-to-br ${member.color} opacity-70 blur-sm group-hover:opacity-100 group-hover:blur-0 transition-all duration-300`}
+                                    className={`absolute -inset-1 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 opacity-70 blur-sm group-hover:opacity-100 group-hover:blur-0 transition-all duration-300`}
                                 />
                                 <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden border-[3px] border-white shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                                     <Image
