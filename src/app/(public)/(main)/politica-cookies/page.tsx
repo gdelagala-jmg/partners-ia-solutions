@@ -1,13 +1,14 @@
 'use client'
 
 import PageBadge from '@/components/ui/PageBadge'
+import { Cookie } from 'lucide-react'
 
 export default function PoliticaCookiesPage() {
   return (
     <div className="min-h-screen bg-white">
       <main className="max-w-4xl mx-auto px-6 py-8 lg:px-8">
         <div className="flex justify-center">
-            <PageBadge text="Cookies" />
+            <PageBadge text="Cookies" icon={<Cookie size={14} className="text-blue-500" />} />
         </div>
         <div className="space-y-8 text-gray-700">
           <div>

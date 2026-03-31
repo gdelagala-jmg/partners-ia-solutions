@@ -11,6 +11,8 @@ const SCOPE_OPTIONS = [
     'Modelo Híbrido',
 ]
 
+import PageBadge from '../ui/PageBadge'
+
 export default function LeadCaptureSection() {
     const [form, setForm] = useState({
         scope: '',
@@ -104,10 +106,7 @@ export default function LeadCaptureSection() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-10"
                 >
-                    <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 mb-5">
-                        <Zap size={14} className="mr-2 text-blue-500" />
-                        Solicita tu Estrategia Digital Optimizada con IA
-                    </div>
+                    <PageBadge text="Hoja de Ruta" icon={<Zap size={14} className="text-blue-500" />} />
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-4 tracking-tight leading-tight">
                         Da el paso hacia una{' '}
                         <span className="text-blue-500">ejecución de alto rendimiento</span>

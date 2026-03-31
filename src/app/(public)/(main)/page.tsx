@@ -57,7 +57,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
                 <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center py-8 lg:py-8">
-                    <PageBadge text="Liderando la Revolución de la IA" />
+                    <PageBadge text="Liderando la Revolución de la IA" icon={<Sparkles size={14} className="text-blue-500" />} />
 
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
@@ -121,6 +121,7 @@ export default function HomePage() {
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-12 px-4">
+                        <PageBadge text="Nuestras Soluciones" icon={<Target size={14} className="text-blue-500" />} />
                         <h2 className="text-3xl md:text-4xl font-semibold text-[#000000] mb-4 tracking-tight">
                             Soluciones Destacadas
                         </h2>
@@ -211,6 +212,7 @@ export default function HomePage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
+                        <PageBadge text="Próximos Pasos" icon={<Sparkles size={14} className="text-blue-500" />} />
                         <h2 className="text-3xl md:text-4xl font-semibold text-[#000000] mb-4 tracking-tight">
                             ¿Listo para escalar?
                         </h2>

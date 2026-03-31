@@ -69,7 +69,7 @@ export default function ContactPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <PageBadge text="Contáctanos" />
+                        <PageBadge text="Contáctanos" icon={<MessageCircle size={14} className="text-blue-500" />} />
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Hablemos de tu <span className="text-blue-500">Futuro</span>
                         </h1>

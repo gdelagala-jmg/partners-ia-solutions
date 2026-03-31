@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import NewsFilterBar from '@/components/news/NewsFilterBar'
 import FlashNewsList from '@/components/news/FlashNewsList'
 import Link from 'next/link'
-import { Calendar, Tag, Newspaper, Building2 } from 'lucide-react'
+import { Calendar, Tag, Newspaper, Building2, Brain } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 
@@ -88,7 +88,7 @@ export default function NewsPageClient() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <PageBadge text="Intelligence Hub" />
+                        <PageBadge text="Intelligence Hub" icon={<Brain size={14} className="text-blue-500" />} />
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Noticias & <span className="text-blue-500">Insights</span>
                         </h1>

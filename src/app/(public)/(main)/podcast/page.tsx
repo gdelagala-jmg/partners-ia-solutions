@@ -56,7 +56,7 @@ export default function PodcastPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <PageBadge text="Intelligence Broadcast" />
+                        <PageBadge text="Intelligence Broadcast" icon={<Radio size={14} className="text-blue-500" />} />
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Podcast & <span className="text-blue-500">Videos</span>
                         </h1>

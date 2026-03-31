@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Headphones, Radio } from 'lucide-react'
+import PageBadge from '../ui/PageBadge'
 
 export default function PodcastHomeSection() {
     const [mainChannelHtml, setMainChannelHtml] = useState('')
@@ -37,9 +38,7 @@ export default function PodcastHomeSection() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-8"
                 >
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-50 rounded-2xl mb-4 border border-gray-200">
-                        <Radio className="text-gray-900" size={22} />
-                    </div>
+                    <PageBadge text="Insights & Podcast" icon={<Radio size={14} className="text-blue-500" />} />
 
                     <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight">
                         Nuestra <span className="text-blue-500">Voz IA</span>

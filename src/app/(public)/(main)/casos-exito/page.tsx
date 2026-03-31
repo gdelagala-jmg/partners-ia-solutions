@@ -7,7 +7,7 @@ export default function SuccessStoriesPage() {
     return (
         <div className="min-h-screen bg-white">
             <div className="py-8 lg:py-8 container mx-auto px-6 text-center">
-                <PageBadge text="Impacto Real y Resultados" />
+                <PageBadge text="Impacto Real y Resultados" icon={<Award size={14} className="text-blue-500" />} />
                 <div className="flex justify-center">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-2xl mb-6 border border-gray-200">
                         <Award className="text-gray-900" size={32} />

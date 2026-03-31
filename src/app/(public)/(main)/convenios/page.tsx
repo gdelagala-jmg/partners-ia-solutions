@@ -8,7 +8,7 @@ export default function AgreementsPage() {
         <div className="min-h-screen bg-white">
             <main className="max-w-7xl mx-auto px-6 py-8 lg:px-8">
                 <div className="flex justify-center">
-                    <PageBadge text="Alianzas" />
+                    <PageBadge text="Alianzas" icon={<Handshake size={14} className="text-blue-500" />} />
                 </div>
                 <div className="text-center">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-2xl mb-6 border border-gray-200">

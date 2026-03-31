@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { 
     Users, 
@@ -53,11 +54,23 @@ export default function TeamPage() {
     return (
         <div className="min-h-screen bg-slate-50 overflow-hidden">
             {/* Hero Section */}
-            <section className="relative py-8 lg:py-8 px-5 md:px-6">
-                <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent pointer-events-none" />
-                <div className="container mx-auto max-w-6xl relative">
+            <section className="relative py-8 lg:py-8 px-5 md:px-6 overflow-hidden flex items-center">
+                {/* Background Image Layer */}
+                <div className="absolute inset-0 z-0">
+                    {/* Opacity Overlay to maintain focus on content */}
+                    <div className="absolute inset-0 bg-slate-50/70 backdrop-blur-[1px] z-10" />
+                    <Image 
+                        src="/images/team-hero-bg.jpg" 
+                        alt="Fondo de Equipo" 
+                        fill 
+                        priority
+                        className="object-cover object-center"
+                    />
+                </div>
+
+                <div className="container mx-auto max-w-6xl relative z-10">
                     <div className="flex justify-center mb-0">
-                        <PageBadge text="Expertos en Innovación Inteligente" />
+                        <PageBadge text="Expertos en Innovación Inteligente" icon={<Users size={14} className="text-blue-500" />} />
                     </div>
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
@@ -65,7 +78,7 @@ export default function TeamPage() {
                         transition={{ duration: 0.6 }}
                         className="text-center"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-4 border border-blue-100">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50/80 backdrop-blur-sm text-blue-700 text-sm font-medium mb-4 border border-blue-100">
                             <Users size={16} />
                             <span>Consultoría de Alto Impacto</span>
                         </div>
@@ -280,6 +293,7 @@ export default function TeamPage() {
                                 <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                                     <item.icon size={28} />
                                 </div>
+                                <item.icon size={28} />
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">{item.title}</h3>
                                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">{item.desc}</p>
                             </motion.div>

@@ -49,7 +49,7 @@ export default function SchoolPage() {
                         transition={{ duration: 0.6 }}
                     >
                         <div className="flex justify-center">
-                            <PageBadge text="Academy" />
+                            <PageBadge text="Academy" icon={<GraduationCap size={14} className="text-blue-500" />} />
                         </div>
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
                             Domina la <span className="text-blue-500">Inteligencia Artificial</span>

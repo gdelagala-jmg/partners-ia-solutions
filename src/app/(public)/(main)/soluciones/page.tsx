@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Box } from 'lucide-react'
+import { ArrowRight, Box, Cpu } from 'lucide-react'
 import Link from 'next/link'
 
 import PageBadge from '@/components/ui/PageBadge'
@@ -56,7 +56,7 @@ export default function SolutionsPage() {
             {/* Hero Section */}
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-                    <PageBadge text="Ecosistemas de IA a Medida" />
+                    <PageBadge text="Ecosistemas de IA a Medida" icon={<Cpu size={14} className="text-blue-500" />} />
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}

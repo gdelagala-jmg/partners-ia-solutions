@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Calendar, Tag, Newspaper, Building2 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import PageBadge from '../ui/PageBadge'
 
 interface NewsPost {
     id: string
@@ -48,6 +49,7 @@ export default function LatestNewsSection() {
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 px-4 text-center md:text-left items-center md:items-end">
                     <div>
+                        <PageBadge text="Actualidad IA" icon={<Newspaper size={14} className="text-blue-500" />} />
                         <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 tracking-tight">
                             Últimas Noticias
                         </h2>
