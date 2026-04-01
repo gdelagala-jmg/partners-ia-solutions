@@ -3,45 +3,43 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Zap, Settings, Rocket, Gem, Handshake } from 'lucide-react'
+import { Zap, Settings, Rocket, Gem, Handshake, Loader2 } from 'lucide-react'
 
-const members = [
-    {
-        id: 1,
-        name: 'Álvaro',
-        image: '/team/member-1.jpg',
-        icon: Zap,
-        color: 'from-amber-400 to-orange-500',
-    },
-    {
-        id: 2,
-        name: 'José',
-        image: '/team/member-2.jpg',
-        icon: Settings,
-        color: 'from-blue-400 to-indigo-500',
-    },
-    {
-        id: 3,
-        name: 'Diego',
-        image: '/team/member-3.jpg',
-        icon: Rocket,
-        color: 'from-purple-400 to-pink-500',
-    },
-    {
-        id: 4,
-        name: 'Jaime',
-        image: '/team/member-4.jpg',
-        icon: Gem,
-        color: 'from-emerald-400 to-teal-500',
-    },
-    {
-        id: 5,
-        name: 'Gonzalo',
-        image: '/team/member-5.jpg',
-        icon: Handshake,
-        color: 'from-rose-400 to-red-500',
-    },
-]
+interface TeamMember {
+    id: string
+    name: string
+    photoUrl: string | null
+    role: string | null
+    showPhoto: boolean
+    showName: boolean
+    customFields: string
+    order: number
+}
+
+const iconMap: Record<string, any> = {
+    Zap, Settings, Rocket, Gem, Handshake
+}
+
+// Colores de halo + badge por nombre (identidad fija de marca)
+const memberStyles: Record<string, { glow: string; badge: string }> = {
+    álvaro:  { glow: 'shadow-[0_0_45px_12px_rgba(251,146,60,0.35)]',  badge: 'from-orange-400 to-orange-500' },
+    jose:    { glow: 'shadow-[0_0_45px_12px_rgba(59,130,246,0.35)]',  badge: 'from-blue-500 to-blue-600' },
+    josé:    { glow: 'shadow-[0_0_45px_12px_rgba(59,130,246,0.35)]',  badge: 'from-blue-500 to-blue-600' },
+    diego:   { glow: 'shadow-[0_0_45px_12px_rgba(236,72,153,0.35)]',  badge: 'from-pink-500 to-fuchsia-500' },
+    jaime:   { glow: 'shadow-[0_0_45px_12px_rgba(16,185,129,0.35)]',  badge: 'from-emerald-400 to-teal-500' },
+    gonzalo: { glow: 'shadow-[0_0_45px_12px_rgba(239,68,68,0.35)]',   badge: 'from-red-500 to-rose-500' },
+}
+
+function getMemberStyle(name: string) {
+    const key = name.toLowerCase().split(' ')[0]
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quitar tildes para comparar
+    // buscar coincidencia
+    for (const [k, v] of Object.entries(memberStyles)) {
+        const kNorm = k.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        if (key.includes(kNorm) || kNorm.includes(key)) return v
+    }
+    return { glow: 'shadow-[0_0_45px_12px_rgba(99,102,241,0.3)]', badge: 'from-indigo-500 to-violet-500' }
+}
 
 function shuffleArray<T>(array: T[]): T[] {
     const arr = [...array]
@@ -53,104 +51,162 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function TeamCircles() {
+    const [members, setMembers] = useState<TeamMember[]>([])
+    const [order, setOrder] = useState<TeamMember[]>([])
     const [visible, setVisible] = useState(true)
-    const [order, setOrder] = useState(members)
-    const [cycleKey, setCycleKey] = useState(0)
+    const [loading, setLoading] = useState(true)
 
+    const fetchMembers = async () => {
+        try {
+            const res = await fetch('/api/team')
+            const data = await res.json()
+            if (Array.isArray(data)) {
+                const publicMembers = data.filter((m: TeamMember) => m.showPhoto)
+                setMembers(publicMembers)
+                setOrder(publicMembers)
+            }
+        } catch (error) {
+            console.error('Error fetching team:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => { fetchMembers() }, [])
+
+    // Shuffle cada 24s: todo el grupo desaparece → se baraja → reaparece
     const cycle = useCallback(() => {
-        // 1. Apagar
+        if (members.length <= 1) return
         setVisible(false)
-
-        // 2. Reordenar aleatoriamente mientras están "apagados"
-        setTimeout(() => {
-            setOrder(shuffleArray(members))
-            setCycleKey(k => k + 1)
-        }, 700)
-
-        // 3. Encender con nuevo orden
-        setTimeout(() => {
-            setVisible(true)
-        }, 1100)
-    }, [])
+        setTimeout(() => setOrder(shuffleArray(members)), 600)
+        setTimeout(() => setVisible(true), 1000)
+    }, [members])
 
     useEffect(() => {
-        const interval = setInterval(cycle, 24000)
-        return () => clearInterval(interval)
-    }, [cycle])
+        if (members.length > 1) {
+            const interval = setInterval(cycle, 24000)
+            return () => clearInterval(interval)
+        }
+    }, [cycle, members.length])
+
+    if (loading) {
+        return (
+            <div className="flex justify-center py-20">
+                <Loader2 className="animate-spin text-blue-400/40" size={28} />
+            </div>
+        )
+    }
+
+    if (members.length === 0) return null
+
+    const visibleMembers = order.filter(m => m.showPhoto)
 
     return (
-        <div className="mt-10 md:mt-14">
+        <section className="py-24 relative overflow-hidden bg-transparent">
+            {/* Halo de luz azul central como en la versión original */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(219,234,254,0.35)_0%,_rgba(255,255,255,0)_60%)] pointer-events-none" />
+
             {/* Título */}
-            <p className="text-center text-xs md:text-sm font-medium text-slate-400 uppercase tracking-widest mb-6 md:mb-8">
-                El Equipo
-            </p>
-
-            {/* Círculos */}
-            <div className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8 px-4">
-                {order.map((member, idx) => {
-                    const Icon = member.icon
-                    return (
-                        <motion.div
-                            key={`${cycleKey}-${member.id}`}
-                            initial={{ opacity: 0, scale: 0.85 }}
-                            animate={
-                                visible
-                                    ? { opacity: 1, scale: 1 }
-                                    : { opacity: 0, scale: 0.85 }
-                            }
-                            transition={{
-                                duration: 0.5,
-                                delay: visible ? idx * 0.08 : (4 - idx) * 0.05,
-                                ease: 'easeInOut',
-                            }}
-                            className="flex flex-col items-center gap-2 group"
-                        >
-                            {/* Círculo foto */}
-                            <div className="relative">
-                                {/* Anillo de color de skill */}
-                                <div
-                                    className={`absolute -inset-1 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 opacity-70 blur-sm group-hover:opacity-100 group-hover:blur-0 transition-all duration-300`}
-                                />
-                                <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden border-[3px] border-white shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                                    <Image
-                                        src={member.image}
-                                        alt={member.name}
-                                        fill
-                                        className="object-cover object-top"
-                                        sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
-                                    />
-                                </div>
-
-                                {/* Icono skill en badge */}
-                                <div
-                                    className={`absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-gradient-to-br ${member.color} flex items-center justify-center shadow-md border-2 border-white`}
-                                >
-                                    <Icon size={13} className="text-white" />
-                                </div>
-                            </div>
-
-                            {/* Nombre */}
-                            <div className="text-center">
-                                <p className="text-xs font-semibold text-slate-700 leading-tight">{member.name}</p>
-                            </div>
-                        </motion.div>
-                    )
-                })}
+            <div className="text-center mb-10 relative z-10">
+                <p className="text-[11px] font-semibold tracking-[0.35em] text-slate-500 uppercase">EL EQUIPO</p>
+                <p className="text-[11px] text-slate-400 italic mt-1">*Interactúa con los iconos de nuestro ADN</p>
             </div>
 
-            {/* Indicador de ciclo */}
-            <div className="flex justify-center mt-6">
-                <div className="flex items-center gap-1.5">
-                    {[...Array(5)].map((_, i) => (
-                        <div
-                            key={i}
-                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                                i === 0 ? 'bg-blue-500 w-3' : 'bg-slate-300'
-                            }`}
-                        />
+            {/* 
+                CAPA 1 → motion.div con opacity controlado por `visible`
+                         El shuffle de 24s apaga/enciende todo el grupo (fade grupal)
+                CAPA 2 → AnimatePresence sin mode
+                         Si el admin oculta un miembro, SOLO ese hace fade out/in independiente
+            */}
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto">
+                <motion.div
+                    animate={{ opacity: visible ? 1 : 0 }}
+                    transition={{ duration: 0.45, ease: 'easeInOut' }}
+                    className="flex flex-nowrap justify-center items-center gap-8 md:gap-14 lg:gap-20 px-8 py-16 overflow-x-auto no-scrollbar"
+                >
+                    <AnimatePresence>
+                        {visibleMembers.map((member) => {
+                            const style = getMemberStyle(member.name)
+
+                            let iconName = 'Zap'
+                            try {
+                                const fields = JSON.parse(member.customFields || '{}')
+                                if (fields.icon && iconMap[fields.icon]) iconName = fields.icon
+                            } catch (e) {}
+                            const Icon = iconMap[iconName] || Zap
+
+                            return (
+                                <motion.div
+                                    key={member.id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.35, ease: 'easeInOut' }}
+                                    className="flex flex-col items-center gap-4 shrink-0"
+                                >
+                                    {/* Círculo con halo de color */}
+                                    <div className="relative group">
+                                        {/* Foto circular */}
+                                        <div
+                                            className={`
+                                                relative
+                                                w-[120px] h-[120px] md:w-[140px] md:h-[140px]
+                                                rounded-full
+                                                border-[3px] border-white
+                                                bg-white
+                                                overflow-hidden
+                                                ${style.glow}
+                                                transition-all duration-500
+                                                group-hover:scale-105
+                                            `}
+                                        >
+                                            <Image
+                                                src={member.photoUrl || '/images/placeholder-user.jpg'}
+                                                alt={member.name}
+                                                fill
+                                                className="object-cover object-top"
+                                                sizes="140px"
+                                            />
+                                        </div>
+
+                                        {/* Badge de icono ADN */}
+                                        <div className={`
+                                            absolute bottom-1 right-1
+                                            w-9 h-9 md:w-10 md:h-10
+                                            rounded-full
+                                            bg-gradient-to-br ${style.badge}
+                                            border-[2.5px] border-white
+                                            shadow-lg
+                                            flex items-center justify-center
+                                            z-10
+                                            transition-transform duration-300 group-hover:scale-110
+                                        `}>
+                                            <Icon className="w-4 h-4 md:w-5 md:h-5 text-white" strokeWidth={2.5} />
+                                        </div>
+                                    </div>
+
+                                    {/* Nombre */}
+                                    {member.showName && (
+                                        <p className="text-[13px] md:text-[14px] font-medium text-slate-700 tracking-wide">
+                                            {member.name.split(' ')[0]}
+                                        </p>
+                                    )}
+                                </motion.div>
+                            )
+                        })}
+                    </AnimatePresence>
+                </motion.div>
+            </div>
+
+            {/* Paginación de puntos */}
+            <div className="flex justify-center mt-10 relative z-10">
+                <div className="flex items-center gap-2.5">
+                    <div className="h-1.5 w-7 bg-blue-500 rounded-full" />
+                    {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-1.5 w-1.5 bg-slate-300 rounded-full" />
                     ))}
                 </div>
             </div>
-        </div>
+        </section>
     )
 }

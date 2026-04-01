@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
@@ -42,36 +42,41 @@ model Solution {
 }
 
 model NewsPost {
-  id           String    @id @default(uuid())
-  title        String
-  slug         String    @unique
-  category     String
-  tags         String?
-  coverImage   String?   @db.Text
-  content      String    @db.LongText
-  published    Boolean   @default(false)
-  publishedAt  DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  aiType       String?
-  businessArea String?
-  profession   String?
-  sector       String?
-  aiTool       String?
-  company      String?
-  podcastAudioUrl String? @db.Text
+  id              String    @id @default(uuid())
+  title           String
+  slug            String    @unique
+  category        String
+  aiType          String?
+  businessArea    String?
+  sector          String?
+  profession      String?
+  coverImage      String?   @db.Text
+  content         String    @db.LongText
+  published       Boolean   @default(false)
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  tags            String?
+  aiTool          String?
+  company         String?
+  podcastAudioUrl String?   @db.Text
 }
 
 model TeamMember {
-  id          String   @id @default(uuid())
-  name        String
-  role        String
-  bio         String   @db.Text
-  photoUrl    String?
-  socialLinks String   @default("{}")
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(uuid())
+  name         String
+  role         String?
+  bio          String?  @db.Text
+  photoUrl     String?
+  socialLinks  String   @default("{}")
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  customFields String   @default("{}")
+  linkedIn     String?
+  phone        String?
+  showName     Boolean  @default(true)
+  showPhoto    Boolean  @default(true)
 }
 
 model SuccessCase {
@@ -120,13 +125,13 @@ model Lead {
   email         String
   phone         String?
   message       String   @db.Text
-  source        String   @default("CONTACT")
-  scope         String?
-  bottleneck    String?
-  urgency       Int?
-  desiredResult String?
   status        String   @default("NEW")
   createdAt     DateTime @default(now())
+  bottleneck    String?
+  desiredResult String?
+  scope         String?
+  source        String   @default("CONTACT")
+  urgency       Int?
 }
 
 model AdminUser {
@@ -187,15 +192,15 @@ model NavLink {
 }
 
 model AssistantLead {
-  id                String   @id @default(uuid())
-  name              String
-  email             String
-  phone             String?
-  company           String?
-  chatSummary       String?  @db.Text
-  status            String   @default("NEW") // ENDED, FOLLOWUP
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  chatSummary String?  @db.Text
+  status      String   @default("NEW")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Application {
@@ -215,7 +220,7 @@ model Application {
 model ConsentLog {
   id         String   @id @default(uuid())
   email      String
-  action     String   // e.g. "CONTACT_FORM", "LEAD_CAPTURE"
+  action     String
   acceptedAt DateTime @default(now())
   ipAddress  String?
   userAgent  String?
