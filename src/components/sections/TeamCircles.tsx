@@ -118,11 +118,16 @@ export default function TeamCircles() {
                 CAPA 2 → AnimatePresence sin mode
                          Si el admin oculta un miembro, SOLO ese hace fade out/in independiente
             */}
-            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-12 md:px-16">
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-10">
                 <motion.div
                     animate={{ opacity: visible ? 1 : 0 }}
                     transition={{ duration: 0.45, ease: 'easeInOut' }}
-                    className="flex flex-nowrap justify-center items-center gap-3 sm:gap-6 md:gap-12 lg:gap-20 py-12"
+                    className="
+                        grid grid-cols-2 gap-y-12 gap-x-4
+                        sm:grid-cols-3 sm:gap-x-8
+                        md:flex md:flex-wrap md:justify-center md:gap-12 lg:gap-20
+                        py-12 items-center
+                    "
                 >
                     <AnimatePresence mode="popLayout">
                         {visibleMembers.map((member) => {
@@ -138,11 +143,11 @@ export default function TeamCircles() {
                             return (
                                 <motion.div
                                     key={member.id}
-                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    initial={{ opacity: 0, scale: 0.85 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    exit={{ opacity: 0, scale: 0.85 }}
                                     transition={{ duration: 0.4, ease: 'easeOut' }}
-                                    className="flex flex-col items-center gap-4 shrink-0"
+                                    className="flex flex-col items-center gap-4 w-full md:w-auto"
                                 >
                                     {/* Círculo con halo de color */}
                                     <div className="relative group">
@@ -150,14 +155,17 @@ export default function TeamCircles() {
                                         <div
                                             className={`
                                                 relative
-                                                w-16 h-16 xs:w-20 xs:h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-[140px] lg:h-[140px]
+                                                w-24 h-24  /* Móvil base */
+                                                xs:w-28 xs:h-28
+                                                sm:w-32 sm:h-32
+                                                lg:w-[140px] lg:h-[140px]
                                                 rounded-full
-                                                border-[2px] sm:border-[3px] border-white
+                                                border-[3px] border-white
                                                 bg-white
                                                 overflow-hidden
                                                 ${style.glow}
                                                 transition-all duration-500
-                                                group-hover:scale-105
+                                                group-hover:scale-105 group-hover:shadow-[0_0_55px_15px_rgba(219,234,254,0.45)]
                                             `}
                                         >
                                             <Image
@@ -165,29 +173,29 @@ export default function TeamCircles() {
                                                 alt={member.name}
                                                 fill
                                                 className="object-cover object-top"
-                                                sizes="(max-width: 640px) 80px, (max-width: 768px) 112px, 140px"
+                                                sizes="(max-width: 640px) 112px, (max-width: 1024px) 128px, 140px"
                                             />
                                         </div>
 
                                         {/* Badge de icono ADN */}
                                         <div className={`
-                                            absolute -bottom-1 -right-1 sm:bottom-0 sm:right-0 md:bottom-1 md:right-1
-                                            w-6 h-6 xs:w-7 xs:h-7 sm:w-9 sm:h-9 md:w-10 md:h-10
+                                            absolute bottom-0 right-0 sm:bottom-1 sm:right-1
+                                            w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10
                                             rounded-full
                                             bg-gradient-to-br ${style.badge}
-                                            border-[1.5px] sm:border-[2.5px] border-white
+                                            border-[2px] sm:border-[2.5px] border-white
                                             shadow-lg
                                             flex items-center justify-center
                                             z-10
                                             transition-transform duration-300 group-hover:scale-110
                                         `}>
-                                            <Icon className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white" strokeWidth={2.5} />
+                                            <Icon className="w-4 h-4 md:w-5 md:h-5 text-white" strokeWidth={2.5} />
                                         </div>
                                     </div>
 
                                     {/* Nombre */}
                                     {member.showName && (
-                                        <p className="text-[10px] xs:text-[11px] sm:text-[13px] md:text-[14px] font-medium text-slate-700 tracking-tight sm:tracking-wide text-center">
+                                        <p className="text-[12px] sm:text-[13px] md:text-[14px] font-medium text-slate-700 tracking-wide text-center">
                                             {member.name.split(' ')[0]}
                                         </p>
                                     )}
@@ -198,11 +206,9 @@ export default function TeamCircles() {
                 </motion.div>
             </div>
 
-            {/* Indicador de estado (opcional, oculto en móvil si hay pocos) */}
+            {/* Pulso de actividad centralizado */}
             <div className="hidden md:flex justify-center mt-6 relative z-10">
-                <div className="flex items-center gap-2.5">
-                    <div className="h-1.5 w-7 bg-blue-500/40 rounded-full animate-pulse" />
-                </div>
+                <div className="h-1.5 w-1.5 bg-blue-500/20 rounded-full animate-ping" />
             </div>
         </section>
     )
