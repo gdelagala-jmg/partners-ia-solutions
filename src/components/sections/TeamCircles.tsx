@@ -118,11 +118,11 @@ export default function TeamCircles() {
                 CAPA 2 → AnimatePresence sin mode
                          Si el admin oculta un miembro, SOLO ese hace fade out/in independiente
             */}
-            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-10">
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-12 md:px-16">
                 <motion.div
                     animate={{ opacity: visible ? 1 : 0 }}
                     transition={{ duration: 0.45, ease: 'easeInOut' }}
-                    className="flex flex-nowrap justify-center items-center gap-3 sm:gap-6 md:gap-10 lg:gap-16 py-12"
+                    className="flex flex-nowrap justify-center items-center gap-3 sm:gap-6 md:gap-12 lg:gap-20 py-12"
                 >
                     <AnimatePresence mode="popLayout">
                         {visibleMembers.map((member) => {
@@ -142,7 +142,7 @@ export default function TeamCircles() {
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.8 }}
                                     transition={{ duration: 0.4, ease: 'easeOut' }}
-                                    className="flex flex-col items-center gap-3 shrink-0"
+                                    className="flex flex-col items-center gap-4 shrink-0"
                                 >
                                     {/* Círculo con halo de color */}
                                     <div className="relative group">
