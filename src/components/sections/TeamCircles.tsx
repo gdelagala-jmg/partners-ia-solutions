@@ -118,7 +118,7 @@ export default function TeamCircles() {
                 CAPA 2 → AnimatePresence sin mode
                          Si el admin oculta un miembro, SOLO ese hace fade out/in independiente
             */}
-            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 overflow-hidden">
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-10">
                 <motion.div
                     animate={{ opacity: visible ? 1 : 0 }}
                     transition={{ duration: 0.45, ease: 'easeInOut' }}
