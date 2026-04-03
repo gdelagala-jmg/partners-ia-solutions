@@ -78,10 +78,6 @@ export default function TeamPage() {
                         transition={{ duration: 0.6 }}
                         className="text-center"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50/80 backdrop-blur-sm text-blue-700 text-sm font-medium mb-4 border border-blue-100">
-                            <Users size={16} />
-                            <span>Consultoría de Alto Impacto</span>
-                        </div>
                         <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4 leading-[1.1] tracking-tight">
                             "No predecimos el futuro de la IA: <br />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
