@@ -93,22 +93,37 @@ export default function NewsAdminPage() {
     }
 
     const handleSyncAll = async () => {
-        if (!confirm(`Se enviarán todas las noticias publicadas (${posts.filter(p => p.published).length}) a Google Business Profile. ¿Deseas continuar?`)) return
-        setIsSyncing('all')
-        try {
-            const res = await fetch('/api/news/sync-all', { method: 'POST' })
-            if (res.ok) {
-                alert('Sincronización masiva iniciada. Las noticias aparecerán en Google Business en unos momentos.')
-            } else {
-                const err = await res.json()
-                alert(`Error: ${err.error || 'Desconocido'}`)
-            }
-        } catch (error) {
-            console.error('Error syncing all:', error)
-            alert('Error de conexión')
-        } finally {
-            setIsSyncing(null)
+        const publishedPosts = posts.filter(p => p.published)
+        if (publishedPosts.length === 0) {
+            alert('No hay noticias publicadas para sincronizar.')
+            return
         }
+
+        if (!confirm(`Se enviarán ${publishedPosts.length} noticias a Google Business Profile una por una. ¿Deseas continuar?`)) return
+        
+        setIsSyncing('all')
+        let successCount = 0
+        let errorCount = 0
+
+        for (let i = 0; i < publishedPosts.length; i++) {
+            const post = publishedPosts[i]
+            try {
+                // Actualizamos el estado para mostrar progreso (opcional, usando el id para feedback visual en la tabla)
+                const res = await fetch(`/api/news/${post.id}/sync`, { method: 'POST' })
+                if (res.ok) {
+                    successCount++
+                } else {
+                    errorCount++
+                }
+            } catch (error) {
+                console.error(`Error syncing post ${post.id}:`, error)
+                errorCount++
+            }
+        }
+
+        setIsSyncing(null)
+        alert(`Sincronización terminada.\n✅ Éxito: ${successCount}\n❌ Error: ${errorCount}`)
+        fetchPosts()
     }
 
     const handleSubmit = async (data: any) => {
