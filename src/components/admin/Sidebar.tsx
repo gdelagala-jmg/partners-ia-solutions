@@ -88,35 +88,35 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
     }
 
     return (
-        <div className="flex flex-col h-full bg-white">
-            {/* Header */}
-            <div className="p-8 border-b border-gray-50 hidden lg:block">
+        <div className="flex flex-col h-full bg-white/70 backdrop-blur-xl border-r border-[#F2F2F7]">
+            {/* Header - Minimalist Apple Style */}
+            <div className="px-6 py-8 border-b border-[#F2F2F7]/50 hidden lg:block">
                 <Link href="/" className="flex items-center group">
-                    <div className="relative h-10 w-48">
+                    <div className="relative h-8 w-40">
                         <Image
                             src="/logo-ias.png"
-                            alt="IA Solutions Admin"
+                            alt="IA Solutions"
                             fill
-                            className="object-contain transition-transform group-hover:scale-105"
+                            className="object-contain transition-transform group-hover:scale-105 duration-500"
                             priority
                         />
                     </div>
                 </Link>
             </div>
 
-            {/* Mobile Header Close */}
-            <div className="p-6 border-b border-gray-50 lg:hidden flex justify-between items-center">
-                <span className="text-xl font-bold text-gray-900 underline decoration-blue-500 decoration-4 underline-offset-4">Menú</span>
+            {/* Mobile Header Close - Refined */}
+            <div className="px-6 py-4 border-b border-[#F2F2F7]/50 lg:hidden flex justify-between items-center bg-white/50">
+                <span className="text-sm font-bold tracking-widest text-gray-400 uppercase">Menú Principal</span>
                 <button
                     onClick={onCloseMobile}
-                    className="p-2 bg-gray-50 rounded-full text-gray-400 hover:text-gray-900 transition-colors"
+                    className="p-1.5 bg-gray-50/50 rounded-xl text-gray-400 hover:text-gray-900 transition-all border border-gray-100/50 active:scale-90"
                 >
-                    <X size={20} />
+                    <X size={18} />
                 </button>
             </div>
 
-            {/* Navigation */}
-            <nav className="flex-1 p-6 space-y-1 overflow-y-auto custom-scrollbar">
+            {/* Navigation - Compact Apple List style */}
+            <nav className="flex-1 px-4 py-6 space-y-0.5 overflow-y-auto custom-scrollbar">
                 {menuItems.map((item) => {
                     const Icon = item.icon
                     const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
@@ -127,51 +127,54 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
                             href={item.href}
                             onClick={onCloseMobile}
                             className={clsx(
-                                "flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group",
+                                "flex items-center px-4 py-2.5 text-[13px] font-semibold rounded-xl transition-all duration-300 group relative",
                                 isActive
-                                    ? "bg-blue-600 text-white shadow-lg shadow-blue-100"
-                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                    ? "bg-[#007AFF] text-white shadow-lg shadow-[#007AFF]/20"
+                                    : "text-[#1D1D1F]/70 hover:bg-[#F2F2F7]/80 hover:text-[#1D1D1F]"
                             )}
                         >
                             <Icon
-                                size={18}
+                                size={16}
                                 className={clsx(
-                                    "mr-3 transition-colors",
-                                    isActive ? "text-white" : "text-gray-400 group-hover:text-blue-600"
+                                    "mr-3 transition-colors duration-300",
+                                    isActive ? "text-white" : "text-gray-400 group-hover:text-[#007AFF]"
                                 )}
                             />
                             {item.name}
+                            
+                            {isActive && (
+                                <div className="absolute left-0 w-1 h-4 bg-white/50 rounded-full" />
+                            )}
                         </Link>
                     )
                 })}
             </nav>
 
-            {/* Footer Actions */}
-            <div className="p-6 border-t border-gray-50 space-y-2">
-                {/* Maintenance Toggle */}
+            {/* Footer Actions - Tight Spacing */}
+            <div className="px-4 py-6 border-t border-[#F2F2F7]/50 space-y-1 bg-gray-50/20">
                 {!loading && (
                     <button
                         onClick={toggleMaintenance}
                         className={clsx(
-                            "flex w-full items-center px-4 py-3 text-sm font-bold rounded-xl transition-all border group mb-4",
+                            "flex w-full items-center px-4 py-2.5 text-[12px] font-bold rounded-xl transition-all border border-transparent group mb-2",
                             isMaintenance 
-                                ? "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100" 
-                                : "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                                ? "bg-amber-50/50 text-amber-700 hover:bg-amber-100/50 border-amber-100" 
+                                : "bg-emerald-50/50 text-emerald-700 hover:bg-emerald-100/50 border-emerald-100"
                         )}
                     >
                         {isMaintenance ? (
-                            <ShieldAlert size={18} className="mr-3 text-amber-600" />
+                            <ShieldAlert size={14} className="mr-3" />
                         ) : (
-                            <ShieldCheck size={18} className="mr-3 text-green-600" />
+                            <ShieldCheck size={14} className="mr-3" />
                         )}
-                        <span className="flex-1 text-left">Mantenimiento</span>
+                        <span className="flex-1 text-left uppercase tracking-tighter">Mantenimiento</span>
                         <div className={clsx(
-                            "w-10 h-5 rounded-full relative transition-colors duration-300",
-                            isMaintenance ? "bg-amber-600" : "bg-green-500"
+                            "w-8 h-4 rounded-full relative transition-colors duration-500",
+                            isMaintenance ? "bg-amber-500" : "bg-emerald-400"
                         )}>
                             <div className={clsx(
-                                "absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300",
-                                isMaintenance ? "left-6" : "left-1"
+                                "absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all duration-500 shadow-sm",
+                                isMaintenance ? "left-4.5" : "left-0.5"
                             )} />
                         </div>
                     </button>
@@ -180,16 +183,16 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
                 <Link
                     href="/"
                     target="_blank"
-                    className="flex w-full items-center px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-blue-600 rounded-xl transition-all group"
+                    className="flex w-full items-center px-4 py-2 text-[12px] font-semibold text-gray-400 hover:bg-gray-100/50 hover:text-[#007AFF] rounded-xl transition-all group"
                 >
-                    <ExternalLink size={18} className="mr-3 text-gray-400 group-hover:text-blue-600 transition-colors" />
-                    Sitio Público
+                    <ExternalLink size={14} className="mr-3 text-gray-300 group-hover:text-[#007AFF]" />
+                    Ver Sitio Público
                 </Link>
                 <button
                     onClick={handleLogout}
-                    className="flex w-full items-center px-4 py-3 text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all group"
+                    className="flex w-full items-center px-4 py-2 text-[12px] font-semibold text-gray-400 hover:bg-red-50/50 hover:text-red-500 rounded-xl transition-all group"
                 >
-                    <LogOut size={18} className="mr-3 text-gray-400 group-hover:text-red-600 transition-colors" />
+                    <LogOut size={14} className="mr-3 text-gray-300 group-hover:text-red-500" />
                     Cerrar Sesión
                 </button>
             </div>

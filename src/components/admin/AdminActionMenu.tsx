@@ -38,7 +38,7 @@ export default function AdminActionMenu({ actions }: AdminActionMenuProps) {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl z-50 py-2 animate-in fade-in zoom-in duration-200">
+                <div className="absolute right-0 mt-2 w-48 bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] z-50 py-2 animate-in fade-in zoom-in duration-200">
                     {actions.map((action, idx) => {
                         const Icon = action.icon
                         return (
@@ -48,18 +48,19 @@ export default function AdminActionMenu({ actions }: AdminActionMenuProps) {
                                     action.onClick()
                                     setIsOpen(false)
                                 }}
-                                className={`w-full flex items-center px-4 py-2.5 text-sm transition-colors ${action.variant === 'danger'
-                                        ? 'text-red-600 hover:bg-red-50'
-                                        : 'text-gray-700 hover:bg-gray-50'
+                                className={`w-full flex items-center px-4 py-2.5 text-sm transition-all active:scale-[0.98] ${action.variant === 'danger'
+                                        ? 'text-red-500 hover:bg-red-50/50'
+                                        : 'text-[#1D1D1F] hover:bg-white/40'
                                     }`}
                             >
-                                <Icon size={16} className="mr-3" />
+                                <Icon size={16} className="mr-3 text-gray-400" />
                                 {action.label}
                             </button>
                         )
                     })}
                 </div>
             )}
+
         </div>
     )
 }

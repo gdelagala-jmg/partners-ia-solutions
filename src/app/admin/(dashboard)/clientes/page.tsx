@@ -165,22 +165,22 @@ export default function ClientsPage() {
     ]
 
     return (
-        <div className="space-y-10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div>
-                    <h1 className="text-4xl font-black text-gray-900 tracking-tight">Cartera de Clientes</h1>
-                    <p className="text-gray-500 mt-2 font-medium">Gestión integral de fichas de clientes y relaciones corporativas.</p>
+        <div className="space-y-8">
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4 md:px-0">
+                <div className="space-y-1">
+                    <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Cartera de Clientes</h1>
+                    <p className="text-gray-400 mt-1 font-medium max-w-xl">Gestión integral de fichas de clientes y relaciones corporativas.</p>
                 </div>
                 {!isEditing && (
                     <button
                         onClick={handleCreate}
-                        className="flex items-center justify-center px-8 py-4 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all font-black shadow-xl shadow-blue-100 scale-100 hover:scale-105 active:scale-95"
+                        className="flex items-center justify-center px-6 py-3 bg-[#1D1D1F] text-white rounded-2xl hover:bg-black transition-all font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.1)] whitespace-nowrap shrink-0"
                     >
-                        <Plus size={24} className="mr-2" />
+                        <Plus size={20} className="mr-2" />
                         Nuevo Cliente
                     </button>
                 )}
-            </div>
+            </header>
 
             {isEditing ? (
                 <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
@@ -197,15 +197,15 @@ export default function ClientsPage() {
                     loading={loading}
                     emptyMessage="No hay clientes registrados en la cartera."
                     renderMobileCard={(client) => (
-                        <div className="space-y-5">
+                        <div className="space-y-5 p-2">
                             <div className="flex items-start justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-14 w-14 rounded-2xl bg-gray-50 overflow-hidden border border-gray-100 flex items-center justify-center p-1 shadow-sm">
+                                    <div className="h-14 w-14 rounded-2xl bg-white border border-gray-100 flex items-center justify-center p-2 shadow-sm shrink-0">
                                         {client.logoUrl ? <img src={client.logoUrl} className="h-full w-full object-contain" alt="" /> : <Building size={24} className="text-gray-300" />}
                                     </div>
                                     <div>
-                                        <h3 className="font-black text-gray-900 leading-tight">{client.companyName}</h3>
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase mt-1 tracking-wider">{client.taxId || 'SIN CIF'}</p>
+                                        <h3 className="font-bold text-[#1D1D1F] leading-tight text-lg">{client.companyName}</h3>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase mt-1 tracking-widest">{client.taxId || 'SIN CIF'}</p>
                                     </div>
                                 </div>
                                 <AdminActionMenu
@@ -217,26 +217,26 @@ export default function ClientsPage() {
                                 />
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4 py-4 border-t border-gray-50">
-                                <div>
-                                    <p className="text-[10px] text-gray-400 font-black uppercase mb-1">Contacto</p>
-                                    <p className="text-xs font-bold text-gray-700">{client.contactName || '---'}</p>
+                            <div className="grid grid-cols-2 gap-4 py-4 border-t border-gray-100/50">
+                                <div className="bg-white/40 p-3 rounded-xl border border-white">
+                                    <p className="text-[9px] text-gray-400 font-bold uppercase mb-1 tracking-widest">Contacto</p>
+                                    <p className="text-xs font-bold text-[#1D1D1F]">{client.contactName || '---'}</p>
                                 </div>
-                                <div>
-                                    <p className="text-[10px] text-gray-400 font-black uppercase mb-1">Sector</p>
-                                    <p className="text-xs font-bold text-blue-600">{client.sector || 'General'}</p>
+                                <div className="bg-white/40 p-3 rounded-xl border border-white">
+                                    <p className="text-[9px] text-gray-400 font-bold uppercase mb-1 tracking-widest">Sector</p>
+                                    <p className="text-xs font-bold text-blue-600 truncate">{client.sector || 'General'}</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                            <div className="flex items-center justify-between pt-4 border-t border-gray-100/50">
                                 {client.active ? (
-                                    <span className="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-black rounded-lg uppercase tracking-wider">Activo</span>
+                                    <span className="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg uppercase tracking-wider">Activo</span>
                                 ) : (
-                                    <span className="px-3 py-1 bg-gray-50 text-gray-400 text-[10px] font-black rounded-lg uppercase tracking-wider">Inactivo</span>
+                                    <span className="px-3 py-1 bg-gray-50 text-gray-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">Inactivo</span>
                                 )}
                                 {client.website && (
-                                    <a href={client.website} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-blue-500 hover:underline font-mono">
-                                        Visitar Web
+                                    <a href={client.website} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-blue-500 hover:text-blue-700 font-mono bg-white/60 p-2 rounded-lg border border-white shadow-sm">
+                                        Explorar Web
                                     </a>
                                 )}
                             </div>

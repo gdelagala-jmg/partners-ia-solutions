@@ -163,15 +163,15 @@ export default function SectorsPage() {
 
     return (
         <div className="space-y-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Gestión de Sectores</h1>
-                    <p className="text-gray-500 mt-2">Administra los sectores para clasificar soluciones con diseño premium.</p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4 md:px-0">
+                <div className="flex-1 min-w-0">
+                    <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Gestión de Sectores</h1>
+                    <p className="text-gray-400 mt-1 font-medium max-w-2xl">Administra los sectores para clasificar soluciones con diseño premium.</p>
                 </div>
                 {!isEditing && (
                     <button
                         onClick={handleCreate}
-                        className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-bold shadow-lg shadow-blue-100"
+                        className="flex items-center justify-center px-6 py-3 bg-[#1D1D1F] text-white rounded-2xl hover:bg-black transition-all font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.1)]"
                     >
                         <Plus size={20} className="mr-2" />
                         Nuevo Sector
@@ -197,12 +197,12 @@ export default function SectorsPage() {
                         <div className="space-y-4">
                             <div className="flex items-start justify-between gap-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="h-12 w-12 rounded-xl bg-gray-50 overflow-hidden border border-gray-100 flex-shrink-0">
+                                    <div className="h-12 w-12 rounded-2xl bg-white/50 backdrop-blur-sm overflow-hidden border border-white flex-shrink-0 shadow-sm">
                                         {sector.image ? <img src={sector.image} className="h-full w-full object-cover" alt="" /> : <Box size={24} className="m-3 text-gray-300" />}
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-gray-900">{sector.name}</h3>
-                                        <p className="text-xs text-gray-400 font-mono">/{sector.slug}</p>
+                                        <h3 className="font-bold text-[#1D1D1F]">{sector.name}</h3>
+                                        <p className="text-[10px] text-gray-400 font-mono mt-0.5 opacity-60">/{sector.slug}</p>
                                     </div>
                                 </div>
                                 <AdminActionMenu
@@ -213,17 +213,17 @@ export default function SectorsPage() {
                                     ]}
                                 />
                             </div>
-                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                            <div className="flex items-center justify-between pt-4 border-t border-gray-100/50">
                                 <div className="flex gap-2">
                                     {sector.active ? (
-                                        <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded uppercase">Activo</span>
+                                        <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg uppercase tracking-wider">Activo</span>
                                     ) : (
-                                        <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] font-bold rounded uppercase">Inactivo</span>
+                                        <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">Inactivo</span>
                                     )}
-                                    <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">{sector._count?.solutions || 0} Soluciones</span>
+                                    <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-lg uppercase tracking-wider">{sector._count?.solutions || 0} Soluciones</span>
                                 </div>
                                 {sector.externalUrl && (
-                                    <a href={sector.externalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700">
+                                    <a href={sector.externalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 bg-white/60 p-2 rounded-full border border-white shadow-sm">
                                         <ExternalLink size={16} />
                                     </a>
                                 )}

@@ -135,10 +135,11 @@ model Lead {
 }
 
 model AdminUser {
-  id           String   @id @default(uuid())
-  username     String   @unique
-  passwordHash String
-  createdAt    DateTime @default(now())
+  id              String   @id @default(uuid())
+  username        String   @unique
+  passwordHash    String
+  createdAt       DateTime @default(now())
+  dashboardConfig String?  @db.LongText
 }
 
 model Course {

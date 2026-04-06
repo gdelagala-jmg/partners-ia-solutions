@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar } from 'lucide-react'
+import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink } from 'lucide-react'
 import NewsForm from '@/components/admin/NewsForm'
 import ImportModal from '@/components/admin/ImportModal'
 import AdminTable from '@/components/admin/AdminTable'
@@ -161,13 +161,26 @@ export default function NewsAdminPage() {
             header: '',
             className: 'text-right',
             accessor: (post: any) => (
-                <AdminActionMenu
-                    actions={[
-                        { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
-                        { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
-                        { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
-                    ]}
-                />
+                <div className="flex items-center justify-end gap-2">
+                    {post.published && (
+                        <a
+                            href={`/noticias/${post.slug || post.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50/50 rounded-full transition-all"
+                            title="Ver publicación"
+                        >
+                            <ExternalLink size={18} />
+                        </a>
+                    )}
+                    <AdminActionMenu
+                        actions={[
+                            { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
+                            { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
+                            { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
+                        ]}
+                    />
+                </div>
             )
         }
     ]
@@ -181,26 +194,26 @@ export default function NewsAdminPage() {
                 />
             )}
 
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 px-4 md:px-0">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Noticias & Blog</h1>
-                    <p className="text-gray-500 mt-2">Gestiona el contenido inteligente del portal.</p>
+                    <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Noticias & Blog</h1>
+                    <p className="text-gray-400 mt-1 font-medium">Gestión editorial inteligente y contenido global.</p>
                 </div>
                 {!isEditing && (
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setShowImportModal(true)}
-                            className="flex-1 sm:flex-none flex items-center justify-center px-4 py-2.5 bg-white text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium border border-gray-100 shadow-sm"
+                            className="flex-1 sm:flex-none flex items-center justify-center px-5 py-2.5 bg-white/60 backdrop-blur-md text-[#1D1D1F] rounded-2xl hover:bg-white/80 transition-all font-semibold border border-white/40 shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
                         >
                             <FileArchive size={18} className="mr-2 text-gray-400" />
                             Importar
                         </button>
                         <button
                             onClick={handleCreate}
-                            className="flex-1 sm:flex-none flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-medium shadow-lg shadow-blue-100"
+                            className="flex-1 sm:flex-none flex items-center justify-center px-6 py-2.5 bg-[#1D1D1F] text-white rounded-2xl hover:bg-black transition-all font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.1)]"
                         >
                             <Plus size={18} className="mr-2" />
-                            Nueva
+                            Nueva Noticia
                         </button>
                     </div>
                 )}
@@ -217,7 +230,7 @@ export default function NewsAdminPage() {
             ) : (
                 <div className="space-y-6">
                     {/* Filter Tabs */}
-                    <div className="flex p-1 bg-gray-100/50 rounded-xl w-fit">
+                    <div className="flex p-1.5 bg-gray-200/40 backdrop-blur-sm rounded-2xl w-fit">
                         {[
                             { id: 'all', label: 'Todas', count: posts.length },
                             { id: 'published', label: 'Publicadas', count: posts.filter(p => p.published).length },
@@ -226,12 +239,12 @@ export default function NewsAdminPage() {
                             <button
                                 key={t.id}
                                 onClick={() => setFilter(t.id as any)}
-                                className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${filter === t.id
-                                    ? 'bg-white text-blue-600 shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-900'
+                                className={`px-5 py-2 text-[11px] font-bold rounded-xl transition-all ${filter === t.id
+                                    ? 'bg-white text-[#1D1D1F] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                                    : 'text-gray-450 hover:text-gray-900'
                                     }`}
                             >
-                                {t.label} <span className="ml-1 opacity-50">{t.count}</span>
+                                {t.label} <span className={`ml-1.5 ${filter === t.id ? 'text-blue-500' : 'opacity-40'}`}>{t.count}</span>
                             </button>
                         ))}
                     </div>
@@ -280,13 +293,25 @@ export default function NewsAdminPage() {
                                         </div>
                                     </div>
                                 </div>
-                                <AdminActionMenu
-                                    actions={[
-                                        { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
-                                        { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
-                                        { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
-                                    ]}
-                                />
+                                <div className="flex flex-col items-end gap-3">
+                                    <AdminActionMenu
+                                        actions={[
+                                            { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
+                                            { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
+                                            { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
+                                        ]}
+                                    />
+                                    {post.published && (
+                                        <a
+                                            href={`/noticias/${post.slug || post.id}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-2 bg-white/60 text-[#1D1D1F] rounded-full border border-white shadow-sm"
+                                        >
+                                            <ExternalLink size={16} />
+                                        </a>
+                                    )}
+                                </div>
                             </div>
                         )}
                     />

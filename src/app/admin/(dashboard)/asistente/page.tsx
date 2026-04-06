@@ -80,104 +80,99 @@ export default function AssistantLeadsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full blur-3xl -mr-20 -mt-20 opacity-50 pointer-events-none" />
-        
-        <div className="relative z-10">
+    <div className="space-y-8 animate-in fade-in duration-700">
+      {/* Header Section */}
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-4 md:px-0">
+        <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2.5 bg-blue-100 text-blue-600 rounded-2xl">
-              <Bot size={28} />
+            <div className="p-2 bg-white rounded-2xl border border-white shadow-sm flex items-center justify-center">
+              <Bot size={24} className="text-[#1D1D1F]" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Leads del Asistente</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Leads del Asistente</h1>
           </div>
-          <p className="text-gray-500 max-w-xl text-lg leading-relaxed">
-            Contactos capturados automáticamente a través de las conversaciones del Asistente IA de la web.
-          </p>
+          <p className="text-gray-400 font-medium italic">Conversaciones inteligentes capturadas por tu IA.</p>
         </div>
 
-        <div className="relative z-10 w-full md:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+        <div className="relative w-full md:w-80 shadow-sm group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1D1D1F] transition-colors" size={18} />
           <input
             type="text"
-            placeholder="Buscar por nombre, email o empresa..."
+            placeholder="Filtrar por nombre o empresa..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+            className="w-full pl-11 pr-4 py-3 bg-white/60 backdrop-blur-md border border-white rounded-2xl focus:outline-none focus:bg-white transition-all text-sm font-medium"
           />
         </div>
-      </div>
+      </header>
 
+      {/* Leads Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {filteredLeads.length === 0 ? (
-          <div className="col-span-1 xl:col-span-2 text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
-            <Bot className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-1">Aún no hay leads del Asistente</h3>
-            <p className="text-gray-500">Cuando los usuarios interactúen con la IA y dejen sus datos, aparecerán aquí.</p>
+          <div className="col-span-full py-24 bg-white/60 backdrop-blur-md border border-white rounded-3xl text-center">
+            <Bot className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-[#1D1D1F] mb-1">Sin nuevos contactos</h3>
+            <p className="text-gray-400 font-medium">El asistente está esperando nuevas interacciones.</p>
           </div>
         ) : (
           filteredLeads.map((lead) => (
-            <div key={lead.id} className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-6 sm:p-8 flex flex-col group relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gray-50 to-white rounded-full blur-2xl -mr-10 -mt-10 opacity-50 pointer-events-none" />
-              
-              {/* Header Info */}
-              <div className="flex justify-between items-start mb-6 border-b border-gray-100 pb-6 relative z-10">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-1">{lead.name}</h2>
-                  <div className="flex items-center text-sm text-gray-500 gap-4 mt-2">
-                    <span className="flex items-center gap-1.5"><Mail size={14} className="text-gray-400" /> {lead.email}</span>
-                    {lead.phone && <span className="flex items-center gap-1.5"><Phone size={14} className="text-gray-400" /> {lead.phone}</span>}
+            <div 
+              key={lead.id} 
+              className="group bg-white/60 backdrop-blur-md border border-white rounded-3xl p-6 sm:p-8 flex flex-col hover:bg-white transition-all duration-500 shadow-sm hover:shadow-xl hover:-translate-y-1"
+            >
+              <div className="flex justify-between items-start mb-6">
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">{lead.name}</h2>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium text-gray-400">
+                    <span className="flex items-center gap-1.5"><Mail size={14} /> {lead.email}</span>
+                    {lead.phone && <span className="flex items-center gap-1.5"><Phone size={14} /> {lead.phone}</span>}
                   </div>
                 </div>
                 {getStatusBadge(lead.status)}
               </div>
 
-              {/* Chat Summary */}
-              <div className="flex-1 space-y-4 mb-6 relative z-10">
+              <div className="flex-1 space-y-6 mb-8 mt-2">
                 {lead.company && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Building2 size={16} className="text-gray-400" />
-                    <span className="font-medium text-gray-700">Empresa:</span>
-                    <span className="text-gray-600">{lead.company}</span>
+                  <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-[#1D1D1F]/5 border border-[#1D1D1F]/5 self-start shrink-0">
+                    <Building2 size={16} className="text-[#1D1D1F]" />
+                    <span className="text-xs font-bold text-[#1D1D1F] uppercase tracking-wider">{lead.company}</span>
                   </div>
                 )}
                 
-                <div>
-                  <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <MessageSquare size={16} className="text-blue-500" />
-                    Resumen de la Conversación
+                <div className="bg-white/40 rounded-2xl border border-white p-5 group-hover:bg-white/80 transition-colors">
+                  <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+                    <MessageSquare size={14} className="text-blue-500" />
+                    Insights de la Conversación
                   </div>
-                  <div className="text-sm text-gray-600 bg-blue-50/50 p-4 rounded-xl border border-blue-100/50 leading-relaxed max-h-40 overflow-y-auto custom-scrollbar">
-                    {lead.chatSummary || "No se pudo extraer un resumen."}
-                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed font-medium italic">
+                    "{lead.chatSummary || "No se pudo extraer un resumen detallado de esta sesión."}"
+                  </p>
                 </div>
               </div>
 
-              {/* Footer Actions */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-100 mt-auto relative z-10">
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <Calendar size={14} />
+              <div className="flex items-center justify-between pt-6 border-t border-[#1D1D1F]/5 mt-auto">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-gray-300 uppercase tracking-tighter">
+                  <Calendar size={12} />
                   {new Date(lead.createdAt).toLocaleString('es-ES', { 
                     day: '2-digit', month: 'short', year: 'numeric', 
                     hour: '2-digit', minute: '2-digit' 
                   })}
                 </div>
                 
-                <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex items-center gap-3">
                   <select
-                    className="text-sm bg-gray-50 border border-gray-200 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-medium"
+                    className="text-xs font-bold bg-white/80 border border-white text-[#1D1D1F] rounded-xl px-3 py-2 focus:outline-none cursor-pointer hover:bg-white transition-all shadow-sm"
                     value={lead.status}
                     onChange={(e) => updateStatus(lead.id, e.target.value)}
                   >
-                    <option value="NEW">Marcar: Nuevo</option>
-                    <option value="FOLLOWUP">Marcar: En Seguimiento</option>
-                    <option value="ENDED">Marcar: Cerrado</option>
+                    <option value="NEW">NUEVO</option>
+                    <option value="FOLLOWUP">SEGUIMIENTO</option>
+                    <option value="ENDED">CERRADO</option>
                   </select>
                   
                   <a 
                     href={`mailto:${lead.email}?subject=Partners IA Solutions - Contacto Virtual Assistant`}
-                    className="p-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-                    title="Enviar Email"
+                    className="p-2.5 bg-[#1D1D1F] text-white rounded-xl hover:bg-black transition-all shadow-sm active:scale-95"
+                    title="Contactar vía Email"
                   >
                     <ExternalLink size={18} />
                   </a>
