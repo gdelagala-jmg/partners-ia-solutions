@@ -202,6 +202,9 @@ model AssistantLead {
   status      String   @default("NEW")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  insights    String?  @db.Text
+  priority    String?  @default("MEDIUM")
+  sentiment   String?  @default("NEUTRAL")
 }
 
 model Application {

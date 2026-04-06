@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import CookieBanner from "@/components/layout/CookieBanner";
+import AssistantWidget from "@/components/public/AssistantWidget";
 
 export const metadata: Metadata = {
+// ... existing metadata ...
   metadataBase: new URL('https://www.partnersiasolutions.com'),
   title: {
     default: "IA Solutions | Ecosistemas Inteligentes y Automatización IA",
@@ -72,6 +74,7 @@ export default function RootLayout({
       <body className="antialiased" suppressHydrationWarning>
         {children}
         <CookieBanner />
+        <AssistantWidget />
       </body>
     </html>
   );

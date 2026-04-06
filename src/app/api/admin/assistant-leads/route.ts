@@ -18,25 +18,31 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
-    const { id, status } = await req.json();
+    const { id, status, sentiment, priority, insights } = await req.json();
 
-    if (!id || !status) {
+    if (!id) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
+    const data: any = {};
+    if (status) data.status = status;
+    if (sentiment) data.sentiment = sentiment;
+    if (priority) data.priority = priority;
+    if (insights) data.insights = insights;
+
     const lead = await prisma.assistantLead.update({
       where: { id },
-      data: { status },
+      data,
     });
 
     return NextResponse.json(lead);
   } catch (error) {
-    console.error("Error updating lead status:", error);
+    console.error("Error updating lead details:", error);
     return NextResponse.json(
-      { error: "Error updating lead status" },
+      { error: "Error updating lead details" },
       { status: 500 }
     );
   }

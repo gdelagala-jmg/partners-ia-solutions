@@ -39,6 +39,7 @@ const footerSections = [
     {
         title: 'Empresa',
         links: [
+            { name: 'FAQ', href: '/faq' },
             { name: 'Contacto', href: '/contacto' },
             { name: 'Acceso', href: '/admin/login' },
         ]
@@ -95,9 +96,12 @@ export default function Footer({
         },
         {
             title: 'Empresa',
-            links: navLinks
-                .filter(l => l.location === 'FOOTER_EMPRESA')
-                .map(link => ({ name: link.name, href: link.href }))
+            links: [
+                { name: 'FAQ', href: '/faq' },
+                ...navLinks
+                    .filter(l => l.location === 'FOOTER_EMPRESA')
+                    .map(link => ({ name: link.name, href: link.href }))
+            ]
         }
     ]
 
