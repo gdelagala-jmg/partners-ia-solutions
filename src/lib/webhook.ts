@@ -18,18 +18,23 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
             .trim();
 
         // Limpiar contenido HTML pero manteniendo el texto plano legible
-        const cleanContent = (post.content || '')
+        let cleanContent = (post.content || '')
             .replace(/<[^>]*>?/gm, '')
             .replace(/&nbsp;/g, ' ')
             .replace(/\s+/g, ' ')
-            .trim()
-            .substring(0, 1500) + '...';
+            .trim();
+
+        if (cleanContent.length > 1500) {
+            cleanContent = cleanContent.substring(0, 1497) + '...';
+        }
 
         // Manejo de compatibilidad de imágenes para Google Business (Sólo soporta PNG/JPG/JPEG)
         let finalImageUrl = 'https://www.partnersiasolutions.com/logo-ias.png';
         const rawImageUrl = post.coverImage || '';
         
         if (rawImageUrl) {
+            // Google Business es estricto: solo JPG, JPEG o PNG. 
+            // Si es WEBP u otro formato, usamos el logo por defecto para evitar que GMB rechace el post.
             const isSupported = /\.(jpg|jpeg|png)$/i.test(rawImageUrl);
             if (isSupported) {
                 finalImageUrl = rawImageUrl.startsWith('http') 

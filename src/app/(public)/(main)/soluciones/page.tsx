@@ -55,18 +55,17 @@ export default function SolutionsPage() {
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-                    <PageBadge text="Ecosistemas de IA a Medida" icon={<Cpu size={14} className="text-blue-500" />} />
-
+                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">
-                            Soluciones de IA para <br className="hidden md:block"/> <span className="text-blue-600">cada Sector</span>
+                        <PageBadge text="Ecosistemas de IA a Medida" icon={<Cpu size={14} className="text-blue-500" />} />
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight leading-tight">
+                            Soluciones de IA por <br className="hidden md:block"/> <span className="text-blue-600">Sector</span>
                         </h1>
-                        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-base md:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
                             Descubre cómo nuestros agentes inteligentes diseñados a medida están transformando la productividad y la estrategia en tu sector específico.
                         </p>
                     </motion.div>

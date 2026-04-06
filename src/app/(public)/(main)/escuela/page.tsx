@@ -41,21 +41,19 @@ export default function SchoolPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-8 lg:py-8 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+            <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
+                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="flex justify-center">
-                            <PageBadge text="Academy" icon={<GraduationCap size={14} className="text-blue-500" />} />
-                        </div>
+                        <PageBadge text="Academy" icon={<GraduationCap size={14} className="text-blue-500" />} />
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
-                            Domina la <span className="text-blue-500">Inteligencia Artificial</span>
+                            Domina la <span className="text-blue-500">IA</span>
                         </h1>
-                        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                            Cursos prácticos diseñados para ejecutivos, desarrolladores y equipos que quieren liderar la revolución de la IA.
+                        <p className="text-base md:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+                            Cursos prácticos diseñados para ejecutivos y equipos que quieren liderar la revolución de la IA en sus sectores.
                         </p>
                     </motion.div>
                 </div>

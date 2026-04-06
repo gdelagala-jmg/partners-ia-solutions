@@ -68,17 +68,15 @@ export default function TeamPage() {
                     />
                 </div>
 
-                <div className="container mx-auto max-w-6xl relative z-10">
-                    <div className="flex justify-center mb-0">
-                        <PageBadge text="Expertos en Innovación Inteligente" icon={<Users size={14} className="text-blue-500" />} />
-                    </div>
+                <div className="container mx-auto max-w-4xl relative z-10 text-center">
+                    <PageBadge text="Expertos en Innovación Inteligente" icon={<Users size={14} className="text-blue-500" />} />
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                         className="text-center"
                     >
-                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4 leading-[1.1] tracking-tight">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-slate-900 mb-4 leading-[1.1] tracking-tight">
                             "No predecimos el futuro de la IA: <br />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
                                 lo construimos para tu empresa.

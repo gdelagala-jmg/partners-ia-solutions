@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink } from 'lucide-react'
+import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink, RefreshCw } from 'lucide-react'
 import NewsForm from '@/components/admin/NewsForm'
 import ImportModal from '@/components/admin/ImportModal'
 import AdminTable from '@/components/admin/AdminTable'
@@ -14,6 +14,7 @@ export default function NewsAdminPage() {
     const [showImportModal, setShowImportModal] = useState(false)
     const [currentPost, setCurrentPost] = useState<any>(null)
     const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all')
+    const [isSyncing, setIsSyncing] = useState<string | null>(null)
 
     const filteredPosts = posts.filter(post => {
         if (filter === 'published') return post.published
@@ -70,6 +71,43 @@ export default function NewsAdminPage() {
             if (res.ok) fetchPosts()
         } catch (error) {
             console.error('Error updating status:', error)
+        }
+    }
+
+    const handleSync = async (id: string) => {
+        setIsSyncing(id)
+        try {
+            const res = await fetch(`/api/news/${id}/sync`, { method: 'POST' })
+            if (res.ok) {
+                alert('Noticia enviada a Make correctamente (Google Business)')
+            } else {
+                const err = await res.json()
+                alert(`Error al sincronizar: ${err.error || 'Desconocido'}`)
+            }
+        } catch (error) {
+            console.error('Error syncing:', error)
+            alert('Error de conexión al sincronizar')
+        } finally {
+            setIsSyncing(null)
+        }
+    }
+
+    const handleSyncAll = async () => {
+        if (!confirm(`Se enviarán todas las noticias publicadas (${posts.filter(p => p.published).length}) a Google Business Profile. ¿Deseas continuar?`)) return
+        setIsSyncing('all')
+        try {
+            const res = await fetch('/api/news/sync-all', { method: 'POST' })
+            if (res.ok) {
+                alert('Sincronización masiva iniciada. Las noticias aparecerán en Google Business en unos momentos.')
+            } else {
+                const err = await res.json()
+                alert(`Error: ${err.error || 'Desconocido'}`)
+            }
+        } catch (error) {
+            console.error('Error syncing all:', error)
+            alert('Error de conexión')
+        } finally {
+            setIsSyncing(null)
         }
     }
 
@@ -176,6 +214,11 @@ export default function NewsAdminPage() {
                     <AdminActionMenu
                         actions={[
                             { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
+                            ...(post.published ? [{ 
+                                label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
+                                icon: RefreshCw, 
+                                onClick: () => handleSync(post.id) 
+                            }] : []),
                             { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
                             { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
                         ]}
@@ -201,6 +244,14 @@ export default function NewsAdminPage() {
                 </div>
                 {!isEditing && (
                     <div className="flex items-center gap-3">
+                        <button
+                            onClick={handleSyncAll}
+                            disabled={isSyncing === 'all'}
+                            className="flex-1 sm:flex-none flex items-center justify-center px-5 py-2.5 bg-blue-50/50 text-blue-600 rounded-2xl hover:bg-blue-100/50 transition-all font-semibold border border-blue-200/50 shadow-sm disabled:opacity-50"
+                        >
+                            <RefreshCw size={18} className={`mr-2 ${isSyncing === 'all' ? 'animate-spin' : ''}`} />
+                            {isSyncing === 'all' ? 'Sincronizando...' : 'Sincronizar Todo'}
+                        </button>
                         <button
                             onClick={() => setShowImportModal(true)}
                             className="flex-1 sm:flex-none flex items-center justify-center px-5 py-2.5 bg-white/60 backdrop-blur-md text-[#1D1D1F] rounded-2xl hover:bg-white/80 transition-all font-semibold border border-white/40 shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
@@ -297,6 +348,11 @@ export default function NewsAdminPage() {
                                     <AdminActionMenu
                                         actions={[
                                             { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
+                                            ...(post.published ? [{ 
+                                                label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
+                                                icon: RefreshCw, 
+                                                onClick: () => handleSync(post.id) 
+                                            }] : []),
                                             { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
                                             { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
                                         ]}

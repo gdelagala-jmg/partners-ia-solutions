@@ -87,34 +87,30 @@ export default function FAQPage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-          <PageBadge 
-            text="Centro de Soporte" 
-            icon={<HelpCircle size={14} className="text-blue-500" />} 
-          />
-          <motion.h1 
+      <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
+        <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 tracking-tight"
+            transition={{ duration: 0.6 }}
           >
-            Preguntas Frecuentes
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed font-medium"
-          >
-            Todo lo que necesitas saber sobre cómo la Inteligencia Artificial de Partners IA Solutions puede transformar tu negocio.
-          </motion.p>
+            <PageBadge 
+              text="Centro de Soporte" 
+              icon={<HelpCircle size={14} className="text-blue-500" />} 
+            />
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
+              Preguntas Frecuentes
+            </h1>
+            <p className="text-base md:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+              Todo lo que necesitas saber sobre cómo la Inteligencia Artificial de Partners IA Solutions puede transformar tu negocio.
+            </p>
+          </motion.div>
         </div>
       </section>
 
       {/* FAQ Categories & Items */}
-      <section className="pb-24 px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto space-y-16">
+      <section className="py-20 px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-20">
           {faqCategories.map((category, catIdx) => (
             <motion.div 
               key={category.title}
@@ -122,15 +118,18 @@ export default function FAQPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: catIdx * 0.1 }}
-              className="space-y-6"
+              className="group"
             >
-              <div className="flex items-center gap-3 px-2">
-                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center border border-gray-100 shadow-sm transition-transform group-hover:scale-110 duration-500">
                   {category.icon}
                 </div>
-                <h2 className="text-xl md:text-2xl font-bold text-black tracking-tight">
-                  {category.title}
-                </h2>
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 tracking-tight">
+                    {category.title}
+                  </h2>
+                  <div className="h-1 w-8 bg-blue-500/20 rounded-full mt-1 group-hover:w-12 transition-all duration-500" />
+                </div>
               </div>
               
               <div className="grid gap-4">
