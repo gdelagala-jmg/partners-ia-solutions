@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import NewsDetailClient from '@/components/news/NewsDetailClient'
+import JSONLD from '@/components/seo/JSONLD'
 
 export const dynamic = 'force-dynamic'
 
@@ -83,5 +84,65 @@ export default async function NewsDetailPage({ params }: Props) {
         notFound()
     }
 
-    return <NewsDetailClient post={post} />
+    const domain = 'https://www.partnersiasolutions.com'
+    const url = `${domain}/noticias/${slug}`
+    const imageUrl = post.coverImage ? 
+        (post.coverImage.startsWith('http') ? post.coverImage : `${domain}${post.coverImage}`) : 
+        `${domain}/logo-ias.png`
+
+    const articleSchema = {
+        headline: post.title,
+        image: imageUrl,
+        datePublished: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+        dateModified: post.updatedAt?.toISOString() || post.createdAt.toISOString(),
+        author: {
+            '@type': 'Organization',
+            name: 'Partners IA Solutions',
+            url: domain
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'Partners IA Solutions',
+            logo: {
+                '@type': 'ImageObject',
+                url: `${domain}/logo-ias.png`
+            }
+        },
+        description: post.content.substring(0, 160).replace(/<[^>]*>/g, ''),
+        mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': url
+        }
+    }
+
+    const breadcrumbSchema = {
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Inicio',
+                item: domain
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Noticias',
+                item: `${domain}/noticias`
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: post.title,
+                item: url
+            }
+        ]
+    }
+
+    return (
+        <>
+            <JSONLD type="NewsArticle" data={articleSchema} />
+            <JSONLD type="BreadcrumbList" data={breadcrumbSchema} />
+            <NewsDetailClient post={post} />
+        </>
+    )
 }

@@ -28,6 +28,17 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
             cleanContent = cleanContent.substring(0, 1497) + '...';
         }
 
+        // Prependemos la fecha de publicación al contenido para que Google Business lo muestre (limpio y visual)
+        if (post.publishedAt) {
+            const date = new Date(post.publishedAt);
+            const formattedDate = date.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            cleanContent = `📅 Publicado el ${formattedDate}\n\n${cleanContent}`;
+        }
+
         // Manejo de compatibilidad de imágenes para Google Business (Sólo soporta PNG/JPG/JPEG)
         let finalImageUrl = 'https://www.partnersiasolutions.com/logo-ias.png';
         const rawImageUrl = post.coverImage || '';
@@ -54,14 +65,19 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
             publishedAt: post.publishedAt
         };
 
-        // El fetch no tiene await bloqueante estricto en la respuesta para no ralentizar la API
-        fetch(url, {
+        // El fetch tiene await para asegurar que se complete antes de que la función finalice (especialmente en Vercel)
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
-        }).catch(err => console.error('Error enviando webhook a Make:', err));
+        })
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Make.com responded with ${response.status}: ${errorText}`);
+        }
         
-        console.log('Webhook dispatched to Make.com for post:', post.slug);
+        console.log('Webhook successfully delivered to Make.com for post:', post.slug);
 
     } catch (error) {
         console.error('Webhook Error:', error);

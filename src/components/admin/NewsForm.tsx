@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { Calendar, Upload, X, Loader2, Tag, Plus, Code2, Eye, Zap } from 'lucide-react'
+import { Calendar, Upload, X, Loader2, Tag, Plus, Code2, Eye, Zap, Share2, CheckCircle2 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
 // Dynamic import so SSR doesn't try to load browser-only Quill
@@ -222,6 +222,8 @@ function SelectableMetadata({
 export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     const [uploading, setUploading] = useState(false)
     const [analyzing, setAnalyzing] = useState(false)
+    const [syncing, setSyncing] = useState(false)
+    const [syncSuccess, setSyncSuccess] = useState(false)
     const [analysedFields, setAnalysedFields] = useState<string[]>([])
     const [editorMode, setEditorMode] = useState<'visual' | 'html'>('visual')
     const [htmlContent, setHtmlContent] = useState(initialData?.content || '')
@@ -473,6 +475,24 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
         }
     }
 
+    // --- Sync to Google Business Manual Trigger ---
+    const handleManualSync = async () => {
+        if (!initialData?.id) return
+        setSyncing(true)
+        setSyncSuccess(false)
+        try {
+            const res = await fetch(`/api/news/${initialData.id}/sync`, { method: 'POST' })
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.error || 'Sync failed')
+            setSyncSuccess(true)
+            setTimeout(() => setSyncSuccess(false), 3000)
+        } catch (err: any) {
+            alert('Error al sincronizar: ' + err.message)
+        } finally {
+            setSyncing(false)
+        }
+    }
+
     // Inject quill css once
     useEffect(() => {
         const id = 'quill-css'
@@ -621,19 +641,43 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
                         Metadatos Inteligentes
                     </h3>
                     <div className="flex flex-col items-center sm:items-end gap-2 text-right">
-                        <button
-                            type="button"
-                            onClick={analyzeContent}
-                            disabled={analyzing}
-                            className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
-                        >
-                            {analyzing ? (
-                                <Loader2 size={16} className="animate-spin" />
-                            ) : (
-                                <Zap size={16} className="fill-white" />
+                        <div className="flex gap-2">
+                            {initialData?.id && (
+                                <button
+                                    type="button"
+                                    onClick={handleManualSync}
+                                    disabled={syncing}
+                                    title="Sincronizar con Google Business (Make.com)"
+                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all border shadow-sm transform hover:scale-[1.02] active:scale-[0.98] ${
+                                        syncSuccess 
+                                            ? 'bg-green-50 border-green-200 text-green-700' 
+                                            : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                                    }`}
+                                >
+                                    {syncing ? (
+                                        <Loader2 size={16} className="animate-spin" />
+                                    ) : syncSuccess ? (
+                                        <CheckCircle2 size={16} className="text-green-600" />
+                                    ) : (
+                                        <Share2 size={16} className="text-blue-500" />
+                                    )}
+                                    {syncing ? 'Sincronizando...' : syncSuccess ? 'Sincronizado' : 'Sincronizar GMB'}
+                                </button>
                             )}
-                            {analyzing ? 'Procesando Magia...' : 'Generar Mágicamente'}
-                        </button>
+                            <button
+                                type="button"
+                                onClick={analyzeContent}
+                                disabled={analyzing}
+                                className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+                            >
+                                {analyzing ? (
+                                    <Loader2 size={16} className="animate-spin" />
+                                ) : (
+                                    <Zap size={16} className="fill-white" />
+                                )}
+                                {analyzing ? 'Procesando Magia...' : 'Generar Mágicamente'}
+                            </button>
+                        </div>
                         {analysedFields.length > 0 && (
                             <p className="text-[10px] text-green-600 font-medium animate-fade-in pr-2">
                                 ✨ Detectado: {analysedFields.slice(0, 3).join(', ')}{analysedFields.length > 3 ? '...' : ''}

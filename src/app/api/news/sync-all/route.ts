@@ -19,13 +19,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true, message: 'No published news to sync' })
         }
 
-        // Trigger webhook for each post
-        // Using a loop with a small delay for safety, although triggerMakeWebhook is non-blocking
-        for (const post of posts) {
-            await triggerMakeWebhook(post, true)
-            // Pequeño retardo de 100ms para evitar saturar el webhook de Make si hay cientos de noticias
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
+        // Disparar webhooks en paralelo para evitar timeout de Vercel (especialmente para 49 noticias)
+        await Promise.all(posts.map(post => triggerMakeWebhook(post, true)));
 
         return NextResponse.json({ 
             success: true, 

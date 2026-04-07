@@ -27,7 +27,7 @@ export default function AvisoLegalPage() {
             </p>
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Razón Social:</strong> Partners IA Solutions S.L.</li>
-              <li><strong>CIF:</strong> 12345678Z</li>
+              <li><strong>CIF:</strong> B26856138</li>
               <li><strong>Dirección:</strong> Calle Club 1 Oficina 4 48930 Las Arenas Getxo - Bizkaia</li>
               <li><strong>Email:</strong> <a href="mailto:info@partnersiasolutions.com" className="text-blue-600 hover:underline">info@partnersiasolutions.com</a></li>
             </ul>

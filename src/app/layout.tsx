@@ -64,6 +64,8 @@ export const metadata: Metadata = {
   },
 };
 
+import JSONLD, { getOrganizationSchema } from "@/components/seo/JSONLD";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -72,6 +74,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
+        <JSONLD type="Organization" data={getOrganizationSchema()} />
         {children}
         <CookieBanner />
         <AssistantWidget />
