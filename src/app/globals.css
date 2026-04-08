@@ -201,6 +201,17 @@ html {
       padding-right: 3rem;
     }
   }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }
 
 /* Keyframe Animations */
@@ -246,6 +257,19 @@ html {
   100% {
     transform: translateX(-50%);
   }
+}
+
+@keyframes clients-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-clients-marquee {
+  animation: clients-marquee 28s linear infinite;
+}
+
+.animate-clients-marquee:hover {
+  animation-play-state: paused;
 }
 
 /* Focus States */
