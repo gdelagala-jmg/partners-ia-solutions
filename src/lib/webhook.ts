@@ -24,10 +24,6 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
             .replace(/\s+/g, ' ')
             .trim();
 
-        if (cleanContent.length > 1500) {
-            cleanContent = cleanContent.substring(0, 1497) + '...';
-        }
-
         // Prependemos la fecha de publicación al contenido para que Google Business lo muestre (limpio y visual)
         if (post.publishedAt) {
             const date = new Date(post.publishedAt);
@@ -37,6 +33,11 @@ export async function triggerMakeWebhook(post: any, isNewPublish: boolean) {
                 year: 'numeric'
             });
             cleanContent = `📅 Publicado el ${formattedDate}\n\n${cleanContent}`;
+        }
+
+        // Truncar al final para asegurar el límite de 1500 caracteres de Google Business
+        if (cleanContent.length > 1500) {
+            cleanContent = cleanContent.substring(0, 1497) + '...';
         }
 
         // Manejo de compatibilidad de imágenes para Google Business (Sólo soporta PNG/JPG/JPEG)
