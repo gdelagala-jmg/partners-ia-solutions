@@ -16,26 +16,57 @@ export default function AssistantWidget() {
     company: ''
   })
   const [isSystemActive, setIsSystemActive] = useState<boolean | null>(null)
-  
+  const [messages, setMessages] = useState<{id: string, role: string, content: string}[]>([])
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const chatParent = useRef<HTMLDivElement>(null)
   
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat({
-    api: '/api/assistant/chat?v=2',
-    onError: (err) => {
-      console.error('useChat Error:', err);
-      window.alert(`Error connecting to AI: ${err.message || 'Unknown error'}`);
-    },
-    onFinish: (message) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value)
+  }
+
+  const sendManualMessage = async (content: string) => {
+    if (!content.trim() || isLoading) return
+    
+    setIsLoading(true)
+    const userMsg = { id: Date.now().toString(), role: 'user', content }
+    const newMessages = [...messages, userMsg]
+    setMessages(newMessages)
+    
+    try {
+      const res = await fetch('/api/assistant/chat?v=3', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages })
+      })
+      
+      const data = await res.json()
+      
+      if (!res.ok) {
+        throw new Error(data.details || data.error || 'Error en servidor')
+      }
+      
+      const assistantMsg = { id: (Date.now() + 1).toString(), role: 'assistant', content: data.text }
+      const finalMessages = [...newMessages, assistantMsg]
+      setMessages(finalMessages)
+
       // Si el asistente menciona contacto o agenda, podríamos disparar el formulario
-      if (message.content.toLowerCase().includes('contacto') || 
-          message.content.toLowerCase().includes('email') ||
-          messages.length >= 6) {
+      if (data.text.toLowerCase().includes('contacto') || 
+          data.text.toLowerCase().includes('email') ||
+          finalMessages.length >= 6) {
         if (!leadSaved && !showLeadForm) {
             setTimeout(() => setShowLeadForm(true), 2000)
         }
       }
+      
+    } catch (err: any) {
+      console.error(err)
+      window.alert("Fallo de conexión API: " + err.message)
+      setMessages([...newMessages, { id: 'err', role: 'assistant', content: `[Error del Servidor]: No me pude conectar con Gemini. (${err.message})` }])
+    } finally {
+      setIsLoading(false)
     }
-  })
+  }
 
   useEffect(() => {
     const checkStatus = async () => {
@@ -251,9 +282,7 @@ export default function AssistantWidget() {
                       if (!input.trim() || isLoading) return;
                       const msg = input;
                       setInput('');
-                      append({ role: 'user', content: msg }).catch((err) => {
-                        window.alert("Error API: " + err.message);
-                      });
+                      sendManualMessage(msg);
                     }
                   }}
                   placeholder="Escribe tu duda..."
@@ -267,9 +296,7 @@ export default function AssistantWidget() {
                     if (!input.trim() || isLoading) return;
                     const msg = input;
                     setInput('');
-                    append({ role: 'user', content: msg }).catch((err) => {
-                      window.alert("Error API: " + err.message);
-                    });
+                    sendManualMessage(msg);
                   }}
                   className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 pointer-events-auto cursor-pointer"
                 >

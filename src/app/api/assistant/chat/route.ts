@@ -1,4 +1,4 @@
-import { streamText } from 'ai'
+import { generateText } from 'ai'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 
 // Configuración explícita del proveedor
@@ -12,8 +12,8 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json()
     
-    const result = streamText({
-      model: google('gemini-1.5-flash'), // O google('models/gemini-1.5-flash')
+    const result = await generateText({
+      model: google('gemini-1.5-flash'),
       messages: [
         {
           role: 'system',
@@ -23,12 +23,9 @@ export async function POST(req: Request) {
       ],
     })
 
-    return result.toDataStreamResponse()
-  } catch (error) {
+    return Response.json({ text: result.text })
+  } catch (error: any) {
     console.error('Chat API Error:', error)
-    return new Response(JSON.stringify({ error: 'Failed to process chat' }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    })
+    return Response.json({ error: 'Failed to process chat', details: error.message }, { status: 500 })
   }
 }
