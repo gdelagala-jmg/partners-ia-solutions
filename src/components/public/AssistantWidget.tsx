@@ -219,13 +219,17 @@ const formatMessage = (text: string) => {
                     )}
                     
                     {/* Generative UI Cards */}
-                    {m.toolCalls && m.toolCalls.map((tool: any, idx) => {
-                      if (tool.toolName === 'proponer_reunion') {
+                    {m.toolCalls && Array.isArray(m.toolCalls) && m.toolCalls.map((tool: any, idx) => {
+                      const toolName = tool.toolName || tool.name;
+                      const args = tool.args || tool.arguments || {};
+                      const toolId = tool.toolCallId || tool.id || idx;
+
+                      if (toolName === 'proponer_reunion') {
                         return (
                           <motion.div 
                             initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            key={tool.toolCallId || idx} 
+                            key={toolId} 
                             className="bg-white border border-gray-200 rounded-[1.25rem] overflow-hidden shadow-sm w-full mt-1"
                           >
                             <div className="bg-gradient-to-r from-blue-50 to-indigo-50/30 px-4 py-3 border-b border-gray-100 flex items-center gap-2">
@@ -234,9 +238,13 @@ const formatMessage = (text: string) => {
                             </div>
                             <div className="p-4 space-y-3">
                               <div className="text-[11.5px] text-gray-600 leading-relaxed">
-                                <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full font-bold mb-2 tracking-tight">{tool.args.tipo_servicio}</span>
-                                <br />
-                                {tool.args.contexto}
+                                {args.tipo_servicio && (
+                                  <>
+                                    <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full font-bold mb-2 tracking-tight">{args.tipo_servicio}</span>
+                                    <br />
+                                  </>
+                                )}
+                                {args.contexto || 'Conversemos sobre cómo podemos integrar IA en tu flujo de trabajo de forma exitosa.'}
                               </div>
                               <button 
                                 onClick={() => window.open('https://cal.com/partnersiasolutions', '_blank')} 
