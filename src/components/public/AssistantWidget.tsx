@@ -246,7 +246,7 @@ const formatMessage = (text: string) => {
                         <input 
                           required
                           placeholder="Nombre completo"
-                          className="w-full bg-white/10 border border-white/10 rounded-xl px-8 py-2 text-[11px] focus:outline-none focus:bg-white/20 transition-all font-medium"
+                          className="w-full bg-white/10 border border-white/10 rounded-xl px-8 py-2 text-[16px] sm:text-[11px] focus:outline-none focus:bg-white/20 transition-all font-medium"
                           value={leadData.name}
                           onChange={e => setLeadData({...leadData, name: e.target.value})}
                         />
@@ -256,7 +256,7 @@ const formatMessage = (text: string) => {
                         <input 
                           required type="email"
                           placeholder="Email corporativo"
-                          className="w-full bg-white/10 border border-white/10 rounded-xl px-8 py-2 text-[11px] focus:outline-none focus:bg-white/20 transition-all font-medium"
+                          className="w-full bg-white/10 border border-white/10 rounded-xl px-8 py-2 text-[16px] sm:text-[11px] focus:outline-none focus:bg-white/20 transition-all font-medium"
                           value={leadData.email}
                           onChange={e => setLeadData({...leadData, email: e.target.value})}
                         />
@@ -265,7 +265,7 @@ const formatMessage = (text: string) => {
                         <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={12} />
                         <input 
                           placeholder="Empresa"
-                          className="w-full bg-white/10 border border-white/10 rounded-xl px-8 py-2 text-[11px] focus:outline-none focus:bg-white/20 transition-all font-medium"
+                          className="w-full bg-white/10 border border-white/10 rounded-xl px-8 py-2 text-[16px] sm:text-[11px] focus:outline-none focus:bg-white/20 transition-all font-medium"
                           value={leadData.company}
                           onChange={e => setLeadData({...leadData, company: e.target.value})}
                         />
@@ -310,7 +310,7 @@ const formatMessage = (text: string) => {
                     }
                   }}
                   placeholder="Escribe tu duda..."
-                  className="flex-1 bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-black/5 shadow-sm"
+                  className="flex-1 bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-[16px] sm:text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-black/5 shadow-sm"
                 />
                 <button 
                   type="button"
