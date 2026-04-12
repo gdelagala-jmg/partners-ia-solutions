@@ -60,6 +60,9 @@ model NewsPost {
   aiTool          String?
   company         String?
   podcastAudioUrl String?   @db.Text
+  gmbSyncStatus   String    @default("PENDING") // PENDING, SUCCESS, ERROR
+  gmbLastSync     DateTime?
+  gmbErrorMessage String?   @db.Text
 }
 
 model TeamMember {

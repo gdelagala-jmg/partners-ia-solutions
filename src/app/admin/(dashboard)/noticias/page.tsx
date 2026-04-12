@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink, RefreshCw } from 'lucide-react'
+import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink, RefreshCw, CheckCircle2, AlertCircle, Clock } from 'lucide-react'
 import NewsForm from '@/components/admin/NewsForm'
 import ImportModal from '@/components/admin/ImportModal'
 import AdminTable from '@/components/admin/AdminTable'
@@ -89,6 +89,7 @@ export default function NewsAdminPage() {
             alert('Error de conexión al sincronizar')
         } finally {
             setIsSyncing(null)
+            fetchPosts()
         }
     }
 
@@ -209,6 +210,45 @@ export default function NewsAdminPage() {
                     </span>
                 )
             )
+        },
+        {
+            header: 'Google Business',
+            accessor: (post: any) => {
+                if (!post.published) return <span className="text-gray-300 text-[10px]">—</span>;
+                
+                const status = post.gmbSyncStatus || 'PENDING';
+                
+                switch (status) {
+                    case 'SUCCESS':
+                        return (
+                            <div className="flex items-center text-green-500 gap-1.5" title={`Sincronizado el ${post.gmbLastSync ? new Date(post.gmbLastSync).toLocaleString() : 'recientemente'}`}>
+                                <CheckCircle2 size={14} />
+                                <span className="text-[10px] font-bold uppercase tracking-wider">OK</span>
+                            </div>
+                        );
+                    case 'ERROR':
+                        return (
+                            <div className="flex items-center text-red-500 gap-1.5 cursor-help" title={post.gmbErrorMessage || 'Error desconocido'}>
+                                <AlertCircle size={14} />
+                                <span className="text-[10px] font-bold uppercase tracking-wider">Error</span>
+                            </div>
+                        );
+                    case 'SYNCING':
+                        return (
+                            <div className="flex items-center text-blue-500 gap-1.5">
+                                <RefreshCw size={14} className="animate-spin" />
+                                <span className="text-[10px] font-bold uppercase tracking-wider">Procesando</span>
+                            </div>
+                        );
+                    default:
+                        return (
+                            <div className="flex items-center text-gray-400 gap-1.5">
+                                <Clock size={14} />
+                                <span className="text-[10px] font-bold uppercase tracking-wider italic opacity-60">Pendiente</span>
+                            </div>
+                        );
+                }
+            }
         },
         {
             header: '',
@@ -346,17 +386,27 @@ export default function NewsAdminPage() {
                                                 {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
                                             </span>
                                         </div>
-                                        <div className="mt-2 text-xs">
-                                            {post.published ? (
-                                                <span className="text-green-600 font-medium flex items-center">
-                                                    <span className="w-1 h-1 rounded-full bg-green-500 mr-1.5" /> Publicada
-                                                </span>
-                                            ) : (
-                                                <span className="text-gray-400 font-medium flex items-center">
-                                                    <span className="w-1 h-1 rounded-full bg-gray-300 mr-1.5" /> Borrador
-                                                </span>
-                                            )}
-                                        </div>
+                                        {post.published && (
+                                            <div className="mt-2">
+                                                {post.gmbSyncStatus === 'SUCCESS' ? (
+                                                    <span className="text-[10px] text-green-500 font-bold flex items-center">
+                                                        <CheckCircle2 size={10} className="mr-1" /> GMB OK
+                                                    </span>
+                                                ) : post.gmbSyncStatus === 'ERROR' ? (
+                                                    <span className="text-[10px] text-red-500 font-bold flex items-center">
+                                                        <AlertCircle size={10} className="mr-1" /> GMB ERROR
+                                                    </span>
+                                                ) : post.gmbSyncStatus === 'SYNCING' ? (
+                                                    <span className="text-[10px] text-blue-500 font-bold flex items-center">
+                                                        <RefreshCw size={10} className="mr-1 animate-spin" /> GMB SYNCING
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-[10px] text-gray-400 italic flex items-center">
+                                                        <Clock size={10} className="mr-1" /> GMB PENDIENTE
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-end gap-3">

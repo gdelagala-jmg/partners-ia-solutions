@@ -74,6 +74,17 @@ export async function POST(request: Request) {
             },
         })
 
+        // -- IMPORTANTE: Disparar Sincronización con Google Business Profile --
+        if (post.published) {
+            try {
+                // Importación dinámica para evitar ciclos de dependencia si fuera necesario
+                const { triggerMakeWebhook } = await import('@/lib/webhook')
+                await triggerMakeWebhook(post, true)
+            } catch (webhookError) {
+                console.error('[GMB Sync] Failed to trigger GMB webhook:', webhookError)
+            }
+        }
+
         // Chained Podcast Sync
         let podcastEpisode = null
         if (body.podcastAudioUrl) {
