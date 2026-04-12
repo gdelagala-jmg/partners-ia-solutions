@@ -235,25 +235,29 @@ export default function AssistantWidget() {
             </div>
 
             {/* Input Area */}
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit(e);
-              }}
-              className="p-4 bg-white/20 border-t border-black/5"
-            >
+            <div className="p-4 bg-white/20 border-t border-black/5">
               <div className="relative flex items-center gap-2">
                 <input 
                   disabled={isLoading}
                   value={input}
                   onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSubmit(e as any);
+                    }
+                  }}
                   placeholder="Escribe tu duda..."
                   className="flex-1 bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-black/5 shadow-sm"
                 />
                 <button 
-                  type="submit"
+                  type="button"
                   disabled={isLoading || !input}
-                  className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 pointer-events-auto"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSubmit(e as any);
+                  }}
+                  className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 cursor-pointer"
                 >
                   <Send size={16} />
                 </button>
@@ -261,7 +265,7 @@ export default function AssistantWidget() {
               <div className="text-[8px] text-center text-gray-400 font-black uppercase tracking-[0.3em] mt-3 opacity-60">
                 Powered by Partners IA Solutions
               </div>
-            </form>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
