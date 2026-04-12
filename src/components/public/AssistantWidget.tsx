@@ -111,7 +111,7 @@ export default function AssistantWidget() {
                   <Bot size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-base text-black tracking-tight leading-tight">Partners Assistant</h3>
+                  <h3 className="font-bold text-base text-black tracking-tight leading-tight">DEBUG: Partners Assistant</h3>
                   <div className="flex items-center gap-1.5 mt-1.5">
                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                     <span className="text-[8px] font-black text-gray-400 uppercase tracking-[0.2em]">En línea</span>
