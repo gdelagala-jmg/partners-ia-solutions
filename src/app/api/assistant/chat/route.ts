@@ -19,21 +19,19 @@ export async function POST(req: Request) {
         {
           role: 'system',
           content: `Eres el Asistente Experto de Partners IA Solutions. Tu misión es ayudar al usuario con un tono Apple-style (minimalista y premium). 
-          Si notas interés real en implementar IA, desarrollar software a medida, o si el usuario pide contacto, DEBES USAR la herramienta "proponer_reunion" para enviar una tarjeta interactiva, y añadir un mensaje corto invitándole a elegir un horario.`
+          Si notas interés real en implementar IA, desarrollar software a medida, o si el usuario pide contacto, DEBES USAR la herramienta "mostrar_formulario_contacto" para que el usuario pueda dejarnos sus datos. No uses enlaces externos para agendar.`
         },
         ...messages,
       ],
       tools: {
-        proponer_reunion: tool({
-          description: 'Muestra una tarjeta interactiva tipo calendario (UI Tool) para que el cliente agende una videollamada con un experto de Partners IA. Úsalo si el cliente pide contacto, precios, o detalla un proyecto.',
+        mostrar_formulario_contacto: tool({
+          description: 'Muestra un formulario de contacto profesional para capturar los datos del lead (nombre, email, empresa). Úsalo cuando el cliente demuestre interés comercial o pida contacto.',
           parameters: z.object({
-            contexto: z.string().describe('Breve contexto de por qué estamos ofreciendo la reunión basado en lo que ha dicho el cliente.'),
-            tipo_servicio: z.enum(['Agentes IA', 'Automatización', 'Desarrollo a Medida', 'Consultoría General']).describe('El servicio que mejor encaja con la necesidad del cliente.')
+            motivo: z.string().describe('Breve motivo de por qué mostramos el formulario basado en la charla.'),
+            prioridad: z.enum(['Alta', 'Media', 'Baja']).optional()
           }),
-          execute: async ({ contexto, tipo_servicio }) => {
-            // El backend no ejecuta nada real aquí, simplemente devuelve los datos
-            // que luego el frontend usará para renderizar la tarjeta interactiva.
-            return { ui_type: 'calendar_card', contexto, tipo_servicio };
+          execute: async ({ motivo }) => {
+            return { ui_type: 'contact_form', motivo };
           }
         })
       }

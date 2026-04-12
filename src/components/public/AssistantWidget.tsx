@@ -224,7 +224,7 @@ const formatMessage = (text: string) => {
                       const args = tool.args || tool.arguments || {};
                       const toolId = tool.toolCallId || tool.id || idx;
 
-                      if (toolName === 'proponer_reunion') {
+                      if (toolName === 'mostrar_formulario_contacto') {
                         return (
                           <motion.div 
                             initial={{ y: 10, opacity: 0 }}
@@ -232,25 +232,19 @@ const formatMessage = (text: string) => {
                             key={toolId} 
                             className="bg-white border border-gray-200 rounded-[1.25rem] overflow-hidden shadow-sm w-full mt-1"
                           >
-                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50/30 px-4 py-3 border-b border-gray-100 flex items-center gap-2">
-                              <Calendar className="text-blue-600" size={16} />
-                              <span className="font-bold text-[13px] text-gray-800 tracking-tight">Agendar Videollamada</span>
+                            <div className="bg-gradient-to-r from-gray-50 to-gray-100/30 px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                              <Mail className="text-black" size={16} />
+                              <span className="font-bold text-[13px] text-gray-800 tracking-tight">Solicitud de Información</span>
                             </div>
                             <div className="p-4 space-y-3">
                               <div className="text-[11.5px] text-gray-600 leading-relaxed">
-                                {args.tipo_servicio && (
-                                  <>
-                                    <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full font-bold mb-2 tracking-tight">{args.tipo_servicio}</span>
-                                    <br />
-                                  </>
-                                )}
-                                {args.contexto || 'Conversemos sobre cómo podemos integrar IA en tu flujo de trabajo de forma exitosa.'}
+                                {args.motivo || 'Para brindarte una asesoría personalizada y adaptada a tus necesidades, por favor déjanos tus datos de contacto.'}
                               </div>
                               <button 
-                                onClick={() => window.open('https://cal.com/partnersiasolutions', '_blank')} 
+                                onClick={() => setShowLeadForm(true)} 
                                 className="w-full py-2.5 bg-black text-white rounded-xl text-[12px] font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 shadow-sm"
                               >
-                                Ver Horarios <ExternalLink size={14} />
+                                Abrir Formulario <ChevronRight size={14} />
                               </button>
                             </div>
                           </motion.div>
