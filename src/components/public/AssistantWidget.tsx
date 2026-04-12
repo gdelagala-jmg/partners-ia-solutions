@@ -113,8 +113,27 @@ export default function AssistantWidget() {
 
   if (isSystemActive === false) return null
 
+const formatMessage = (text: string) => {
+  const safeText = text.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  
+  let html = safeText
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-black">$1</strong>')
+    .replace(/^\s*\*\s+(.*)/gm, '<li class="ml-4 mb-1 relative before:content-[\'•\'] before:absolute before:-left-4 before:text-blue-500">$1</li>')
+    .replace(/\n\n/g, '</p><p class="mt-2">')
+    .replace(/\n/g, '<br/>')
+
+  html = html.replace(/<br\/><li/g, '<li').replace(/<\/li><br\/>/g, '</li>')
+
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
+    <div 
+      className="text-[12.5px] leading-[1.6] [&_li]:block [&_strong]:text-current [&_strong]:opacity-90 [&_p:first-child]:mt-0"
+      dangerouslySetInnerHTML={{ __html: `<p>${html}</p>` }} 
+    />
+  )
+}
+
+  return (
+    <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 z-[9999] pointer-events-none flex flex-col items-end">
       <AnimatePresence>
         {!isOpen && (
           <motion.button
@@ -122,11 +141,12 @@ export default function AssistantWidget() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setIsOpen(true)}
-            className="pointer-events-auto w-[40px] h-[40px] bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform relative group border border-white/20 overflow-hidden"
+            className="pointer-events-auto w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform relative group border border-white/20 overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Bot size={25} />
-            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white animate-pulse" />
+            <Bot size={28} className="sm:hidden" />
+            <Bot size={32} className="hidden sm:block" />
+            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-black animate-pulse" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -137,17 +157,17 @@ export default function AssistantWidget() {
             initial={{ y: 20, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
-            className="pointer-events-auto absolute bottom-0 right-0 w-[92vw] sm:w-[400px] h-[600px] max-h-[80vh] flex flex-col bg-white/70 backdrop-blur-2xl border border-white/40 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] overflow-hidden"
+            className="pointer-events-auto relative sm:absolute sm:bottom-0 sm:right-0 w-full sm:w-[400px] h-[65vh] sm:h-[600px] max-h-[85vh] flex flex-col bg-white/70 backdrop-blur-3xl border border-white/60 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] overflow-hidden"
           >
             {/* Header */}
-            <div className="px-5 py-3.5 border-b border-black/5 flex items-center justify-between bg-white/40">
+            <div className="px-4 py-3 sm:px-5 sm:py-3.5 border-b border-black/5 flex items-center justify-between bg-white/50">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center shadow-sm">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-black text-white rounded-xl flex items-center justify-center shadow-sm">
                   <Bot size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-base text-black tracking-tight leading-tight">Partners Assistant</h3>
-                  <div className="flex items-center gap-1.5 mt-1.5">
+                  <h3 className="font-bold text-[15px] sm:text-base text-black tracking-tight leading-tight">Partners Assistant</h3>
+                  <div className="flex items-center gap-1.5 mt-1 sm:mt-1.5">
                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                     <span className="text-[8px] font-black text-gray-400 uppercase tracking-[0.2em]">En línea</span>
                   </div>
@@ -155,26 +175,26 @@ export default function AssistantWidget() {
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 hover:bg-black/5 rounded-full transition-colors"
+                className="p-2 hover:bg-black/5 rounded-full transition-colors"
               >
-                <X size={18} className="text-gray-400" />
+                <X size={20} className="text-gray-400" />
               </button>
             </div>
 
             {/* Chat Messages */}
             <div 
               ref={chatParent}
-              className="flex-1 overflow-y-auto p-4 space-y-3 scroll-smooth"
+              className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth"
             >
               {messages.length === 0 && (
-                <div className="text-center py-6 space-y-3">
-                  <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto border border-white">
-                    <Sparkles className="text-blue-500" size={24} />
+                <div className="text-center py-8 space-y-3">
+                  <div className="w-14 h-14 bg-gradient-to-tr from-gray-50 to-gray-100 rounded-2xl flex items-center justify-center mx-auto border border-white shadow-sm">
+                    <Sparkles className="text-blue-500" size={28} />
                   </div>
-                  <h4 className="text-sm font-bold text-black tracking-tight px-6 leading-tight">
+                  <h4 className="text-[15px] sm:text-base font-bold text-black tracking-tight px-6 leading-tight">
                     Hola, soy tu asistente experto en IA. ¿Cómo puedo ayudarte hoy?
                   </h4>
-                  <p className="text-[10px] text-gray-400 font-bold px-10 leading-relaxed uppercase tracking-wider">
+                  <p className="text-[10px] text-gray-400 font-bold px-10 leading-relaxed uppercase tracking-widest">
                     Asesoría en Agentes, RAG y Automatización.
                   </p>
                 </div>
@@ -185,22 +205,26 @@ export default function AssistantWidget() {
                   key={m.id} 
                   className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`max-w-[85%] px-3.5 py-2.5 rounded-[1.25rem] text-[13px] font-medium leading-normal tracking-tight ${
+                  <div className={`max-w-[85%] sm:max-w-[80%] px-4 py-3 rounded-[1.5rem] ${
                     m.role === 'user' 
-                      ? 'bg-black text-white shadow-md' 
-                      : 'bg-white border border-gray-100 text-black shadow-sm'
+                      ? 'bg-black text-white shadow-md rounded-br-[0.5rem]' 
+                      : 'bg-white border border-gray-100 text-black shadow-sm rounded-bl-[0.5rem]'
                   }`}>
-                    {m.content}
+                    {m.role === 'user' ? (
+                      <span className="text-[13px] font-medium leading-relaxed">{m.content}</span>
+                    ) : (
+                      formatMessage(m.content)
+                    )}
                   </div>
                 </div>
               ))}
               
               {isLoading && (
                 <div className="flex justify-start">
-                   <div className="bg-white border border-gray-100 px-3 py-2 rounded-full flex gap-1">
-                      <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce" />
-                      <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]" />
-                      <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]" />
+                   <div className="bg-white border border-gray-100 px-4 py-3 rounded-[1.5rem] rounded-bl-[0.5rem] flex gap-1.5 shadow-sm items-center h-10">
+                      <div className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce" />
+                      <div className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]" />
+                      <div className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]" />
                    </div>
                 </div>
               )}
