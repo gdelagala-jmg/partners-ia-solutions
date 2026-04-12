@@ -19,8 +19,12 @@ export default function AssistantWidget() {
   
   const chatParent = useRef<HTMLDivElement>(null)
   
-  const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat({
     api: '/api/assistant/chat?v=2',
+    onError: (err) => {
+      console.error('useChat Error:', err);
+      window.alert(`Error connecting to AI: ${err.message || 'Unknown error'}`);
+    },
     onFinish: (message) => {
       // Si el asistente menciona contacto o agenda, podríamos disparar el formulario
       if (message.content.toLowerCase().includes('contacto') || 
@@ -235,35 +239,25 @@ export default function AssistantWidget() {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-white/20 border-t border-black/5">
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit(e);
+              }}
+              className="p-4 bg-white/20 border-t border-black/5"
+            >
               <div className="relative flex items-center gap-2">
                 <input 
                   disabled={isLoading}
                   value={input}
                   onChange={handleInputChange}
-                  onKeyDown={async (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey && input.trim()) {
-                      e.preventDefault();
-                      const content = input;
-                      // Limpiar input ANTES de enviar para que se sienta instantáneo
-                      handleInputChange({ target: { value: '' } } as any);
-                      await append({ role: 'user', content });
-                    }
-                  }}
                   placeholder="Escribe tu duda..."
                   className="flex-1 bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-black/5 shadow-sm"
                 />
                 <button 
-                  type="button"
+                  type="submit"
                   disabled={isLoading || !input}
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    if (!input.trim()) return;
-                    const content = input;
-                    handleInputChange({ target: { value: '' } } as any);
-                    await append({ role: 'user', content });
-                  }}
-                  className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 cursor-pointer"
+                  className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 pointer-events-auto"
                 >
                   <Send size={16} />
                 </button>
@@ -271,7 +265,7 @@ export default function AssistantWidget() {
               <div className="text-[8px] text-center text-gray-400 font-black uppercase tracking-[0.3em] mt-3 opacity-60">
                 Powered by Partners IA Solutions
               </div>
-            </div>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>
