@@ -236,7 +236,10 @@ export default function AssistantWidget() {
 
             {/* Input Area */}
             <form 
-              onSubmit={handleSubmit}
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit(e);
+              }}
               className="p-4 bg-white/20 border-t border-black/5"
             >
               <div className="relative flex items-center gap-2">
@@ -250,7 +253,7 @@ export default function AssistantWidget() {
                 <button 
                   type="submit"
                   disabled={isLoading || !input}
-                  className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200"
+                  className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 pointer-events-auto"
                 >
                   <Send size={16} />
                 </button>
