@@ -255,6 +255,7 @@ export default function AssistantWidget() {
                   disabled={isLoading || !input}
                   onClick={(e) => {
                     e.preventDefault();
+                    window.alert('Intentando enviar a: /api/assistant/chat?v=2');
                     handleSubmit(e as any);
                   }}
                   className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 cursor-pointer"
