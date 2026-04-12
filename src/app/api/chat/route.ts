@@ -1,20 +1,19 @@
 import { streamText } from 'ai'
-import { google } from '@ai-sdk/google'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
 
-// Cambiamos a runtime standard por si hay bloqueos en Edge
+// Configuración explícita del proveedor
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+})
+
 export const runtime = 'nodejs'
 
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json()
     
-    // Verificación rápida de la clave (solo para logs de Vercel)
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-      console.error('ERROR: GOOGLE_GENERATIVE_AI_API_KEY no configurada en Vercel')
-    }
-
     const result = streamText({
-      model: google('gemini-1.5-flash'),
+      model: google('gemini-1.5-flash'), // O google('models/gemini-1.5-flash')
       messages: [
         {
           role: 'system',
