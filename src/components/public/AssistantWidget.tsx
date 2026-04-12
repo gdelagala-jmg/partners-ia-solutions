@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useChat } from '@ai-sdk/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Bot, X, Send, User, ChevronRight, Mail, Phone, Building2, CheckCircle2, Loader2, Sparkles } from 'lucide-react'
+import { Bot, X, Send, User, ChevronRight, Mail, Phone, Building2, CheckCircle2, Loader2, Sparkles, Calendar, ExternalLink } from 'lucide-react'
 
 export default function AssistantWidget() {
   const [isOpen, setIsOpen] = useState(false)
@@ -16,7 +15,7 @@ export default function AssistantWidget() {
     company: ''
   })
   const [isSystemActive, setIsSystemActive] = useState<boolean | null>(null)
-  const [messages, setMessages] = useState<{id: string, role: string, content: string}[]>([])
+  const [messages, setMessages] = useState<{id: string, role: string, content: string, toolCalls?: any[]}[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const chatParent = useRef<HTMLDivElement>(null)
@@ -46,14 +45,13 @@ export default function AssistantWidget() {
         throw new Error(data.details || data.error || 'Error en servidor')
       }
       
-      const assistantMsg = { id: (Date.now() + 1).toString(), role: 'assistant', content: data.text }
+      const assistantMsg = { id: (Date.now() + 1).toString(), role: 'assistant', content: data.text || '', toolCalls: data.toolCalls }
       const finalMessages = [...newMessages, assistantMsg]
       setMessages(finalMessages)
 
       // Si el asistente menciona contacto o agenda, podríamos disparar el formulario
-      if (data.text.toLowerCase().includes('contacto') || 
-          data.text.toLowerCase().includes('email') ||
-          finalMessages.length >= 6) {
+      if ((data.text && (data.text.toLowerCase().includes('contacto') || data.text.toLowerCase().includes('email'))) ||
+          finalMessages.length >= 8) {
         if (!leadSaved && !showLeadForm) {
             setTimeout(() => setShowLeadForm(true), 2000)
         }
@@ -205,16 +203,53 @@ const formatMessage = (text: string) => {
                   key={m.id} 
                   className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`max-w-[85%] sm:max-w-[80%] px-4 py-3 rounded-[1.5rem] ${
-                    m.role === 'user' 
-                      ? 'bg-black text-white shadow-md rounded-br-[0.5rem]' 
-                      : 'bg-white border border-gray-100 text-black shadow-sm rounded-bl-[0.5rem]'
-                  }`}>
-                    {m.role === 'user' ? (
-                      <span className="text-[13px] font-medium leading-relaxed">{m.content}</span>
-                    ) : (
-                      formatMessage(m.content)
+                  <div className={`flex flex-col gap-2 ${m.role === 'user' ? 'items-end' : 'items-start'} max-w-[85%] sm:max-w-[80%]`}>
+                    {m.content && (
+                      <div className={`px-4 py-3 rounded-[1.5rem] ${
+                        m.role === 'user' 
+                          ? 'bg-black text-white shadow-md rounded-br-[0.5rem]' 
+                          : 'bg-white border border-gray-100 text-black shadow-sm rounded-bl-[0.5rem]'
+                      }`}>
+                        {m.role === 'user' ? (
+                          <span className="text-[13px] font-medium leading-relaxed">{m.content}</span>
+                        ) : (
+                          formatMessage(m.content)
+                        )}
+                      </div>
                     )}
+                    
+                    {/* Generative UI Cards */}
+                    {m.toolCalls && m.toolCalls.map((tool: any, idx) => {
+                      if (tool.toolName === 'proponer_reunion') {
+                        return (
+                          <motion.div 
+                            initial={{ y: 10, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            key={tool.toolCallId || idx} 
+                            className="bg-white border border-gray-200 rounded-[1.25rem] overflow-hidden shadow-sm w-full mt-1"
+                          >
+                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50/30 px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                              <Calendar className="text-blue-600" size={16} />
+                              <span className="font-bold text-[13px] text-gray-800 tracking-tight">Agendar Videollamada</span>
+                            </div>
+                            <div className="p-4 space-y-3">
+                              <div className="text-[11.5px] text-gray-600 leading-relaxed">
+                                <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full font-bold mb-2 tracking-tight">{tool.args.tipo_servicio}</span>
+                                <br />
+                                {tool.args.contexto}
+                              </div>
+                              <button 
+                                onClick={() => window.open('https://cal.com/partnersiasolutions', '_blank')} 
+                                className="w-full py-2.5 bg-black text-white rounded-xl text-[12px] font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                              >
+                                Ver Horarios <ExternalLink size={14} />
+                              </button>
+                            </div>
+                          </motion.div>
+                        )
+                      }
+                      return null;
+                    })}
                   </div>
                 </div>
               ))}
