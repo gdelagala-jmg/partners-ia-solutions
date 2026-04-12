@@ -19,7 +19,7 @@ export default function AssistantWidget() {
   
   const chatParent = useRef<HTMLDivElement>(null)
   
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
     api: '/api/assistant/chat?v=2',
     onFinish: (message) => {
       // Si el asistente menciona contacto o agenda, podríamos disparar el formulario
@@ -241,10 +241,13 @@ export default function AssistantWidget() {
                   disabled={isLoading}
                   value={input}
                   onChange={handleInputChange}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                  onKeyDown={async (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey && input.trim()) {
                       e.preventDefault();
-                      handleSubmit(e as any);
+                      const content = input;
+                      // Limpiar input ANTES de enviar para que se sienta instantáneo
+                      handleInputChange({ target: { value: '' } } as any);
+                      await append({ role: 'user', content });
                     }
                   }}
                   placeholder="Escribe tu duda..."
@@ -253,10 +256,12 @@ export default function AssistantWidget() {
                 <button 
                   type="button"
                   disabled={isLoading || !input}
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.preventDefault();
-                    window.alert('Intentando enviar a: /api/assistant/chat?v=2');
-                    handleSubmit(e as any);
+                    if (!input.trim()) return;
+                    const content = input;
+                    handleInputChange({ target: { value: '' } } as any);
+                    await append({ role: 'user', content });
                   }}
                   className="w-10 h-10 bg-black text-white rounded-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50 disabled:scale-100 shadow-lg shadow-gray-200 z-50 cursor-pointer"
                 >
