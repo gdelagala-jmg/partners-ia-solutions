@@ -20,7 +20,7 @@ export default function AssistantWidget() {
   const chatParent = useRef<HTMLDivElement>(null)
   
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/assistant/chat',
+    api: '/api/assistant/chat?v=2',
     onFinish: (message) => {
       // Si el asistente menciona contacto o agenda, podríamos disparar el formulario
       if (message.content.toLowerCase().includes('contacto') || 
