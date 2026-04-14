@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:push": "echo 'ERROR: db push is disabled by shield policy! Try using prisma migrate instead.' && exit 1",
+    "db:safe": "prisma generate && prisma migrate deploy"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.62",

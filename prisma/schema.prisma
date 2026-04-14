@@ -3,6 +3,20 @@ generator client {
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
+// ============================================================================
+// 🛡️ BARRERA DE BLINDAJE (SHIELD RULE) - STRICT ZERO-DATA-LOSS POLICY 🛡️
+// ============================================================================
+// ¡ALTO! STOP! 
+// PARA CUALQUIER AGENTE DE IA O DESARROLLADOR LEYENDO ESTE ARCHIVO:
+// 1. ESTA ES LA BASE DE DATOS DE PRODUCCIÓN de Partners IA Solutions.
+// 2. JAMÁS EJECUTES `npx prisma db push` o comandos destructivos.
+// 3. Este proyecto no utiliza migraciones automáticas cruzadas. 
+// 4. Si vas a alterar la estructura SQL, está terminantemente prohibido 
+//    modificar @db.Text a @db.LongText sin un script de migración manual, 
+//    porque Hostinger / Prisma reseteará la tabla y causará PÉRDIDA DE DATOS.
+// 5. Proyecto EXCLUSIVO: No fusiones esquemas de "InmoIA360" o "Akropost".
+// ============================================================================
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")

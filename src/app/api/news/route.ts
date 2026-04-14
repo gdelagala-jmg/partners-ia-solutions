@@ -47,7 +47,7 @@ export async function GET(request: Request) {
         const [posts, total] = await Promise.all([
             prisma.newsPost.findMany({
                 where,
-                orderBy: { publishedAt: 'desc' },
+                orderBy: includeDrafts ? { updatedAt: 'desc' } : { publishedAt: 'desc' },
                 take,
                 skip,
             }),
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
 
     const posts = await prisma.newsPost.findMany({
         where,
-        orderBy: { publishedAt: 'desc' },
+        orderBy: includeDrafts ? { updatedAt: 'desc' } : { publishedAt: 'desc' },
         take: limit ? parseInt(limit) : undefined,
     })
     return NextResponse.json(posts)
