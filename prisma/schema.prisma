@@ -141,6 +141,7 @@ model AdminUser {
   id              String   @id @default(uuid())
   username        String   @unique
   passwordHash    String
+  role            String   @default("EDITOR") // ADMIN, EDITOR
   createdAt       DateTime @default(now())
   dashboardConfig String?  @db.LongText
 }
@@ -246,4 +247,38 @@ model PodcastEpisode {
   link        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+model Property {
+  id           String   @id @default(uuid())
+  externalId   Int?     @unique
+  address      String
+  price        Float
+  category     String
+  type         String
+  thumb        String?  @db.Text
+  description  String?  @db.LongText
+  images       String?  @db.LongText
+  visible      Boolean  @default(true)
+  featured     Boolean  @default(false)
+  matterportUrl String? @db.Text @map("matterport")
+  features     String?  @db.LongText
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  transactions Transaction[]
+}
+
+model Transaction {
+  id              String   @id @default(uuid())
+  stripeSessionId String   @unique
+  amount          Float
+  currency        String   @default("EUR")
+  status          String   @default("PENDING") // PENDING, PAID, FAILED, REFUNDED
+  type            String   // VALUACIÓN, PROMOCIÓN, HONORARIOS
+  propertyId      String?
+  property        Property? @relation(fields: [propertyId], references: [id])
+  customerEmail   String
+  customerId      String?  // Stripe Customer ID
+  metadata        String?  @db.Text // JSON para datos adicionales
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
