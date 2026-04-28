@@ -1,87 +1,101 @@
 'use client'
 
-import Link from 'next/link'
-import { Check, ShieldCheck, Lock, Globe, Fuel } from 'lucide-react'
+import { Fuel, Linkedin, Facebook, Instagram, Youtube, Mail } from 'lucide-react'
+import Image from 'next/image'
+
+// Custom TikTok Icon
+const TikTokIcon = ({ size = 18 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.525.02c1.31-.02 2.61-.01 3.91.04.15 1.53.85 3.01 2.01 4.02 1.09.96 2.53 1.48 4.04 1.52v4.04c-1.46-.02-2.91-.45-4.13-1.22-.01 2.55-.02 5.09-.02 7.64 0 2.23-.92 4.36-2.52 5.89-1.57 1.5-3.69 2.29-5.87 2.06-2.71-.28-5.06-2.14-5.84-4.75-.8-2.65.11-5.61 2.31-7.24 2.1-1.56 4.96-1.8 7.29-.63v4.22c-1.07-.63-2.4-.76-3.56-.34-1.12.41-1.95 1.34-2.19 2.52-.25 1.25.17 2.57 1.1 3.42.92.83 2.25 1.07 3.44.62 1.13-.43 1.9-1.47 1.98-2.68.03-3.95.02-7.9.02-11.85-.01-2.45-.02-4.91-.01-7.36z" />
+    </svg>
+)
 
 export default function SaveFuelFooter() {
     return (
-        <footer className="bg-[#F9FAFB] pt-[64px] pb-[40px] border-t border-gray-100 font-outfit">
-            <div className="max-w-[1120px] mx-auto px-[24px]">
-                {/* QR Section */}
-                <div className="mb-[48px] bg-white border border-gray-100 rounded-[28px] p-[40px] md:p-[56px] text-center shadow-sm relative overflow-hidden">
-                    <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-[32px]">Escanea para abrir en tu móvil</span>
-                        
-                        <div className="bg-white p-[8px] rounded-[24px] shadow-xl shadow-gray-200/40 mb-[32px] border border-gray-50">
-                            <div className="w-[180px] h-[180px] bg-gray-50 rounded-[18px] flex items-center justify-center p-[20px]">
-                                <div className="grid grid-cols-5 gap-[4px] opacity-80 w-full h-full">
-                                    {[...Array(25)].map((_, i) => (
-                                        <div key={i} className={`rounded-sm ${(i === 0 || i === 4 || i === 20 || i === 24 || i === 12 || i % 7 === 0) ? 'bg-[#030306]' : 'bg-transparent border border-[#030306]/10'}`} />
-                                    ))}
-                                </div>
+        <footer className="bg-white text-gray-900 border-t border-gray-200 font-outfit overflow-hidden">
+            <div className="max-w-[1200px] mx-auto px-6">
+                <div className="py-16 grid grid-cols-1 md:grid-cols-12 gap-12 text-center md:text-left">
+                    
+                    {/* Brand Section */}
+                    <div className="md:col-span-5 flex flex-col items-center md:items-start">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                                <Fuel size={26} strokeWidth={3} />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-2xl font-black tracking-tighter text-[#1D1D1F] leading-none">SaveFuel</span>
+                                <span className="text-[10px] font-black text-emerald-500 tracking-[0.2em] uppercase mt-1">PRO</span>
                             </div>
                         </div>
-                        
-                        <div className="flex items-center gap-[10px] text-slate-400 text-[11px] font-semibold">
-                             <div className="w-[18px] h-[24px] rounded-[4px] border-2 border-slate-300 flex items-center justify-center relative">
-                                 <div className="w-[8px] h-[2px] bg-slate-200 absolute bottom-[4px] rounded-full" />
-                             </div>
-                             Instalable como app en Android e iOS
+                        <p className="text-[15px] text-gray-500 leading-relaxed max-w-sm mb-8 font-inter font-medium">
+                            El GPS del ahorro en gasolina. La inteligencia colectiva al servicio del conductor europeo.
+                        </p>
+
+                        <div className="flex flex-col items-center md:items-start w-full">
+                            <span className="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-3">Síguenos en redes</span>
+                            <div className="flex items-center gap-2">
+                                <a href="#" className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-pink-600 hover:scale-110 transition-transform shadow-sm">
+                                    <Instagram size={16} />
+                                </a>
+                                <a href="#" className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-blue-600 hover:scale-110 transition-transform shadow-sm">
+                                    <Facebook size={16} />
+                                </a>
+                                <a href="#" className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-blue-700 hover:scale-110 transition-transform shadow-sm">
+                                    <Linkedin size={16} />
+                                </a>
+                                <a href="#" className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-black hover:scale-110 transition-transform shadow-sm">
+                                    <TikTokIcon size={16} />
+                                </a>
+                                <a href="#" className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-red-600 hover:scale-110 transition-transform shadow-sm">
+                                    <Youtube size={16} />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Links Section */}
+                    <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+                        <div>
+                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-6">Herramientas</h4>
+                            <ul className="space-y-4 text-gray-500 text-[14px] font-medium font-inter">
+                                <li><a href="#" className="hover:text-emerald-600 transition-colors">Calculadora</a></li>
+                                <li><a href="#" className="hover:text-emerald-600 transition-colors">Widget para tu web</a></li>
+                                <li><a href="#" className="hover:text-emerald-600 transition-colors">Programa de Socios</a></li>
+                                <li><a href="#" className="hover:text-emerald-600 transition-colors">Noticias</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-6">Producto</h4>
+                            <ul className="space-y-4 text-gray-500 text-[14px] font-medium font-inter">
+                                <li><a href="#how-it-works" className="hover:text-emerald-600 transition-colors">Cómo funciona</a></li>
+                                <li><a href="#countries" className="hover:text-emerald-600 transition-colors">Cobertura</a></li>
+                                <li><a href="#pricing" className="hover:text-emerald-600 transition-colors">Precios</a></li>
+                            </ul>
+                        </div>
+                        <div className="col-span-2 sm:col-span-1">
+                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-6">Contacto</h4>
+                            <ul className="space-y-4 text-gray-500 text-[14px] font-medium font-inter">
+                                <li>
+                                    <a href="mailto:contacto@savefuel.app" className="flex items-center justify-center md:justify-start gap-2 hover:text-emerald-600 transition-colors">
+                                        <Mail size={16} />
+                                        <span>contacto@savefuel.app</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                {/* Legal Section */}
-                <div className="mb-[48px]">
-                    <div className="flex items-center gap-[10px] mb-[24px] text-[#0f172a] opacity-60">
-                        <ShieldCheck size={18} className="text-slate-400" />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em]">LEGAL Y PRIVACIDAD</span>
+                {/* Bottom Bar */}
+                <div className="py-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] font-bold text-gray-400 uppercase tracking-widest font-inter">
+                    <p>© 2026 PARTNERS IA Solutions S.L. - España · UE</p>
+                    <div className="flex items-center gap-4 flex-wrap justify-center">
+                        <a href="#" className="hover:text-gray-900 transition-colors">Aviso Legal</a>
+                        <span className="w-1 h-1 rounded-full bg-gray-300" />
+                        <a href="#" className="hover:text-gray-900 transition-colors">Privacidad</a>
+                        <span className="w-1 h-1 rounded-full bg-gray-300" />
+                        <a href="#" className="hover:text-gray-900 transition-colors">Cookies</a>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[10px]">
-                        {[
-                            { name: 'Privacidad (RGPD)', href: '#', icon: ShieldCheck },
-                            { name: 'Cookies', href: '#', icon: Globe },
-                            { name: 'Términos', href: '#', icon: Check },
-                            { name: 'Aviso Legal', href: '#', icon: Lock }
-                        ].map((item) => (
-                            <Link 
-                                key={item.name} 
-                                href={item.href}
-                                className="bg-[#f1f5f9]/50 border border-transparent hover:border-slate-200 p-[16px] rounded-[16px] flex items-center gap-[14px] group transition-all"
-                            >
-                                <div className="w-[40px] h-[40px] bg-white rounded-[12px] flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow border border-gray-100">
-                                    <item.icon size={18} className="text-slate-400 group-hover:text-emerald-500 transition-colors" />
-                                </div>
-                                <span className="text-[13px] font-semibold text-slate-600">{item.name}</span>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Main Footer Bottom */}
-                <div className="pt-[32px] border-t border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-[20px]">
-                    <div className="flex flex-col md:flex-row items-center gap-[12px] md:gap-[16px]">
-                        <div className="flex items-center gap-[10px]">
-                            <div className="w-[36px] h-[36px] bg-gradient-to-br from-[#14b8a6] to-[#10b981] rounded-[10px] flex items-center justify-center text-white shadow-md">
-                                <Fuel size={18} />
-                            </div>
-                            <span className="text-[18px] font-bold text-[#0f172a] tracking-tight">SaveFuel</span>
-                        </div>
-                        <span className="text-[11px] text-slate-400 font-medium tracking-tight md:border-l md:pl-[14px] md:py-[2px] border-slate-200">
-                            — EL GPS del ahorro en gasolina
-                        </span>
-                    </div>
-
-                    <div className="flex items-center flex-wrap justify-center gap-x-[24px] gap-y-[8px] text-[12px] font-medium text-slate-500">
-                        <Link href="#" className="hover:text-emerald-600 transition-colors">Privacidad</Link>
-                        <Link href="#" className="hover:text-emerald-600 transition-colors">Términos</Link>
-                        <Link href="#" className="hover:text-emerald-600 transition-colors">Cookies</Link>
-                        <Link href="#" className="hover:text-emerald-600 transition-colors">Gestionar cookies</Link>
-                    </div>
-
-                    <Link href="/admin/apps" className="text-[11px] font-medium text-slate-400 uppercase tracking-[0.15em] hover:text-emerald-600 transition-colors">
-                        © 2026 PARTNERS IA Solutions
-                    </Link>
                 </div>
             </div>
         </footer>

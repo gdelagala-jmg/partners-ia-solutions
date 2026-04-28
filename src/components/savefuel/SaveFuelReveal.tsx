@@ -1,71 +1,79 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MapPin, ArrowRight } from 'lucide-react'
+import { Play } from 'lucide-react'
+import { useState } from 'react'
 
 export default function SaveFuelReveal() {
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const handlePlay = () => {
+        setIsPlaying(true);
+    };
+
     return (
-        <section id="how-it-works" className="py-[80px] bg-gradient-to-b from-white via-[#f8fbff] to-[#f0f9ff] font-outfit overflow-hidden">
-            <div className="max-w-[720px] mx-auto px-[24px] text-center mb-[56px]">
-                {/* Section Label */}
-                <motion.span
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="inline-block text-[11px] font-bold text-violet-500 uppercase tracking-[0.25em] mb-[16px]"
-                >
-                    MIRA CÓMO FUNCIONA
-                </motion.span>
-
-                {/* Heading */}
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.05 }}
-                    className="text-[40px] md:text-[56px] font-black text-[#0f172a] mb-[20px] tracking-tight leading-[1.1]"
-                >
-                    Tu ruta,{' '}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0d9488] to-[#0ea5e9]">
-                        optimizada
-                    </span>
-                </motion.h2>
-
-                {/* Subtitle */}
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-[17px] text-gray-500 leading-[1.7] max-w-[560px] mx-auto"
-                >
-                    Introduce tu origen y destino. En segundos sabrás dónde parar para ahorrar más.
-                </motion.p>
-            </div>
-
-            {/* YouTube Video Container */}
-            <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-                className="max-w-[1000px] mx-auto px-[24px]"
-            >
-                <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl bg-white aspect-video max-w-[860px] mx-auto">
-                    <iframe
-                        className="absolute inset-0 w-full h-full"
-                        src="https://www.youtube.com/embed/OnTcspCEy1E?autoplay=1&mute=1&loop=1&playlist=OnTcspCEy1E&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0&iv_load_policy=3"
-                        title="SaveFuel Demo"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                    ></iframe>
-                    
-                    {/* Overlay to prevent interaction and keep it looking like a background video */}
-                    <div className="absolute inset-0 pointer-events-none" />
+        <section id="how-it-works" className="py-10 bg-white font-outfit overflow-hidden relative border-t border-gray-50">
+            <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+                <div className="text-center mb-10">
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-block text-[11px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-3"
+                    >
+                        ASÍ FUNCIONA SAVEFUEL
+                    </motion.span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-[36px] md:text-[48px] font-black text-[#1D1D1F] tracking-tighter leading-[1.05]"
+                    >
+                        En <span className="text-emerald-500 italic">60 segundos</span> te enseñamos <br />
+                        cómo empezar a ahorrar.
+                    </motion.h2>
                 </div>
-            </motion.div>
+
+                {/* Real Video Implementation */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="relative max-w-[900px] mx-auto aspect-video rounded-[32px] overflow-hidden bg-gray-900 shadow-2xl group"
+                >
+                    {isPlaying ? (
+                        <iframe
+                            className="w-full h-full"
+                            src="https://www.youtube.com/embed/nDEvnumyKGw?autoplay=1&rel=0&showinfo=0&modestbranding=1"
+                            title="SaveFuel Demo"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                        />
+                    ) : (
+                        <img 
+                            src="https://img.youtube.com/vi/nDEvnumyKGw/maxresdefault.jpg" 
+                            alt="SaveFuel Video Thumbnail" 
+                            className="w-full h-full object-cover opacity-60"
+                        />
+                    )}
+
+                    {/* Play Overlay */}
+                    {!isPlaying && (
+                        <div 
+                            onClick={handlePlay}
+                            className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-[2px] cursor-pointer group-hover:bg-black/20 transition-all duration-500"
+                        >
+                            <div className="w-20 h-20 rounded-full bg-white text-emerald-500 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform duration-500">
+                                <Play size={32} fill="currentColor" className="ml-1" />
+                            </div>
+                        </div>
+                    )}
+                </motion.div>
+            </div>
+            
+            {/* Background decorative glows */}
+            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[300px] h-[300px] bg-emerald-50/40 blur-[100px] -z-10" />
         </section>
     )
 }

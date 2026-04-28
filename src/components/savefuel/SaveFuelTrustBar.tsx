@@ -1,23 +1,23 @@
 'use client'
 
-import { Check } from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 
 const badges = [
     'DATOS GUBERNAMENTALES OFICIALES',
-    'SIN REGISTRO',
-    'MÓVIL Y PC',
-    'RGPD COMPLIANT',
-    '6 IDIOMAS',
+    'SIN REGISTRO OBLIGATORIO',
+    'INSTALABLE EN MÓVIL',
+    'COBERTURA 28 PAÍSES',
+    'SOPORTE 6 IDIOMAS',
 ]
 
 export default function SaveFuelTrustBar() {
     return (
-        <div className="bg-[#f8fafc] border-y border-gray-100 py-[16px] font-outfit overflow-hidden">
-            <div className="max-w-[1120px] mx-auto px-[24px]">
-                <div className="flex flex-wrap items-center justify-center gap-x-[32px] gap-y-[8px]">
+        <div className="bg-gray-50/50 border-y border-gray-100 py-6 font-outfit overflow-hidden">
+            <div className="max-w-[1200px] mx-auto px-6">
+                <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
                     {badges.map((badge) => (
-                        <span key={badge} className="flex items-center gap-[6px] text-[11px] font-semibold text-gray-400 uppercase tracking-[0.15em]">
-                            <Check size={12} className="text-emerald-500" strokeWidth={2.5} />
+                        <span key={badge} className="flex items-center gap-2 text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] transition-colors hover:text-emerald-500 cursor-default">
+                            <ShieldCheck size={14} className="text-emerald-500/50" />
                             {badge}
                         </span>
                     ))}

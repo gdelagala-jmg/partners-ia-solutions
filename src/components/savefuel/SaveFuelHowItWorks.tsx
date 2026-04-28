@@ -6,90 +6,95 @@ import { TrendingDown, SlidersHorizontal, ShieldCheck, Zap, Navigation, Trophy, 
 const features = [
     {
         icon: TrendingDown,
-        label: 'Ahorro Real y Medible',
-        desc: 'Calcula tu ahorro exacto al litro. Conductores como tú ya ahorran una media de 250€/año.',
-        bg: 'bg-emerald-500',
+        label: 'Ahorro Real',
+        desc: 'Calcula tu ahorro exacto al litro. Conductores como tú ahorran una media de 250€/año.',
+        bg: 'bg-emerald-50',
+        color: 'text-emerald-500'
     },
     {
         icon: SlidersHorizontal,
-        label: 'Optimización por Precio',
-        desc: 'No para solo cuando te quedas sin gasolina. Analiza precios en toda la ruta y te dice dónde llenar para maximizar ahorro.',
-        bg: 'bg-blue-500',
+        label: 'Optimización',
+        desc: 'Analiza precios en toda la ruta y te dice dónde llenar para maximizar el ahorro neto.',
+        bg: 'bg-sky-50',
+        color: 'text-sky-500'
     },
     {
         icon: ShieldCheck,
-        label: 'Datos 100% Oficiales',
-        desc: 'Precios directos de los ministerios y reguladores de energía de 10 países europeos. Actualizados cada 30 min. Cero datos falsos.',
-        bg: 'bg-amber-500',
+        label: 'Datos Oficiales',
+        desc: 'Precios directos de ministerios de 28 países europeos. Actualizados cada 30 min.',
+        bg: 'bg-emerald-50',
+        color: 'text-emerald-500'
     },
     {
         icon: Zap,
-        label: 'Cargadores Eléctricos',
-        desc: 'También para vehículos eléctricos. Encuentra cargadores con potencia, conector y disponibilidad.',
-        bg: 'bg-violet-500',
+        label: 'Carga Eléctrica',
+        desc: 'Encuentra cargadores con potencia, conector y disponibilidad en tiempo real.',
+        bg: 'bg-sky-50',
+        color: 'text-sky-500'
     },
     {
         icon: Navigation,
-        label: 'Navegación Integrada',
-        desc: 'Navega directamente con Waze, Google Maps o Apple Maps. Un toque y estás en camino.',
-        bg: 'bg-sky-500',
+        label: 'Navegación',
+        desc: 'Navega directamente con Waze, Google Maps o Apple Maps con un solo toque.',
+        bg: 'bg-emerald-50',
+        color: 'text-emerald-500'
     },
     {
         icon: Trophy,
-        label: 'Gamificación Única',
-        desc: 'Valida precios, completa misiones, sube de nivel como Auditor. Tu comunidad te recompensa.',
-        bg: 'bg-rose-500',
+        label: 'Gamificación',
+        desc: 'Valida precios, completa misiones y sube de nivel en la comunidad SaveFuel.',
+        bg: 'bg-sky-50',
+        color: 'text-sky-500'
     },
     {
         icon: Globe,
-        label: '10 Países Europeos',
-        desc: 'España, Francia, Alemania, Italia, Portugal, Austria, Bélgica, Holanda, Luxemburgo y Eslovenia. Un buscador, toda Europa.',
-        bg: 'bg-teal-500',
+        label: 'Toda Europa',
+        desc: 'Un buscador para 28 países. Datos verificados y oficiales en toda la Unión Europea.',
+        bg: 'bg-emerald-50',
+        color: 'text-emerald-500'
     },
     {
         icon: Car,
-        label: 'Perfil de Vehículo',
-        desc: 'Configura tu coche una vez: modelo, combustible, depósito, consumo. Cálculos ultra-precisos.',
-        bg: 'bg-emerald-600',
+        label: 'Perfil de Coche',
+        desc: 'Configura tu modelo, combustible y consumo para obtener cálculos ultra-precisos.',
+        bg: 'bg-sky-50',
+        color: 'text-sky-500'
     },
 ]
 
 export default function SaveFuelHowItWorks() {
     return (
-        <section id="funcionalidades" className="py-[80px] bg-[#f8fafc] font-outfit">
-            <div className="max-w-[1120px] mx-auto px-[24px]">
+        <section id="how-it-works" className="py-16 bg-[#f9f9fb] font-outfit relative">
+            <div className="max-w-[1200px] mx-auto px-6">
                 {/* Header */}
-                <div className="text-center mb-[48px]">
-                    <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-[0.25em] mb-[12px] block">
+                <div className="text-center mb-12">
+                    <span className="text-[12px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 block">
                         FUNCIONALIDADES
                     </span>
-                    <h2 className="text-[40px] md:text-[56px] font-black text-[#0f172a] mb-[16px] tracking-tight leading-[1.1]">
-                        Todo lo que necesitas para{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0d9488] to-[#0ea5e9]">
-                            ahorrar de verdad
-                        </span>
+                    <h2 className="text-[40px] md:text-[60px] font-black tracking-tighter leading-[1.05] mb-6">
+                        Todo para <span className="text-emerald-500">ahorrar de verdad.</span>
                     </h2>
-                    <p className="text-[17px] text-gray-500 max-w-[600px] mx-auto leading-[1.7]">
-                        No es otra app de gasolineras. Es un optimizador de rutas con datos oficiales de 10 países europeos y tecnología inteligente.
+                    <p className="text-[18px] text-gray-400 max-w-[640px] mx-auto leading-relaxed font-inter font-medium">
+                        Tecnología inteligente diseñada para conductores que quieren optimizar cada céntimo en sus trayectos diarios o viajes largos.
                     </p>
                 </div>
 
-                {/* Feature Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[12px]">
+                {/* Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {features.map((f, idx) => (
                         <motion.div
                             key={f.label}
-                            initial={{ opacity: 0, y: 16 }}
+                            initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: idx * 0.05 }}
-                            className="bg-white rounded-[20px] border border-gray-100 p-[20px] hover:shadow-md transition-all"
+                            transition={{ duration: 0.5, delay: idx * 0.05 }}
+                            className="bg-gray-50/50 rounded-[32px] border border-gray-100 p-8 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
                         >
-                            <div className={`${f.bg} w-[44px] h-[44px] rounded-[14px] flex items-center justify-center mb-[14px] text-white`}>
-                                <f.icon size={20} />
+                            <div className={`${f.bg} w-[56px] h-[56px] rounded-[18px] flex items-center justify-center mb-6 ${f.color} transform group-hover:scale-110 transition-transform`}>
+                                <f.icon size={28} strokeWidth={2.5} />
                             </div>
-                            <h3 className="text-[14px] font-bold text-[#0f172a] mb-[8px]">{f.label}</h3>
-                            <p className="text-[13px] text-gray-500 leading-[1.65] font-normal">{f.desc}</p>
+                            <h3 className="text-[18px] font-black text-[#1D1D1F] mb-3 tracking-tight">{f.label}</h3>
+                            <p className="text-[15px] text-gray-500 leading-relaxed font-inter font-medium">{f.desc}</p>
                         </motion.div>
                     ))}
                 </div>

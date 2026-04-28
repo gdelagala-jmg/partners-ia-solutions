@@ -4,30 +4,54 @@ import { motion } from 'framer-motion'
 import { Plus } from 'lucide-react'
 
 const faqs = [
-    { q: '¿Es realmente gratuito?', a: 'Sí, la versión básica permite buscar y comparar precios en tu país de origen sin coste alguno.' },
-    { q: '¿De dónde vienen los datos?', a: 'Los precios son oficiales y se obtienen directamente de las bases de datos gubernamentales de cada país europeo (como el Geoportal en España).' },
-    { q: '¿Cómo ahorro 250€ al año?', a: 'Basado en un consumo medio de 1.500km/mes, la diferencia entre la gasolinera más cara y la más barata suele ser de 0.15€/litro.' },
+    { 
+        q: '¿Es gratis SaveFuel?', 
+        a: 'Sí, SaveFuel tiene un plan gratuito para comparar gasolineras y calcular rutas base. El plan PRO desbloquea la optimización completa en toda Europa.' 
+    },
+    { 
+        q: '¿En qué países funciona?', 
+        a: 'En España y 28 países de la Unión Europea, con datos oficiales directos de los ministerios nacionales.' 
+    },
+    { 
+        q: '¿Necesito registrarme?', 
+        a: 'No es obligatorio. Puedes buscar y calcular rutas de forma anónima. El registro solo es necesario para gestionar tu suscripción PRO.' 
+    },
+    { 
+        q: '¿Cómo calculáis el ahorro?', 
+        a: 'Analizamos el precio del combustible por litro multiplicado por tu capacidad de depósito, restando el coste real del desvío (combustible gastado extra).' 
+    }
 ]
 
 export default function SaveFuelFAQ() {
     return (
-        <section id="faq" className="py-[80px] bg-[#f8fafc] font-outfit">
-            <div className="max-w-[720px] mx-auto px-[24px]">
-                <h2 className="text-[36px] font-black text-[#0f172a] mb-[40px] text-center tracking-tight">Preguntas Frecuentes</h2>
-                <div className="space-y-[8px]">
+        <section id="faq" className="py-10 bg-white font-outfit border-t border-gray-100">
+            <div className="max-w-[700px] mx-auto px-6">
+                <div className="text-center mb-12">
+                    <span className="text-[12px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 block">
+                        AYUDA
+                    </span>
+                    <h2 className="text-[32px] md:text-[40px] font-black text-[#1D1D1F] tracking-tighter">
+                        Preguntas <span className="text-emerald-500 italic">frecuentes.</span>
+                    </h2>
+                </div>
+                
+                <div className="space-y-3">
                     {faqs.map((faq, idx) => (
                         <motion.div 
                             key={idx}
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="p-[20px] rounded-[16px] border border-gray-100 hover:border-emerald-100 transition-colors bg-white shadow-sm"
+                            transition={{ delay: idx * 0.05 }}
+                            className="p-6 md:p-8 rounded-[24px] border border-gray-100 hover:border-emerald-100 hover:bg-emerald-50/10 transition-all duration-300 bg-gray-50/20 group cursor-pointer"
                         >
-                            <h4 className="font-bold text-[#0f172a] text-[15px] mb-[8px] flex justify-between items-center group cursor-pointer">
+                            <h4 className="font-black text-[#1D1D1F] text-[16px] md:text-[18px] mb-3 flex justify-between items-center gap-4">
                                 {faq.q}
-                                <Plus size={16} className="text-emerald-600 transition-transform group-hover:rotate-90 flex-shrink-0" />
+                                <div className="w-7 h-7 rounded-full bg-white border border-gray-100 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all shrink-0">
+                                    <Plus size={16} strokeWidth={4} />
+                                </div>
                             </h4>
-                            <p className="text-[14px] text-slate-500 font-normal leading-[1.7]">{faq.a}</p>
+                            <p className="text-[14px] md:text-[15px] text-gray-500 font-medium font-inter leading-relaxed">{faq.a}</p>
                         </motion.div>
                     ))}
                 </div>

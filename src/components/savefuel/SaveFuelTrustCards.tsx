@@ -1,54 +1,58 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ShieldCheck, BadgeCheck, Shield, Globe } from 'lucide-react'
+import { ShieldCheck, BadgeCheck, Lock, Globe } from 'lucide-react'
 
 const trustItems = [
     {
         icon: ShieldCheck,
-        label: 'Datos Oficiales Verificados',
-        desc: '10 APIs gubernamentales',
-        bg: 'bg-emerald-500',
+        label: 'Datos Oficiales',
+        desc: '28 APIs de gobierno',
+        bg: 'bg-emerald-50',
+        color: 'text-emerald-500'
     },
     {
         icon: BadgeCheck,
-        label: 'RGPD Compliant',
-        desc: 'Privacidad garantizada',
-        bg: 'bg-blue-500',
+        label: 'Privacidad',
+        desc: 'RGPD Compliant',
+        bg: 'bg-sky-50',
+        color: 'text-sky-500'
     },
     {
-        icon: Shield,
-        label: 'Pagos Seguros',
-        desc: 'Stripe certificado PCI',
-        bg: 'bg-violet-500',
+        icon: Lock,
+        label: 'Seguridad',
+        desc: 'Pagos con Stripe',
+        bg: 'bg-emerald-50',
+        color: 'text-emerald-500'
     },
     {
         icon: Globe,
-        label: 'Cobertura Europea',
-        desc: '55.000+ estaciones',
-        bg: 'bg-amber-500',
+        label: 'Cobertura',
+        desc: 'Toda la UE',
+        bg: 'bg-sky-50',
+        color: 'text-sky-500'
     },
 ]
 
 export default function SaveFuelTrustCards() {
     return (
-        <section className="py-[64px] bg-white font-outfit">
-            <div className="max-w-[1120px] mx-auto px-[24px]">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-[12px]">
+        <section className="py-16 bg-white font-outfit border-t border-gray-100">
+            <div className="max-w-[1200px] mx-auto px-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {trustItems.map((item, idx) => (
                         <motion.div
                             key={item.label}
-                            initial={{ opacity: 0, y: 12 }}
+                            initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: idx * 0.07 }}
-                            className="bg-white border border-gray-100 rounded-[20px] p-[24px] flex flex-col items-center text-center hover:shadow-md transition-all"
+                            transition={{ duration: 0.5, delay: idx * 0.1 }}
+                            className="bg-gray-50/50 border border-gray-100 rounded-[28px] p-8 flex flex-col items-center text-center hover:bg-white hover:shadow-xl transition-all duration-500"
                         >
-                            <div className={`${item.bg} w-[48px] h-[48px] rounded-[14px] flex items-center justify-center mb-[14px] text-white`}>
-                                <item.icon size={22} />
+                            <div className={`${item.bg} w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${item.color}`}>
+                                <item.icon size={28} strokeWidth={2.5} />
                             </div>
-                            <p className="text-[14px] font-bold text-[#0f172a] mb-[4px]">{item.label}</p>
-                            <p className="text-[12px] text-gray-400 font-normal">{item.desc}</p>
+                            <h4 className="text-[15px] font-black text-[#1D1D1F] mb-1 tracking-tight uppercase">{item.label}</h4>
+                            <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest">{item.desc}</p>
                         </motion.div>
                     ))}
                 </div>
