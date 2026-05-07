@@ -14,3 +14,23 @@ export function generateSlug(text: string): string {
         .replace(/--+/g, '-') // Replace multiple consecutive hyphens with a single one
         .replace(/^-+|-+$/g, '') // Trim leading/trailing hyphens
 }
+
+/**
+ * Normalizes solution type checking for LAB prototypes.
+ * Handles exact DB values ('LAB') and potential legacy or frontend labels ('Prototipo LAB').
+ */
+export function isLabSolution(type: string | null | undefined): boolean {
+    if (!type) return false;
+    const t = type.toLowerCase();
+    return t === 'lab' || t === 'prototipo lab' || t === 'lab prototype';
+}
+
+/**
+ * Normalizes solution type checking for Final (Commercial) solutions.
+ * Handles exact DB values ('SOLUTION') and potential legacy or frontend labels ('Solución Final').
+ */
+export function isFinalSolution(type: string | null | undefined): boolean {
+    if (!type) return false;
+    const t = type.toLowerCase();
+    return t === 'solution' || t === 'solución final' || t === 'solucion final' || t === 'final';
+}

@@ -8,6 +8,7 @@ import LatestNewsSection from '@/components/sections/LatestNewsSection'
 import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 import ClientCarousel from '@/components/sections/ClientCarousel'
 import PageBadge from '@/components/ui/PageBadge'
+import { isLabSolution } from '@/lib/utils'
 
 interface HomeSolution {
     id: string
@@ -130,7 +131,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                         />
                                         <div className="absolute top-3 left-3 z-20 flex gap-2">
                                             <span className={`px-2.5 py-1 backdrop-blur-md text-xs font-semibold rounded-xl shadow-sm border ${
-                                                solution.type === 'Prototipo LAB' 
+                                                isLabSolution(solution.type)
                                                 ? 'bg-slate-900/95 text-white border-white/10' 
                                                 : 'bg-white/95 text-black border-white/20'
                                             }`}>

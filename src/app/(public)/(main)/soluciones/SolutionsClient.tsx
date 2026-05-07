@@ -1,7 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Box, Cpu } from 'lucide-react'
+import { Cpu, ArrowRight, ArrowUpRight, Beaker, Box } from 'lucide-react'
+import { isFinalSolution, isLabSolution } from '@/lib/utils'
 import Link from 'next/link'
 import PageBadge from '@/components/ui/PageBadge'
 
@@ -120,8 +121,8 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
         return sector.image || '/logo-ias.png'
     }
 
-    const finalSolutions = solutions.filter(s => s.type === 'Solución Final')
-    const labPrototypes = solutions.filter(s => s.type === 'Prototipo LAB')
+    const finalSolutions = solutions.filter(s => isFinalSolution(s.type))
+    const labPrototypes = solutions.filter(s => isLabSolution(s.type))
 
     return (
         <div className="min-h-screen bg-white">
