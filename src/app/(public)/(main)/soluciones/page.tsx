@@ -18,6 +18,17 @@ export default async function SolutionsPage() {
     orderBy: { order: 'asc' }
   })
 
+  const solutions = await prisma.solution.findMany({
+    where: { published: true },
+    orderBy: [
+      { featuredOrder: 'asc' },
+      { createdAt: 'desc' }
+    ],
+    include: {
+      gallery: true
+    }
+  })
+
   // Adapt to interface
   const sectorsData = sectors.map(s => ({
     id: s.id,
@@ -27,5 +38,14 @@ export default async function SolutionsPage() {
     description: s.description || undefined
   }))
 
-  return <SolutionsClient sectors={sectorsData} />
+  const solutionsData = solutions.map(s => ({
+    id: s.id,
+    title: s.title,
+    slug: s.slug,
+    description: s.description,
+    type: s.type,
+    image: s.multimedia || (s.gallery && s.gallery.length > 0 ? s.gallery[0].url : '/images/placeholder.jpg')
+  }))
+
+  return <SolutionsClient sectors={sectorsData} solutions={solutionsData} />
 }
