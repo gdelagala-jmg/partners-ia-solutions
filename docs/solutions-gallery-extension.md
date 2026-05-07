@@ -35,7 +35,7 @@ Para garantizar la fiabilidad del sistema se ejecutó un script de automatizaci�
    - *Prueba:* `npm run build` y `npm run lint`.
    - *Resultado:* **BUILD EXITOSO**. Rutas generadas estáticamente sin problemas. (LINT con advertencias ya conocidas, ver "Riesgos Pendientes").
 
-## Riesgos Pendientes
+## Riesgos Pendientes (Actualizado)
 - **Eslint ESM (Menor)**: `npm run lint` presenta un error genérico del entorno Next.js (`eslint-config-next/core-web-vitals` requiere la extensión `.js` en el archivo `eslint.config.mjs`). Esto no afecta a la compilación de producción.
 - **Colisión de Slugs**: Debido a que los sectores y las soluciones comparten el patrón `/soluciones/[slug]`, si una solución y un sector tienen exactamente el mismo nombre (ej. "Salud"), la página priorizará mostrar la Solución. Recomendable usar nombres diferenciados para las soluciones.
 - **Dependencia de `multimediaUrl`**: Se mantuvo como *fallback* para compatibilidad retroactiva. Es importante que editores entiendan su propósito vs la Galería.
@@ -53,9 +53,7 @@ Se realizó una auditoría visual completa (Browser y Servidor) el 7 de mayo de 
 2. **Validación de Soluciones Legacy:**
    - La base de datos mantiene las soluciones previas (`Process Automation`, `Predictive Analytics`, etc.) intactas, con sus campos extendidos anulados (null) y `gallery: []`.
    - La lógica del `SolutionDetailClient.tsx` se degrada graciosamente en caso de galerías vacías, ocultando controles del carrusel y renderizando la imagen estática.
-3. **Riesgos Pendientes Detectados (Imágenes 404):**
-   - Aunque la lógica funciona, las rutas legacy (ej. `/images/solutions/automation.webp`) **no existen localmente**. Esto genera una imagen rota (404) que arruina el componente visual premium del detalle de la solución.
-4. **Recomendación Inmediata:**
-   - Implementar placeholders o assets estáticos temporales antes de continuar con integraciones complejas para evitar inconsistencias de diseño.
+3. **Mitigación de Imágenes 404 (Resuelto):**
+   - Se generó e implementó un asset `placeholder.jpg` premium (estilo glassmorphism corporativo tecnológico) que se sirve automáticamente en el front-end si no hay `multimediaUrl` o `gallery`. Esto previene íconos rotos 404 para datos legacy.
 
 **ESTADO FINAL DEL MÓDULO:** El módulo de Gestión de Soluciones (Backend, Admin UI, Frontend UI, Routing) ha sido declarado **VALIDADO Y ESTABLE**. Se ha establecido un safepoint de seguridad.
