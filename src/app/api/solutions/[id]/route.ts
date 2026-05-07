@@ -11,6 +11,7 @@ export async function GET(request: Request, { params }: { params: Params }) {
     const { id } = await params
     const solution = await prisma.solution.findUnique({
         where: { id },
+        include: { gallery: { orderBy: { order: 'asc' } }, sectors: true }
     })
 
     if (!solution) {
@@ -30,7 +31,10 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     try {
         const { id } = await params
         const body = await request.json()
-        let { title, description, slug, type, multimedia, ctaUrl, published, sectorIds, featured, featuredOrder } = body
+        let { 
+            title, description, slug, type, multimedia, ctaUrl, published, sectorIds, 
+            featured, featuredOrder, functionalDescription, problemsSolved, capabilities, workflowDescription, gallery 
+        } = body
 
         // Auto-generate slug if missing
         if (!slug || slug.trim() === '') {
@@ -47,11 +51,27 @@ export async function PUT(request: Request, { params }: { params: Params }) {
                 multimedia,
                 ctaUrl,
                 published,
+                functionalDescription,
+                problemsSolved,
+                capabilities,
+                workflowDescription,
                 featured: featured !== undefined ? featured : undefined,
                 featuredOrder: featuredOrder !== undefined ? featuredOrder : undefined,
                 sectors: sectorIds ? {
                     set: sectorIds.map((id: string) => ({ id }))
-                } : undefined
+                } : undefined,
+                ...(gallery !== undefined ? {
+                    gallery: {
+                        deleteMany: {},
+                        create: gallery.map((g: any, index: number) => ({
+                            url: g.url,
+                            alt: g.alt || '',
+                            type: g.type || 'IMAGE',
+                            order: g.order !== undefined ? g.order : index,
+                            isPrimary: g.isPrimary || false
+                        }))
+                    }
+                } : {})
             },
         })
 

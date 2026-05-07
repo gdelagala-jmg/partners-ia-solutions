@@ -1,8 +1,8 @@
-import { useForm } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useEffect, useState } from 'react'
-import { Check } from 'lucide-react'
+import { Check, Plus, Trash2 } from 'lucide-react'
 
 const solutionSchema = z.object({
     title: z.string().min(1, 'Title is required'),
@@ -10,11 +10,20 @@ const solutionSchema = z.object({
     description: z.string().min(1, 'Description is required'),
     type: z.enum(['SOLUTION', 'LAB']),
     multimedia: z.string().optional(),
+    functionalDescription: z.string().optional(),
+    problemsSolved: z.string().optional(),
+    capabilities: z.string().optional(),
+    workflowDescription: z.string().optional(),
     ctaUrl: z.string().optional(),
     published: z.boolean().optional(),
     featured: z.boolean().optional(),
     featuredOrder: z.number().optional().nullable(),
     sectorIds: z.array(z.string()).optional(),
+    gallery: z.array(z.object({
+        url: z.string().min(1, 'URL es obligatoria'),
+        alt: z.string().optional(),
+        isPrimary: z.boolean().optional(),
+    })).optional()
 })
 
 type SolutionFormValues = z.infer<typeof solutionSchema>
@@ -22,20 +31,27 @@ type SolutionFormValues = z.infer<typeof solutionSchema>
 export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
     const [sectors, setSectors] = useState<any[]>([])
 
-    const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm<SolutionFormValues>({
+    const { register, control, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm<SolutionFormValues>({
         resolver: zodResolver(solutionSchema),
         defaultValues: initialData ? {
             ...initialData,
             sectorIds: initialData.sectors?.map((i: any) => i.id) || [],
             featured: initialData.featured || false,
             featuredOrder: initialData.featuredOrder || null,
+            gallery: initialData.gallery || []
         } : {
             type: 'SOLUTION',
             published: false,
             featured: false,
             featuredOrder: null,
-            sectorIds: []
+            sectorIds: [],
+            gallery: []
         },
+    })
+
+    const { fields: galleryFields, append: appendGallery, remove: removeGallery } = useFieldArray({
+        control,
+        name: "gallery"
     })
 
     useEffect(() => {
@@ -136,11 +152,91 @@ export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Multimedia URL (Imagen/Video)</label>
+                    <label className="block text-sm font-medium text-gray-700">Multimedia URL (Fallback)</label>
                     <input
                         {...register('multimedia')}
+                        placeholder="Ej: /images/visuals/solution.png"
                         className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 overflow-hidden"
                     />
+                    <p className="text-xs text-gray-500 mt-1">Se usará si la galería está vacía.</p>
+                </div>
+            </div>
+
+            <div className="border-t border-gray-100 pt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Galería de Imágenes</h3>
+                <div className="space-y-4">
+                    {galleryFields.map((field, index) => (
+                        <div key={field.id} className="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 rounded-lg border border-gray-100 items-start md:items-center">
+                            <div className="flex-1 space-y-3 w-full">
+                                <div>
+                                    <input
+                                        {...register(`gallery.${index}.url`)}
+                                        placeholder="URL de la imagen"
+                                        className="block w-full bg-white border-gray-300 rounded-lg shadow-sm text-sm"
+                                    />
+                                    {errors?.gallery?.[index]?.url && <p className="text-red-500 text-xs mt-1">{errors.gallery[index]?.url?.message}</p>}
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <input
+                                        {...register(`gallery.${index}.alt`)}
+                                        placeholder="Texto alternativo (Alt)"
+                                        className="block w-full bg-white border-gray-300 rounded-lg shadow-sm text-sm"
+                                    />
+                                    <label className="flex items-center gap-2 whitespace-nowrap text-sm text-gray-600">
+                                        <input type="checkbox" {...register(`gallery.${index}.isPrimary`)} className="rounded text-blue-600" />
+                                        Principal
+                                    </label>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => removeGallery(index)}
+                                className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            >
+                                <Trash2 size={20} />
+                            </button>
+                        </div>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => appendGallery({ url: '', alt: '', isPrimary: galleryFields.length === 0 })}
+                        className="flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg transition-colors"
+                    >
+                        <Plus size={16} className="mr-2" /> Añadir Imagen a la Galería
+                    </button>
+                </div>
+            </div>
+
+            <div className="border-t border-gray-100 pt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Información Detallada</h3>
+                <div className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Descripción Funcional</label>
+                        <textarea
+                            {...register('functionalDescription')}
+                            rows={3}
+                            placeholder="Cómo funciona a nivel técnico/operativo..."
+                            className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Problemas que Resuelve</label>
+                        <textarea
+                            {...register('problemsSolved')}
+                            rows={3}
+                            placeholder="Qué dolores de cabeza elimina esta solución..."
+                            className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Capacidades Principales</label>
+                        <textarea
+                            {...register('capabilities')}
+                            rows={3}
+                            placeholder="Ej: Análisis en tiempo real, integración con CRMs..."
+                            className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
                 </div>
             </div>
 

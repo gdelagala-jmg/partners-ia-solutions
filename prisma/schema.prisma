@@ -42,8 +42,12 @@ model Solution {
   title           String
   slug            String   @unique
   description     String   @db.Text
-  longDescription String?  @db.Text
-  multimedia      String?
+  longDescription     String?  @db.Text
+  functionalDescription String? @db.Text
+  problemsSolved      String?  @db.Text
+  capabilities        String?  @db.Text
+  workflowDescription String?  @db.Text
+  multimedia          String?
   ctaUrl          String?
   tags            String?
   order           Int      @default(0)
@@ -53,6 +57,20 @@ model Solution {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   sectors         Sector[] @relation("SectorToSolution")
+  gallery         SolutionMedia[]
+}
+
+model SolutionMedia {
+  id          String   @id @default(uuid())
+  solutionId  String
+  url         String
+  alt         String?
+  type        String   @default("IMAGE") // IMAGE, VIDEO
+  order       Int      @default(0)
+  isPrimary   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  solution    Solution @relation(fields: [solutionId], references: [id], onDelete: Cascade)
 }
 
 model NewsPost {

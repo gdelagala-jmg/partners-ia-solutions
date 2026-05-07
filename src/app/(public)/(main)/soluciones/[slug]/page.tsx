@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import SectorSolutionClient from './SectorSolutionClient'
+import SolutionDetailClient from './SolutionDetailClient'
 import JSONLD from '@/components/seo/JSONLD'
 
 interface Props {
@@ -9,8 +10,28 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  
+  // Try Solution first
+  const solution = await prisma.solution.findUnique({
+    where: { slug, published: true }
+  })
+
+  if (solution) {
+    return {
+      title: `${solution.title} | Partners IA Solutions`,
+      description: solution.description,
+      openGraph: {
+        title: solution.title,
+        description: solution.description,
+        images: [solution.multimedia || '/logo-ias.png'],
+      }
+    }
+  }
+
+  // Fallback to Sector
   const sector = await prisma.sector.findUnique({
-    where: { slug: params.slug }
+    where: { slug }
   })
 
   if (!sector) return {}
@@ -30,8 +51,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SectorSolutionPage({ params }: Props) {
+  const { slug } = await params
+
+  // 1. Try to find a specific Solution
+  const solution = await prisma.solution.findUnique({
+    where: { slug, published: true },
+    include: { gallery: { orderBy: { order: 'asc' } } }
+  })
+
+  if (solution) {
+    return (
+      <>
+        <JSONLD 
+          schema={{
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: solution.title,
+            description: solution.description,
+            brand: {
+              '@type': 'Brand',
+              name: 'Partners IA Solutions'
+            }
+          }}
+        />
+        <SolutionDetailClient solution={solution} />
+      </>
+    )
+  }
+
+  // 2. Fallback to Sector
   const sector = await prisma.sector.findUnique({
-    where: { slug: params.slug }
+    where: { slug }
   })
 
   if (!sector) return notFound()

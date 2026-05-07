@@ -8,9 +8,14 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const sectorId = searchParams.get('sector')
     const featured = searchParams.get('featured')
-    const limit = searchParams.get('limit')
+    const isAdminCall = searchParams.get('admin') === 'true'
+    const session = isAdminCall ? await getSession() : null
 
-    const where: any = { published: true }
+    const where: any = {}
+    if (!isAdminCall || !session) {
+        where.published = true
+    }
+    
     if (sectorId) {
         where.sectors = {
             some: {
@@ -27,7 +32,8 @@ export async function GET(request: Request) {
         orderBy: featured === 'true' ? { featuredOrder: 'asc' } : { order: 'asc' },
         take: limit ? parseInt(limit) : undefined,
         include: {
-            sectors: true
+            sectors: true,
+            gallery: { orderBy: { order: 'asc' } }
         }
     })
     return NextResponse.json(solutions)
@@ -42,7 +48,10 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json()
-        let { title, description, slug, type, multimedia, ctaUrl, published, sectorIds, featured, featuredOrder } = body
+        let { 
+            title, description, slug, type, multimedia, ctaUrl, published, sectorIds, 
+            featured, featuredOrder, functionalDescription, problemsSolved, capabilities, workflowDescription, gallery 
+        } = body
 
         // Auto-generate slug if missing
         if (!slug || slug.trim() === '') {
@@ -58,11 +67,26 @@ export async function POST(request: Request) {
                 multimedia,
                 ctaUrl,
                 published,
+                functionalDescription,
+                problemsSolved,
+                capabilities,
+                workflowDescription,
                 featured: featured || false,
                 featuredOrder: featuredOrder || null,
                 sectors: sectorIds && sectorIds.length > 0 ? {
                     connect: sectorIds.map((id: string) => ({ id }))
-                } : undefined
+                } : undefined,
+                ...(gallery && gallery.length > 0 ? {
+                    gallery: {
+                        create: gallery.map((g: any, index: number) => ({
+                            url: g.url,
+                            alt: g.alt || '',
+                            type: g.type || 'IMAGE',
+                            order: g.order !== undefined ? g.order : index,
+                            isPrimary: g.isPrimary || false
+                        }))
+                    }
+                } : {})
             },
         })
 

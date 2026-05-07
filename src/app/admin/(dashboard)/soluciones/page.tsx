@@ -15,7 +15,7 @@ export default function SolutionsPage() {
     const fetchSolutions = async () => {
         setLoading(true)
         try {
-            const res = await fetch('/api/solutions')
+            const res = await fetch('/api/solutions?admin=true')
             if (res.ok) {
                 const data = await res.json()
                 setSolutions(Array.isArray(data) ? data : [])
