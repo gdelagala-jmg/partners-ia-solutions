@@ -91,17 +91,20 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
         <div className="flex flex-col h-full bg-white/70 backdrop-blur-xl border-r border-[#F2F2F7]">
             {/* Header - Minimalist Apple Style */}
             <div className="px-6 py-8 border-b border-[#F2F2F7]/50 hidden lg:block">
-                <Link href="/" className="flex items-center group">
-                    <div className="relative h-8 w-40">
-                        <Image
-                            src="/logo-ias.png"
-                            alt="IA Solutions"
-                            fill
-                            className="object-contain transition-transform group-hover:scale-105 duration-500"
-                            priority
-                        />
-                    </div>
-                </Link>
+                <div className="flex justify-center p-4">
+                    <Link href="/" className="flex items-center group">
+                        <div className="relative h-8 w-40" style={{ position: 'relative', height: '2rem', width: '10rem', overflow: 'hidden' }}>
+                            <Image
+                                src="/logo-ias.png"
+                                alt="Partners IA Solutions Logo"
+                                fill
+                                style={{ objectFit: 'contain' }}
+                                className="transition-transform group-hover:scale-105 duration-500"
+                                priority
+                            />
+                        </div>
+                    </Link>
+                </div>
             </div>
 
             {/* Mobile Header Close - Refined */}
