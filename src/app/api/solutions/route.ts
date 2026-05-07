@@ -30,7 +30,6 @@ export async function GET(request: Request) {
     const solutions = await prisma.solution.findMany({
         where,
         orderBy: featured === 'true' ? { featuredOrder: 'asc' } : { order: 'asc' },
-        take: limit ? parseInt(limit) : undefined,
         include: {
             sectors: true,
             gallery: { orderBy: { order: 'asc' } }
