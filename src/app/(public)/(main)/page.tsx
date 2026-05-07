@@ -13,21 +13,22 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  // Fetching data on the server
-  const sectors = await prisma.sector.findMany({
-    where: { active: true },
-    orderBy: { order: 'asc' },
-    take: 6
+  // Fetching featured solutions on the server
+  const solutions = await prisma.solution.findMany({
+    where: { published: true, featured: true },
+    orderBy: { featuredOrder: 'asc' },
+    take: 3
   })
 
-  // Adapt database objects to Sector interface
-  const initialSectors = sectors.map(s => ({
+  // Adapt database objects to HomeSolution interface
+  const featuredSolutions = solutions.map(s => ({
     id: s.id,
-    name: s.name,
+    title: s.title,
     slug: s.slug,
-    image: s.image,
-    description: s.description || undefined
+    multimediaUrl: s.multimedia,
+    description: s.description,
+    type: s.type
   }))
 
-  return <HomeClient initialSectors={initialSectors} />
+  return <HomeClient featuredSolutions={featuredSolutions} />
 }

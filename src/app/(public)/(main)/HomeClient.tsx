@@ -9,30 +9,26 @@ import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 import ClientCarousel from '@/components/sections/ClientCarousel'
 import PageBadge from '@/components/ui/PageBadge'
 
-interface Sector {
+interface HomeSolution {
     id: string
-    name: string
+    title: string
     slug: string
-    image: string
-    description?: string
+    multimediaUrl: string | null
+    description: string | null
+    type: string
 }
 
 interface HomeClientProps {
-    initialSectors: Sector[]
+    featuredSolutions: HomeSolution[]
 }
 
-export default function HomeClient({ initialSectors }: HomeClientProps) {
+export default function HomeClient({ featuredSolutions }: HomeClientProps) {
     
-    const getSectorImage = (sector: Sector) => {
-        if (sector.image && sector.image !== '/logo-ias.png' && !sector.image.includes('placeholder')) {
-            return sector.image
+    const getSolutionImage = (solution: HomeSolution) => {
+        if (solution.multimediaUrl && !solution.multimediaUrl.includes('placeholder')) {
+            return solution.multimediaUrl
         }
-        const name = sector.name?.toLowerCase() || ''
-        const slug = sector.slug?.toLowerCase() || ''
-        if (name.includes('legal') || slug.includes('legal')) return '/images/visuals/sector-legal.png'
-        if (name.includes('inmobil') || name.includes('real estate') || slug.includes('estate')) return '/images/visuals/sector-real-estate.png'
-        if (name.includes('finan') || name.includes('banc') || slug.includes('finan')) return '/images/visuals/sector-finance.png'
-        return sector.image || '/logo-ias.png'
+        return '/logo-ias.png'
     }
 
     return (
@@ -115,35 +111,42 @@ export default function HomeClient({ initialSectors }: HomeClientProps) {
                         </p>
                     </div>
 
-                    {initialSectors.length === 0 ? (
-                        <div className="text-center text-gray-500 bg-white py-8 rounded-2xl border border-gray-100">Pronto publicaremos nuestras soluciones especializadas.</div>
+                    {featuredSolutions.length === 0 ? (
+                        <div className="text-center text-gray-500 bg-white py-8 rounded-2xl border border-gray-100">Pronto publicaremos nuestras soluciones destacadas.</div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {initialSectors.map((sector) => (
+                            {featuredSolutions.map((solution) => (
                                 <Link
-                                    key={sector.id}
-                                    href={`/soluciones/${sector.slug}`}
+                                    key={solution.id}
+                                    href={`/soluciones/${solution.slug}`}
                                     className="group flex flex-col rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-500 border border-gray-200 bg-white"
                                 >
                                     <div className="h-44 w-full relative overflow-hidden bg-gray-100">
                                         <div className="absolute inset-0 bg-blue-900/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
                                         <img
-                                            src={getSectorImage(sector)}
-                                            alt={`Soluciones IA para ${sector.name}`}
+                                            src={getSolutionImage(solution)}
+                                            alt={`Solución: ${solution.title}`}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
-                                        <div className="absolute top-3 left-3 z-20">
-                                            <span className="px-2.5 py-1 bg-white/95 backdrop-blur-md text-xs font-semibold rounded-xl shadow-sm text-black border border-white/20">
-                                                {sector.name}
+                                        <div className="absolute top-3 left-3 z-20 flex gap-2">
+                                            <span className={`px-2.5 py-1 backdrop-blur-md text-xs font-semibold rounded-xl shadow-sm border ${
+                                                solution.type === 'Prototipo LAB' 
+                                                ? 'bg-slate-900/95 text-white border-white/10' 
+                                                : 'bg-white/95 text-black border-white/20'
+                                            }`}>
+                                                {solution.type}
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="p-5 flex flex-col flex-1 justify-between bg-white">
-                                        <p className="text-gray-600 line-clamp-3 leading-relaxed text-sm mb-4">
-                                            {sector.description || `Descubre cómo la IA automatiza tus operaciones y mejora las métricas del sector ${sector.name}.`}
+                                    <div className="p-5 flex flex-col flex-1 bg-white">
+                                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                                            {solution.title}
+                                        </h3>
+                                        <p className="text-gray-600 line-clamp-3 leading-relaxed text-sm mb-4 flex-1">
+                                            {solution.description || `Descubre nuestra solución inteligente especializada para maximizar tu rendimiento.`}
                                         </p>
-                                        <div className="flex items-center text-sm font-semibold text-blue-600 group-hover:text-black transition-colors">
-                                            Descubrir Soluciones
+                                        <div className="flex items-center text-sm font-semibold text-blue-600 group-hover:text-black transition-colors mt-auto">
+                                            Ver Detalles
                                             <ArrowRight size={16} className="ml-1.5 transform group-hover:translate-x-1 transition-transform" />
                                         </div>
                                     </div>
