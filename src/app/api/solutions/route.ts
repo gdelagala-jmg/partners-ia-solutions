@@ -89,6 +89,11 @@ export async function POST(request: Request) {
             },
         })
 
+        const { revalidatePath } = await import('next/cache')
+        revalidatePath('/')
+        revalidatePath('/soluciones')
+        revalidatePath('/admin/soluciones')
+
         return NextResponse.json(solution)
     } catch (error) {
         console.error('Error creating solution:', error)

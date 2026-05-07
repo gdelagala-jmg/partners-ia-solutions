@@ -9,19 +9,19 @@ const solutionSchema = z.object({
     slug: z.string().min(1, 'Slug is required'),
     description: z.string().min(1, 'Description is required'),
     type: z.enum(['SOLUTION', 'LAB']),
-    multimedia: z.string().optional(),
-    functionalDescription: z.string().optional(),
-    problemsSolved: z.string().optional(),
-    capabilities: z.string().optional(),
-    workflowDescription: z.string().optional(),
-    ctaUrl: z.string().optional(),
+    multimedia: z.string().optional().nullable(),
+    functionalDescription: z.string().optional().nullable(),
+    problemsSolved: z.string().optional().nullable(),
+    capabilities: z.string().optional().nullable(),
+    workflowDescription: z.string().optional().nullable(),
+    ctaUrl: z.string().optional().nullable(),
     published: z.boolean().optional(),
     featured: z.boolean().optional(),
     featuredOrder: z.number().optional().nullable(),
     sectorIds: z.array(z.string()).optional(),
     gallery: z.array(z.object({
         url: z.string().min(1, 'URL es obligatoria'),
-        alt: z.string().optional(),
+        alt: z.string().optional().nullable(),
         isPrimary: z.boolean().optional(),
     })).optional()
 })
@@ -30,6 +30,9 @@ type SolutionFormValues = z.infer<typeof solutionSchema>
 
 export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
     const [sectors, setSectors] = useState<any[]>([])
+    const [uploadingImage, setUploadingImage] = useState<number | null>(null)
+    const [newSectorName, setNewSectorName] = useState('')
+    const [creatingSector, setCreatingSector] = useState(false)
 
     const { register, control, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm<SolutionFormValues>({
         resolver: zodResolver(solutionSchema),
@@ -80,8 +83,67 @@ export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
         }
     }
 
+    const handleUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        setUploadingImage(index)
+        const formData = new FormData()
+        formData.append('file', file)
+
+        try {
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            const data = await res.json()
+            if (data.url) {
+                setValue(`gallery.${index}.url`, data.url, { shouldValidate: true })
+            } else {
+                alert(data.error || 'Error al subir la imagen')
+            }
+        } catch (error) {
+            alert('Error de conexión al subir la imagen')
+        } finally {
+            setUploadingImage(null)
+        }
+    }
+
+    const handleCreateSector = async () => {
+        if (!newSectorName.trim()) return
+        setCreatingSector(true)
+        try {
+            const res = await fetch('/api/sectors', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    name: newSectorName, 
+                    image: '/images/sectors/default.svg', // Default fallback
+                    externalUrl: '#' // Default fallback
+                })
+            })
+            if (res.ok) {
+                const newSector = await res.json()
+                setSectors([...sectors, newSector])
+                const current = watch('sectorIds') || []
+                setValue('sectorIds', [...current, newSector.id], { shouldValidate: true })
+                setNewSectorName('')
+            } else {
+                alert('Error al crear sector. Asegúrate de tener permisos.')
+            }
+        } catch (error) {
+            alert('Error de conexión al crear sector.')
+        } finally {
+            setCreatingSector(false)
+        }
+    }
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+        <form onSubmit={handleSubmit(onSubmit, (err) => {
+            console.log('Validation errors:', err)
+            const errorFields = Object.keys(err).join(', ')
+            alert(`Faltan campos por rellenar o hay errores en: ${errorFields}`)
+        })} className="space-y-6 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Título</label>
@@ -137,6 +199,29 @@ export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
                         )
                     })}
                 </div>
+                <div className="mt-3 flex items-center gap-2 max-w-sm">
+                    <input 
+                        type="text" 
+                        placeholder="Nombre de nuevo sector..." 
+                        value={newSectorName}
+                        onChange={(e) => setNewSectorName(e.target.value)}
+                        className="flex-1 block bg-white border-gray-300 rounded-lg shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleCreateSector();
+                            }
+                        }}
+                    />
+                    <button 
+                        type="button"
+                        onClick={handleCreateSector}
+                        disabled={creatingSector || !newSectorName.trim()}
+                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                    >
+                        {creatingSector ? 'Añadiendo...' : 'Añadir'}
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -169,11 +254,23 @@ export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
                         <div key={field.id} className="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 rounded-lg border border-gray-100 items-start md:items-center">
                             <div className="flex-1 space-y-3 w-full">
                                 <div>
-                                    <input
-                                        {...register(`gallery.${index}.url`)}
-                                        placeholder="URL de la imagen"
-                                        className="block w-full bg-white border-gray-300 rounded-lg shadow-sm text-sm"
-                                    />
+                                    <div className="flex gap-2 items-center">
+                                        <input
+                                            {...register(`gallery.${index}.url`)}
+                                            placeholder="URL de la imagen"
+                                            className="block w-full bg-white border-gray-300 rounded-lg shadow-sm text-sm"
+                                        />
+                                        <label className="cursor-pointer text-xs font-medium text-blue-600 bg-blue-50 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors whitespace-nowrap">
+                                            {uploadingImage === index ? 'Subiendo...' : 'Subir foto'}
+                                            <input 
+                                                type="file" 
+                                                accept="image/*" 
+                                                className="hidden" 
+                                                onChange={(e) => handleUpload(index, e)} 
+                                                disabled={uploadingImage === index}
+                                            />
+                                        </label>
+                                    </div>
                                     {errors?.gallery?.[index]?.url && <p className="text-red-500 text-xs mt-1">{errors.gallery[index]?.url?.message}</p>}
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -272,7 +369,7 @@ export default function SolutionForm({ initialData, onSubmit, onCancel }: any) {
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Orden en Homepage (1-3)</label>
                     <select
-                        {...register('featuredOrder', { valueAsNumber: true })}
+                        {...register('featuredOrder', { setValueAs: v => v === "" || isNaN(parseInt(v, 10)) ? null : parseInt(v, 10) })}
                         className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Seleccionar orden...</option>

@@ -55,8 +55,8 @@ export async function POST(request: Request) {
             }
         }
 
-        // Fallback solo para desarrollo LOCAL (no funcionará en Vercel)
-        if (process.env.NODE_ENV === 'development') {
+        // Fallback si no hay Vercel Blob configurado (útil para pruebas locales con npm run build/start)
+        if (!process.env.BLOB_READ_WRITE_TOKEN) {
             const { writeFile, mkdir } = await import('fs/promises')
             const bytes = await file.arrayBuffer()
             const buffer = Buffer.from(bytes)
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ url: `/uploads/${filename}` })
         }
 
-        throw new Error('No hay almacenamiento configurado para producción.')
+        throw new Error('No hay almacenamiento configurado.')
 
     } catch (error: any) {
         console.error('Error uploading file:', error)

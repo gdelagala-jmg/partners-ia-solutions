@@ -14,7 +14,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   // Try Solution first
   const solution = await prisma.solution.findUnique({
-    where: { slug, published: true }
+    where: { slug, published: true },
+    include: { gallery: { orderBy: { order: 'asc' } } }
   })
 
   if (solution) {
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       openGraph: {
         title: solution.title,
         description: solution.description,
-        images: [solution.multimedia || '/logo-ias.png'],
+        images: [solution.gallery?.[0]?.url || solution.multimedia || '/logo-ias.png'],
       }
     }
   }

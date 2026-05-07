@@ -75,6 +75,12 @@ export async function PUT(request: Request, { params }: { params: Params }) {
             },
         })
 
+        const { revalidatePath } = await import('next/cache')
+        revalidatePath('/')
+        revalidatePath('/soluciones')
+        revalidatePath(`/soluciones/${solution.slug}`)
+        revalidatePath('/admin/soluciones')
+
         return NextResponse.json(solution)
     } catch (error) {
         console.error('Error updating solution:', error)

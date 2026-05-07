@@ -15,7 +15,7 @@ export default function SolutionsPage() {
     const fetchSolutions = async () => {
         setLoading(true)
         try {
-            const res = await fetch('/api/solutions?admin=true')
+            const res = await fetch(`/api/solutions?admin=true&t=${Date.now()}`, { cache: 'no-store' })
             if (res.ok) {
                 const data = await res.json()
                 setSolutions(Array.isArray(data) ? data : [])
@@ -76,9 +76,13 @@ export default function SolutionsPage() {
             if (res.ok) {
                 setIsEditing(false)
                 fetchSolutions()
+            } else {
+                const errData = await res.json()
+                alert(`Error al guardar: ${errData.error || errData.details || JSON.stringify(errData)}`)
             }
         } catch (error) {
             console.error('Error saving solution:', error)
+            alert('Error de conexión al guardar')
         }
     }
 

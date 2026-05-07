@@ -1,8 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Sparkles, Zap, Target } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { ArrowRight, Sparkles, Zap, Target, X, Loader2 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import PodcastHomeSection from '@/components/sections/PodcastHomeSection'
 import LatestNewsSection from '@/components/sections/LatestNewsSection'
 import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
@@ -24,7 +25,44 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ featuredSolutions }: HomeClientProps) {
-    
+    const [displaySolutions, setDisplaySolutions] = useState<HomeSolution[]>([])
+    const [isDemoOpen, setIsDemoOpen] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [demoData, setDemoData] = useState({ name: '', email: '', phone: '', solutionSlug: '' })
+    const [demoSuccess, setDemoSuccess] = useState(false)
+
+    useEffect(() => {
+        // Shuffle and pick 6 random solutions
+        const shuffled = [...featuredSolutions].sort(() => 0.5 - Math.random())
+        setDisplaySolutions(shuffled.slice(0, 6))
+    }, [featuredSolutions])
+
+    const handleDemoSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setIsSubmitting(true)
+        try {
+            const res = await fetch('/api/demos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(demoData)
+            })
+            if (res.ok) {
+                setDemoSuccess(true)
+                setTimeout(() => {
+                    setIsDemoOpen(false)
+                    setDemoSuccess(false)
+                    setDemoData({ name: '', email: '', phone: '', solutionSlug: '' })
+                }, 3000)
+            } else {
+                alert('Hubo un error al enviar tu solicitud. Inténtalo de nuevo.')
+            }
+        } catch (error) {
+            alert('Error de red. Inténtalo de nuevo.')
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
     const getSolutionImage = (solution: HomeSolution) => {
         if (solution.multimediaUrl && !solution.multimediaUrl.includes('placeholder')) {
             return solution.multimediaUrl
@@ -112,11 +150,11 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         </p>
                     </div>
 
-                    {featuredSolutions.length === 0 ? (
-                        <div className="text-center text-gray-500 bg-white py-8 rounded-2xl border border-gray-100">Pronto publicaremos nuestras soluciones destacadas.</div>
+                    {displaySolutions.length === 0 ? (
+                        <div className="text-center text-gray-500 bg-white py-8 rounded-2xl border border-gray-100">Cargando soluciones...</div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {featuredSolutions.map((solution) => (
+                            {displaySolutions.map((solution) => (
                                 <Link
                                     key={solution.id}
                                     href={`/soluciones/${solution.slug}`}
@@ -156,10 +194,17 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         </div>
                     )}
 
-                    <div className="mt-8 text-center">
+                    <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <button
+                            onClick={() => setIsDemoOpen(true)}
+                            className="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-medium text-sm rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg group"
+                        >
+                            Solicita tu demo
+                            <Zap size={16} className="ml-2 group-hover:animate-pulse" />
+                        </button>
                         <Link
                             href="/soluciones"
-                            className="inline-flex items-center px-6 py-2.5 bg-white text-gray-900 font-medium text-sm rounded-xl border border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm hover:shadow-md group"
+                            className="inline-flex items-center px-8 py-3 bg-white text-gray-900 font-medium text-sm rounded-xl border border-gray-200 hover:border-gray-300 transition-all shadow-sm group"
                         >
                             Ver Todas las Soluciones
                             <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -208,6 +253,119 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
 
 
             <LeadCaptureSection />
+
+            {/* DEMO MODAL */}
+            <AnimatePresence>
+                {isDemoOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                            onClick={() => setIsDemoOpen(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden z-10"
+                        >
+                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                                <div>
+                                    <h3 className="text-xl font-bold text-gray-900">Solicita tu Demo</h3>
+                                    <p className="text-xs text-gray-500 mt-1">Conoce cómo podemos transformar tu negocio.</p>
+                                </div>
+                                <button
+                                    onClick={() => setIsDemoOpen(false)}
+                                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-full transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+                            
+                            {demoSuccess ? (
+                                <div className="p-8 text-center bg-white">
+                                    <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <Sparkles size={32} />
+                                    </div>
+                                    <h4 className="text-lg font-bold text-gray-900 mb-2">¡Solicitud Enviada!</h4>
+                                    <p className="text-gray-600">Nos pondremos en contacto contigo muy pronto para agendar la demo.</p>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleDemoSubmit} className="p-6 space-y-4 bg-white">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={demoData.name}
+                                            onChange={e => setDemoData(d => ({ ...d, name: e.target.value }))}
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                            placeholder="Tu nombre"
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Email Profesional</label>
+                                            <input
+                                                type="email"
+                                                required
+                                                value={demoData.email}
+                                                onChange={e => setDemoData(d => ({ ...d, email: e.target.value }))}
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                                placeholder="tu@empresa.com"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                                            <input
+                                                type="tel"
+                                                required
+                                                value={demoData.phone}
+                                                onChange={e => setDemoData(d => ({ ...d, phone: e.target.value }))}
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                                placeholder="+34 600 000 000"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Solución de interés</label>
+                                        <div className="relative">
+                                            <select
+                                                required
+                                                value={demoData.solutionSlug}
+                                                onChange={e => setDemoData(d => ({ ...d, solutionSlug: e.target.value }))}
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all appearance-none bg-white font-medium text-gray-800"
+                                            >
+                                                <option value="" disabled>Selecciona una solución...</option>
+                                                {featuredSolutions.map(s => (
+                                                    <option key={s.id} value={s.slug}>{s.title}</option>
+                                                ))}
+                                            </select>
+                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full mt-2 bg-black text-white font-medium py-3 rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center shadow-lg hover:shadow-xl disabled:opacity-70"
+                                    >
+                                        {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : 'Solicitar Demo Ahora'}
+                                    </button>
+                                    <p className="text-center text-xs text-gray-400 mt-4">
+                                        Tus datos están protegidos y no los compartimos con terceros.
+                                    </p>
+                                </form>
+                            )}
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     )
 }

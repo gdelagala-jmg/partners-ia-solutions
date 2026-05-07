@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  // Fetching featured solutions on the server
+  // Fetching all published solutions to allow client-side randomization
   const solutions = await prisma.solution.findMany({
-    where: { published: true, featured: true },
+    where: { published: true },
     orderBy: { featuredOrder: 'asc' },
-    take: 3
+    include: { gallery: { orderBy: { order: 'asc' } } }
   })
 
   // Adapt database objects to HomeSolution interface
@@ -25,7 +25,7 @@ export default async function HomePage() {
     id: s.id,
     title: s.title,
     slug: s.slug,
-    multimediaUrl: s.multimedia,
+    multimediaUrl: (s.gallery && s.gallery.length > 0) ? s.gallery[0].url : (s.multimedia || null),
     description: s.description,
     type: s.type
   }))
