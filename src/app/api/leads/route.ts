@@ -193,13 +193,20 @@ export async function POST(request: Request) {
             const label = typeLabels[data.source] || '🆕 NUEVO LEAD'
             const solutionInfo = data.solutionTitle ? `\n<b>Solución:</b> ${data.solutionTitle}` : ''
             
+            // Build detailed info for Roadmap/Lead Capture
+            let detailedInfo = ''
+            if (data.scope) detailedInfo += `\n<b>Ámbito:</b> ${data.scope}`
+            if (data.bottleneck) detailedInfo += `\n<b>Cuello de botella:</b> ${data.bottleneck}`
+            if (data.urgency) detailedInfo += `\n<b>Urgencia:</b> ${data.urgency}/10`
+            if (data.desiredResult) detailedInfo += `\n<b>Resultado deseado:</b> ${data.desiredResult}`
+
             const telegramMessage = `
 <b>${label}</b>
 ────────────────
 <b>Nombre:</b> ${data.name}
 <b>Email:</b> ${data.email}
 <b>Teléfono:</b> ${data.phone || 'N/A'}
-<b>Empresa:</b> ${data.company || 'N/A'}${solutionInfo}
+<b>Empresa:</b> ${data.company || 'N/A'}${solutionInfo}${detailedInfo}
 
 <b>Mensaje:</b>
 <i>${data.message || 'Sin mensaje'}</i>
