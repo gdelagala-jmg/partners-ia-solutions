@@ -23,6 +23,21 @@ export async function POST(request: Request) {
             }
         })
 
+        // Send Telegram Notification
+        try {
+            const { sendTelegramNotification } = await import('@/lib/telegram')
+            await sendTelegramNotification(`
+<b>🚀 Nueva Solicitud de Demo</b>
+<b>Nombre:</b> ${name}
+<b>Email:</b> ${email}
+<b>Teléfono:</b> ${phone || 'No proporcionado'}
+<b>Solución:</b> ${solutionSlug}
+<b>Origen:</b> Home Modal
+            `)
+        } catch (telegramErr) {
+            console.error('Error sending Telegram notification:', telegramErr)
+        }
+
         // If you have MAKE_WEBHOOK_URL, you can also send it there
         if (process.env.MAKE_WEBHOOK_URL) {
             try {

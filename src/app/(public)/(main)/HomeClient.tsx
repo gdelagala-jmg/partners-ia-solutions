@@ -345,13 +345,13 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                             <div className="relative">
                                                 <select
                                                     required
-                                                    value={demoData.solution}
-                                                    onChange={e => setDemoData(d => ({ ...d, solution: e.target.value }))}
+                                                    value={demoData.solutionSlug}
+                                                    onChange={e => setDemoData(d => ({ ...d, solutionSlug: e.target.value }))}
                                                     className="w-full pl-4 pr-10 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm appearance-none bg-gray-50/30 cursor-pointer"
                                                 >
                                                     <option value="" disabled>Selecciona una solución...</option>
-                                                    {allSolutions.map(s => (
-                                                        <option key={s.id} value={s.title}>{s.title}</option>
+                                                    {featuredSolutions.map(s => (
+                                                        <option key={s.id} value={s.slug}>{s.title}</option>
                                                     ))}
                                                 </select>
                                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
