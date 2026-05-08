@@ -365,10 +365,10 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                         <div className="pt-2">
                                             <button
                                                 type="submit"
-                                                disabled={isDemoLoading}
+                                                disabled={isSubmitting}
                                                 className="w-full py-4 bg-[#1D1D1F] hover:bg-black text-white rounded-2xl font-bold transition-all transform active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
                                             >
-                                                {isDemoLoading ? (
+                                                {isSubmitting ? (
                                                     <>
                                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                                         Enviando...
