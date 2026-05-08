@@ -47,77 +47,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             return NextResponse.json({ error: 'No hay suscriptores activos para enviar' }, { status: 400 })
         }
 
-        // 3. Prepare sending results
-        let sentCount = 0
-        let failedCount = 0
-        const batchSize = 10 // Safe batch size for SMTP
+        // 3. Send emails
+        const { sendBulkEmails } = await import('@/lib/email')
+        const sendResult = await sendBulkEmails(campaign, subscribers)
         
-        // Process in batches
-        for (let i = 0; i < subscribers.length; i += batchSize) {
-            const batch = subscribers.slice(i, i + batchSize)
-            
-            await Promise.all(batch.map(async (subscriber) => {
-                try {
-                    // Generate HTML with unique unsubscribe token
-                    const html = generateNewsletterHtml(campaign, false, subscriber.unsubscribeToken)
-                    
-                    const result = await sendEmail({
-                        to: subscriber.email,
-                        subject: campaign.subject,
-                        html
-                    })
-
-                    // Log success
-                    await prisma.newsletterCampaignLog.upsert({
-                        where: {
-                            campaignId_subscriberId: {
-                                campaignId: id,
-                                subscriberId: subscriber.id
-                            }
-                        },
-                        create: {
-                            campaignId: id,
-                            subscriberId: subscriber.id,
-                            deliveryStatus: 'SENT',
-                            provider: 'SMTP',
-                            providerMsgId: (result as any).messageId
-                        },
-                        update: {
-                            deliveryStatus: 'SENT',
-                            providerMsgId: (result as any).messageId
-                        }
-                    })
-                    sentCount++
-                } catch (error: any) {
-                    // Log failure
-                    await prisma.newsletterCampaignLog.upsert({
-                        where: {
-                            campaignId_subscriberId: {
-                                campaignId: id,
-                                subscriberId: subscriber.id
-                            }
-                        },
-                        create: {
-                            campaignId: id,
-                            subscriberId: subscriber.id,
-                            deliveryStatus: 'FAILED',
-                            lastError: error.message
-                        },
-                        update: {
-                            deliveryStatus: 'FAILED',
-                            lastError: error.message
-                        }
-                    })
-                    failedCount++
-                }
-            }))
-            
-            // Optional: Small delay between batches if needed
-            // await new Promise(resolve => setTimeout(resolve, 500))
-        }
-
         // 4. Final update
-        const finalStatus = failedCount === 0 ? 'SENT' : (sentCount > 0 ? 'PARTIALLY_FAILED' : 'FAILED')
+        const finalStatus = sendResult.failed === 0 ? 'SENT' : (sendResult.sent > 0 ? 'PARTIALLY_FAILED' : 'FAILED')
         
         await prisma.newsletterCampaign.update({
             where: { id },
@@ -129,8 +64,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
         return NextResponse.json({ 
             success: true, 
-            sent: sentCount, 
-            failed: failedCount,
+            sent: sendResult.sent, 
+            failed: sendResult.failed,
             status: finalStatus
         })
 

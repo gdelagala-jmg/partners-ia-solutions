@@ -22,7 +22,8 @@ import {
     Link2,
     Bot,
     LayoutGrid,
-    Send
+    Send,
+    Settings
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
@@ -40,6 +41,7 @@ const menuItems = [
     { name: 'Noticias', href: '/admin/noticias', icon: FileText },
     { name: 'Audiencia', href: '/admin/newsletter', icon: Users },
     { name: 'Campañas', href: '/admin/newsletter/campaigns', icon: Send },
+    { name: 'Newsletter Config', href: '/admin/newsletter/settings', icon: Settings },
     { name: 'Mensajes', href: '/admin/leads', icon: Mail },
     { name: 'Equipo', icon: Users, href: '/admin/equipo' },
     { name: 'Casos Éxito', icon: Trophy, href: '/admin/casos' },

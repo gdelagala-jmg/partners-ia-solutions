@@ -74,6 +74,14 @@ export async function PUT(request: Request, { params }: { params: Params }) {
         const isNewPublish = !existing.published && post.published
         if (isNewPublish) {
             await triggerMakeWebhook(post, true)
+            
+            // FASE 6: Generación automática de newsletter
+            try {
+                const { createCampaignFromPost } = await import('@/lib/newsletter-automation')
+                await createCampaignFromPost(post)
+            } catch (err) {
+                console.error('Error auto-generating newsletter campaign:', err)
+            }
         }
         return NextResponse.json(post)
     } catch (error: any) {
