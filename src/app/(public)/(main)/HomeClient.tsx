@@ -269,9 +269,19 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative bg-white rounded-2xl shadow-2xl w-[calc(100%-2rem)] max-w-lg overflow-hidden z-10"
+                            className="relative bg-white rounded-3xl shadow-2xl w-[calc(100%-2rem)] max-w-lg overflow-hidden z-10 flex flex-col max-h-[90vh]"
                         >
-                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                            <button 
+                                onClick={() => setIsDemoOpen(false)}
+                                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all z-20"
+                                aria-label="Cerrar"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+
+                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                                 <div>
                                     <h3 className="text-xl font-bold text-gray-900">Solicita tu Demo</h3>
                                     <p className="text-xs text-gray-500 mt-1">Conoce cómo podemos transformar tu negocio.</p>
@@ -293,73 +303,83 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                     <p className="text-gray-600">Nos pondremos en contacto contigo muy pronto para agendar la demo.</p>
                                 </div>
                             ) : (
-                                <form onSubmit={handleDemoSubmit} className="p-6 space-y-4 bg-white">
-                                    <div className="space-y-1">
-                                        <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Nombre Completo</label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={demoData.name}
-                                            onChange={e => setDemoData(d => ({ ...d, name: e.target.value }))}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-sm"
-                                            placeholder="Tu nombre"
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <form onSubmit={handleDemoSubmit} className="flex flex-col overflow-hidden">
+                                    <div className="p-6 space-y-6 overflow-y-auto custom-scrollbar">
                                         <div className="space-y-1">
-                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Email Profesional</label>
+                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Nombre Completo</label>
                                             <input
-                                                type="email"
+                                                type="text"
                                                 required
-                                                value={demoData.email}
-                                                onChange={e => setDemoData(d => ({ ...d, email: e.target.value }))}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-sm"
-                                                placeholder="tu@empresa.com"
+                                                value={demoData.name}
+                                                onChange={e => setDemoData(d => ({ ...d, name: e.target.value }))}
+                                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
+                                                placeholder="Tu nombre"
                                             />
                                         </div>
-                                        <div className="space-y-1">
-                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Teléfono</label>
-                                            <input
-                                                type="tel"
-                                                required
-                                                value={demoData.phone}
-                                                onChange={e => setDemoData(d => ({ ...d, phone: e.target.value }))}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-sm"
-                                                placeholder="+34 600 000 000"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Solución de interés</label>
-                                        <div className="relative">
-                                            <select
-                                                required
-                                                value={demoData.solutionSlug}
-                                                onChange={e => setDemoData(d => ({ ...d, solutionSlug: e.target.value }))}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all appearance-none bg-white font-medium text-gray-800"
-                                            >
-                                                <option value="" disabled>Selecciona una solución...</option>
-                                                {featuredSolutions.map(s => (
-                                                    <option key={s.id} value={s.slug}>{s.title}</option>
-                                                ))}
-                                            </select>
-                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                </svg>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Email Profesional</label>
+                                                <input
+                                                    type="email"
+                                                    required
+                                                    value={demoData.email}
+                                                    onChange={e => setDemoData(d => ({ ...d, email: e.target.value }))}
+                                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
+                                                    placeholder="tu@empresa.com"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Teléfono</label>
+                                                <input
+                                                    type="tel"
+                                                    required
+                                                    value={demoData.phone}
+                                                    onChange={e => setDemoData(d => ({ ...d, phone: e.target.value }))}
+                                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
+                                                    placeholder="+34 600 000 000"
+                                                />
                                             </div>
                                         </div>
+                                        <div className="space-y-1">
+                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Solución de interés</label>
+                                            <div className="relative">
+                                                <select
+                                                    required
+                                                    value={demoData.solution}
+                                                    onChange={e => setDemoData(d => ({ ...d, solution: e.target.value }))}
+                                                    className="w-full pl-4 pr-10 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm appearance-none bg-gray-50/30 cursor-pointer"
+                                                >
+                                                    <option value="" disabled>Selecciona una solución...</option>
+                                                    {allSolutions.map(s => (
+                                                        <option key={s.id} value={s.title}>{s.title}</option>
+                                                    ))}
+                                                </select>
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-2">
+                                            <button
+                                                type="submit"
+                                                disabled={isDemoLoading}
+                                                className="w-full py-4 bg-[#1D1D1F] hover:bg-black text-white rounded-2xl font-bold transition-all transform active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
+                                            >
+                                                {isDemoLoading ? (
+                                                    <>
+                                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                        Enviando...
+                                                    </>
+                                                ) : 'Solicitar Demo Ahora'}
+                                            </button>
+                                            <p className="mt-4 text-[11px] text-center text-gray-400 font-medium">
+                                                Tus datos están protegidos y no los compartimos con terceros.
+                                            </p>
+                                        </div>
                                     </div>
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full mt-2 bg-black text-white font-medium py-3 rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center shadow-lg hover:shadow-xl disabled:opacity-70"
-                                    >
-                                        {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : 'Solicitar Demo Ahora'}
-                                    </button>
-                                    <p className="text-center text-xs text-gray-400 mt-4">
-                                        Tus datos están protegidos y no los compartimos con terceros.
-                                    </p>
                                 </form>
                             )}
                         </motion.div>
