@@ -5,6 +5,8 @@ import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 
+import LeadForm from '@/components/forms/LeadForm'
+
 export default function SolutionDetailClient({ solution }: { solution: any }) {
     const [currentImageIdx, setCurrentImageIdx] = useState(0)
 
@@ -130,6 +132,44 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                             </a>
                         </div>
                     )}
+
+                    {/* SOLICITAR DEMO SECTION */}
+                    <div id="demo-section" className="mt-16 md:mt-24 pt-16 border-t border-gray-100">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <span className="text-blue-600 font-bold tracking-wider uppercase text-sm">Prueba de Valor</span>
+                                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mt-2 mb-4 leading-tight">
+                                    ¿Quieres ver <span className="italic text-blue-600">{solution.title}</span> en acción?
+                                </h2>
+                                <p className="text-gray-600 text-lg mb-8">
+                                    Agenda una demo personalizada y descubre cómo esta solución de IA puede transformar tu operativa diaria. 
+                                    Sin compromiso, adaptada a tus necesidades reales.
+                                </p>
+                                <ul className="space-y-4">
+                                    {['Demo 100% personalizada', 'Análisis de viabilidad técnica', 'Resolución de dudas en vivo'].map((item, i) => (
+                                        <li key={i} className="flex items-center gap-3 text-gray-700 font-medium">
+                                            <div className="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                                <CheckCircle2 size={14} />
+                                            </div>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="bg-gray-50/50 p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm">
+                                <LeadForm 
+                                    layout="inline"
+                                    source="DEMO_REQUEST"
+                                    context={{
+                                        solutionSlug: solution.slug,
+                                        solutionTitle: solution.title,
+                                        solutionType: solution.type,
+                                        sourcePage: "Solution Detail"
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

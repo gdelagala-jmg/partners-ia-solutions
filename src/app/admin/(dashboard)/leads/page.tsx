@@ -12,6 +12,8 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 const SOURCE_LABELS: Record<string, { label: string; color: string }> = {
     CONTACT: { label: 'Contacto', color: 'bg-purple-50/50 text-purple-600 border-purple-100' },
     LEAD_CAPTURE: { label: 'Hoja de Ruta', color: 'bg-orange-50/50 text-orange-600 border-orange-100' },
+    DEMO_REQUEST: { label: 'Solicitud Demo', color: 'bg-indigo-50/50 text-indigo-600 border-indigo-100' },
+    ROADMAP_REQUEST: { label: 'Hoja de Ruta', color: 'bg-orange-50/50 text-orange-600 border-orange-100' },
 }
 
 const urgencyColor = (v?: number) => {
@@ -150,9 +152,21 @@ export default function LeadsPage() {
                                         </div>
                                     </div>
 
-                                    {/* Lead capture quick preview */}
-                                    {isLeadCapture && (
-                                        <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    {/* Lead quick preview (Contextual) */}
+                                    {(isLeadCapture || lead.solutionTitle || lead.company) && (
+                                        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            {lead.company && (
+                                                <div className="bg-white/40 border border-white rounded-2xl p-4 shadow-sm">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Empresa</p>
+                                                    <p className="text-[13px] font-bold text-[#1D1D1F] line-clamp-1">{lead.company}</p>
+                                                </div>
+                                            )}
+                                            {lead.solutionTitle && (
+                                                <div className="bg-blue-50/40 border border-blue-100 rounded-2xl p-4 shadow-sm">
+                                                    <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1.5">Solución</p>
+                                                    <p className="text-[13px] font-bold text-blue-700 line-clamp-1">{lead.solutionTitle}</p>
+                                                </div>
+                                            )}
                                             {lead.scope && (
                                                 <div className="bg-white/40 border border-white rounded-2xl p-4 shadow-sm">
                                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Ámbito</p>
@@ -165,12 +179,6 @@ export default function LeadsPage() {
                                                     <p className={`text-lg font-black ${urgencyColor(lead.urgency)}`}>
                                                         {lead.urgency}<span className="text-[10px] opacity-40 ml-0.5">/10</span>
                                                     </p>
-                                                </div>
-                                            )}
-                                            {lead.bottleneck && (
-                                                <div className="bg-white/40 border border-white rounded-2xl p-4 shadow-sm col-span-2 md:col-span-1">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Cuello de botella</p>
-                                                    <p className="text-[13px] font-bold text-[#1D1D1F] line-clamp-1">{lead.bottleneck}</p>
                                                 </div>
                                             )}
                                         </div>
