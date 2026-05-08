@@ -167,6 +167,12 @@ model Lead {
   scope         String?
   source        String   @default("CONTACT")
   urgency       Int?
+  company       String?
+  solutionSlug  String?
+  solutionTitle String?
+  solutionType  String?
+  sourceUrl     String?
+  sourcePage    String?
 }
 
 model AdminUser {
