@@ -10,6 +10,7 @@ import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 import ClientCarousel from '@/components/sections/ClientCarousel'
 import PageBadge from '@/components/ui/PageBadge'
 import { isLabSolution } from '@/lib/utils'
+import NewsletterForm from '@/components/newsletter/NewsletterForm'
 
 interface HomeSolution {
     id: string
@@ -216,6 +217,13 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
 
             <PodcastHomeSection />
             <LatestNewsSection />
+
+            {/* Newsletter Section */}
+            <section className="py-20 bg-white">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <NewsletterForm variant="home" />
+                </div>
+            </section>
 
             <section className="pt-6 pb-10 bg-white border-t border-gray-100">
                 <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">

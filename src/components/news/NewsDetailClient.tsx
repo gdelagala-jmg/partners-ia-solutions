@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Calendar, Tag, ArrowLeft, Clock, Linkedin, Facebook, Twitter, MessageCircle, Mail, Link2, Send, AtSign, Printer } from 'lucide-react'
+import NewsletterForm from '../newsletter/NewsletterForm'
 
 interface NewsPost {
     id: string
@@ -144,6 +145,16 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                             .replace(/<\/span>/g, '')
                     }}
                 />
+
+                {/* Newsletter Subscription */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.25 }}
+                    className="mt-12"
+                >
+                    <NewsletterForm variant="inline" />
+                </motion.div>
 
                 {/* Social Sharing */}
                 <motion.div

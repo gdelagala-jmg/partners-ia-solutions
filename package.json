@@ -23,6 +23,7 @@
     "adm-zip": "^0.5.16",
     "ai": "^6.0.147",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "firebase": "^12.9.0",
     "framer-motion": "^12.31.0",
     "google-translate-api-x": "^10.7.2",
