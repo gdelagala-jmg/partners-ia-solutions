@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { sendBulkEmails } from '@/lib/email'
 import { generateNewsletterHtml } from '@/lib/newsletter-templates'
 
+export const maxDuration = 60; // 🛡️ Allow up to 60 seconds for bulk sending
+
 export async function GET(request: Request) {
     // 🛡️ Security Check
     const authHeader = request.headers.get('authorization')
