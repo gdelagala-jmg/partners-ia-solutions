@@ -21,6 +21,8 @@ export default function LeadCaptureSection() {
         desiredResult: '',
         name: '',
         email: '',
+        phone: '',
+        company: '',
         privacyAccepted: false,
     })
     const [loading, setLoading] = useState(false)
@@ -62,6 +64,8 @@ export default function LeadCaptureSection() {
                     bottleneck: form.bottleneck,
                     urgency: form.urgency,
                     desiredResult: form.desiredResult,
+                    phone: form.phone,
+                    company: form.company,
                     source: 'LEAD_CAPTURE',
                 }),
             })
@@ -72,7 +76,7 @@ export default function LeadCaptureSection() {
             }
 
             setStatus('success')
-            setForm({ scope: '', bottleneck: '', urgency: 5, desiredResult: '', name: '', email: '', privacyAccepted: false })
+            setForm({ scope: '', bottleneck: '', urgency: 5, desiredResult: '', name: '', email: '', phone: '', company: '', privacyAccepted: false })
         } catch (err: any) {
             setStatus('error')
             setErrorMsg(err.message || 'Error inesperado. Inténtalo de nuevo.')
@@ -265,6 +269,36 @@ export default function LeadCaptureSection() {
                                         onChange={handleChange}
                                         required
                                         placeholder="tu@email.com"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                                    />
+                                </div>
+
+                                {/* Phone */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                        Teléfono
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={form.phone}
+                                        onChange={handleChange}
+                                        placeholder="+34 600 000 000"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                                    />
+                                </div>
+
+                                {/* Company */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                        Empresa
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="company"
+                                        value={form.company}
+                                        onChange={handleChange}
+                                        placeholder="Tu empresa"
                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
                                     />
                                 </div>
