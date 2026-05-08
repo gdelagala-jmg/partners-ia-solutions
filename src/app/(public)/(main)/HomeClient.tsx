@@ -271,15 +271,6 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             className="relative bg-white rounded-3xl shadow-2xl w-[calc(100%-2rem)] max-w-lg overflow-hidden z-10 flex flex-col max-h-[90vh]"
                         >
-                            <button 
-                                onClick={() => setIsDemoOpen(false)}
-                                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all z-20"
-                                aria-label="Cerrar"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
 
                             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                                 <div>
