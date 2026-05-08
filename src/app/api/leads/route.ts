@@ -3,6 +3,7 @@ import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import nodemailer from 'nodemailer'
 import { z } from 'zod'
+import { sendTelegramNotification } from '@/lib/telegram'
 
 // 1. Validation Schema
 const leadSchema = z.object({
@@ -176,6 +177,40 @@ export async function POST(request: Request) {
             }
         } catch (mailError) {
             console.error('Non-critical: Error sending internal notification:', mailError)
+        }
+
+        // 6. Telegram Notification
+        try {
+            const typeLabels: Record<string, string> = {
+                DEMO_REQUEST: '🚀 SOLICITUD DE DEMO',
+                CONTACT: '📩 CONTACTO GENÉRICO',
+                ROADMAP_REQUEST: '🗺️ SOLICITUD DE HOJA DE RUTA',
+                LEAD_CAPTURE: '🎯 CAPTACIÓN DE LEAD',
+                LEGACY_DEMO: '⏳ DEMO (LEGACY)',
+                LEGACY_CONTACT: '⏳ CONTACTO (LEGACY)'
+            }
+
+            const label = typeLabels[data.source] || '🆕 NUEVO LEAD'
+            const solutionInfo = data.solutionTitle ? `\n<b>Solución:</b> ${data.solutionTitle}` : ''
+            
+            const telegramMessage = `
+<b>${label}</b>
+────────────────
+<b>Nombre:</b> ${data.name}
+<b>Email:</b> ${data.email}
+<b>Teléfono:</b> ${data.phone || 'N/A'}
+<b>Empresa:</b> ${data.company || 'N/A'}${solutionInfo}
+
+<b>Mensaje:</b>
+<i>${data.message || 'Sin mensaje'}</i>
+────────────────
+<b>Origen:</b> ${data.sourcePage || 'N/A'}
+<b>URL:</b> ${data.sourceUrl || 'N/A'}
+`.trim()
+
+            await sendTelegramNotification(telegramMessage)
+        } catch (tgError) {
+            console.error('Non-critical: Error sending Telegram notification:', tgError)
         }
 
         return NextResponse.json(lead, { status: 201 })

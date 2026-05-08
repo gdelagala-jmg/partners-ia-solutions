@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendTelegramNotification } from '@/lib/telegram'
 
 export async function POST(req: Request) {
   try {
@@ -22,6 +23,26 @@ export async function POST(req: Request) {
         sentiment: 'NEUTRAL'
       }
     })
+
+    // Send Telegram Notification
+    try {
+      const telegramMessage = `
+<b>🤖 NUEVO LEAD (ASISTENTE IA)</b>
+────────────────
+<b>Nombre:</b> ${name}
+<b>Email:</b> ${email}
+<b>Teléfono:</b> ${phone || 'N/A'}
+<b>Empresa:</b> ${company || 'N/A'}
+
+<b>Resumen del chat:</b>
+<i>${chatSummary || 'Sin resumen'}</i>
+────────────────
+`.trim()
+
+      await sendTelegramNotification(telegramMessage)
+    } catch (tgError) {
+      console.error('Non-critical: Error sending Telegram notification:', tgError)
+    }
 
     return NextResponse.json(lead)
   } catch (error) {

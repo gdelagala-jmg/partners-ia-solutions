@@ -269,7 +269,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden z-10"
+                            className="relative bg-white rounded-2xl shadow-2xl w-[calc(100%-2rem)] max-w-lg overflow-hidden z-10"
                         >
                             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                                 <div>
@@ -294,43 +294,43 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                 </div>
                             ) : (
                                 <form onSubmit={handleDemoSubmit} className="p-6 space-y-4 bg-white">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+                                    <div className="space-y-1">
+                                        <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Nombre Completo</label>
                                         <input
                                             type="text"
                                             required
                                             value={demoData.name}
                                             onChange={e => setDemoData(d => ({ ...d, name: e.target.value }))}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-sm"
                                             placeholder="Tu nombre"
                                         />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Email Profesional</label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="space-y-1">
+                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Email Profesional</label>
                                             <input
                                                 type="email"
                                                 required
                                                 value={demoData.email}
                                                 onChange={e => setDemoData(d => ({ ...d, email: e.target.value }))}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-sm"
                                                 placeholder="tu@empresa.com"
                                             />
                                         </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                                        <div className="space-y-1">
+                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Teléfono</label>
                                             <input
                                                 type="tel"
                                                 required
                                                 value={demoData.phone}
                                                 onChange={e => setDemoData(d => ({ ...d, phone: e.target.value }))}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all text-sm"
                                                 placeholder="+34 600 000 000"
                                             />
                                         </div>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Solución de interés</label>
+                                    <div className="space-y-1">
+                                        <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Solución de interés</label>
                                         <div className="relative">
                                             <select
                                                 required

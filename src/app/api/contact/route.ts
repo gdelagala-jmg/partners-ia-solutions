@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 import { prisma } from '@/lib/prisma'
+import { sendTelegramNotification } from '@/lib/telegram'
 
 export async function POST(request: Request) {
     try {
@@ -63,6 +64,25 @@ export async function POST(request: Request) {
             console.log('Email sent successfully for lead:', lead.id)
         } else {
             console.warn('SMTP configuration missing. Email was NOT sent for lead:', lead.id)
+        }
+
+        // 3. Telegram Notification
+        try {
+            const telegramMessage = `
+<b>📩 NUEVO CONTACTO (WEB)</b>
+────────────────
+<b>Nombre:</b> ${name}
+<b>Email:</b> ${email}
+<b>Teléfono:</b> ${phone || 'N/A'}
+
+<b>Mensaje:</b>
+<i>${message || 'Sin mensaje'}</i>
+────────────────
+`.trim()
+
+            await sendTelegramNotification(telegramMessage)
+        } catch (tgError) {
+            console.error('Non-critical: Error sending Telegram notification:', tgError)
         }
 
         return NextResponse.json(lead)
