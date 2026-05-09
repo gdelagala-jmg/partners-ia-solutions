@@ -104,7 +104,7 @@ export default function SaveFuelHero() {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="lg:col-span-5 relative"
           >
-            <div className="relative z-10 rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl shadow-emerald-500/10 max-h-[500px] md:max-h-[600px] lg:max-h-[650px]">
+            <div className="relative z-10 rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl shadow-emerald-500/10 max-h-[380px] md:max-h-[480px] lg:max-h-[560px]">
               <Image 
                 src="/savefuel-preview.png" 
                 alt="SaveFuel App Preview" 
@@ -113,6 +113,8 @@ export default function SaveFuelHero() {
                 className="w-full h-auto object-cover object-top"
                 priority
               />
+              {/* Bottom gradient mask to cleanly crop the image */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
             </div>
             
             {/* Glow effects */}
