@@ -104,13 +104,13 @@ export default function SaveFuelHero() {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="lg:col-span-5 relative"
           >
-            <div className="relative z-10 rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl shadow-emerald-500/10">
+            <div className="relative z-10 rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl shadow-emerald-500/10 max-h-[500px] md:max-h-[600px] lg:max-h-[650px]">
               <Image 
                 src="/savefuel-preview.png" 
                 alt="SaveFuel App Preview" 
                 width={500} 
                 height={700} 
-                className="w-full h-auto"
+                className="w-full h-auto object-cover object-top"
                 priority
               />
             </div>
