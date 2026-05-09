@@ -219,7 +219,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             <LatestNewsSection />
 
             {/* Newsletter Section */}
-            <section className="py-20 bg-white">
+            <section id="newsletter" className="py-20 bg-white scroll-mt-24">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <NewsletterForm variant="home" />
                 </div>

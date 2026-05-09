@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { sendEmail } from '@/lib/email'
+import { generateWelcomeEmailHtml } from '@/lib/newsletter-templates'
 
 const subscribeSchema = z.object({
     email: z.string().email('Email inválido'),
@@ -35,7 +37,7 @@ export async function POST(req: Request) {
                 )
             } else {
                 // Reactivate
-                await prisma.newsletterSubscriber.update({
+                const subscriber = await prisma.newsletterSubscriber.update({
                     where: { email },
                     data: { 
                         isActive: true,
@@ -44,12 +46,24 @@ export async function POST(req: Request) {
                         consentAt: new Date()
                     }
                 })
+
+                // Send Welcome Email
+                try {
+                    await sendEmail({
+                        to: email,
+                        subject: 'Bienvenido a Partners IA Solutions',
+                        html: generateWelcomeEmailHtml(subscriber.unsubscribeToken)
+                    })
+                } catch (emailError) {
+                    console.error('Non-critical: Error sending welcome email (reactivation):', emailError)
+                }
+
                 return NextResponse.json({ success: true, message: 'Suscripción reactivada.' })
             }
         }
 
         // Create new subscriber
-        await prisma.newsletterSubscriber.create({
+        const newSubscriber = await prisma.newsletterSubscriber.create({
             data: {
                 email,
                 sourceUrl,
@@ -60,6 +74,17 @@ export async function POST(req: Request) {
                 // unsubscribeToken is generated automatically by Prisma default(uuid())
             }
         })
+
+        // Send Welcome Email
+        try {
+            await sendEmail({
+                to: email,
+                subject: 'Bienvenido a Partners IA Solutions',
+                html: generateWelcomeEmailHtml(newSubscriber.unsubscribeToken)
+            })
+        } catch (emailError) {
+            console.error('Non-critical: Error sending welcome email:', emailError)
+        }
 
         // Also log consent in ConsentLog for audit trail
         try {

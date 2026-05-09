@@ -82,3 +82,66 @@ export function generateNewsletterHtml(campaign: any, isTest: boolean = false, s
     </html>
     `
 }
+
+export function generateWelcomeEmailHtml(subscriberToken: string) {
+    const unsubscribeUrl = `https://partnersiasolutions.com/newsletter/unsubscribe/${subscriberToken}`
+
+    return `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bienvenido a Partners IA Solutions</title>
+        <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1d1d1f; margin: 0; padding: 0; background-color: #ffffff; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { padding: 20px 0; border-bottom: 1px solid #f2f2f7; margin-bottom: 30px; text-align: center; }
+            .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #000; text-decoration: none; }
+            .title { font-size: 32px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 20px; color: #000; }
+            .content { font-size: 16px; color: #1d1d1f; margin-bottom: 30px; }
+            .cta-container { margin: 40px 0; text-align: center; }
+            .cta-button { display: inline-block; padding: 16px 32px; background-color: #000000; color: #ffffff !important; text-decoration: none; border-radius: 14px; font-weight: 600; font-size: 16px; }
+            .footer { font-size: 12px; color: #86868b; margin-top: 60px; border-top: 1px solid #f2f2f7; padding-top: 30px; text-align: center; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <a href="https://partnersiasolutions.com" class="logo">PARTNERS IA <span style="color: #86868b;">SOLUTIONS</span></a>
+            </div>
+
+            <h1 class="title">¡Bienvenido a nuestra comunidad!</h1>
+            
+            <div class="content">
+                <p>Hola,</p>
+                <p>Gracias por suscribirte a la newsletter editorial de <strong>Partners IA Solutions</strong>. Estamos encantados de tenerte con nosotros.</p>
+                <p>A partir de ahora, recibirás directamente en tu bandeja de entrada:</p>
+                <ul>
+                    <li>Análisis exclusivos de las últimas tendencias en IA.</li>
+                    <li>Casos de éxito y soluciones prácticas para empresas.</li>
+                    <li>Novedades sobre herramientas y automatizaciones que están cambiando el mercado.</li>
+                </ul>
+                <p>Queremos ayudarte a mantenerte a la vanguardia tecnológica de la forma más sencilla posible.</p>
+            </div>
+            
+            <div class="cta-container">
+                <a href="https://partnersiasolutions.com/noticias" class="cta-button">Ver últimas noticias</a>
+                <div style="margin-top: 12px;">
+                    <a href="https://www.partnersiasolutions.com/soluciones" class="cta-button" style="background-color: #f2f2f7; color: #000000 !important;">Nuestras soluciones</a>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p style="margin-bottom: 8px;">&copy; ${new Date().getFullYear()} Partners IA Solutions. Todos los derechos reservados.</p>
+                <p style="margin-bottom: 16px;">Has recibido este email porque acabas de suscribirte a nuestra newsletter.</p>
+                <p>
+                    <a href="https://partnersiasolutions.com" style="color: #86868b; text-decoration: underline;">Web principal</a> &bull; 
+                    <a href="${unsubscribeUrl}" style="color: #86868b; text-decoration: underline;">Darme de baja</a>
+                </p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `
+}
