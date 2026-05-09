@@ -24,8 +24,11 @@ export async function sendEmail({ to, subject, html, text }: { to: string, subje
     if (!transporter) return { success: false, error: 'Configuración SMTP no encontrada' }
 
     try {
+        const fromName = "Partners IA Solutions";
+        const fromEmail = process.env.SMTP_USER || 'info@partnersiasolutions.com';
+        
         const info = await transporter.sendMail({
-            from: process.env.SMTP_FROM || `"Partners IA Solutions" <${process.env.SMTP_USER}>`,
+            from: `"${fromName}" <${fromEmail}>`,
             to,
             subject,
             html,
