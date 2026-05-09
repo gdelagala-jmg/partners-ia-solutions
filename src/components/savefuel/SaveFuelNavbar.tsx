@@ -51,7 +51,7 @@ export default function SaveFuelNavbar() {
                 </Link>
 
                 {/* Desktop Menu */}
-                <div className="hidden 2xl:flex items-center gap-8">
+                <div className="hidden xl:flex items-center gap-8">
                     <div className="flex items-center gap-8">
                         {navLinks.map((link) => (
                             <Link 
@@ -78,7 +78,7 @@ export default function SaveFuelNavbar() {
 
                 {/* Mobile Menu Toggle */}
                 <button 
-                    className="2xl:hidden w-11 h-11 flex items-center justify-center text-[#1D1D1F] bg-gray-50 rounded-xl"
+                    className="xl:hidden w-11 h-11 flex items-center justify-center text-[#1D1D1F] bg-gray-50 rounded-xl"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
                     {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -92,7 +92,7 @@ export default function SaveFuelNavbar() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="2xl:hidden bg-white border-t border-gray-50 overflow-hidden shadow-2xl"
+                        className="xl:hidden bg-white border-t border-gray-50 overflow-hidden shadow-2xl"
                     >
                         <div className="p-4 flex flex-col gap-3">
                             {navLinks.map((link) => (
