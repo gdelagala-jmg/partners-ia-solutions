@@ -26,7 +26,7 @@ export default async function AppLandingPage({ params }: { params: Promise<{ slu
     return (
         <div className="min-h-screen bg-white selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden">
             {/* Nav Header - Improved for Transparency/Glassmorphism */}
-            <div className="fixed top-0 left-0 w-full h-20 bg-white/70 backdrop-blur-2xl border-b border-gray-100/50 z-[100] flex items-center justify-between px-6 lg:px-12 transition-all duration-500">
+            <div className="fixed top-0 left-0 w-full h-20 bg-white/70 backdrop-blur-2xl border-b border-gray-100/50 z-[100] flex items-center justify-between px-4 md:px-6 lg:px-12 transition-all duration-500">
                 <Link href="/apps" className="flex items-center gap-2 text-gray-500 hover:text-emerald-600 transition-all group">
                     <div className="p-2 bg-gray-50 group-hover:bg-emerald-50 rounded-lg transition-colors">
                         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
@@ -57,7 +57,7 @@ export default async function AppLandingPage({ params }: { params: Promise<{ slu
                     For now, I'll conditionalize it: if content exists, we skip the default minimal hero to avoid double header.
                 */}
                 {!app.content && (
-                    <div className="max-w-5xl mx-auto px-6 lg:px-12 pt-12 mb-20 text-center space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                    <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-12 pt-12 mb-20 text-center space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
                         <div className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-600 shadow-xl shadow-emerald-500/5">
                             <Sparkles size={16} className="animate-spin-slow duration-[10s]" />
                             <span className="text-sm font-black uppercase tracking-widest">Herramienta Inteligente</span>
@@ -91,7 +91,7 @@ export default async function AppLandingPage({ params }: { params: Promise<{ slu
                 </article>
 
                 {/* Uniform Interactive Footer */}
-                <footer className="max-w-7xl mx-auto px-6 lg:px-12 pb-32">
+                <footer className="max-w-7xl mx-auto px-4 md:px-6 lg:px-12 pb-32">
                     <div className="pt-24 border-t border-gray-100 text-center space-y-12 animate-in fade-in fill-mode-both duration-700 delay-500">
                         <div className="space-y-4">
                             <h4 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter">¿Alguna pregunta sobre {app.name}?</h4>

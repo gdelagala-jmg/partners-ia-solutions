@@ -9,7 +9,7 @@ export default function SuccessStoriesPage() {
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
-                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
+                <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -26,7 +26,7 @@ export default function SuccessStoriesPage() {
                 </div>
             </section>
 
-            <main className="max-w-7xl mx-auto px-6 py-16 lg:px-8">
+            <main className="max-w-7xl mx-auto px-4 md:px-6 py-16 lg:px-8">
                 <div className="mt-8 p-12 bg-white rounded-3xl border border-gray-200 border-dashed text-center">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-2xl mb-6 border border-gray-200">
                         <Award className="text-gray-900" size={32} />

@@ -42,7 +42,7 @@ export default function SchoolPage() {
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
-                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
+                <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ export default function SchoolPage() {
 
             {/* Courses Grid */}
             <section className="py-8 lg:py-8">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                     {loading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[1, 2, 3].map((i) => (

@@ -87,7 +87,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
     <div className="min-h-screen bg-gray-50 pb-16">
       <div className="relative pt-28 pb-16 lg:pt-28 lg:pb-24 bg-white border-b border-gray-100 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 text-center">
             <Link href="/soluciones" className="inline-flex items-center text-sm font-medium text-gray-400 hover:text-blue-600 mb-8 transition-colors">
                 <ArrowLeft size={16} className="mr-2" />
                 Volver a todas las industrias

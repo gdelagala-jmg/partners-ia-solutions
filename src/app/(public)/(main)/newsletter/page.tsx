@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function NewsletterPage() {
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center bg-white px-6 py-12">
+    <div className="min-h-[80vh] flex flex-col items-center justify-center bg-white px-4 md:px-6 py-12">
       <div className="max-w-3xl w-full text-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Decorative Icon */}

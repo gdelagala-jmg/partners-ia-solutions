@@ -88,7 +88,7 @@ export default function FAQPage() {
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
       <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -109,7 +109,7 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ Categories & Items */}
-      <section className="py-20 px-6 lg:px-8">
+      <section className="py-20 px-4 md:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-20">
           {faqCategories.map((category, catIdx) => (
             <motion.div 
@@ -148,7 +148,7 @@ export default function FAQPage() {
 
       {/* CTA Section */}
       <section className="bg-gray-50 py-16 border-y border-gray-100">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
             <h3 className="text-2xl font-bold text-black mb-4 tracking-tight">¿Alguna otra duda especial?</h3>
             <p className="text-gray-600 mb-8 font-medium">Nuestro equipo de expertos está listo para resolver tus inquietudes técnicas o estratégicas.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

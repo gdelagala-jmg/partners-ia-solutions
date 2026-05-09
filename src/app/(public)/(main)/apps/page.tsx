@@ -42,7 +42,7 @@ export default function AppsIndexPage() {
     return (
         <div className="min-h-screen bg-[#fafafa] selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
             {/* Header / Hero Section */}
-            <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 px-6 overflow-hidden">
+            <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 px-4 md:px-6 overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 pointer-events-none opacity-40">
                     <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-blue-100/50 rounded-full blur-[100px] animate-pulse" />
                     <div className="absolute bottom-[20%] right-[5%] w-[300px] h-[300px] bg-indigo-100/40 rounded-full blur-[100px] animate-pulse delay-700" />
@@ -69,7 +69,7 @@ export default function AppsIndexPage() {
             </section>
 
             {/* Apps Grid */}
-            <section className="max-w-7xl mx-auto px-6 pb-32">
+            <section className="max-w-7xl mx-auto px-4 md:px-6 pb-32">
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {[1, 2, 3, 4, 5, 6].map(i => (

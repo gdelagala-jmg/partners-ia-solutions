@@ -37,7 +37,7 @@ const countries = [
 export default function SaveFuelCountries() {
     return (
         <section id="countries" className="py-6 bg-white font-outfit border-t border-gray-100">
-            <div className="max-w-[1200px] mx-auto px-6">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
                 {/* Tighter Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                     <div className="max-w-xl">

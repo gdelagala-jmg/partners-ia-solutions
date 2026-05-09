@@ -128,7 +128,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
             <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
-                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center">
+                <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -147,7 +147,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Sectors Grid as Solutions */}
             <section className="py-16 lg:py-24 bg-white">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                     <div className="mb-10 text-center md:text-left">
                         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Explorar por Industria</h2>
                         <p className="text-gray-600 mt-2 text-base max-w-2xl">
@@ -210,7 +210,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             {/* Final Solutions */}
             {finalSolutions.length > 0 && (
                 <section className="py-16 lg:py-24 bg-slate-50 border-t border-gray-100">
-                    <div className="max-w-5xl mx-auto px-6 lg:px-8">
+                    <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8">
                         <div className="mb-10 text-center md:text-left">
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Soluciones Finales</h2>
                             <p className="text-gray-600 mt-3 text-lg max-w-2xl">
@@ -229,7 +229,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             {/* Lab Prototypes */}
             {labPrototypes.length > 0 && (
                 <section className="py-16 lg:py-24 bg-slate-900 border-t border-slate-800">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                         <div className="mb-12 text-center md:text-left">
                             <div className="inline-block px-3 py-1 mb-4 bg-cyan-900/30 text-cyan-400 text-sm font-mono rounded-full border border-cyan-500/20">
                                 INNOVATION LAB

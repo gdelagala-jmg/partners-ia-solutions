@@ -13,7 +13,7 @@ export default function SaveFuelReveal() {
 
     return (
         <section id="how-it-works" className="py-10 bg-white font-outfit overflow-hidden relative border-t border-gray-50">
-            <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6 relative z-10">
                 <div className="text-center mb-10">
                     <motion.span
                         initial={{ opacity: 0, y: 10 }}

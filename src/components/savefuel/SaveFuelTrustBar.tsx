@@ -13,7 +13,7 @@ const badges = [
 export default function SaveFuelTrustBar() {
     return (
         <div className="bg-gray-50/50 border-y border-gray-100 py-6 font-outfit overflow-hidden">
-            <div className="max-w-[1200px] mx-auto px-6">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
                 <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
                     {badges.map((badge) => (
                         <span key={badge} className="flex items-center gap-2 text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] transition-colors hover:text-emerald-500 cursor-default">

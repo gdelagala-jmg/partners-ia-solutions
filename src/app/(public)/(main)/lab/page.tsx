@@ -6,7 +6,7 @@ import { FlaskConical } from 'lucide-react'
 export default function LabPage() {
     return (
         <div className="min-h-screen bg-white">
-            <main className="max-w-7xl mx-auto px-6 py-8 lg:px-8">
+            <main className="max-w-7xl mx-auto px-4 md:px-6 py-8 lg:px-8">
                 <div className="flex justify-center">
                     <PageBadge text="Laboratorio" icon={<FlaskConical size={14} className="text-blue-500" />} />
                 </div>
