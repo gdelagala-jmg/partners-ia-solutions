@@ -24,13 +24,13 @@ const savefuelFeatures = [
 export default function SaveFuelComparison() {
     return (
         <section id="comparison" className="py-10 bg-white text-[#1D1D1F] font-outfit border-t border-gray-100">
-            <div className="max-w-[1200px] mx-auto px-6">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <span className="text-[12px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 block">
                         COMPARATIVA REAL
                     </span>
-                    <h2 className="text-[40px] md:text-[60px] font-black tracking-tighter leading-[1.05] mb-6">
+                    <h2 className="text-[32px] md:text-[60px] font-black tracking-tighter leading-[1.05] mb-6">
                         Google Maps te dice <br className="hidden md:block" />
                         donde hay <span className="text-gray-300 italic">gasolineras.</span>
                     </h2>
@@ -46,7 +46,7 @@ export default function SaveFuelComparison() {
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="bg-gray-50/50 border border-gray-100 rounded-[40px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500"
+                        className="bg-gray-50/50 border border-gray-100 rounded-2xl md:rounded-[40px] p-6 md:p-10 hover:bg-white hover:shadow-2xl transition-all duration-500"
                     >
                         <div className="flex items-center gap-4 mb-8">
                             <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center">
@@ -71,7 +71,7 @@ export default function SaveFuelComparison() {
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="relative bg-white border-2 border-emerald-500 rounded-[40px] p-10 shadow-2xl shadow-emerald-500/10 overflow-hidden"
+                        className="relative bg-white border-2 border-emerald-500 rounded-2xl md:rounded-[40px] p-6 md:p-10 shadow-2xl shadow-emerald-500/10 overflow-hidden"
                     >
                         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-[60px] opacity-50" />
                         

@@ -18,9 +18,9 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-16">
-            <div className="relative pt-28 pb-16 lg:pt-28 lg:pb-24 bg-white border-b border-gray-100 overflow-hidden">
+            <div className="relative pt-24 pb-12 md:pt-28 md:pb-24 bg-white border-b border-gray-100 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 pointer-events-none" />
-                <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+                <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 text-center">
                     <Link href="/soluciones" className="inline-flex items-center text-sm font-medium text-gray-400 hover:text-blue-600 mb-8 transition-colors">
                         <ArrowLeft size={16} className="mr-2" />
                         Volver al catálogo
@@ -41,7 +41,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-8 md:mt-12">
-                <div className="bg-white p-6 md:p-12 rounded-3xl shadow-sm border border-gray-100 mb-12">
+                <div className="bg-white p-5 md:p-12 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 mb-12">
                     {/* GALLERY */}
                     <div className="mb-12">
                         <div className="relative w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden bg-gray-100 border border-gray-200">
@@ -134,7 +134,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                     )}
 
                     {/* SOLICITAR DEMO SECTION */}
-                    <div id="demo-section" className="mt-16 md:mt-24 pt-16 border-t border-gray-100">
+                    <div id="demo-section" className="mt-12 md:mt-24 pt-10 md:pt-16 border-t border-gray-100">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                             <div>
                                 <span className="text-blue-600 font-bold tracking-wider uppercase text-sm">Prueba de Valor</span>
@@ -156,7 +156,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="bg-gray-50/50 p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm">
+                            <div className="bg-gray-50/50 p-5 md:p-8 rounded-2xl border border-gray-100 shadow-sm">
                                 <LeadForm 
                                     layout="inline"
                                     source="DEMO_REQUEST"

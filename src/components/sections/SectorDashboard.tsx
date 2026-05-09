@@ -57,9 +57,9 @@ export default function SectorDashboard() {
     if (!loading && sectors.length === 0) return null
 
     return (
-        <section className="py-8 lg:py-8 bg-white">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="text-center mb-8">
+        <section className="py-7 md:py-8 bg-white">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                <div className="text-center mb-6">
                     <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight">
                         Explora por Sector
                     </h2>
@@ -83,7 +83,7 @@ export default function SectorDashboard() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.4, delay: idx * 0.1 }}
-                                    className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 block"
+                                    className="group relative h-56 md:h-64 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 block"
                                 >
                                     {/* Background Image */}
                                     <div className="absolute inset-0 z-0">

@@ -27,13 +27,13 @@ const testimonials = [
 export default function SaveFuelTestimonials() {
     return (
         <section className="py-10 bg-white font-outfit border-t border-gray-100 overflow-hidden">
-            <div className="max-w-[1200px] mx-auto px-6">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <span className="text-[12px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 block">
                         TESTIMONIOS REALES
                     </span>
-                    <h2 className="text-[40px] md:text-[60px] font-black text-[#1D1D1F] tracking-tighter leading-[1.05]">
+                    <h2 className="text-[32px] md:text-[60px] font-black text-[#1D1D1F] tracking-tighter leading-[1.05]">
                         Conductores que <br />
                         <span className="text-emerald-500">ya están ahorrando.</span>
                     </h2>
@@ -48,7 +48,7 @@ export default function SaveFuelTestimonials() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: idx * 0.1 }}
-                            className="bg-gray-50/50 border border-gray-100 rounded-[32px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 relative group"
+                            className="bg-gray-50/50 border border-gray-100 rounded-2xl md:rounded-[32px] p-6 md:p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 relative group"
                         >
                             <Quote className="text-emerald-500/10 absolute top-8 right-8 w-16 h-16 transform group-hover:scale-110 transition-transform" />
                             

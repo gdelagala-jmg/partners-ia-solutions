@@ -99,8 +99,8 @@ export default function LeadCaptureSection() {
     }
 
     return (
-        <section className="py-6 lg:py-12 bg-gray-50">
-            <div className="max-w-5xl mx-auto px-5 md:px-6 lg:px-8">
+        <section className="py-10 md:py-16 bg-gray-50">
+            <div className="max-w-5xl mx-auto px-4 md:px-6">
 
                 {/* Header */}
                 <motion.div
@@ -126,7 +126,7 @@ export default function LeadCaptureSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="bg-white border border-gray-200 rounded-3xl shadow-xl overflow-hidden"
+                    className="bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden"
                 >
                     {status === 'success' ? (
                         <div className="flex flex-col items-center justify-center py-8 px-8 text-center">
@@ -145,12 +145,12 @@ export default function LeadCaptureSection() {
                             </button>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} className="p-5 md:p-8 lg:p-10">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <form onSubmit={handleSubmit} className="p-5 md:p-10">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
 
                                 {/* Scope */}
                                 <div className="md:col-span-2">
-                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                    <label className="block text-xs md:text-sm font-semibold text-gray-800 mb-1 md:mb-1.5">
                                         ¿En qué ámbito buscas optimizar?
                                         <span className="text-blue-500 ml-1">*</span>
                                     </label>
@@ -160,7 +160,7 @@ export default function LeadCaptureSection() {
                                             value={form.scope}
                                             onChange={handleChange}
                                             required
-                                            className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all pr-10"
+                                            className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 md:py-2.5 text-gray-800 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all pr-10"
                                         >
                                             <option value="" disabled>Selecciona una opción...</option>
                                             {SCOPE_OPTIONS.map(opt => (
@@ -173,7 +173,7 @@ export default function LeadCaptureSection() {
 
                                 {/* Bottleneck */}
                                 <div className="md:col-span-2">
-                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                    <label className="block text-xs md:text-sm font-semibold text-gray-800 mb-1 md:mb-1.5">
                                         ¿Cuál es el principal "cuello de botella" que frena tu avance hoy?
                                         <span className="text-blue-500 ml-1">*</span>
                                     </label>
@@ -184,7 +184,7 @@ export default function LeadCaptureSection() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Ej: Falta de sistematización, procesos manuales, falta de tiempo..."
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 md:py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
                                     />
                                 </div>
 
@@ -219,7 +219,7 @@ export default function LeadCaptureSection() {
 
                                 {/* Desired Result */}
                                 <div className="md:col-span-2">
-                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                    <label className="block text-xs md:text-sm font-semibold text-gray-800 mb-1 md:mb-1.5">
                                         Describe tu deseo de mejora o el resultado específico que buscas alcanzar
                                     </label>
                                     <textarea
@@ -228,7 +228,7 @@ export default function LeadCaptureSection() {
                                         onChange={handleChange}
                                         rows={4}
                                         placeholder="Cuéntanos en detalle qué transformación quieres lograr..."
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 md:py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
                                     />
                                 </div>
 
@@ -241,7 +241,7 @@ export default function LeadCaptureSection() {
 
                                 {/* Name */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                    <label className="block text-xs md:text-sm font-semibold text-gray-800 mb-1 md:mb-1.5">
                                         Nombre completo
                                         <span className="text-blue-500 ml-1">*</span>
                                     </label>
@@ -258,7 +258,7 @@ export default function LeadCaptureSection() {
 
                                 {/* Email */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                    <label className="block text-xs md:text-sm font-semibold text-gray-800 mb-1 md:mb-1.5">
                                         Email
                                         <span className="text-blue-500 ml-1">*</span>
                                     </label>
@@ -275,7 +275,7 @@ export default function LeadCaptureSection() {
 
                                 {/* Phone */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                    <label className="block text-xs md:text-sm font-semibold text-gray-800 mb-1 md:mb-1.5">
                                         Teléfono
                                     </label>
                                     <input
@@ -290,7 +290,7 @@ export default function LeadCaptureSection() {
 
                                 {/* Company */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                                    <label className="block text-xs md:text-sm font-semibold text-gray-800 mb-1 md:mb-1.5">
                                         Empresa
                                     </label>
                                     <input
@@ -336,7 +336,7 @@ export default function LeadCaptureSection() {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="group w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-black hover:bg-gray-800 text-white font-semibold rounded-xl transition-all hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
+                                        className="group w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 md:px-8 md:py-4 bg-black hover:bg-gray-800 text-white font-semibold rounded-2xl transition-all hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
                                     >
                                         {loading ? (
                                             <>

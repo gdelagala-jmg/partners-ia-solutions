@@ -114,7 +114,7 @@ export default function LeadForm({
                                 {...register('name')}
                                 type="text"
                                 placeholder="Ej. Juan Pérez"
-                                className={`w-full pl-11 pr-4 py-3 bg-white border ${errors.name ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
+                                className={`w-full pl-11 pr-4 py-2.5 md:py-3 bg-white border ${errors.name ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
                             />
                         </div>
                         {errors.name && <p className="text-[11px] text-red-500 font-medium ml-1">{errors.name.message}</p>}
@@ -129,7 +129,7 @@ export default function LeadForm({
                                 {...register('email')}
                                 type="email"
                                 placeholder="tu@empresa.com"
-                                className={`w-full pl-11 pr-4 py-3 bg-white border ${errors.email ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
+                                className={`w-full pl-11 pr-4 py-2.5 md:py-3 bg-white border ${errors.email ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
                             />
                         </div>
                         {errors.email && <p className="text-[11px] text-red-500 font-medium ml-1">{errors.email.message}</p>}
@@ -146,7 +146,7 @@ export default function LeadForm({
                                 {...register('phone')}
                                 type="tel"
                                 placeholder="+34 600 000 000"
-                                className={`w-full pl-11 pr-4 py-3 bg-white border ${errors.phone ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
+                                className={`w-full pl-11 pr-4 py-2.5 md:py-3 bg-white border ${errors.phone ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
                             />
                         </div>
                         {errors.phone && <p className="text-[11px] text-red-500 font-medium ml-1">{errors.phone.message}</p>}
@@ -161,7 +161,7 @@ export default function LeadForm({
                                 {...register('company')}
                                 type="text"
                                 placeholder="Nombre de tu empresa"
-                                className={`w-full pl-11 pr-4 py-3 bg-white border ${errors.company ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
+                                className={`w-full pl-11 pr-4 py-2.5 md:py-3 bg-white border ${errors.company ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm`}
                             />
                         </div>
                     </div>
@@ -176,7 +176,7 @@ export default function LeadForm({
                             {...register('message')}
                             rows={3}
                             placeholder="Cuéntanos brevemente tus necesidades..."
-                            className={`w-full pl-11 pr-4 py-3 bg-white border ${errors.message ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm resize-none`}
+                            className={`w-full pl-11 pr-4 py-2.5 md:py-3 bg-white border ${errors.message ? 'border-red-300 bg-red-50/30' : 'border-gray-200 focus:border-emerald-500'} rounded-xl outline-none transition-all font-outfit shadow-sm resize-none`}
                         />
                     </div>
                     {errors.message && <p className="text-[11px] text-red-500 font-medium ml-1">{errors.message.message}</p>}
@@ -219,7 +219,7 @@ export default function LeadForm({
                 <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className={`w-full py-4 px-6 bg-[#1D1D1F] text-white rounded-xl font-bold font-outfit flex items-center justify-center gap-2 hover:bg-black transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed shadow-xl shadow-gray-200 overflow-hidden relative group`}
+                    className={`w-full py-3.5 md:py-4 px-6 bg-[#1D1D1F] text-white rounded-xl font-bold font-outfit flex items-center justify-center gap-2 hover:bg-black transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed shadow-xl shadow-gray-200 overflow-hidden relative group`}
                 >
                     {status === 'loading' ? (
                         <>

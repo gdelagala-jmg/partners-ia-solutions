@@ -6,12 +6,12 @@ import { Check, Zap } from 'lucide-react'
 export default function SaveFuelPricing() {
     return (
         <section id="pricing" className="py-10 bg-white font-outfit overflow-hidden border-t border-gray-100">
-            <div className="max-w-[1200px] mx-auto px-6">
-                <div className="text-center mb-16">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+                <div className="text-center mb-10 md:mb-16">
                     <span className="text-[12px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 block">
                         PLANES Y PRECIOS
                     </span>
-                    <h2 className="text-[36px] md:text-[52px] font-black tracking-tighter leading-[1.1] mb-6 text-[#1D1D1F]">
+                    <h2 className="text-[28px] md:text-[52px] font-black tracking-tighter leading-[1.1] mb-6 text-[#1D1D1F]">
                         La inversión que <br className="hidden md:block" />
                         se <span className="text-emerald-500 italic">paga sola.</span>
                     </h2>
@@ -24,11 +24,11 @@ export default function SaveFuelPricing() {
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="bg-gray-50/50 border border-gray-100 rounded-[32px] p-8 md:p-10 flex flex-col hover:bg-white hover:shadow-xl transition-all duration-500"
+                        className="bg-gray-50/50 border border-gray-100 rounded-2xl md:rounded-[32px] p-6 md:p-10 flex flex-col hover:bg-white hover:shadow-xl transition-all duration-500"
                     >
                         <div className="mb-6">
-                            <h3 className="text-[24px] font-black text-[#1D1D1F] mb-1">Básico</h3>
-                            <p className="text-gray-400 text-[15px] font-medium font-inter">Conductores ocasionales.</p>
+                            <h3 className="text-[22px] md:text-[24px] font-black text-[#1D1D1F] mb-1">Básico</h3>
+                            <p className="text-gray-400 text-[14px] md:text-[15px] font-medium font-inter">Conductores ocasionales.</p>
                         </div>
 
                         <div className="mb-8">
@@ -45,7 +45,7 @@ export default function SaveFuelPricing() {
                             <PricingFeature text="Soporte web" />
                         </ul>
 
-                        <button className="w-full py-4 bg-white border border-gray-200 text-[#1D1D1F] font-black text-[16px] rounded-[20px] hover:bg-gray-50 transition-all">
+                        <button className="w-full py-3.5 md:py-4 bg-white border border-gray-200 text-[#1D1D1F] font-black text-[15px] md:text-[16px] rounded-xl md:rounded-[20px] hover:bg-gray-50 transition-all">
                             Empezar Gratis
                         </button>
                     </motion.div>
@@ -55,16 +55,16 @@ export default function SaveFuelPricing() {
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="relative bg-white border-2 border-emerald-500 rounded-[32px] p-8 md:p-10 flex flex-col shadow-2xl shadow-emerald-500/10 overflow-hidden"
+                        className="relative bg-white border-2 border-emerald-500 rounded-2xl md:rounded-[32px] p-6 md:p-10 flex flex-col shadow-2xl shadow-emerald-500/10 overflow-hidden"
                     >
-                        <div className="absolute top-0 right-0 bg-emerald-500 text-white px-6 py-2 rounded-bl-[20px] text-[10px] font-black uppercase tracking-widest flex items-center gap-2 z-10">
+                        <div className="absolute top-0 right-0 bg-emerald-500 text-white px-6 py-2 rounded-bl-xl md:rounded-bl-[20px] text-[10px] font-black uppercase tracking-widest flex items-center gap-2 z-10">
                             <Zap size={12} fill="currentColor" />
                             MÁS POPULAR
                         </div>
 
                         <div className="mb-6 relative z-10">
-                            <h3 className="text-[24px] font-black text-[#1D1D1F] mb-1">PRO</h3>
-                            <p className="text-gray-400 text-[15px] font-medium font-inter">Potencial europeo total.</p>
+                            <h3 className="text-[22px] md:text-[24px] font-black text-[#1D1D1F] mb-1">PRO</h3>
+                            <p className="text-gray-400 text-[14px] md:text-[15px] font-medium font-inter">Potencial europeo total.</p>
                         </div>
 
                         <div className="mb-8 relative z-10">
@@ -83,7 +83,7 @@ export default function SaveFuelPricing() {
                             <PricingFeature text="Sin publicidad" pro />
                         </ul>
 
-                        <button className="relative z-10 w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-[16px] rounded-[20px] transition-all hover:scale-[1.02] shadow-xl shadow-emerald-500/20">
+                        <button className="relative z-10 w-full py-3.5 md:py-4 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-[15px] md:text-[16px] rounded-xl md:rounded-[20px] transition-all hover:scale-[1.02] shadow-xl shadow-emerald-500/20">
                             Suscribirse PRO
                         </button>
                     </motion.div>

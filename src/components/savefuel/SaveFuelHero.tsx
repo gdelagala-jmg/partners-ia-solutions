@@ -9,11 +9,11 @@ export default function SaveFuelHero() {
   const flags = ["🇪🇸", "🇵🇹", "🇫🇷", "🇮🇹", "🇩🇪", "🇦🇹", "🇧🇪", "🇳🇱", "🇮🇪", "🇬🇷", "🇨🇿", "🇵🇱", "🇸🇪", "🇩🇰", "🇫🇮", "🇳🇴", "🇭🇺", "🇷🇴", "🇧🇬", "🇸🇰", "🇸🇮", "🇭🇷", "🇪🇪", "🇱🇻", "🇱🇹", "🇨🇾", "🇲🇹", "🇦🇩"];
 
   return (
-    <section id="hero" className="relative pt-[140px] pb-8 lg:pt-[160px] lg:pb-10 overflow-hidden bg-white">
+    <section id="hero" className="relative pt-[80px] pb-6 md:pt-[140px] lg:pt-[160px] lg:pb-10 overflow-hidden bg-white">
       {/* Subtle background glow */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-emerald-50/20 to-transparent pointer-events-none" />
       
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           {/* Left Content - 7 cols */}
@@ -24,7 +24,7 @@ export default function SaveFuelHero() {
             className="lg:col-span-7"
           >
             {/* Flags Pill */}
-            <div className="inline-flex items-center gap-3 px-3 py-1.5 rounded-[2rem] bg-gray-50 border border-gray-100 mb-6 shadow-sm max-w-full overflow-hidden">
+            <div className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 mb-4 shadow-sm max-w-full overflow-hidden">
               <div className="flex -space-x-1.5 flex-nowrap overflow-x-auto no-scrollbar pb-1">
                 {flags.map((flag, i) => (
                   <div key={i} className="shrink-0 w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[12px] shadow-sm relative z-[10]">
@@ -38,7 +38,7 @@ export default function SaveFuelHero() {
               </span>
             </div>
 
-            <h1 className="text-[40px] md:text-[56px] lg:text-[68px] font-black text-[#1D1D1F] leading-[0.95] mb-5 tracking-tighter font-outfit">
+            <h1 className="text-[32px] md:text-[56px] lg:text-[68px] font-black text-[#1D1D1F] leading-[1] md:leading-[0.95] mb-4 tracking-tighter font-outfit">
               Ahorra de verdad <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-sky-400">
                 en cada kilómetro.
@@ -46,7 +46,7 @@ export default function SaveFuelHero() {
             </h1>
 
             {/* Community Banner - Found in analysis */}
-            <div className="bg-emerald-50/50 border border-emerald-100/50 rounded-2xl p-4 mb-6 max-w-xl">
+            <div className="bg-emerald-50/50 border border-emerald-100/50 rounded-2xl p-3.5 mb-5 max-w-xl">
                 <div className="flex gap-3">
                     <div className="shrink-0 w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
                         <Users size={18} />
@@ -58,21 +58,21 @@ export default function SaveFuelHero() {
                 </div>
             </div>
 
-            <p className="text-gray-500 text-[17px] md:text-[18px] leading-relaxed mb-6 max-w-lg font-inter font-medium">
+            <p className="text-gray-500 text-[17px] md:text-[18px] leading-relaxed mb-5 max-w-lg font-inter font-medium">
               No busques solo lo barato. Calcula si el desvío compensa el ahorro neto. <span className="text-gray-900 font-bold">Datos oficiales de 28 países.</span>
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
+            <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
               <a
                 href="https://savefuel.app/"
                 target="_blank"
-                className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-xl transition-all shadow-lg shadow-emerald-500/20 text-[16px] text-center"
+                className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl transition-all shadow-lg shadow-emerald-500/20 text-[15px] md:text-[16px] text-center"
               >
                 Abrir App Gratis
               </a>
               <a
                  href="#how-it-works"
-                 className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-gray-50 border border-gray-200 text-[#1D1D1F] font-black rounded-xl transition-all text-[16px] text-center"
+                 className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white hover:bg-gray-50 border border-gray-200 text-[#1D1D1F] font-black rounded-2xl transition-all text-[15px] md:text-[16px] text-center"
               >
                 Ver cómo funciona
               </a>
@@ -104,7 +104,7 @@ export default function SaveFuelHero() {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="lg:col-span-5 relative"
           >
-            <div className="relative z-10 rounded-[2rem] overflow-hidden border-[6px] border-white shadow-2xl shadow-emerald-500/10">
+            <div className="relative z-10 rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl shadow-emerald-500/10">
               <Image 
                 src="/savefuel-preview.png" 
                 alt="SaveFuel App Preview" 

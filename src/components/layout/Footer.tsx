@@ -108,9 +108,9 @@ export default function Footer({
 
     return (
         <footer className="bg-gray-50 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                 {/* Main Footer Content */}
-                <div className="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8 text-center md:text-left">
+                <div className="py-6 md:py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 text-center md:text-left">
                     {/* Brand Section */}
                     <div className="lg:col-span-2 flex flex-col items-center md:items-start">
                         <Link href="/" className="inline-flex items-center group mb-6">
@@ -140,7 +140,7 @@ export default function Footer({
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 hover:shadow-sm transition-all"
+                                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 hover:shadow-sm transition-all"
                                     aria-label={social.name}
                                 >
                                     <social.icon size={18} />
@@ -194,7 +194,7 @@ export default function Footer({
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="py-6 border-t border-gray-200">
+                <div className="py-4 md:py-8 border-t border-gray-200">
                     <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
                         <p className="text-sm text-gray-500">
                             © {new Date().getFullYear()} Partners IA Solutions. Todos los derechos reservados.

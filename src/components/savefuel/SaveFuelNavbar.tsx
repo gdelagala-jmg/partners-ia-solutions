@@ -29,11 +29,11 @@ export default function SaveFuelNavbar() {
         <nav 
             className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 font-outfit ${
                 scrolled 
-                ? 'bg-white/80 backdrop-blur-xl border-b border-gray-100/50 py-4 shadow-sm' 
-                : 'bg-white py-6'
+                ? 'bg-white/80 backdrop-blur-xl border-b border-gray-100/50 py-2.5 md:py-4 shadow-sm' 
+                : 'bg-white py-3.5 md:py-6'
             }`}
         >
-            <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6 flex items-center justify-between">
                 {/* Brand Logo */}
                 <Link href="/apps/savefuel" className="flex items-center gap-3 group relative z-10">
                     <div className="w-11 h-11 bg-emerald-500 rounded-[14px] flex items-center justify-center text-white transition-transform duration-300 group-hover:scale-110 shadow-lg shadow-emerald-500/20">
@@ -94,7 +94,7 @@ export default function SaveFuelNavbar() {
                         exit={{ opacity: 0, height: 0 }}
                         className="2xl:hidden bg-white border-t border-gray-50 overflow-hidden shadow-2xl"
                     >
-                        <div className="p-6 flex flex-col gap-4">
+                        <div className="p-4 flex flex-col gap-3">
                             {navLinks.map((link) => (
                                 <Link 
                                     key={link.name} 

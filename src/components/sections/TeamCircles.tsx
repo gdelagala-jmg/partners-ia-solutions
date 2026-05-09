@@ -102,12 +102,12 @@ export default function TeamCircles() {
     const visibleMembers = order.filter(m => m.showPhoto)
 
     return (
-        <section className="py-24 relative overflow-hidden bg-transparent">
+        <section className="py-10 md:py-24 relative overflow-hidden bg-transparent">
             {/* Halo de luz azul central como en la versión original */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(219,234,254,0.35)_0%,_rgba(255,255,255,0)_60%)] pointer-events-none" />
 
             {/* Título */}
-            <div className="text-center mb-10 relative z-10">
+            <div className="text-center mb-6 relative z-10">
                 <p className="text-[11px] font-semibold tracking-[0.35em] text-slate-500 uppercase">EL EQUIPO</p>
                 <p className="text-[11px] text-slate-400 italic mt-1">*Interactúa con los iconos de nuestro ADN</p>
             </div>
@@ -118,7 +118,7 @@ export default function TeamCircles() {
                 CAPA 2 → AnimatePresence sin mode
                          Si el admin oculta un miembro, SOLO ese hace fade out/in independiente
             */}
-            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-10">
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-10">
                 <motion.div
                     animate={{ opacity: visible ? 1 : 0 }}
                     transition={{ duration: 0.45, ease: 'easeInOut' }}
@@ -126,7 +126,7 @@ export default function TeamCircles() {
                         grid grid-cols-2 gap-y-12 gap-x-4
                         sm:grid-cols-3 sm:gap-x-8
                         md:flex md:flex-wrap md:justify-center md:gap-12 lg:gap-20
-                        py-12 items-center
+                        py-6 md:py-12 items-center
                     "
                 >
                     <AnimatePresence mode="popLayout">

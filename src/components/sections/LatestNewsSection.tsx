@@ -45,9 +45,9 @@ export default function LatestNewsSection() {
     if (!loading && posts.length === 0) return null
 
     return (
-        <section className="py-8 lg:py-8 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 px-4 text-center md:text-left items-center md:items-end">
+        <section className="py-7 md:py-10 lg:py-16 bg-gray-50">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-4 px-0 md:px-4 text-center md:text-left items-center md:items-end">
                     <div>
                         <PageBadge text="Actualidad IA" icon={<Newspaper size={14} className="text-blue-500" />} />
                         <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 tracking-tight">
@@ -105,7 +105,7 @@ export default function LatestNewsSection() {
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-5 flex-1 flex flex-col">
+                                <div className="p-4 flex-1 flex flex-col">
                                     <div className="mb-3 flex flex-wrap gap-2 items-center">
                                         {post.company && (
                                             <span className="inline-flex items-center text-[10px] font-bold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full uppercase tracking-wider">

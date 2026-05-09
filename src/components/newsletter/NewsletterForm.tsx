@@ -59,7 +59,7 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         placeholder="tu@email.com"
                         required
                         disabled={status === 'loading' || status === 'success'}
-                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all disabled:opacity-50"
+                        className="w-full bg-white border border-gray-200 rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all disabled:opacity-50"
                     />
                     <button
                         type="submit"
@@ -100,7 +100,7 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
 
     return (
         <div className={`
-            ${variant === 'home' ? 'bg-gray-50 rounded-3xl p-8 md:p-12 border border-gray-100' : 'bg-white rounded-2xl p-8 border border-gray-100 shadow-sm'}
+            ${variant === 'home' ? 'bg-gray-50 rounded-2xl p-6 md:p-12 border border-gray-100' : 'bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'}
         `}>
             <div className="max-w-2xl mx-auto text-center">
                 <h4 className={`font-bold text-gray-900 ${variant === 'home' ? 'text-2xl md:text-3xl tracking-tight' : 'text-xl'}`}>
@@ -122,12 +122,12 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         placeholder="tu@empresa.com"
                         required
                         disabled={status === 'loading' || status === 'success'}
-                        className="flex-1 px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm placeholder:text-gray-400"
+                        className="flex-1 px-4 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm placeholder:text-gray-400"
                     />
                     <button
                         type="submit"
                         disabled={status === 'loading' || status === 'success'}
-                        className="px-8 py-3.5 bg-black text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center whitespace-nowrap shadow-lg shadow-black/5"
+                        className="px-8 py-3.5 bg-black text-white text-sm font-bold rounded-2xl hover:bg-gray-800 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center whitespace-nowrap shadow-lg shadow-black/5"
                     >
                         {status === 'loading' ? (
                             <Loader2 className="w-4 h-4 animate-spin mr-2" />

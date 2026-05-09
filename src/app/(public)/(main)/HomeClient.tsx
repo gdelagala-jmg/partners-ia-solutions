@@ -78,7 +78,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
-                <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center py-8 lg:py-8">
+                <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 lg:px-8 text-center py-6 md:py-8">
                     <PageBadge text="Liderando la Revolución de la IA" icon={<Sparkles size={14} className="text-blue-500" />} />
 
                     <motion.h1
@@ -139,9 +139,9 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             </section>
 
             {/* FEATURED SOLUTIONS SECTION */}
-            <section className="py-8 bg-gray-50 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="text-center mb-8">
+            <section className="py-6 md:py-10 bg-gray-50 border-b border-gray-100">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                    <div className="text-center mb-6 md:mb-8">
                         <PageBadge text="Nuestras Soluciones" icon={<Target size={14} className="text-blue-500" />} />
                         <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 tracking-tight">
                             Soluciones Destacadas
@@ -161,7 +161,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                     href={`/soluciones/${solution.slug}`}
                                     className="group flex flex-col rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-500 border border-gray-200 bg-white"
                                 >
-                                    <div className="h-44 w-full relative overflow-hidden bg-gray-100">
+                                    <div className="h-40 md:h-44 w-full relative overflow-hidden bg-gray-100">
                                         <div className="absolute inset-0 bg-blue-900/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
                                         <img
                                             src={getSolutionImage(solution)}
@@ -178,7 +178,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="p-5 flex flex-col flex-1 bg-white">
+                                    <div className="p-4 md:p-5 flex flex-col flex-1 bg-white">
                                         <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
                                             {solution.title}
                                         </h3>
@@ -219,14 +219,14 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             <LatestNewsSection />
 
             {/* Newsletter Section */}
-            <section id="newsletter" className="py-20 bg-white scroll-mt-24">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <section id="newsletter" className="py-10 md:py-20 bg-white scroll-mt-24">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                     <NewsletterForm variant="home" />
                 </div>
             </section>
 
             <section className="pt-6 pb-10 bg-white border-t border-gray-100">
-                <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
+                <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8 text-center">
                     {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-100 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
@@ -277,10 +277,10 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative bg-white rounded-3xl shadow-2xl w-[calc(100%-2rem)] max-w-lg overflow-hidden z-10 flex flex-col max-h-[90vh]"
+                            className="relative bg-white rounded-2xl shadow-2xl w-[calc(100%-1.5rem)] max-w-lg overflow-hidden z-10 flex flex-col max-h-[90vh]"
                         >
 
-                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                            <div className="p-5 md:p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                                 <div>
                                     <h3 className="text-xl font-bold text-gray-900">Solicita tu Demo</h3>
                                     <p className="text-xs text-gray-500 mt-1">Conoce cómo podemos transformar tu negocio.</p>
@@ -303,7 +303,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                 </div>
                             ) : (
                                 <form onSubmit={handleDemoSubmit} className="flex flex-col overflow-hidden">
-                                    <div className="p-6 space-y-6 overflow-y-auto custom-scrollbar">
+                                    <div className="p-5 md:p-6 space-y-4 md:space-y-6 overflow-y-auto custom-scrollbar">
                                         <div className="space-y-1">
                                             <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Nombre Completo</label>
                                             <input

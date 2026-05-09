@@ -13,8 +13,8 @@ const TikTokIcon = ({ size = 18 }: { size?: number }) => (
 export default function SaveFuelFooter() {
     return (
         <footer className="bg-white text-gray-900 border-t border-gray-200 font-outfit overflow-hidden">
-            <div className="max-w-[1200px] mx-auto px-6">
-                <div className="py-16 grid grid-cols-1 md:grid-cols-12 gap-12 text-center md:text-left">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+                <div className="py-10 md:py-16 grid grid-cols-1 md:grid-cols-12 gap-12 text-center md:text-left">
                     
                     {/* Brand Section */}
                     <div className="md:col-span-5 flex flex-col items-center md:items-start">
@@ -56,7 +56,7 @@ export default function SaveFuelFooter() {
                     {/* Links Section */}
                     <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
                         <div>
-                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-6">Herramientas</h4>
+                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-4 md:mb-6">Herramientas</h4>
                             <ul className="space-y-4 text-gray-500 text-[14px] font-medium font-inter">
                                 <li><a href="#" className="hover:text-emerald-600 transition-colors">Calculadora</a></li>
                                 <li><a href="#" className="hover:text-emerald-600 transition-colors">Widget para tu web</a></li>
@@ -65,7 +65,7 @@ export default function SaveFuelFooter() {
                             </ul>
                         </div>
                         <div>
-                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-6">Producto</h4>
+                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-4 md:mb-6">Producto</h4>
                             <ul className="space-y-4 text-gray-500 text-[14px] font-medium font-inter">
                                 <li><a href="#how-it-works" className="hover:text-emerald-600 transition-colors">Cómo funciona</a></li>
                                 <li><a href="#countries" className="hover:text-emerald-600 transition-colors">Cobertura</a></li>
@@ -73,7 +73,7 @@ export default function SaveFuelFooter() {
                             </ul>
                         </div>
                         <div className="col-span-2 sm:col-span-1">
-                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-6">Contacto</h4>
+                            <h4 className="font-black text-[13px] text-gray-900 uppercase tracking-widest mb-4 md:mb-6">Contacto</h4>
                             <ul className="space-y-4 text-gray-500 text-[14px] font-medium font-inter">
                                 <li>
                                     <a href="mailto:contacto@savefuel.app" className="flex items-center justify-center md:justify-start gap-2 hover:text-emerald-600 transition-colors">

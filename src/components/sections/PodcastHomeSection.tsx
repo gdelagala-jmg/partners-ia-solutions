@@ -29,14 +29,14 @@ export default function PodcastHomeSection() {
     if (!loading && !mainChannelHtml) return null
 
     return (
-        <section className="py-8 lg:py-8 bg-white">
-            <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <section className="py-7 md:py-10 bg-white">
+            <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-8"
+                    className="text-center mb-5 md:mb-8"
                 >
                     <PageBadge text="Insights & Podcast" icon={<Radio size={14} className="text-blue-500" />} />
 

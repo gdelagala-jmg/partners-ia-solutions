@@ -64,14 +64,14 @@ const features = [
 
 export default function SaveFuelHowItWorks() {
     return (
-        <section id="how-it-works" className="py-16 bg-[#f9f9fb] font-outfit relative">
-            <div className="max-w-[1200px] mx-auto px-6">
+        <section id="how-it-works" className="py-10 md:py-16 bg-[#f9f9fb] font-outfit relative">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
                 {/* Header */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-8 md:mb-12">
                     <span className="text-[12px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 block">
                         FUNCIONALIDADES
                     </span>
-                    <h2 className="text-[40px] md:text-[60px] font-black tracking-tighter leading-[1.05] mb-6">
+                    <h2 className="text-[32px] md:text-[60px] font-black tracking-tighter leading-[1.05] mb-6">
                         Todo para <span className="text-emerald-500">ahorrar de verdad.</span>
                     </h2>
                     <p className="text-[18px] text-gray-400 max-w-[640px] mx-auto leading-relaxed font-inter font-medium">
@@ -88,7 +88,7 @@ export default function SaveFuelHowItWorks() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: idx * 0.05 }}
-                            className="bg-gray-50/50 rounded-[32px] border border-gray-100 p-8 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
+                            className="bg-gray-50/50 rounded-2xl md:rounded-[32px] border border-gray-100 p-6 md:p-8 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
                         >
                             <div className={`${f.bg} w-[56px] h-[56px] rounded-[18px] flex items-center justify-center mb-6 ${f.color} transform group-hover:scale-110 transition-transform`}>
                                 <f.icon size={28} strokeWidth={2.5} />

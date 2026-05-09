@@ -73,10 +73,10 @@ export default function Navbar({
                 : 'bg-white/60 backdrop-blur-md border-b border-transparent'
                 }`}
         >
-            <div className="max-w-7xl mx-auto px-6 xl:px-8 relative">
-                <div className="flex items-center justify-between py-5">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 xl:px-8 relative">
+                <div className="flex items-center justify-between py-2.5 md:py-4 xl:py-5">
                     <Link href="/" className="flex items-center group shrink-0">
-                        <div className="relative h-16 w-48">
+                        <div className="relative h-10 w-32 md:h-12 md:w-40 xl:h-16 xl:w-48">
                             <Image
                                 src="/logo-ias.png"
                                 alt="IA Solutions"
@@ -107,7 +107,7 @@ export default function Navbar({
                     <div className="flex items-center space-x-1 xl:space-x-3">
                         <Link
                             href="/contacto"
-                            className="hidden xl:block px-5 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all hover:scale-105 shadow-sm"
+                            className="hidden xl:block px-5 py-2 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all hover:scale-105 shadow-sm"
                         >
                             Contactar
                         </Link>
@@ -115,7 +115,7 @@ export default function Navbar({
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="xl:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
+                            className="xl:hidden p-2 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
                             aria-label="Toggle menu"
                         >
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -178,13 +178,13 @@ export default function Navbar({
                 className={`xl:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
                     }`}
             >
-                <div className="px-6 py-4 bg-white border-t border-gray-200 space-y-1">
+                <div className="px-4 py-4 bg-white border-t border-gray-200 space-y-1">
                     {navLinks.map((item) => (
                         <Link
                             key={item.name}
                             href={item.href}
                             onClick={() => setIsOpen(false)}
-                            className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all text-center ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+                            className={`block px-4 py-3 text-sm font-medium rounded-xl transition-all text-center ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
                                 ? 'text-gray-900 bg-gray-100'
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                 }`}
@@ -197,7 +197,7 @@ export default function Navbar({
                         <Link
                             href="/contacto"
                             onClick={() => setIsOpen(false)}
-                            className="block px-4 py-3 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all text-center"
+                            className="block px-4 py-3 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all text-center"
                         >
                             Contactar
                         </Link>
@@ -207,7 +207,7 @@ export default function Navbar({
                                 <Link
                                     href="/admin/dashboard"
                                     onClick={() => setIsOpen(false)}
-                                    className="flex items-center justify-center px-4 py-3 bg-blue-50 text-blue-600 text-sm font-bold rounded-lg hover:bg-blue-100 transition-all"
+                                    className="flex items-center justify-center px-4 py-3 bg-blue-50 text-blue-600 text-sm font-bold rounded-xl hover:bg-blue-100 transition-all"
                                 >
                                     <LayoutDashboard size={16} className="mr-2" />
                                     Panel de Control

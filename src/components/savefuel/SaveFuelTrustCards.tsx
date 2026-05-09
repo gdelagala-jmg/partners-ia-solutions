@@ -36,8 +36,8 @@ const trustItems = [
 
 export default function SaveFuelTrustCards() {
     return (
-        <section className="py-16 bg-white font-outfit border-t border-gray-100">
-            <div className="max-w-[1200px] mx-auto px-6">
+        <section className="py-10 md:py-16 bg-white font-outfit border-t border-gray-100">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {trustItems.map((item, idx) => (
                         <motion.div
@@ -46,7 +46,7 @@ export default function SaveFuelTrustCards() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: idx * 0.1 }}
-                            className="bg-gray-50/50 border border-gray-100 rounded-[28px] p-8 flex flex-col items-center text-center hover:bg-white hover:shadow-xl transition-all duration-500"
+                            className="bg-gray-50/50 border border-gray-100 rounded-2xl p-5 md:p-8 flex flex-col items-center text-center hover:bg-white hover:shadow-xl transition-all duration-500"
                         >
                             <div className={`${item.bg} w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${item.color}`}>
                                 <item.icon size={28} strokeWidth={2.5} />

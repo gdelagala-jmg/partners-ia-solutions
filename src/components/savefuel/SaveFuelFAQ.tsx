@@ -25,12 +25,12 @@ const faqs = [
 export default function SaveFuelFAQ() {
     return (
         <section id="faq" className="py-10 bg-white font-outfit border-t border-gray-100">
-            <div className="max-w-[700px] mx-auto px-6">
-                <div className="text-center mb-12">
+            <div className="max-w-[700px] mx-auto px-4 md:px-6">
+                <div className="text-center mb-8 md:mb-12">
                     <span className="text-[12px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 block">
                         AYUDA
                     </span>
-                    <h2 className="text-[32px] md:text-[40px] font-black text-[#1D1D1F] tracking-tighter">
+                    <h2 className="text-[28px] md:text-[40px] font-black text-[#1D1D1F] tracking-tighter">
                         Preguntas <span className="text-emerald-500 italic">frecuentes.</span>
                     </h2>
                 </div>
@@ -43,7 +43,7 @@ export default function SaveFuelFAQ() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.05 }}
-                            className="p-6 md:p-8 rounded-[24px] border border-gray-100 hover:border-emerald-100 hover:bg-emerald-50/10 transition-all duration-300 bg-gray-50/20 group cursor-pointer"
+                            className="p-5 md:p-8 rounded-2xl md:rounded-[24px] border border-gray-100 hover:border-emerald-100 hover:bg-emerald-50/10 transition-all duration-300 bg-gray-50/20 group cursor-pointer"
                         >
                             <h4 className="font-black text-[#1D1D1F] text-[16px] md:text-[18px] mb-3 flex justify-between items-center gap-4">
                                 {faq.q}

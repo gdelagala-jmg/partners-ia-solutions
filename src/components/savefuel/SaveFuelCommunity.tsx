@@ -17,9 +17,9 @@ export default function SaveFuelCommunity() {
     }, [])
 
     return (
-        <section className="py-10 bg-white font-outfit border-t border-gray-100 overflow-hidden">
-            <div className="max-w-[1200px] mx-auto px-6">
-                <div className="bg-gray-50/50 rounded-[40px] p-10 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-12 border border-gray-100 relative overflow-hidden">
+        <section className="py-6 md:py-12 bg-white font-outfit border-t border-gray-100 overflow-hidden">
+            <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+                <div className="bg-gray-50/50 rounded-2xl md:rounded-[40px] p-5 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-6 md:gap-12 border border-gray-100 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none" />
 
                     <div className="flex flex-col gap-4 relative z-10 text-center lg:text-left">
@@ -33,7 +33,7 @@ export default function SaveFuelCommunity() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10">
-                        <div className="bg-white p-6 lg:p-8 rounded-[32px] shadow-xl shadow-emerald-500/5 border border-gray-100 flex flex-col flex-1 min-w-[260px]">
+                        <div className="bg-white p-5 md:p-8 rounded-2xl md:rounded-[32px] shadow-xl shadow-emerald-500/5 border border-gray-100 flex flex-col flex-1 min-w-[260px]">
                             <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest mb-2">En directo</span>
                             <div className="flex items-baseline gap-2 whitespace-nowrap">
                                 <span className="text-[40px] font-black text-emerald-500 leading-none">{count}</span>
@@ -45,7 +45,7 @@ export default function SaveFuelCommunity() {
                             </div>
                         </div>
 
-                        <div className="bg-white p-6 lg:p-8 rounded-[32px] shadow-xl shadow-emerald-500/5 border border-gray-100 flex flex-col flex-1 min-w-[260px]">
+                        <div className="bg-white p-5 md:p-8 rounded-2xl md:rounded-[32px] shadow-xl shadow-emerald-500/5 border border-gray-100 flex flex-col flex-1 min-w-[260px]">
                             <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest mb-2">Ahorro Hoy</span>
                             <div className="flex items-baseline gap-2 whitespace-nowrap">
                                 <span className="text-[40px] font-black text-emerald-500 leading-none">+{saved}€</span>
