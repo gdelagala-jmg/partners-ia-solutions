@@ -106,6 +106,14 @@ export async function POST(request: Request) {
 
         if (post.published) {
             await triggerMakeWebhook(post, true)
+            
+            // FASE 6: Generación automática de newsletter
+            try {
+                const { createCampaignFromPost } = await import('@/lib/newsletter-automation')
+                await createCampaignFromPost(post)
+            } catch (err) {
+                console.error('Error auto-generating newsletter campaign on create:', err)
+            }
         }
 
         return NextResponse.json(post)
