@@ -76,7 +76,7 @@ export default function Navbar({
             <div className="max-w-7xl mx-auto px-4 md:px-6 xl:px-8 relative">
                 <div className="flex items-center justify-between py-2.5 md:py-4 xl:py-5">
                     <Link href="/" className="flex items-center group shrink-0">
-                        <div className="relative h-10 w-32 md:h-12 md:w-40 xl:h-16 xl:w-48">
+                        <div className="relative h-16 w-48 md:h-12 md:w-40 xl:h-16 xl:w-48">
                             <Image
                                 src="/logo-ias.png"
                                 alt="IA Solutions"
