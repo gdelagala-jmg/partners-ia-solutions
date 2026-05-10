@@ -45,7 +45,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
             )}
 
             {/* Article Container */}
-            <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 py-8">
+            <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 py-8">
 
                 {/* Back Button */}
                 <motion.div

@@ -100,7 +100,7 @@ export default function LeadCaptureSection() {
 
     return (
         <section className="py-10 md:py-16 bg-gray-50">
-            <div className="max-w-5xl mx-auto px-4 md:px-6">
+            <div className="max-w-5xl mx-auto px-5 md:px-6">
 
                 {/* Header */}
                 <motion.div
@@ -126,7 +126,7 @@ export default function LeadCaptureSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden"
+                    className="md:bg-white md:border md:border-gray-200 md:rounded-2xl md:shadow-xl overflow-hidden"
                 >
                     {status === 'success' ? (
                         <div className="flex flex-col items-center justify-center py-8 px-8 text-center">
@@ -145,7 +145,7 @@ export default function LeadCaptureSection() {
                             </button>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} className="p-5 md:p-10">
+                        <form onSubmit={handleSubmit} className="py-5 md:p-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
 
                                 {/* Scope */}
@@ -336,7 +336,7 @@ export default function LeadCaptureSection() {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="group w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 md:px-8 md:py-4 bg-black hover:bg-gray-800 text-white font-semibold rounded-2xl transition-all hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
+                                        className="group w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 md:px-8 md:py-4 bg-black hover:bg-gray-800 text-white font-semibold rounded-2xl transition-all hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
                                     >
                                         {loading ? (
                                             <>

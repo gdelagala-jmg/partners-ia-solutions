@@ -78,7 +78,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
-                <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 lg:px-8 text-center py-6 md:py-8">
+                <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center py-6 md:py-8">
                     <PageBadge text="Liderando la Revolución de la IA" icon={<Sparkles size={14} className="text-blue-500" />} />
 
                     <motion.h1
@@ -140,7 +140,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
 
             {/* FEATURED SOLUTIONS SECTION */}
             <section className="py-6 md:py-10 bg-gray-50 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <div className="text-center mb-6 md:mb-8">
                         <PageBadge text="Nuestras Soluciones" icon={<Target size={14} className="text-blue-500" />} />
                         <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 tracking-tight">
@@ -220,13 +220,13 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
 
             {/* Newsletter Section */}
             <section id="newsletter" className="py-10 md:py-20 bg-white scroll-mt-24">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <NewsletterForm variant="home" />
                 </div>
             </section>
 
             <section className="pt-6 pb-10 bg-white border-t border-gray-100">
-                <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8 text-center">
+                <div className="max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center">
                     {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-100 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />

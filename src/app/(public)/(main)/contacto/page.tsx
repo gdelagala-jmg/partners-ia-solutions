@@ -82,7 +82,7 @@ export default function ContactPage() {
 
             {/* Contact Section */}
             <section className="py-8 lg:py-8">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                         {/* Contact Info */}
                         <motion.div
@@ -153,7 +153,7 @@ export default function ContactPage() {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6 }}
                         >
-                            <div className="bg-white border border-gray-200 p-5 md:p-8 lg:p-10 rounded-2xl shadow-sm">
+                            <div className="md:bg-white md:border md:border-gray-200 py-5 md:p-8 lg:p-10 md:rounded-2xl md:shadow-sm">
                                 <h3 className="text-xl font-semibold text-gray-900 mb-5 text-center md:text-left">Envíanos un Mensaje</h3>
 
                                 {isSuccess && (

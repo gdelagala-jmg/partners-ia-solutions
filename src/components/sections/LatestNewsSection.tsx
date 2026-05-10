@@ -46,7 +46,7 @@ export default function LatestNewsSection() {
 
     return (
         <section className="py-7 md:py-10 lg:py-16 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-4 px-0 md:px-4 text-center md:text-left items-center md:items-end">
                     <div>
                         <PageBadge text="Actualidad IA" icon={<Newspaper size={14} className="text-blue-500" />} />

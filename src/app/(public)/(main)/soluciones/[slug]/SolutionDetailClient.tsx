@@ -29,7 +29,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
 
             {/* HERO SECTION */}
             <div className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
-                <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+                <div className="max-w-6xl mx-auto px-5 md:px-6 lg:px-8 relative z-10">
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pb-32">
+            <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-32">
                 {/* CONTAINER */}
                 <motion.div 
                     initial={{ opacity: 0, y: 40 }}
@@ -268,8 +268,8 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                                     className="relative"
                                 >
                                     <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 rounded-[3rem] blur-2xl opacity-50" />
-                                    <div className="relative bg-white p-6 sm:p-10 md:p-16 rounded-[2.5rem] border border-solutions-border shadow-2xl overflow-hidden">
-                                        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10" />
+                                    <div className="relative md:bg-white md:border md:border-solutions-border md:rounded-[2.5rem] p-0 sm:p-4 md:p-16 md:shadow-2xl overflow-hidden">
+                                        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10 hidden md:block" />
                                         <LeadForm 
                                             layout="inline"
                                             variant="premium"

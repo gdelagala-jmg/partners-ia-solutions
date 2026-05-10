@@ -132,7 +132,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Hero Section */}
             <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden border-b border-solutions-border">
-                <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center relative z-10">
+                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center relative z-10">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -156,7 +156,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Sectors Grid */}
             <section className="py-24 relative bg-solutions-bg-main">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <div className="mb-16 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                         <div className="max-w-2xl">
                             <h2 className="text-3xl md:text-5xl font-bold text-solutions-text-primary tracking-tight mb-4">Explorar por Industria</h2>
@@ -232,7 +232,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             {finalSolutions.length > 0 && (
                 <section className="py-32 bg-solutions-bg-commercial border-y border-solutions-border relative">
                     <div className="absolute inset-0 bg-blue-50/30 pointer-events-none" />
-                    <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+                    <div className="max-w-5xl mx-auto px-5 md:px-6 lg:px-8 relative z-10">
                         <div className="mb-16 text-center">
                             <h2 className="text-4xl md:text-6xl font-bold text-solutions-text-primary tracking-tight mb-6">Soluciones Finales</h2>
                             <p className="text-solutions-text-secondary text-xl font-light max-w-2xl mx-auto leading-relaxed">
@@ -251,7 +251,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             {/* Lab Prototypes */}
             {labPrototypes.length > 0 && (
                 <section className="py-32 relative bg-solutions-bg-main">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                    <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                         <div className="mb-16 text-center lg:text-left">
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-cyan-50 text-cyan-700 text-[10px] font-mono font-bold tracking-[0.3em] rounded-full border border-cyan-100">
                                 <Beaker size={14} />
@@ -273,7 +273,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* CTA Final */}
             <section className="py-24">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
                         {/* Decorative background elements for CTA */}
                         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
