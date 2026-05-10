@@ -70,15 +70,17 @@ export async function PUT(request: Request, { params }: { params: Params }) {
             }
         }
 
-        // Detectar si la noticia acaba de ser publicada ahora (false -> true)
-        const isNewPublish = !existing.published && post.published
-        if (isNewPublish) {
-            await triggerMakeWebhook(post, true)
+        // Generación de newsletter (siempre que esté publicado)
+        if (post.published) {
+            // Si antes no estaba publicado, disparamos webhook de GMB
+            if (!existing.published) {
+                await triggerMakeWebhook(post, true)
+            }
             
-            // FASE 6: Generación automática de newsletter
+            // FASE 6: Generación automática de newsletter (centralizado)
             try {
-                const { createCampaignFromPost } = await import('@/lib/newsletter-automation')
-                await createCampaignFromPost(post)
+                const { ensureNewsletterCampaign } = await import('@/lib/newsletter-automation')
+                await ensureNewsletterCampaign(post)
             } catch (err) {
                 console.error('Error auto-generating newsletter campaign:', err)
             }

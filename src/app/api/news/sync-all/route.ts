@@ -19,8 +19,19 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true, message: 'No published news to sync' })
         }
 
-        // Disparar webhooks en paralelo para evitar timeout de Vercel (especialmente para 49 noticias)
-        await Promise.all(posts.map(post => triggerMakeWebhook(post, true)));
+        // Disparar webhooks y asegurar newsletter para cada noticia publicada
+        await Promise.all(posts.map(async (post) => {
+            // Webhook de Google Business
+            await triggerMakeWebhook(post, true);
+            
+            // Asegurar campaña de newsletter
+            try {
+                const { ensureNewsletterCampaign } = await import('@/lib/newsletter-automation')
+                await ensureNewsletterCampaign(post)
+            } catch (nlError) {
+                console.error(`Error triggering newsletter for post ${post.id} in sync-all:`, nlError)
+            }
+        }));
 
         return NextResponse.json({ 
             success: true, 

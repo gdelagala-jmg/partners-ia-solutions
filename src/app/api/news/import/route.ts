@@ -108,7 +108,7 @@ export async function POST(request: Request) {
                     continue
                 }
 
-                await prisma.newsPost.create({
+                const newPost = await prisma.newsPost.create({
                     data: {
                         title: post.title,
                         slug: targetSlug,
@@ -124,6 +124,17 @@ export async function POST(request: Request) {
                         publishedAt: post.published ? new Date() : null,
                     }
                 })
+
+                // Disparar newsletter si viene publicado
+                if (newPost.published) {
+                    try {
+                        const { ensureNewsletterCampaign } = await import('@/lib/newsletter-automation')
+                        await ensureNewsletterCampaign(newPost)
+                    } catch (nlError) {
+                        console.error('Error triggering newsletter on import:', nlError)
+                    }
+                }
+
                 results.success++
             } catch (postError: any) {
                 console.error('Error importing post:', postError)

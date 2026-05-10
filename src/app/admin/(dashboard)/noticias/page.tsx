@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink, RefreshCw, CheckCircle2, AlertCircle, Clock } from 'lucide-react'
+import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink, RefreshCw, CheckCircle2, AlertCircle, Clock, Mail } from 'lucide-react'
 import NewsForm from '@/components/admin/NewsForm'
 import ImportModal from '@/components/admin/ImportModal'
 import AdminTable from '@/components/admin/AdminTable'
@@ -90,6 +90,25 @@ export default function NewsAdminPage() {
         } finally {
             setIsSyncing(null)
             fetchPosts()
+        }
+    }
+
+    const handleGenerateNewsletter = async (postId: string) => {
+        try {
+            const res = await fetch('/api/admin/newsletter/generate-manual', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ postId }),
+            })
+            const data = await res.json()
+            if (res.ok) {
+                alert(data.message)
+            } else {
+                alert(`Error: ${data.error || 'Desconocido'}`)
+            }
+        } catch (error) {
+            console.error('Error generating newsletter:', error)
+            alert('Error de conexión al generar newsletter')
         }
     }
 
@@ -269,11 +288,18 @@ export default function NewsAdminPage() {
                     <AdminActionMenu
                         actions={[
                             { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
-                            ...(post.published ? [{ 
-                                label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
-                                icon: RefreshCw, 
-                                onClick: () => handleSync(post.id) 
-                            }] : []),
+                            ...(post.published ? [
+                                { 
+                                    label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
+                                    icon: RefreshCw, 
+                                    onClick: () => handleSync(post.id) 
+                                },
+                                {
+                                    label: 'Generar Newsletter',
+                                    icon: Mail,
+                                    onClick: () => handleGenerateNewsletter(post.id)
+                                }
+                            ] : []),
                             { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
                             { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
                         ]}
@@ -413,11 +439,18 @@ export default function NewsAdminPage() {
                                     <AdminActionMenu
                                         actions={[
                                             { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
-                                            ...(post.published ? [{ 
-                                                label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
-                                                icon: RefreshCw, 
-                                                onClick: () => handleSync(post.id) 
-                                            }] : []),
+                                            ...(post.published ? [
+                                                { 
+                                                    label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
+                                                    icon: RefreshCw, 
+                                                    onClick: () => handleSync(post.id) 
+                                                },
+                                                {
+                                                    label: 'Generar Newsletter',
+                                                    icon: Mail,
+                                                    onClick: () => handleGenerateNewsletter(post.id)
+                                                }
+                                            ] : []),
                                             { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
                                             { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
                                         ]}
