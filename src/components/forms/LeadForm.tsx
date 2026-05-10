@@ -94,38 +94,38 @@ export default function LeadForm({
                 animate={{ opacity: 1, scale: 1 }}
                 className={`flex flex-col items-center justify-center py-12 px-6 text-center space-y-4 rounded-2xl border ${
                     isPremium 
-                        ? 'bg-emerald-500/10 border-emerald-500/20 text-white' 
+                        ? 'bg-emerald-50/50 border-emerald-100 text-emerald-900' 
                         : 'bg-emerald-50/50 border-emerald-100 text-gray-900'
                 }`}
             >
                 <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                     <CheckCircle size={32} />
                 </div>
-                <h3 className={`text-2xl font-bold font-outfit ${isPremium ? 'text-white' : 'text-gray-900'}`}>¡Solicitud Enviada!</h3>
-                <p className={`${isPremium ? 'text-gray-400' : 'text-gray-600'} max-w-xs`}>
+                <h3 className={`text-2xl font-bold font-outfit ${isPremium ? 'text-emerald-900' : 'text-gray-900'}`}>¡Solicitud Enviada!</h3>
+                <p className={`${isPremium ? 'text-emerald-700/80' : 'text-gray-600'} max-w-xs`}>
                     Gracias por tu interés. Nuestro equipo se pondrá en contacto contigo muy pronto.
                 </p>
             </motion.div>
         )
     }
 
-    const labelClass = `text-xs font-bold uppercase tracking-wider ml-1 mb-1.5 block ${isPremium ? 'text-gray-400' : 'text-gray-500'}`
-    const inputClass = `w-full pl-11 pr-4 py-2.5 sm:py-3 rounded-xl outline-none transition-all font-outfit shadow-sm border ${
+    const labelClass = `text-[10px] font-bold uppercase tracking-[0.1em] ml-1 mb-2 block ${isPremium ? 'text-blue-600/70' : 'text-gray-500'}`
+    const inputClass = `w-full pl-16 pr-6 py-4 sm:py-5 rounded-2xl outline-none transition-all font-sans shadow-sm border ${
         isPremium 
-            ? 'bg-white/5 border-white/10 text-white focus:border-blue-500/50 focus:bg-white/10 focus:ring-4 focus:ring-blue-500/10 placeholder:text-gray-600' 
+            ? 'bg-gray-50/50 border-gray-100 text-gray-900 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/5 placeholder:text-gray-400' 
             : 'bg-white border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 placeholder:text-gray-400'
     }`
-    const iconClass = `absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${isPremium ? 'text-gray-500 group-focus-within:text-blue-400' : 'text-gray-400 group-focus-within:text-emerald-500'}`
+    const iconClass = `absolute left-6 top-1/2 -translate-y-1/2 transition-colors ${isPremium ? 'text-blue-600/40 group-focus-within:text-blue-600' : 'text-gray-400 group-focus-within:text-emerald-500'}`
 
     return (
         <div className={`w-full ${layout === 'modal' ? 'max-w-lg mx-auto' : ''}`}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                     {/* Nombre */}
                     <div className="space-y-0.5">
                         <label className={labelClass}>Nombre Completo</label>
                         <div className="relative group">
-                            <User className={iconClass} size={18} />
+                            <User className={iconClass} size={20} />
                             <input 
                                 {...register('name')}
                                 type="text"
@@ -140,7 +140,7 @@ export default function LeadForm({
                     <div className="space-y-0.5">
                         <label className={labelClass}>Email Corporativo</label>
                         <div className="relative group">
-                            <Mail className={iconClass} size={18} />
+                            <Mail className={iconClass} size={20} />
                             <input 
                                 {...register('email')}
                                 type="email"
@@ -152,12 +152,12 @@ export default function LeadForm({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                     {/* Teléfono */}
                     <div className="space-y-0.5">
                         <label className={labelClass}>Teléfono</label>
                         <div className="relative group">
-                            <Phone className={iconClass} size={18} />
+                            <Phone className={iconClass} size={20} />
                             <input 
                                 {...register('phone')}
                                 type="tel"
@@ -172,7 +172,7 @@ export default function LeadForm({
                     <div className="space-y-0.5">
                         <label className={labelClass}>Empresa</label>
                         <div className="relative group">
-                            <Building className={iconClass} size={18} />
+                            <Building className={iconClass} size={20} />
                             <input 
                                 {...register('company')}
                                 type="text"
@@ -187,12 +187,12 @@ export default function LeadForm({
                 <div className="space-y-0.5">
                     <label className={labelClass}>¿Cómo podemos ayudarte?</label>
                     <div className="relative group">
-                        <MessageSquare className={`absolute left-4 top-4 transition-colors ${isPremium ? 'text-gray-500 group-focus-within:text-blue-400' : 'text-gray-400 group-focus-within:text-emerald-500'}`} size={18} />
+                        <MessageSquare className={`absolute left-6 top-5 transition-colors ${isPremium ? 'text-gray-500 group-focus-within:text-blue-400' : 'text-gray-400 group-focus-within:text-emerald-500'}`} size={20} />
                         <textarea 
                             {...register('message')}
-                            rows={3}
+                            rows={4}
                             placeholder="Cuéntanos brevemente tus necesidades..."
-                            className={`${inputClass} min-h-[100px] resize-none ${errors.message ? 'border-red-500/50 bg-red-500/5' : ''}`}
+                            className={`${inputClass} min-h-[140px] resize-none ${errors.message ? 'border-red-500/50 bg-red-500/5' : ''}`}
                         />
                     </div>
                     {errors.message && <p className="text-[11px] text-red-500 font-medium mt-1.5 ml-1">{errors.message.message}</p>}
@@ -213,8 +213,8 @@ export default function LeadForm({
                             />
                             <CheckCircle className="absolute inset-0 m-auto text-white opacity-0 peer-checked:opacity-100 transition-opacity" size={14} />
                         </div>
-                        <span className={`text-[11px] leading-tight transition-colors ${isPremium ? 'text-gray-500 group-hover:text-gray-400' : 'text-gray-500 group-hover:text-gray-700'}`}>
-                            Acepto la <a href="/politica-privacidad" className={`${isPremium ? 'text-blue-400' : 'text-emerald-600'} hover:underline font-bold`}>política de privacidad</a> y autorizo el tratamiento de mis datos.
+                        <span className={`text-[11px] leading-tight transition-colors ${isPremium ? 'text-gray-600 group-hover:text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}`}>
+                            Acepto la <a href="/politica-privacidad" className={`${isPremium ? 'text-blue-600' : 'text-emerald-600'} hover:underline font-bold`}>política de privacidad</a> y autorizo el tratamiento de mis datos.
                         </span>
                     </label>
                     {errors.consent && <p className="text-[11px] text-red-500 font-medium mt-1.5 ml-8">{errors.consent.message}</p>}
@@ -241,7 +241,7 @@ export default function LeadForm({
                 <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className={`w-full py-3 sm:py-4 px-6 rounded-xl font-bold font-outfit flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed overflow-hidden relative group ${
+                    className={`w-full mt-4 sm:mt-8 py-4 sm:py-5 px-6 rounded-xl font-bold font-outfit flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed overflow-hidden relative group ${
                         isPremium 
                             ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-xl shadow-blue-900/20' 
                             : 'bg-[#1D1D1F] text-white hover:bg-black shadow-xl shadow-gray-200'

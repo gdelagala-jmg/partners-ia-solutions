@@ -23,37 +23,37 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
   const renderSEOContent = () => {
     if (sector.slug === 'salud') {
       return (
-        <div className="space-y-8 text-gray-300 leading-relaxed text-lg">
-          <p className="text-xl text-white font-light">
-            La <strong className="text-blue-400 font-semibold">Inteligencia Artificial en el sector de la Salud</strong> está revolucionando la manera en que profesionales, clínicas y hospitales gestionan sus procesos diarios y diagnostican a los pacientes. 
+        <div className="space-y-8 text-solutions-text-secondary leading-relaxed text-lg">
+          <p className="text-xl text-solutions-text-primary font-light">
+            La <strong className="text-blue-600 font-semibold">Inteligencia Artificial en el sector de la Salud</strong> está revolucionando la manera en que profesionales, clínicas y hospitales gestionan sus procesos diarios y diagnostican a los pacientes. 
           </p>
           
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
-                <Lightbulb className="text-blue-500" size={24} />
+            <h3 className="text-2xl font-bold text-solutions-text-primary flex items-center gap-2">
+                <Lightbulb className="text-blue-600" size={24} />
                 ¿Te preguntas qué hace la IA por ti?
             </h3>
             <p>
-                En Partners IA Solutions desarrollamos ecosistemas inteligentes que no solo mejoran la eficiencia operativa, sino que incrementan drásticamente la <strong className="text-white font-semibold">calidad de vida de las personas</strong>.
+                En Partners IA Solutions desarrollamos ecosistemas inteligentes que no solo mejoran la eficiencia operativa, sino que incrementan drásticamente la <strong className="text-solutions-text-primary font-semibold">calidad de vida de las personas</strong>.
                 Nuestros agentes de diagnóstico temprano asisten a los médicos proporcionando análisis en milisegundos de imágenes médicas, reduciendo los tiempos de espera y el estrés tanto para el paciente como para el especialista.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group">
-                <Zap className="text-blue-400 mb-3 group-hover:scale-110 transition-transform" size={24} />
-                <h4 className="text-white font-bold mb-2">Agentes de Triaje Clínico</h4>
-                <p className="text-sm text-gray-400">Asistentes conversacionales que orientan al paciente sobre urgencias y especialidades basadas en sus síntomas.</p>
+            <div className="p-6 rounded-2xl bg-white border border-solutions-border hover:bg-solutions-bg-commercial hover:border-blue-500/30 transition-all duration-300 group shadow-sm">
+                <Zap className="text-blue-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
+                <h4 className="text-solutions-text-primary font-bold mb-2">Agentes de Triaje Clínico</h4>
+                <p className="text-sm text-solutions-text-secondary">Asistentes conversacionales que orientan al paciente sobre urgencias y especialidades basadas en sus síntomas.</p>
             </div>
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group">
-                <BarChart3 className="text-blue-400 mb-3 group-hover:scale-110 transition-transform" size={24} />
-                <h4 className="text-white font-bold mb-2">Gestión Predictiva</h4>
-                <p className="text-sm text-gray-400">Algoritmos que proyectan el flujo de pacientes, garantizando la disponibilidad de recursos y minimizando el estrés hospitalario.</p>
+            <div className="p-6 rounded-2xl bg-white border border-solutions-border hover:bg-solutions-bg-commercial hover:border-blue-500/30 transition-all duration-300 group shadow-sm">
+                <BarChart3 className="text-blue-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
+                <h4 className="text-solutions-text-primary font-bold mb-2">Gestión Predictiva</h4>
+                <p className="text-sm text-solutions-text-secondary">Algoritmos que proyectan el flujo de pacientes, garantizando la disponibilidad de recursos y minimizando el estrés hospitalario.</p>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-blue-900/20 border border-blue-500/30">
-            <p className="text-blue-100 italic">
+          <div className="p-6 rounded-2xl bg-blue-50 border border-blue-100">
+            <p className="text-blue-800 italic">
                 "Al implementar estas Soluciones de IA en la Salud, nuestros clientes reportan una reducción media del 40% en tareas administrativas, permitiendo un cuidado más humano."
             </p>
           </div>
@@ -62,14 +62,14 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
     }
 
     return (
-        <div className="space-y-8 text-gray-300 leading-relaxed text-lg">
-          <p className="text-xl text-white font-light">
-            La <strong className="text-blue-400 font-semibold">Inteligencia Artificial en {sector.name}</strong> está redefiniendo radicalmente cómo operan los líderes de la industria.
+        <div className="space-y-8 text-solutions-text-secondary leading-relaxed text-lg">
+          <p className="text-xl text-solutions-text-primary font-light">
+            La <strong className="text-blue-600 font-semibold">Inteligencia Artificial en {sector.name}</strong> está redefiniendo radicalmente cómo operan los líderes de la industria.
           </p>
           
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
-                <Zap className="text-blue-500" size={24} />
+            <h3 className="text-2xl font-bold text-solutions-text-primary flex items-center gap-2">
+                <Zap className="text-blue-600" size={24} />
                 Transformamos procesos en resultados
             </h3>
             <p>
@@ -85,11 +85,11 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                 { title: "Visión de Mercado", desc: "Análisis de miles de variables para proteger y proyectar el crecimiento." },
                 { title: "Estrategia de Datos", desc: "Convierte tu información histórica en una ventaja competitiva real." }
             ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-blue-500/30 transition-colors">
-                    <CheckCircle2 className="text-blue-500 shrink-0 mt-1" size={18} />
+                <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-white border border-solutions-border hover:border-blue-500/30 transition-all duration-300 shadow-sm">
+                    <CheckCircle2 className="text-blue-600 shrink-0 mt-1" size={18} />
                     <div>
-                        <h4 className="text-white font-semibold text-sm">{item.title}</h4>
-                        <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
+                        <h4 className="text-solutions-text-primary font-semibold text-sm">{item.title}</h4>
+                        <p className="text-xs text-solutions-text-secondary mt-1">{item.desc}</p>
                     </div>
                 </div>
             ))}
@@ -99,17 +99,16 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-blue-500/30 relative overflow-hidden">
-        {/* Dynamic Mesh Background */}
+    <div className="min-h-screen bg-white text-solutions-text-primary selection:bg-blue-500/10 relative overflow-hidden font-sans">
+        {/* Ultra-soft background accents */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px] animate-pulse" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-900/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
-            <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-blue-600/10 rounded-full blur-[100px]" />
+            <div className="absolute top-[-5%] left-[-5%] w-[40%] h-[40%] bg-blue-50/30 rounded-full blur-[140px]" />
+            <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-indigo-50/30 rounded-full blur-[140px]" />
         </div>
 
         {/* Floating Lines Decorative */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none" 
-             style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} 
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" 
+             style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '48px 48px' }} 
         />
 
         <div className="relative z-10">
@@ -118,9 +117,9 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                 <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                     <Link 
                         href="/soluciones" 
-                        className="group inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-400 mb-8 transition-all duration-300"
+                        className="group inline-flex items-center text-sm font-medium text-solutions-text-secondary hover:text-blue-600 mb-8 transition-all duration-300"
                     >
-                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center mr-3 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all">
+                        <div className="w-8 h-8 rounded-full bg-solutions-bg-commercial flex items-center justify-center mr-3 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all shadow-sm">
                             <ArrowLeft size={16} />
                         </div>
                         Volver a todas las industrias
@@ -135,12 +134,12 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                             >
                                 <PageBadge 
                                     text={`Ecosistema IA para ${sector.name}`} 
-                                    icon={<Cpu size={14} className="text-blue-500" />} 
+                                    icon={<Cpu size={14} className="text-blue-600" />} 
                                     className="mb-4"
                                 />
-                                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-tight">
+                                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-solutions-text-primary leading-tight">
                                     Soluciones para <br className="hidden md:block" />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
                                         {sector.name}
                                     </span>
                                 </h1>
@@ -162,9 +161,9 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                         transition={{ duration: 0.7 }}
                         className="lg:col-span-7"
                     >
-                        <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden group hover:border-blue-500/20 transition-all duration-500">
-                            {/* Decorative element */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl -mr-16 -mt-16 group-hover:bg-blue-500/20 transition-all" />
+                        <div className="bg-white border border-solutions-border rounded-[3rem] p-8 md:p-16 shadow-2xl relative overflow-hidden group hover:border-blue-500/20 transition-all duration-700">
+                            {/* Subtle light accent */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50/50 blur-3xl -mr-32 -mt-32 group-hover:bg-blue-100/50 transition-all duration-700" />
                             
                             <div className="relative z-10">
                                 {renderSEOContent()}
@@ -173,26 +172,26 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
 
                         {/* Additional value propositions */}
                         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col items-center text-center">
-                                <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
+                            <div className="p-6 rounded-2xl bg-white border border-solutions-border flex flex-col items-center text-center shadow-sm">
+                                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-4">
                                     <ShieldCheck size={24} />
                                 </div>
-                                <h4 className="text-white font-bold text-sm mb-1">Seguridad Enterprise</h4>
-                                <p className="text-xs text-gray-500">Privacidad total y cumplimiento normativo.</p>
+                                <h4 className="text-solutions-text-primary font-bold text-sm mb-1">Seguridad Enterprise</h4>
+                                <p className="text-xs text-solutions-text-secondary font-light">Privacidad total y cumplimiento normativo.</p>
                             </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col items-center text-center">
-                                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-4">
+                            <div className="p-6 rounded-2xl bg-white border border-solutions-border flex flex-col items-center text-center shadow-sm">
+                                <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
                                     <Zap size={24} />
                                 </div>
-                                <h4 className="text-white font-bold text-sm mb-1">Despliegue Ágil</h4>
-                                <p className="text-xs text-gray-500">Integración con tus sistemas en semanas.</p>
+                                <h4 className="text-solutions-text-primary font-bold text-sm mb-1">Despliegue Ágil</h4>
+                                <p className="text-xs text-solutions-text-secondary font-light">Integración con tus sistemas en semanas.</p>
                             </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col items-center text-center">
-                                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-4">
+                            <div className="p-6 rounded-2xl bg-white border border-solutions-border flex flex-col items-center text-center shadow-sm">
+                                <div className="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600 mb-4">
                                     <BarChart3 size={24} />
                                 </div>
-                                <h4 className="text-white font-bold text-sm mb-1">ROI Medible</h4>
-                                <p className="text-xs text-gray-500">Optimización de costes desde el día 1.</p>
+                                <h4 className="text-solutions-text-primary font-bold text-sm mb-1">ROI Medible</h4>
+                                <p className="text-xs text-solutions-text-secondary font-light">Optimización de costes desde el día 1.</p>
                             </div>
                         </div>
                     </motion.div>
@@ -207,35 +206,37 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                     >
                         <div className="relative group">
                             {/* Outer Glow */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2.5rem] blur opacity-10 group-hover:opacity-20 transition duration-1000" />
+                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2.5rem] blur opacity-5 group-hover:opacity-10 transition duration-1000" />
                             
-                            <div className="relative bg-[#0a0a0a] border border-white/10 rounded-[2.5rem] p-5 sm:p-8 shadow-2xl">
+                            <div className="relative bg-white border border-solutions-border rounded-[2.5rem] p-5 sm:px-6 sm:py-10 md:px-8 md:py-12 shadow-2xl">
                                 <div className="mb-8">
-                                    <div className="w-14 h-14 rounded-2xl bg-blue-600/20 flex items-center justify-center text-blue-500 mb-5">
+                                    <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-5">
                                         <Mail size={28} />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-white mb-2">Solicita un dossier</h3>
-                                    <p className="text-gray-400 text-sm">
-                                        Analizaremos tu caso y te enviaremos una propuesta detallada para <span className="text-blue-400 font-medium">{sector.name}</span>.
+                                    <h3 className="text-2xl font-bold text-solutions-text-primary mb-2">Solicita un dossier</h3>
+                                    <p className="text-solutions-text-secondary text-sm font-light">
+                                        Analizaremos tu caso y te enviaremos una propuesta detallada para <span className="text-blue-600 font-medium">{sector.name}</span>.
                                     </p>
                                 </div>
 
                                 <LeadForm 
                                     variant="premium" 
-                                    sourcePage={`sector-${sector.slug}`}
-                                    solutionTitle={`Sector: ${sector.name}`}
-                                    solutionSlug={sector.slug}
+                                    context={{
+                                        sourcePage: `sector-${sector.slug}`,
+                                        solutionTitle: `Sector: ${sector.name}`,
+                                        solutionSlug: sector.slug
+                                    }}
                                 />
 
-                                <div className="mt-8 flex items-center justify-center gap-3 py-4 border-t border-white/5">
+                                <div className="mt-8 flex items-center justify-center gap-3 py-4 border-t border-solutions-border">
                                     <div className="flex -space-x-2">
                                         {[1,2,3].map(i => (
-                                            <div key={i} className="w-7 h-7 rounded-full border-2 border-[#0a0a0a] bg-gray-800 overflow-hidden">
-                                                <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="Expert" className="w-full h-full object-cover grayscale" />
+                                            <div key={i} className="w-7 h-7 rounded-full border-2 border-white bg-gray-100 overflow-hidden">
+                                                <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="Expert" className="w-full h-full object-cover" />
                                             </div>
                                         ))}
                                     </div>
-                                    <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
+                                    <p className="text-[10px] text-solutions-muted uppercase tracking-widest font-semibold">
                                         Asesoramiento experto disponible
                                     </p>
                                 </div>
