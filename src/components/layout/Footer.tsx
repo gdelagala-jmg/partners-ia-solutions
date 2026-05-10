@@ -32,9 +32,9 @@ const footerSections = [
     {
         title: 'Soluciones',
         links: [
-            { name: 'Consultoría IA', href: '/soluciones' },
-            { name: 'Desarrollo Custom', href: '/soluciones' },
-            { name: 'Automatización', href: '/soluciones' },
+            { name: 'Sectores', href: '/soluciones/#sectores' },
+            { name: 'Soluciones Finales', href: '/soluciones/#soluciones_finales' },
+            { name: 'Prototipos y Demos', href: '/soluciones/#labs' },
         ]
     },
     {

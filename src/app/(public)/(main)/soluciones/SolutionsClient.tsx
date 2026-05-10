@@ -155,7 +155,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             </section>
 
             {/* Sectors Grid */}
-            <section className="py-24 relative bg-solutions-bg-main">
+            <section id="sectores" className="py-24 relative bg-solutions-bg-main scroll-mt-24">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <div className="mb-16 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                         <div className="max-w-2xl">
@@ -230,7 +230,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Final Solutions */}
             {finalSolutions.length > 0 && (
-                <section className="py-32 bg-solutions-bg-commercial border-y border-solutions-border relative">
+                <section id="soluciones_finales" className="py-32 bg-solutions-bg-commercial border-y border-solutions-border relative scroll-mt-24">
                     <div className="absolute inset-0 bg-blue-50/30 pointer-events-none" />
                     <div className="max-w-5xl mx-auto px-5 md:px-6 lg:px-8 relative z-10">
                         <div className="mb-16 text-center">
@@ -250,7 +250,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Lab Prototypes */}
             {labPrototypes.length > 0 && (
-                <section className="py-32 relative bg-solutions-bg-main">
+                <section id="labs" className="py-32 relative bg-solutions-bg-main scroll-mt-24">
                     <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                         <div className="mb-16 text-center lg:text-left">
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-cyan-50 text-cyan-700 text-[10px] font-mono font-bold tracking-[0.3em] rounded-full border border-cyan-100">
@@ -274,24 +274,22 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             {/* CTA Final */}
             <section className="py-24">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                    <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
+                    <div className="bg-gray-50 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden border border-gray-100">
                         {/* Decorative background elements for CTA */}
-                        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
-                             style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '30px 30px' }} 
+                        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" 
+                             style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} 
                         />
-                        <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-                        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-black/20 rounded-full blur-3xl" />
                         
                         <div className="relative z-10 max-w-3xl mx-auto">
-                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 tracking-tight">
+                            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-8 tracking-tight">
                                 ¿No encuentras la solución <br/> exacta para tu problema?
                             </h2>
-                            <p className="text-white/80 text-lg mb-12 font-light leading-relaxed">
+                            <p className="text-gray-600 text-lg mb-12 font-light leading-relaxed">
                                 Somos expertos en diseñar ecosistemas de IA a medida. Cuéntanos tu desafío y construiremos la herramienta perfecta para tu negocio.
                             </p>
                             <Link 
                                 href="/contacto" 
-                                className="inline-flex items-center px-10 py-5 bg-white text-blue-700 font-bold rounded-2xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-xl"
+                                className="inline-flex items-center px-10 py-5 bg-black text-white font-bold rounded-2xl hover:bg-gray-800 transition-all duration-300 hover:scale-105 shadow-xl"
                             >
                                 Hablar con un Consultor
                                 <ArrowRight className="ml-3" size={20} />
