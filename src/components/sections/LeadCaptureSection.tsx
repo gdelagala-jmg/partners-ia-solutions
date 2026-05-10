@@ -160,7 +160,7 @@ export default function LeadCaptureSection() {
                                             value={form.scope}
                                             onChange={handleChange}
                                             required
-                                            className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 md:py-2.5 text-gray-800 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all pr-10"
+                                            className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 sm:py-3 text-gray-800 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all pr-10"
                                         >
                                             <option value="" disabled>Selecciona una opción...</option>
                                             {SCOPE_OPTIONS.map(opt => (
@@ -184,7 +184,7 @@ export default function LeadCaptureSection() {
                                         onChange={handleChange}
                                         required
                                         placeholder="Ej: Falta de sistematización, procesos manuales, falta de tiempo..."
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 md:py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 sm:py-3 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
                                     />
                                 </div>
 
@@ -228,7 +228,7 @@ export default function LeadCaptureSection() {
                                         onChange={handleChange}
                                         rows={4}
                                         placeholder="Cuéntanos en detalle qué transformación quieres lograr..."
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 md:py-2.5 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 sm:py-3 text-gray-800 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
                                     />
                                 </div>
 

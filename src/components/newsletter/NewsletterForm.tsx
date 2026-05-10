@@ -122,12 +122,12 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         placeholder="tu@empresa.com"
                         required
                         disabled={status === 'loading' || status === 'success'}
-                        className="flex-1 px-4 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm placeholder:text-gray-400"
+                        className="flex-1 px-4 py-3 sm:py-3.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm placeholder:text-gray-400"
                     />
                     <button
                         type="submit"
                         disabled={status === 'loading' || status === 'success'}
-                        className="px-8 py-3.5 bg-black text-white text-sm font-bold rounded-2xl hover:bg-gray-800 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center whitespace-nowrap shadow-lg shadow-black/5"
+                        className="px-8 py-3 sm:py-3.5 bg-black text-white text-sm font-bold rounded-2xl hover:bg-gray-800 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center whitespace-nowrap shadow-lg shadow-black/5"
                     >
                         {status === 'loading' ? (
                             <Loader2 className="w-4 h-4 animate-spin mr-2" />

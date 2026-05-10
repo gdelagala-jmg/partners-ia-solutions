@@ -181,6 +181,7 @@ export async function POST(request: Request) {
 
         // 6. Telegram Notification
         try {
+            const { sendTelegramNotification, escapeHTML } = await import('@/lib/telegram')
             const typeLabels: Record<string, string> = {
                 DEMO_REQUEST: '🚀 SOLICITUD DE DEMO',
                 CONTACT: '📩 CONTACTO GENÉRICO',
@@ -191,27 +192,27 @@ export async function POST(request: Request) {
             }
 
             const label = typeLabels[data.source] || '🆕 NUEVO LEAD'
-            const solutionInfo = data.solutionTitle ? `\n<b>Solución:</b> ${data.solutionTitle}` : ''
+            const solutionInfo = data.solutionTitle ? `\n<b>Solución:</b> ${escapeHTML(data.solutionTitle)}` : ''
             
             // Build detailed info for Roadmap/Lead Capture
             let detailedInfo = ''
-            if (data.scope) detailedInfo += `\n<b>Ámbito:</b> ${data.scope}`
-            if (data.bottleneck) detailedInfo += `\n<b>Cuello de botella:</b> ${data.bottleneck}`
+            if (data.scope) detailedInfo += `\n<b>Ámbito:</b> ${escapeHTML(data.scope)}`
+            if (data.bottleneck) detailedInfo += `\n<b>Cuello de botella:</b> ${escapeHTML(data.bottleneck)}`
             if (data.urgency) detailedInfo += `\n<b>Urgencia:</b> ${data.urgency}/10`
-            if (data.desiredResult) detailedInfo += `\n<b>Resultado deseado:</b> ${data.desiredResult}`
+            if (data.desiredResult) detailedInfo += `\n<b>Resultado deseado:</b> ${escapeHTML(data.desiredResult)}`
 
             const telegramMessage = `
 <b>${label}</b>
 ────────────────
-<b>Nombre:</b> ${data.name}
-<b>Email:</b> ${data.email}
-<b>Teléfono:</b> ${data.phone || 'N/A'}
-<b>Empresa:</b> ${data.company || 'N/A'}${solutionInfo}${detailedInfo}
+<b>Nombre:</b> ${escapeHTML(data.name)}
+<b>Email:</b> ${escapeHTML(data.email)}
+<b>Teléfono:</b> ${escapeHTML(data.phone || 'N/A')}
+<b>Empresa:</b> ${escapeHTML(data.company || 'N/A')}${solutionInfo}${detailedInfo}
 
 <b>Mensaje:</b>
-<i>${data.message || 'Sin mensaje'}</i>
+<i>${escapeHTML(data.message || 'Sin mensaje')}</i>
 ────────────────
-<b>Origen:</b> ${data.sourcePage || 'N/A'}
+<b>Origen:</b> ${escapeHTML(data.sourcePage || 'N/A')}
 <b>URL:</b> ${data.sourceUrl || 'N/A'}
 `.trim()
 

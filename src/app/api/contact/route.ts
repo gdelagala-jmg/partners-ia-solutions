@@ -68,15 +68,17 @@ export async function POST(request: Request) {
 
         // 3. Telegram Notification
         try {
+            const { sendTelegramNotification, escapeHTML } = await import('@/lib/telegram')
+            
             const telegramMessage = `
 <b>📩 NUEVO CONTACTO (WEB)</b>
 ────────────────
-<b>Nombre:</b> ${name}
-<b>Email:</b> ${email}
-<b>Teléfono:</b> ${phone || 'N/A'}
+<b>Nombre:</b> ${escapeHTML(name)}
+<b>Email:</b> ${escapeHTML(email)}
+<b>Teléfono:</b> ${escapeHTML(phone || 'N/A')}
 
 <b>Mensaje:</b>
-<i>${message || 'Sin mensaje'}</i>
+<i>${escapeHTML(message || 'Sin mensaje')}</i>
 ────────────────
 `.trim()
 

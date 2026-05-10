@@ -25,15 +25,20 @@ export async function POST(request: Request) {
 
         // Send Telegram Notification
         try {
-            const { sendTelegramNotification } = await import('@/lib/telegram')
-            await sendTelegramNotification(`
+            const { sendTelegramNotification, escapeHTML } = await import('@/lib/telegram')
+            
+            const telegramMessage = `
 <b>🚀 Nueva Solicitud de Demo</b>
-<b>Nombre:</b> ${name}
-<b>Email:</b> ${email}
-<b>Teléfono:</b> ${phone || 'No proporcionado'}
-<b>Solución:</b> ${solutionSlug}
+────────────────
+<b>Nombre:</b> ${escapeHTML(name)}
+<b>Email:</b> ${escapeHTML(email)}
+<b>Teléfono:</b> ${escapeHTML(phone || 'No proporcionado')}
+<b>Solución:</b> ${escapeHTML(solutionSlug)}
 <b>Origen:</b> Home Modal
-            `)
+────────────────
+            `.trim()
+
+            await sendTelegramNotification(telegramMessage)
         } catch (telegramErr) {
             console.error('Error sending Telegram notification:', telegramErr)
         }

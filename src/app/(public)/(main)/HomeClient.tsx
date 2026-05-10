@@ -311,7 +311,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                                 required
                                                 value={demoData.name}
                                                 onChange={e => setDemoData(d => ({ ...d, name: e.target.value }))}
-                                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
+                                                className="w-full px-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
                                                 placeholder="Tu nombre"
                                             />
                                         </div>
@@ -323,7 +323,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                                     required
                                                     value={demoData.email}
                                                     onChange={e => setDemoData(d => ({ ...d, email: e.target.value }))}
-                                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
+                                                    className="w-full px-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
                                                     placeholder="tu@empresa.com"
                                                 />
                                             </div>
@@ -334,7 +334,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                                     required
                                                     value={demoData.phone}
                                                     onChange={e => setDemoData(d => ({ ...d, phone: e.target.value }))}
-                                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
+                                                    className="w-full px-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm bg-gray-50/30"
                                                     placeholder="+34 600 000 000"
                                                 />
                                             </div>
@@ -346,7 +346,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                                     required
                                                     value={demoData.solutionSlug}
                                                     onChange={e => setDemoData(d => ({ ...d, solutionSlug: e.target.value }))}
-                                                    className="w-full pl-4 pr-10 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm appearance-none bg-gray-50/30 cursor-pointer"
+                                                    className="w-full pl-4 pr-10 py-2.5 sm:py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm appearance-none bg-gray-50/30 cursor-pointer"
                                                 >
                                                     <option value="" disabled>Selecciona una solución...</option>
                                                     {featuredSolutions.map(s => (
@@ -365,7 +365,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                             <button
                                                 type="submit"
                                                 disabled={isSubmitting}
-                                                className="w-full py-4 bg-[#1D1D1F] hover:bg-black text-white rounded-2xl font-bold transition-all transform active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
+                                                className="w-full py-3.5 sm:py-4 bg-[#1D1D1F] hover:bg-black text-white rounded-2xl font-bold transition-all transform active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
                                             >
                                                 {isSubmitting ? (
                                                     <>
