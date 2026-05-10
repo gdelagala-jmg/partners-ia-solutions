@@ -13,7 +13,8 @@ import {
     CheckCircle, 
     AlertCircle, 
     Loader2,
-    ArrowRight
+    ArrowRight,
+    Send
 } from 'lucide-react'
 import { leadFormSchema, type LeadFormData } from '@/lib/validations/lead'
 
@@ -109,20 +110,20 @@ export default function LeadForm({
         )
     }
 
-    const labelClass = `text-[10px] font-bold uppercase tracking-[0.1em] ml-1 mb-2 block ${isPremium ? 'text-blue-600/70' : 'text-gray-500'}`
-    const inputClass = `w-full pl-16 pr-6 py-4 sm:py-5 rounded-2xl outline-none transition-all font-sans shadow-sm border ${
+    const labelClass = `text-[10px] font-bold uppercase tracking-[0.1em] ml-1 mb-1.5 block ${isPremium ? 'text-blue-600/70' : 'text-gray-500'}`
+    const inputClass = `w-full pl-[52px] pr-6 py-3.5 sm:py-4 rounded-2xl outline-none transition-all font-sans shadow-sm border ${
         isPremium 
             ? 'bg-gray-50/50 border-gray-100 text-gray-900 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/5 placeholder:text-gray-400' 
             : 'bg-white border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 placeholder:text-gray-400'
     }`
-    const iconClass = `absolute left-6 top-1/2 -translate-y-1/2 transition-colors ${isPremium ? 'text-blue-600/40 group-focus-within:text-blue-600' : 'text-gray-400 group-focus-within:text-emerald-500'}`
+    const iconClass = `absolute left-5 top-1/2 -translate-y-1/2 transition-colors ${isPremium ? 'text-blue-600/40 group-focus-within:text-blue-600' : 'text-gray-400 group-focus-within:text-emerald-500'}`
 
     return (
         <div className={`w-full ${layout === 'modal' ? 'max-w-lg mx-auto' : ''}`}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     {/* Nombre */}
-                    <div className="space-y-0.5">
+                    <div>
                         <label className={labelClass}>Nombre Completo</label>
                         <div className="relative group">
                             <User className={iconClass} size={20} />
@@ -137,7 +138,7 @@ export default function LeadForm({
                     </div>
 
                     {/* Email */}
-                    <div className="space-y-0.5">
+                    <div>
                         <label className={labelClass}>Email Corporativo</label>
                         <div className="relative group">
                             <Mail className={iconClass} size={20} />
@@ -152,9 +153,9 @@ export default function LeadForm({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     {/* Teléfono */}
-                    <div className="space-y-0.5">
+                    <div>
                         <label className={labelClass}>Teléfono</label>
                         <div className="relative group">
                             <Phone className={iconClass} size={20} />
@@ -169,7 +170,7 @@ export default function LeadForm({
                     </div>
 
                     {/* Empresa */}
-                    <div className="space-y-0.5">
+                    <div>
                         <label className={labelClass}>Empresa</label>
                         <div className="relative group">
                             <Building className={iconClass} size={20} />
@@ -184,15 +185,17 @@ export default function LeadForm({
                 </div>
 
                 {/* Mensaje */}
-                <div className="space-y-0.5">
+                <div>
                     <label className={labelClass}>¿Cómo podemos ayudarte?</label>
                     <div className="relative group">
-                        <MessageSquare className={`absolute left-6 top-5 transition-colors ${isPremium ? 'text-gray-500 group-focus-within:text-blue-400' : 'text-gray-400 group-focus-within:text-emerald-500'}`} size={20} />
+                        <div className="absolute left-5 top-4 h-6 flex items-center pointer-events-none">
+                            <MessageSquare className={`transition-colors ${isPremium ? 'text-gray-500 group-focus-within:text-blue-400' : 'text-gray-400 group-focus-within:text-emerald-500'}`} size={20} />
+                        </div>
                         <textarea 
                             {...register('message')}
                             rows={4}
                             placeholder="Cuéntanos brevemente tus necesidades..."
-                            className={`${inputClass} min-h-[140px] resize-none ${errors.message ? 'border-red-500/50 bg-red-500/5' : ''}`}
+                            className={`${inputClass} min-h-[140px] resize-none leading-6 ${errors.message ? 'border-red-500/50 bg-red-500/5' : ''}`}
                         />
                     </div>
                     {errors.message && <p className="text-[11px] text-red-500 font-medium mt-1.5 ml-1">{errors.message.message}</p>}
@@ -205,9 +208,9 @@ export default function LeadForm({
                             <input 
                                 type="checkbox"
                                 {...register('consent')}
-                                className={`peer appearance-none w-5 h-5 border-2 rounded-md transition-all ${
+                                className={`peer appearance-none w-5 h-5 border-2 !rounded-[6px] transition-all ${
                                     isPremium 
-                                        ? 'border-white/10 checked:bg-blue-600 checked:border-blue-600' 
+                                        ? '!border-gray-400 checked:bg-blue-600 checked:border-blue-600' 
                                         : 'border-gray-300 checked:bg-emerald-500 checked:border-emerald-500'
                                 }`}
                             />

@@ -129,7 +129,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                         </div>
 
                         {/* DETAILS SECTION */}
-                        <div className="px-6 md:px-16 py-12 md:py-20 border-t border-solutions-border">
+                        <div className="px-6 md:px-10 py-12 md:py-20 border-t border-solutions-border">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
                                 <div className="space-y-12">
                                     {solution.functionalDescription && (
@@ -232,45 +232,43 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                             )}
                         </div>
 
-                        {/* PREMIUM DEMO SECTION */}
-                        <div id="demo-section" className="relative px-6 md:px-16 py-16 md:py-24 bg-solutions-bg-commercial border-t border-solutions-border">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                                <div>
+                        {/* PREMIUM DEMO SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
+                        <div id="demo-section" className="relative px-4 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
+                            <div className="max-w-4xl mx-auto">
+                                <div className="text-center mb-16">
                                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-6">
                                         <Zap size={12} />
                                         Prueba de Concepto
                                     </div>
                                     <h2 className="text-4xl md:text-6xl font-black text-solutions-text-primary mb-6 leading-[1.05]">
-                                        Visualiza el futuro de tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">operativa</span>
+                                        Visualiza el futuro de tu <br className="hidden md:block" />
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">operativa inteligente</span>
                                     </h2>
-                                    <p className="text-solutions-text-secondary text-xl mb-10 font-light leading-relaxed max-w-xl">
+                                    <p className="text-solutions-text-secondary text-xl md:text-2xl font-light leading-relaxed max-w-3xl mx-auto mb-10">
                                         No te conformes con la teoría. Agenda una sesión técnica estratégica para ver <span className="text-solutions-text-primary font-medium">{solution.title}</span> resolviendo casos de uso reales de tu sector.
                                     </p>
-                                    
-                                    <div className="space-y-6">
+                                    <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-solutions-text-secondary">
                                         {[
-                                            'Sesión estratégica 1:1 con ingenieros de IA',
-                                            'Análisis de integración con tu stack actual',
-                                            'Estimación de ROI y tiempos de despliegue'
+                                            'Sesión estratégica 1:1',
+                                            'Análisis de integración',
+                                            'Estimación de ROI'
                                         ].map((item, i) => (
-                                            <motion.div 
-                                                key={i}
-                                                initial={{ opacity: 0, x: -10 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: i * 0.1 }}
-                                                className="flex items-center gap-4 text-solutions-text-secondary"
-                                            >
-                                                <div className="w-10 h-10 rounded-xl bg-white border border-solutions-border flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform shadow-sm">
-                                                    <CheckCircle2 size={18} />
-                                                </div>
-                                                <span className="text-lg font-light italic">{item}</span>
-                                            </motion.div>
+                                            <div key={i} className="flex items-center gap-2">
+                                                <CheckCircle2 size={16} className="text-blue-600" />
+                                                <span className="italic">{item}</span>
+                                            </div>
                                         ))}
                                     </div>
                                 </div>
                                 
-                                <div className="relative">
-                                    <div className="relative bg-white p-5 sm:px-6 sm:py-10 md:px-8 md:py-14 rounded-[2.5rem] border border-solutions-border shadow-2xl">
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    className="relative"
+                                >
+                                    <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 rounded-[3rem] blur-2xl opacity-50" />
+                                    <div className="relative bg-white p-6 sm:p-10 md:p-16 rounded-[2.5rem] border border-solutions-border shadow-2xl">
                                         <LeadForm 
                                             layout="inline"
                                             variant="premium"
@@ -283,7 +281,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                                             }}
                                         />
                                     </div>
-                                </div>
+                                </motion.div>
                             </div>
                         </div>
                     </div>

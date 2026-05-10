@@ -161,7 +161,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                         transition={{ duration: 0.7 }}
                         className="lg:col-span-7"
                     >
-                        <div className="bg-white border border-solutions-border rounded-[3rem] p-8 md:p-16 shadow-2xl relative overflow-hidden group hover:border-blue-500/20 transition-all duration-700">
+                        <div className="bg-white border border-solutions-border rounded-[3rem] p-8 md:p-12 shadow-2xl relative overflow-hidden group hover:border-blue-500/20 transition-all duration-700">
                             {/* Subtle light accent */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50/50 blur-3xl -mr-32 -mt-32 group-hover:bg-blue-100/50 transition-all duration-700" />
                             
@@ -195,57 +195,60 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                             </div>
                         </div>
                     </motion.div>
+                </div>
+            </main>
 
-                    {/* Form Section */}
+            {/* PREMIUM DOSSIER SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
+            <section className="relative px-4 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
+                <div className="max-w-4xl mx-auto">
                     <motion.div 
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.7, delay: 0.2 }}
-                        className="lg:col-span-5 lg:sticky lg:top-32"
+                        className="relative group"
                     >
-                        <div className="relative group">
-                            {/* Outer Glow */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2.5rem] blur opacity-5 group-hover:opacity-10 transition duration-1000" />
-                            
-                            <div className="relative bg-white border border-solutions-border rounded-[2.5rem] p-5 sm:px-6 sm:py-10 md:px-8 md:py-12 shadow-2xl">
-                                <div className="mb-8">
-                                    <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-5">
-                                        <Mail size={28} />
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-solutions-text-primary mb-2">Solicita un dossier</h3>
-                                    <p className="text-solutions-text-secondary text-sm font-light">
-                                        Analizaremos tu caso y te enviaremos una propuesta detallada para <span className="text-blue-600 font-medium">{sector.name}</span>.
-                                    </p>
+                        {/* Outer Glow */}
+                        <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 rounded-[3rem] blur-2xl opacity-50 transition duration-1000" />
+                        
+                        <div className="relative bg-white border border-solutions-border rounded-[2.5rem] p-6 sm:p-10 md:p-16 shadow-2xl">
+                            <div className="text-center mb-12">
+                                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 mx-auto">
+                                    <Mail size={32} />
                                 </div>
+                                <h3 className="text-4xl md:text-5xl font-black text-solutions-text-primary mb-4 leading-tight">
+                                    Solicita un dossier estratégico para <br className="hidden md:block" />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{sector.name}</span>
+                                </h3>
+                                <p className="text-solutions-text-secondary text-lg md:text-xl font-light max-w-2xl mx-auto">
+                                    Analizaremos tu caso y te enviaremos una propuesta detallada con soluciones de IA adaptadas específicamente a tu sector.
+                                </p>
+                            </div>
 
-                                <LeadForm 
-                                    variant="premium" 
-                                    context={{
-                                        sourcePage: `sector-${sector.slug}`,
-                                        solutionTitle: `Sector: ${sector.name}`,
-                                        solutionSlug: sector.slug
-                                    }}
-                                />
+                            <LeadForm 
+                                variant="premium" 
+                                context={{
+                                    sourcePage: `sector-${sector.slug}`,
+                                    solutionTitle: `Sector: ${sector.name}`,
+                                    solutionSlug: sector.slug
+                                }}
+                            />
 
-                                <div className="mt-8 flex items-center justify-center gap-3 py-4 border-t border-solutions-border">
-                                    <div className="flex -space-x-2">
-                                        {[1,2,3].map(i => (
-                                            <div key={i} className="w-7 h-7 rounded-full border-2 border-white bg-gray-100 overflow-hidden">
-                                                <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="Expert" className="w-full h-full object-cover" />
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <p className="text-[10px] text-solutions-muted uppercase tracking-widest font-semibold">
-                                        Asesoramiento experto disponible
-                                    </p>
+                            <div className="mt-12 flex flex-col items-center gap-4 py-6 border-t border-solutions-border">
+                                <div className="flex -space-x-2">
+                                    {[1,2,3,4,5].map(i => (
+                                        <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 overflow-hidden">
+                                            <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="Expert" className="w-full h-full object-cover" />
+                                        </div>
+                                    ))}
                                 </div>
+                                <p className="text-[11px] text-solutions-muted uppercase tracking-[0.2em] font-bold">
+                                    Asesoramiento experto de alto nivel disponible
+                                </p>
                             </div>
                         </div>
                     </motion.div>
-
                 </div>
-            </main>
+            </section>
         </div>
     </div>
   )
