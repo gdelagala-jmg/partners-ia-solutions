@@ -233,9 +233,9 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                         </div>
 
                         {/* PREMIUM DEMO SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-                        <div id="demo-section" className="relative px-4 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
+                        <div id="demo-section" className="relative px-5 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
                             <div className="max-w-4xl mx-auto">
-                                <div className="text-center mb-16">
+                                <div className="text-center mb-10 md:mb-16">
                                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-6">
                                         <Zap size={12} />
                                         Prueba de Concepto
@@ -268,7 +268,8 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                                     className="relative"
                                 >
                                     <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 rounded-[3rem] blur-2xl opacity-50" />
-                                    <div className="relative bg-white p-6 sm:p-10 md:p-16 rounded-[2.5rem] border border-solutions-border shadow-2xl">
+                                    <div className="relative bg-white p-6 sm:p-10 md:p-16 rounded-[2.5rem] border border-solutions-border shadow-2xl overflow-hidden">
+                                        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10" />
                                         <LeadForm 
                                             layout="inline"
                                             variant="premium"

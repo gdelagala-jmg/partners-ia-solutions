@@ -121,7 +121,7 @@ export default function LeadForm({
     return (
         <div className={`w-full ${layout === 'modal' ? 'max-w-lg mx-auto' : ''}`}>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {/* Nombre */}
                     <div>
                         <label className={labelClass}>Nombre Completo</label>
@@ -153,7 +153,7 @@ export default function LeadForm({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {/* Teléfono */}
                     <div>
                         <label className={labelClass}>Teléfono</label>

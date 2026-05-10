@@ -199,8 +199,21 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             </main>
 
             {/* PREMIUM DOSSIER SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-            <section className="relative px-4 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
+            <section className="relative px-5 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
                 <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-10 md:mb-16">
+                        <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 mx-auto shadow-sm">
+                            <Mail size={32} />
+                        </div>
+                        <h3 className="text-4xl md:text-5xl font-black text-solutions-text-primary mb-4 leading-tight">
+                            Solicita un dossier estratégico para <br className="hidden md:block" />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{sector.name}</span>
+                        </h3>
+                        <p className="text-solutions-text-secondary text-lg md:text-xl font-light max-w-2xl mx-auto">
+                            Analizaremos tu caso y te enviaremos una propuesta detallada con soluciones de IA adaptadas específicamente a tu sector.
+                        </p>
+                    </div>
+
                     <motion.div 
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -210,20 +223,8 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                         {/* Outer Glow */}
                         <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 rounded-[3rem] blur-2xl opacity-50 transition duration-1000" />
                         
-                        <div className="relative bg-white border border-solutions-border rounded-[2.5rem] p-6 sm:p-10 md:p-16 shadow-2xl">
-                            <div className="text-center mb-12">
-                                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 mx-auto">
-                                    <Mail size={32} />
-                                </div>
-                                <h3 className="text-4xl md:text-5xl font-black text-solutions-text-primary mb-4 leading-tight">
-                                    Solicita un dossier estratégico para <br className="hidden md:block" />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{sector.name}</span>
-                                </h3>
-                                <p className="text-solutions-text-secondary text-lg md:text-xl font-light max-w-2xl mx-auto">
-                                    Analizaremos tu caso y te enviaremos una propuesta detallada con soluciones de IA adaptadas específicamente a tu sector.
-                                </p>
-                            </div>
-
+                        <div className="relative bg-white border border-solutions-border rounded-[2.5rem] p-6 sm:p-10 md:p-16 shadow-2xl overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10" />
                             <LeadForm 
                                 variant="premium" 
                                 context={{
