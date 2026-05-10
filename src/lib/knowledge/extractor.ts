@@ -4,7 +4,7 @@
  * cleans it and produces structured chunks for embedding.
  */
 
-import prisma from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 
 export interface ContentChunk {
   content_type: string
