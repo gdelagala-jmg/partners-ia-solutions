@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { triggerMakeWebhook } from '@/lib/webhook'
+import { ensureNewsletterCampaign } from '@/lib/newsletter-automation'
 import { syncPodcastToFeed } from '@/lib/utils/podcast-sync'
 type Params = Promise<{ id: string }>
 
@@ -78,12 +79,19 @@ export async function PUT(request: Request, { params }: { params: Params }) {
             }
             
             // FASE 6: Generación automática de newsletter (centralizado)
+            console.log(`[Newsletter] Iniciando trigger para post: ${post.id} (${post.title})`)
             try {
-                const { ensureNewsletterCampaign } = await import('@/lib/newsletter-automation')
-                await ensureNewsletterCampaign(post)
-            } catch (err) {
-                console.error('Error auto-generating newsletter campaign:', err)
+                const result = await ensureNewsletterCampaign(post)
+                if (result) {
+                    console.log(`[Newsletter] ÉXITO: Campaña procesada para post ${post.id}`)
+                } else {
+                    console.log(`[Newsletter] INFO: No se requirió creación para post ${post.id} (posible duplicado u omitido)`)
+                }
+            } catch (err: any) {
+                console.error(`[Newsletter][ERROR] Fallo al generar campaña para post ${post.id}:`, err.message)
             }
+        } else {
+            console.log(`[Newsletter] Omitido: El post ${post.id} no está marcado como publicado.`)
         }
         return NextResponse.json(post)
     } catch (error: any) {

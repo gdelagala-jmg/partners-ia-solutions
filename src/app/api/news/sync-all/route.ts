@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { ensureNewsletterCampaign } from '@/lib/newsletter-automation'
 import { triggerMakeWebhook } from '@/lib/webhook'
 
 export async function POST(request: Request) {
@@ -25,11 +26,16 @@ export async function POST(request: Request) {
             await triggerMakeWebhook(post, true);
             
             // Asegurar campaña de newsletter
+            console.log(`[Newsletter] Iniciando trigger (SYNC-ALL) para post: ${post.id} (${post.title})`)
             try {
-                const { ensureNewsletterCampaign } = await import('@/lib/newsletter-automation')
-                await ensureNewsletterCampaign(post)
-            } catch (nlError) {
-                console.error(`Error triggering newsletter for post ${post.id} in sync-all:`, nlError)
+                const result = await ensureNewsletterCampaign(post)
+                if (result) {
+                    console.log(`[Newsletter] ÉXITO: Campaña procesada para post ${post.id}`)
+                } else {
+                    console.log(`[Newsletter] INFO: No se requirió creación para post ${post.id} (posible duplicado u omitido)`)
+                }
+            } catch (err: any) {
+                console.error(`[Newsletter][ERROR] Fallo al generar campaña para post ${post.id} en sync-all:`, err.message)
             }
         }));
 

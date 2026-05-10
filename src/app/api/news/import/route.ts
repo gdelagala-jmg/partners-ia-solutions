@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { ensureNewsletterCampaign } from '@/lib/newsletter-automation'
 import { generateSlug } from '@/lib/utils'
 import AdmZip from 'adm-zip'
 import path from 'path'
@@ -126,12 +127,18 @@ export async function POST(request: Request) {
                 })
 
                 // Disparar newsletter si viene publicado
-                if (newPost.published) {
+                if (post.published) {
+                    // FASE 6: Generación automática de newsletter (centralizado)
+                    console.log(`[Newsletter] Iniciando trigger (IMPORT) para post: ${newPost.id} (${newPost.title})`)
                     try {
-                        const { ensureNewsletterCampaign } = await import('@/lib/newsletter-automation')
-                        await ensureNewsletterCampaign(newPost)
-                    } catch (nlError) {
-                        console.error('Error triggering newsletter on import:', nlError)
+                        const result = await ensureNewsletterCampaign(newPost)
+                        if (result) {
+                            console.log(`[Newsletter] ÉXITO: Campaña procesada para post ${newPost.id}`)
+                        } else {
+                            console.log(`[Newsletter] INFO: No se requirió creación para post ${newPost.id} (posible duplicado u omitido)`)
+                        }
+                    } catch (err: any) {
+                        console.error(`[Newsletter][ERROR] Fallo al generar campaña para post ${newPost.id}:`, err.message)
                     }
                 }
 
