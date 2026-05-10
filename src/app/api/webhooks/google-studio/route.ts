@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { ensureNewsletterCampaign } from '@/lib/newsletter-automation'
 import { slugify } from '@/lib/utils/slugify'
 import { downloadAndStoreImage } from '@/lib/utils/image-storage'
 import { syncPodcastToFeed } from '@/lib/utils/podcast-sync'
@@ -83,6 +84,21 @@ export async function POST(request: Request) {
             } catch (webhookError) {
                 console.error('[GMB Sync] Failed to trigger GMB webhook:', webhookError)
             }
+
+            // FASE 6: Generación automática de newsletter (centralizado)
+            console.log(`[Newsletter] Google Studio trigger iniciado para post: ${post.id} (${post.title})`)
+            try {
+                const result = await ensureNewsletterCampaign(post)
+                if (result) {
+                    console.log(`[Newsletter] Google Studio campaña creada/programada para post ${post.id}`)
+                } else {
+                    console.log(`[Newsletter] Google Studio omitido por duplicado para post ${post.id}`)
+                }
+            } catch (err: any) {
+                console.error(`[Newsletter][ERROR] Google Studio fallo al generar campaña para post ${post.id}:`, err.message)
+            }
+        } else {
+            console.log(`[Newsletter] Google Studio omitido: El post ${post.id} no está marcado como publicado.`)
         }
 
         // Chained Podcast Sync
