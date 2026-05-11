@@ -18,10 +18,10 @@ import Image from 'next/image'
 //  • grayscale suave → color en hover
 //  • Transición premium 300ms ease-out
 //
-//  TAMAÑOS:
-//  • Mobile  (default):  64 × 64 px  — w-16 h-16
-//  • Tablet  (sm: 640px): 80 × 80 px  — sm:w-20 sm:h-20
-//  • Desktop (md: 768px): 96 × 96 px  — md:w-24 md:h-24
+//  TAMAÑOS (−20% vs anterior):
+//  • Mobile  (default):  48 × 48 px  — w-12 h-12
+//  • Tablet  (sm: 640px): 64 × 64 px  — sm:w-16 sm:h-16
+//  • Desktop (md: 768px): 72 × 72 px  — md:w-[72px] md:h-[72px]
 //
 //  GAP:
 //  • Mobile:  gap-4  (16px)
@@ -79,10 +79,10 @@ export default function ClientCarousel() {
                             key={`${client.id}-${idx}`}
                             className={[
                                 'group flex-shrink-0 relative',
-                                // Responsive square sizes
-                                'w-16 h-16',          // mobile  — 64px
-                                'sm:w-20 sm:h-20',    // tablet  — 80px
-                                'md:w-24 md:h-24',    // desktop — 96px
+                                // Responsive square sizes (−20% vs anterior)
+                                'w-12 h-12',                    // mobile  — 48px
+                                'sm:w-16 sm:h-16',              // tablet  — 64px
+                                'md:w-[72px] md:h-[72px]',      // desktop — 72px
                             ].join(' ')}
                         >
                             <Image
@@ -99,7 +99,7 @@ export default function ClientCarousel() {
                                     'group-hover:grayscale-0 group-hover:opacity-100',
                                     'transition-all duration-300 ease-out',
                                 ].join(' ')}
-                                sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
+                                sizes="(max-width: 640px) 48px, (max-width: 768px) 64px, 72px"
                             />
                         </div>
                     ))}
