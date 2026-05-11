@@ -1,3 +1,29 @@
+const SOCIAL_LINKS_HTML = `
+<div style="margin-top: 40px; text-align: center; border-top: 1px solid #f2f2f7; padding-top: 30px;">
+    <p style="font-size: 13px; font-weight: 700; color: #1d1d1f; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.1em;">Síguenos y mantente conectado</p>
+    <div style="display: block; margin-bottom: 20px;">
+        <a href="https://www.linkedin.com/company/109997641/" style="display: inline-block; margin: 0 10px; text-decoration: none;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="28" height="28" alt="LinkedIn" style="display: block; opacity: 0.8;">
+        </a>
+        <a href="https://open.spotify.com/show/2L0NV7YhTyXzUEcP7VAv7H" style="display: inline-block; margin: 0 10px; text-decoration: none;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3669/3669986.png" width="28" height="28" alt="Spotify" style="display: block; opacity: 0.8;">
+        </a>
+        <a href="https://api.whatsapp.com/send?phone=34639023805" style="display: inline-block; margin: 0 10px; text-decoration: none;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" width="28" height="28" alt="WhatsApp" style="display: block; opacity: 0.8;">
+        </a>
+        <a href="https://www.facebook.com/pgf.iasolutions" style="display: inline-block; margin: 0 10px; text-decoration: none;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670032.png" width="28" height="28" alt="Facebook" style="display: block; opacity: 0.8;">
+        </a>
+        <a href="https://www.instagram.com/pgf.iasolutions/" style="display: inline-block; margin: 0 10px; text-decoration: none;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3955/3955024.png" width="28" height="28" alt="Instagram" style="display: block; opacity: 0.8;">
+        </a>
+        <a href="https://www.youtube.com/@PGF.IASolutions" style="display: inline-block; margin: 0 10px; text-decoration: none;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670147.png" width="28" height="28" alt="YouTube" style="display: block; opacity: 0.8;">
+        </a>
+    </div>
+</div>
+`
+
 export function generateNewsletterHtml(campaign: any, isTest: boolean = false, subscriberToken: string = 'test-token') {
     const { subject, preheader, introText, heroImage, content, primaryCtaText, primaryCtaUrl, recommendedSolutions } = campaign
     const unsubscribeUrl = `https://partnersiasolutions.com/newsletter/unsubscribe/${subscriberToken}`
@@ -32,7 +58,7 @@ export function generateNewsletterHtml(campaign: any, isTest: boolean = false, s
             .content { font-size: 16px; color: #1d1d1f; margin-bottom: 30px; }
             .cta-container { margin: 40px 0; text-align: center; }
             .cta-button { display: inline-block; padding: 16px 32px; background-color: #000000; color: #ffffff !important; text-decoration: none; border-radius: 14px; font-weight: 600; font-size: 16px; }
-            .footer { font-size: 12px; color: #86868b; margin-top: 60px; border-top: 1px solid #f2f2f7; padding-top: 30px; text-align: center; }
+            .footer { font-size: 12px; color: #86868b; margin-top: 20px; border-top: 1px solid #f2f2f7; padding-top: 30px; text-align: center; }
             .test-banner { background-color: #fef3c7; color: #92400e; padding: 10px; text-align: center; font-size: 12px; font-weight: bold; border-radius: 8px; margin-bottom: 20px; }
             img { max-width: 100%; height: auto; }
         </style>
@@ -68,6 +94,8 @@ export function generateNewsletterHtml(campaign: any, isTest: boolean = false, s
                     ${solutionsHtml}
                 </div>
             ` : ''}
+
+            ${SOCIAL_LINKS_HTML}
             
             <div class="footer">
                 <p style="margin-bottom: 8px;">&copy; ${new Date().getFullYear()} Partners IA Solutions. Todos los derechos reservados.</p>
@@ -102,7 +130,7 @@ export function generateWelcomeEmailHtml(subscriberToken: string) {
             .content { font-size: 16px; color: #1d1d1f; margin-bottom: 30px; }
             .cta-container { margin: 40px 0; text-align: center; }
             .cta-button { display: inline-block; padding: 16px 32px; background-color: #000000; color: #ffffff !important; text-decoration: none; border-radius: 14px; font-weight: 600; font-size: 16px; }
-            .footer { font-size: 12px; color: #86868b; margin-top: 60px; border-top: 1px solid #f2f2f7; padding-top: 30px; text-align: center; }
+            .footer { font-size: 12px; color: #86868b; margin-top: 20px; border-top: 1px solid #f2f2f7; padding-top: 30px; text-align: center; }
         </style>
     </head>
     <body>
@@ -131,6 +159,8 @@ export function generateWelcomeEmailHtml(subscriberToken: string) {
                     <a href="https://www.partnersiasolutions.com/soluciones" class="cta-button" style="background-color: #f2f2f7; color: #000000 !important;">Nuestras soluciones</a>
                 </div>
             </div>
+
+            ${SOCIAL_LINKS_HTML}
             
             <div class="footer">
                 <p style="margin-bottom: 8px;">&copy; ${new Date().getFullYear()} Partners IA Solutions. Todos los derechos reservados.</p>
@@ -145,3 +175,4 @@ export function generateWelcomeEmailHtml(subscriberToken: string) {
     </html>
     `
 }
+
