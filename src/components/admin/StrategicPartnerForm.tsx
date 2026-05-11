@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useEffect, useState } from 'react'
-import { Upload, X, Globe, User, Landmark, Tag, Palette, Layout, Settings } from 'lucide-react'
+import { Upload, X, Globe, User, Landmark, Tag, Palette, Layout, Settings, Handshake } from 'lucide-react'
 
 const partnerSchema = z.object({
     name: z.string().min(2, 'El nombre es obligatorio'),
@@ -32,7 +32,7 @@ interface StrategicPartnerFormProps {
 }
 
 const CATEGORIES = [
-    'AI', 'Cloud', 'Infrastructure', 'Payments', 'Automation', 
+    'Partners', 'AI', 'Cloud', 'Infrastructure', 'Payments', 'Automation', 
     'Analytics', 'Security', 'Integrations', 'Communications', 
     'Data', 'Development', 'Strategic'
 ]
@@ -69,7 +69,7 @@ export default function StrategicPartnerForm({ initialData, onSubmit, onCancel }
     useEffect(() => {
         if (!initialData && nameValue) {
             const slug = nameValue.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-            setValue('slug', slug)
+            setValue('slug', slug, { shouldValidate: true })
         }
     }, [nameValue, setValue, initialData])
 

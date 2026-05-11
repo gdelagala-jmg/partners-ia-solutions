@@ -14,6 +14,11 @@ export default function StrategicPartnersPage() {
     const [isEditing, setIsEditing] = useState(false)
     const [currentPartner, setCurrentPartner] = useState<any>(null)
     const [activeTab, setActiveTab] = useState<'list' | 'settings'>('list')
+    const [categoryFilter, setCategoryFilter] = useState<string>('all')
+
+    const filteredPartners = partners.filter(p => 
+        categoryFilter === 'all' ? true : p.category === categoryFilter
+    )
 
     const fetchData = async () => {
         setLoading(true)
@@ -199,6 +204,28 @@ export default function StrategicPartnersPage() {
                 )}
             </header>
 
+            {!isEditing && activeTab === 'list' && (
+                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                    <List size={18} className="text-gray-400" />
+                    <span className="text-sm font-bold text-gray-700">Filtrar por Categoría:</span>
+                    <select 
+                        value={categoryFilter}
+                        onChange={(e) => setCategoryFilter(e.target.value)}
+                        className="bg-gray-50 border-gray-200 border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-indigo-500 font-medium"
+                    >
+                        <option value="all">Todas las categorías</option>
+                        <option value="Partners">Partners Estratégicos</option>
+                        <option value="AI">Inteligencia Artificial</option>
+                        <option value="Cloud">Cloud</option>
+                        <option value="Infrastructure">Infraestructura</option>
+                        <option value="Strategic">Estratégicos (Otros)</option>
+                    </select>
+                    <div className="ml-auto text-[10px] font-black text-gray-300 uppercase tracking-widest">
+                        {filteredPartners.length} registros encontrados
+                    </div>
+                </div>
+            )}
+
             {isEditing ? (
                 <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
                     <StrategicPartnerForm
@@ -219,7 +246,7 @@ export default function StrategicPartnersPage() {
             ) : (
                 <AdminTable
                     columns={columns}
-                    data={partners}
+                    data={filteredPartners}
                     loading={loading}
                     emptyMessage="No hay partners estratégicos registrados."
                     renderMobileCard={(partner) => (
