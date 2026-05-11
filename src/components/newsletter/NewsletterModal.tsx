@@ -183,7 +183,7 @@ export default function NewsletterModal() {
                         className="text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight text-center leading-snug"
                     >
                         Mantente a la vanguardia{' '}
-                        <span className="text-blue-500">con Partners IA</span>
+                        <span className="text-blue-500">con Partners IA Solutions</span>
                     </h2>
 
                     {/* Descripción */}
