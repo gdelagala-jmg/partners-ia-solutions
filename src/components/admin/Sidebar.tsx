@@ -34,6 +34,7 @@ const menuItems = [
     { name: 'Asistente AI', href: '/admin/asistente', icon: Bot },
     { name: 'Sectores', href: '/admin/sectors', icon: Box },
     { name: 'Clientes', href: '/admin/clientes', icon: Users },
+    { name: 'Partners', href: '/admin/partners', icon: Handshake },
     { name: 'Navegación', href: '/admin/navegacion', icon: Link2 },
     { name: 'Aplicaciones', href: '/admin/apps', icon: LayoutGrid },
     { name: 'Soluciones', href: '/admin/soluciones', icon: Puzzle },

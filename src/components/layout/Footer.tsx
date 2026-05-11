@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Linkedin, Facebook, Instagram, Youtube, MessageCircle, Music, Podcast, Share2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import NewsletterForm from '../newsletter/NewsletterForm'
+import FooterStrategicPartners from './FooterStrategicPartners'
 
 const SpotifyIcon = ({ size = 18 }: { size?: number }) => (
     <svg 
@@ -127,9 +128,15 @@ export default function Footer({
                             Transformamos negocios con soluciones de Inteligencia Artificial de última generación.
                         </p>
 
-                        <div className="w-full max-w-xs mb-8">
-                            <h3 className="text-[10px] font-black text-gray-400 mb-4 tracking-[0.2em] uppercase">Newsletter Editorial</h3>
-                            <NewsletterForm variant="footer" />
+                        <div className="flex flex-col sm:flex-row gap-8 items-start w-full mb-10">
+                            <div className="w-full sm:max-w-xs shrink-0">
+                                <h3 className="text-[10px] font-black text-gray-400 mb-4 tracking-[0.2em] uppercase">Newsletter Editorial</h3>
+                                <NewsletterForm variant="footer" />
+                            </div>
+                            
+                            <div className="hidden sm:block w-[1px] self-stretch bg-gray-200" />
+                            
+                            <FooterStrategicPartners />
                         </div>
 
                         {/* Social Links */}

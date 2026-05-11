@@ -357,3 +357,48 @@ model NewsletterSetting {
   defaultCrossSellEnabled   Boolean  @default(true)
   doubleOptInEnabled        Boolean  @default(false)
 }
+
+// ============================================================================
+// 🤝 STRATEGIC PARTNERS MODULE
+// ============================================================================
+
+model StrategicPartner {
+  id              String   @id @default(uuid())
+  name            String
+  slug            String   @unique
+  logoUrl         String?
+  logoAlt         String?
+  websiteUrl      String?
+  category        String?  @default("Strategic")
+  displayOrder    Int      @default(0)
+  isActive        Boolean  @default(true)
+  isFeatured      Boolean  @default(false)
+  showInFooter    Boolean  @default(true)
+  showInHomepage  Boolean  @default(false)
+  showInSolutions Boolean  @default(false)
+  brandColor      String?
+  logoVariant     String?  @default("ORIGINAL") // ORIGINAL, MONOCHROME, INVERTED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("strategic_partners")
+}
+
+model SitePartnerSettings {
+  id                String   @id @default("GLOBAL")
+  sectionTitle      String   @default("Partners Estratégicos")
+  sectionSubtitle   String?  @default("")
+  layoutType        String   @default("horizontal-logos")
+  maxVisibleItems   Int      @default(8)
+  autoplay          Boolean  @default(false)
+  animationSpeed    Int      @default(3000)
+  showDividers      Boolean  @default(true)
+  showBackground    Boolean  @default(false)
+  backgroundStyle   String   @default("minimal")
+  mobileStack       Boolean  @default(true)
+  footerEnabled     Boolean  @default(true)
+  updatedAt         DateTime @updatedAt
+
+  @@map("site_partner_settings")
+}
+
