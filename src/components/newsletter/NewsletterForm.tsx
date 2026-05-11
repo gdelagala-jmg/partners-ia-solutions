@@ -114,8 +114,9 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         : 'Recibe próximas publicaciones, insights y soluciones exclusivas directamente en tu bandeja de entrada.'}
                 </p>
 
-                <form onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <form id="newsletter-form" onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto scroll-mt-20">
                     <input
+                        id="newsletter-email"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
