@@ -92,7 +92,6 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         onVerify={(token) => setTurnstileToken(token)}
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => setTurnstileToken(null)}
-                        theme="light"
                         appearance="interaction-only"
                     />
                 </div>
@@ -174,7 +173,6 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         onVerify={(token) => setTurnstileToken(token)}
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => setTurnstileToken(null)}
-                        theme="light"
                         appearance="interaction-only"
                     />
                 </div>

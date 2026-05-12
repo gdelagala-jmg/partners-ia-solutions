@@ -251,7 +251,6 @@ export default function LeadForm({
                         onVerify={(token) => setTurnstileToken(token)}
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => setTurnstileToken(null)}
-                        theme={isPremium ? 'light' : 'light'}
                         appearance="interaction-only"
                     />
                 </div>

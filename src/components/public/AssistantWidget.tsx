@@ -342,7 +342,6 @@ const formatMessage = (text: string) => {
                           onExpire={() => setTurnstileToken(null)}
                           onError={() => setTurnstileToken(null)}
                           appearance="interaction-only"
-                          theme="dark"
                         />
                       </div>
 
