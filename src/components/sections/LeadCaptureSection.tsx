@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Zap, ChevronDown, Send, CheckCircle2, AlertCircle } from 'lucide-react'
+import TurnstileCaptcha from '../security/TurnstileCaptcha'
 
 const SCOPE_OPTIONS = [
     'Gestión Profesional / Negocio',
@@ -28,6 +29,8 @@ export default function LeadCaptureSection() {
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
     const [errorMsg, setErrorMsg] = useState('')
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+    const captchaRef = useRef<{ reset: () => void } | null>(null)
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         const target = e.target as HTMLInputElement
@@ -67,6 +70,7 @@ export default function LeadCaptureSection() {
                     phone: form.phone,
                     company: form.company,
                     source: 'LEAD_CAPTURE',
+                    turnstileToken: captchaToken,
                 }),
             })
 
@@ -80,6 +84,8 @@ export default function LeadCaptureSection() {
         } catch (err: any) {
             setStatus('error')
             setErrorMsg(err.message || 'Error inesperado. Inténtalo de nuevo.')
+            // Reset captcha on error so the user can try again
+            captchaRef.current?.reset()
         } finally {
             setLoading(false)
         }
@@ -331,11 +337,21 @@ export default function LeadCaptureSection() {
                                     </div>
                                 )}
 
+                                 {/* Security */}
+                                <div className="md:col-span-2 flex justify-center md:justify-start">
+                                    <TurnstileCaptcha 
+                                        ref={captchaRef}
+                                        onVerify={setCaptchaToken} 
+                                        onError={() => setCaptchaToken(null)}
+                                        onExpire={() => setCaptchaToken(null)}
+                                    />
+                                </div>
+
                                 {/* Submit */}
                                 <div className="md:col-span-2 pt-2">
                                     <button
                                         type="submit"
-                                        disabled={loading}
+                                        disabled={loading || !captchaToken}
                                         className="group w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 md:px-8 md:py-4 bg-black hover:bg-gray-800 text-white font-semibold rounded-2xl transition-all hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
                                     >
                                         {loading ? (
