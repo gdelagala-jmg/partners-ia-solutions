@@ -36,9 +36,18 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
         // Fetch security configuration from server
         useEffect(() => {
             fetch('/api/security/config')
-                .then(res => res.json())
-                .then(data => setIsSecurityEnabled(data.formSecurityEnabled))
-                .catch(() => setIsSecurityEnabled(false)) // Fail-safe: disable if error
+                .then(res => {
+                    if (!res.ok) throw new Error(`Security config fetch failed: ${res.status}`)
+                    return res.json()
+                })
+                .then(data => {
+                    console.log('[Security] Turnstile component config:', data)
+                    setIsSecurityEnabled(!!data.formSecurityEnabled)
+                })
+                .catch(err => {
+                    console.warn('[Security] Failed to load turnstile config:', err)
+                    setIsSecurityEnabled(false)
+                })
         }, [])
 
         // Render widget effect

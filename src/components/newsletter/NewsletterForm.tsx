@@ -20,9 +20,18 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
     // Fetch security config
     useEffect(() => {
         fetch('/api/security/config')
-            .then(res => res.json())
-            .then(data => setIsSecurityEnabled(data.formSecurityEnabled))
-            .catch(() => setIsSecurityEnabled(false))
+            .then(res => {
+                if (!res.ok) throw new Error(`Security config fetch failed: ${res.status}`)
+                return res.json()
+            })
+            .then(data => {
+                console.log('[Security] Config loaded:', data)
+                setIsSecurityEnabled(!!data.formSecurityEnabled)
+            })
+            .catch(err => {
+                console.warn('[Security] Failed to load config, falling back to disabled:', err)
+                setIsSecurityEnabled(false)
+            })
     }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
