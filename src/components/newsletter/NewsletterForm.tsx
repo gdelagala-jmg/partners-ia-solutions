@@ -87,15 +87,17 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                     </button>
                 </form>
-                {/* Turnstile - discrete in footer, rendered below input */}
-                <TurnstileCaptcha
-                    ref={captchaRef}
-                    onVerify={(token) => setTurnstileToken(token)}
-                    onExpire={() => setTurnstileToken(null)}
-                    onError={() => setTurnstileToken(null)}
-                    theme="light"
-                    appearance="interaction-only"
-                />
+                {/* Turnstile - hidden */}
+                <div className="hidden">
+                    <TurnstileCaptcha
+                        ref={captchaRef}
+                        onVerify={(token) => setTurnstileToken(token)}
+                        onExpire={() => setTurnstileToken(null)}
+                        onError={() => setTurnstileToken(null)}
+                        theme="light"
+                        appearance="interaction-only"
+                    />
+                </div>
                 <AnimatePresence mode="wait">
                     {status === 'success' && (
                         <motion.p 

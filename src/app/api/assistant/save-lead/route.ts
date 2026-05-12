@@ -1,13 +1,26 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendTelegramNotification } from '@/lib/telegram'
+import { isRateLimited, incrementRateLimit } from '@/lib/security/verifyTurnstile'
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0'
+
+    // ── Rate limiting ────────────────────────────────────────────────────
+    if (isRateLimited(ip)) {
+        console.warn(`[AssistantLead] Rate limit exceeded for IP: ${ip}`)
+        return NextResponse.json(
+            { error: 'Demasiados intentos. Por favor, espera unos minutos.' },
+            { status: 429 }
+        )
+    }
+
     const data = await req.json()
     const { name, email, phone, company, chatSummary } = data
 
     if (!name || !email) {
+      incrementRateLimit(ip)
       return NextResponse.json({ error: 'Faltan campos obligatorios' }, { status: 400 })
     }
 

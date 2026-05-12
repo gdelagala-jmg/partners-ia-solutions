@@ -337,8 +337,8 @@ export default function LeadCaptureSection() {
                                     </div>
                                 )}
 
-                                 {/* Security */}
-                                <div className="md:col-span-2 flex justify-center md:justify-start">
+                                 {/* Security - Hidden */}
+                                <div className="hidden">
                                     <TurnstileCaptcha 
                                         ref={captchaRef}
                                         onVerify={setCaptchaToken} 
@@ -351,7 +351,7 @@ export default function LeadCaptureSection() {
                                 <div className="md:col-span-2 pt-2">
                                     <button
                                         type="submit"
-                                        disabled={loading || !captchaToken}
+                                        disabled={loading}
                                         className="group w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 md:px-8 md:py-4 bg-black hover:bg-gray-800 text-white font-semibold rounded-2xl transition-all hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
                                     >
                                         {loading ? (

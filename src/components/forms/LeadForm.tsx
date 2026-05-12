@@ -242,14 +242,17 @@ export default function LeadForm({
                 </div>
 
                 {/* Turnstile CAPTCHA — invisible by default, renders challenge only if needed */}
-                <TurnstileCaptcha
-                    ref={captchaRef}
-                    onVerify={(token) => setTurnstileToken(token)}
-                    onExpire={() => setTurnstileToken(null)}
-                    onError={() => setTurnstileToken(null)}
-                    theme={isPremium ? 'light' : 'light'}
-                    appearance="interaction-only"
-                />
+                {/* Turnstile - Hidden */}
+                <div className="hidden">
+                    <TurnstileCaptcha
+                        ref={captchaRef}
+                        onVerify={(token) => setTurnstileToken(token)}
+                        onExpire={() => setTurnstileToken(null)}
+                        onError={() => setTurnstileToken(null)}
+                        theme={isPremium ? 'light' : 'light'}
+                        appearance="interaction-only"
+                    />
+                </div>
 
                 {/* Error Message */}
                 <AnimatePresence>
