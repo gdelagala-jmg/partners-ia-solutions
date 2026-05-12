@@ -19,6 +19,8 @@ import {
 import { leadFormSchema, type LeadFormData } from '@/lib/validations/lead'
 import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 
+import { useSecurity } from '@/context/SecurityContext'
+
 interface LeadFormProps {
     layout?: 'inline' | 'modal'
     variant?: 'standard' | 'premium'
@@ -43,6 +45,7 @@ export default function LeadForm({
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
     const captchaRef = useRef<TurnstileHandle>(null)
+    const { formSecurityEnabled } = useSecurity()
 
     const isPremium = variant === 'premium'
 
@@ -58,14 +61,13 @@ export default function LeadForm({
     const onSubmit = async (data: LeadFormData) => {
         setErrorMessage(null)
 
-        /* Turnstile disabled for now
-        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-        if (siteKey && !turnstileToken) {
-            setErrorMessage('Por favor, completa la verificación de seguridad antes de enviar.')
+        // Lead/Demo Policy: Fail-closed
+        // Security is MANDATORY if enabled on server.
+        if (formSecurityEnabled && !turnstileToken) {
+            setErrorMessage('La verificación de seguridad es obligatoria para enviar la solicitud.')
             setStatus('error')
             return
         }
-        */
 
         setStatus('loading')
 

@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Bot, X, Send, User, ChevronRight, Mail, Phone, Building2, CheckCircle2, Loader2, Sparkles, Calendar, ExternalLink, AlertCircle } from 'lucide-react'
 import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 
+import { useSecurity } from '@/context/SecurityContext'
+
 export default function AssistantWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [showLeadForm, setShowLeadForm] = useState(false)
@@ -18,7 +20,8 @@ export default function AssistantWidget() {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const captchaRef = useRef<TurnstileHandle>(null)
-  const [isSystemActive, setIsSystemActive] = useState<boolean | null>(null)
+  const [isAssistantActive, setIsAssistantActive] = useState<boolean | null>(null)
+  const { formSecurityEnabled } = useSecurity()
   const [messages, setMessages] = useState<{id: string, role: string, content: string, toolCalls?: any[]}[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -76,12 +79,12 @@ export default function AssistantWidget() {
         const res = await fetch('/api/assistant/config')
         if (res.ok) {
           const data = await res.json()
-          setIsSystemActive(data.active)
+          setIsAssistantActive(data.active)
         } else {
-          setIsSystemActive(true) // Fallback to true if API fails
+          setIsAssistantActive(true) // Fallback to true if API fails
         }
       } catch (error) {
-        setIsSystemActive(true) // Fallback to true if fetch fails
+        setIsAssistantActive(true) // Fallback to true if fetch fails
       }
     }
     checkStatus()
@@ -97,13 +100,12 @@ export default function AssistantWidget() {
     e.preventDefault()
     setErrorMsg(null)
 
-    /* Turnstile disabled for now
-    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-    if (siteKey && !turnstileToken) {
-        setErrorMsg('Por favor, completa la verificación de seguridad.')
+    // AI Assistant Lead Policy: Fail-closed
+    // Security is MANDATORY if enabled on server.
+    if (formSecurityEnabled && !turnstileToken) {
+        setErrorMsg('La verificación de seguridad es obligatoria.')
         return
     }
-    */
 
     try {
       const res = await fetch('/api/assistant/save-lead', {

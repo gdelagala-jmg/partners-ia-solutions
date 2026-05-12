@@ -22,15 +22,19 @@ export interface TurnstileResult {
     error?: string
 }
 
+export type SecurityPolicy = 'strict' | 'fail-open'
+
 /**
  * Verifies a Cloudflare Turnstile challenge token.
  *
  * @param token  - The cf-turnstile-response token from the client form.
  * @param ip     - Optional: visitor IP for Cloudflare's stricter validation.
+ * @param policy - Policy to apply if verification fails. 'strict' (default) blocks, 'fail-open' logs but allows.
  */
 export async function verifyTurnstileToken(
     token: string | null | undefined,
-    ip?: string | null
+    ip?: string | null,
+    policy: SecurityPolicy = 'strict'
 ): Promise<TurnstileResult> {
     const secretKey = process.env.TURNSTILE_SECRET_KEY
     const isDev = process.env.NODE_ENV !== 'production'
@@ -48,6 +52,21 @@ export async function verifyTurnstileToken(
         return { success: true }
     }
 
+    // Helper to handle failure based on policy
+    const handleFailure = (reason: string, errorMsg: string): TurnstileResult => {
+        logFailedAttempt(reason, ip, policy)
+        
+        if (policy === 'fail-open') {
+            console.log(`[Turnstile] 🔓 Fail-open policy applied for ${reason}. Allowing submission.`)
+            return { success: true }
+        }
+
+        return {
+            success: false,
+            error: errorMsg,
+        }
+    }
+
     // ── Production checks ────────────────────────────────────────────────────
     if (!secretKey) {
         // Production: key missing AND security enabled → hard block
@@ -63,11 +82,7 @@ export async function verifyTurnstileToken(
 
     // ── Token missing ────────────────────────────────────────────────────────
     if (!token) {
-        logFailedAttempt('TOKEN_MISSING', ip)
-        return {
-            success: false,
-            error: 'Se requiere completar la verificación de seguridad.',
-        }
+        return handleFailure('TOKEN_MISSING', 'Se requiere completar la verificación de seguridad.')
     }
 
     // ── Cloudflare verification ──────────────────────────────────────────────
@@ -84,11 +99,7 @@ export async function verifyTurnstileToken(
 
         if (!cfResponse.ok) {
             console.error('[Turnstile] Cloudflare API returned non-OK status:', cfResponse.status)
-            logFailedAttempt('CF_API_ERROR', ip)
-            return {
-                success: false,
-                error: 'Error al verificar la seguridad. Inténtalo de nuevo.',
-            }
+            return handleFailure('CF_API_ERROR', 'Error al verificar la seguridad. Inténtalo de nuevo.')
         }
 
         const data: {
@@ -100,21 +111,13 @@ export async function verifyTurnstileToken(
 
         if (!data.success) {
             const codes = data['error-codes']?.join(', ') || 'unknown'
-            logFailedAttempt(`CF_VERIFY_FAIL:${codes}`, ip)
-            return {
-                success: false,
-                error: 'Verificación de seguridad fallida. Por favor, recarga la página e inténtalo de nuevo.',
-            }
+            return handleFailure(`CF_VERIFY_FAIL:${codes}`, 'Verificación de seguridad fallida. Por favor, recarga la página e inténtalo de nuevo.')
         }
 
         return { success: true }
     } catch (err) {
         console.error('[Turnstile] Unexpected error during verification:', err)
-        logFailedAttempt('EXCEPTION', ip)
-        return {
-            success: false,
-            error: 'Error inesperado en la verificación de seguridad.',
-        }
+        return handleFailure('EXCEPTION', 'Error inesperado en la verificación de seguridad.')
     }
 }
 
@@ -147,8 +150,8 @@ export function incrementRateLimit(ip: string): void {
     }
 }
 
-function logFailedAttempt(reason: string, ip?: string | null): void {
+function logFailedAttempt(reason: string, ip: string | null | undefined, policy: SecurityPolicy): void {
     console.warn(
-        `[Turnstile] 🚫 CAPTCHA FAILED | reason=${reason} | ip=${ip ?? 'unknown'} | ts=${new Date().toISOString()}`
+        `[Turnstile] 🚫 CAPTCHA FAILED | policy=${policy} | reason=${reason} | ip=${ip ?? 'unknown'} | ts=${new Date().toISOString()}`
     )
 }

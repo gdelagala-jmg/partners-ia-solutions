@@ -72,19 +72,27 @@ export const metadata: Metadata = {
 };
 
 import JSONLD, { getOrganizationSchema } from "@/components/seo/JSONLD";
+import { SecurityProvider } from "@/context/SecurityContext";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Read security config once in the server root
+  const securityConfig = {
+    formSecurityEnabled: process.env.ENABLE_FORM_SECURITY === 'true'
+  };
+
   return (
     <html lang="es" suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
-        <JSONLD type="Organization" data={getOrganizationSchema()} />
-        {children}
-        <CookieBanner />
-        <AssistantWidget />
+        <SecurityProvider config={securityConfig}>
+          <JSONLD type="Organization" data={getOrganizationSchema()} />
+          {children}
+          <CookieBanner />
+          <AssistantWidget />
+        </SecurityProvider>
       </body>
     </html>
   );

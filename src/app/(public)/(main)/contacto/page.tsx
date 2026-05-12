@@ -5,13 +5,12 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Mail, Phone, MapPin, Send, Loader2, MessageCircle, Linkedin, Facebook, Instagram, Youtube, Music } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Loader2, MessageCircle, Linkedin, Facebook, Instagram, Youtube, Music, AlertCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 import PageBadge from '@/components/ui/PageBadge'
 import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 import { useRef } from 'react'
-import { AlertCircle } from 'lucide-react'
 
 const contactSchema = z.object({
     name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
@@ -34,11 +33,14 @@ const socialLinks = [
     { name: 'Spotify', href: 'https://open.spotify.com/show/3hfDKLDnMQwxLQBJGLcCrH', icon: Music, color: 'text-green-500' },
 ]
 
+import { useSecurity } from '@/context/SecurityContext'
+
 export default function ContactPage() {
     const [isSuccess, setIsSuccess] = useState(false)
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
     const [errorMsg, setErrorMsg] = useState<string | null>(null)
     const captchaRef = useRef<TurnstileHandle>(null)
+    const { formSecurityEnabled } = useSecurity()
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<ContactFormValues>({
         resolver: zodResolver(contactSchema),
@@ -47,13 +49,13 @@ export default function ContactPage() {
     const onSubmit = async (data: ContactFormValues) => {
         setErrorMsg(null)
 
-        /* Turnstile disabled for now
-        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-        if (siteKey && !turnstileToken) {
-            setErrorMsg('Por favor, completa la verificación de seguridad antes de enviar.')
+        // Contact Policy: Fail-closed
+        // If security is enabled on server, we REQUIRE a valid token.
+        // No bypass allowed for contact/leads to prevent spam.
+        if (formSecurityEnabled && !turnstileToken) {
+            setErrorMsg('La verificación de seguridad es obligatoria para contactar. Por favor, completa el captcha.')
             return
         }
-        */
 
         try {
             const res = await fetch('/api/contact', {

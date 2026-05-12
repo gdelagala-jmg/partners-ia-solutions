@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
+import { useSecurity } from '@/context/SecurityContext'
 
 interface NewsletterFormProps {
     variant?: 'footer' | 'inline' | 'home'
@@ -14,36 +15,16 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
-    const [isSecurityEnabled, setIsSecurityEnabled] = useState<boolean | null>(null)
     const captchaRef = useRef<TurnstileHandle>(null)
-
-    // Fetch security config
-    useEffect(() => {
-        fetch('/api/security/config')
-            .then(res => {
-                if (!res.ok) throw new Error(`Security config fetch failed: ${res.status}`)
-                return res.json()
-            })
-            .then(data => {
-                console.log('[Security] Config loaded:', data)
-                setIsSecurityEnabled(!!data.formSecurityEnabled)
-            })
-            .catch(err => {
-                console.warn('[Security] Failed to load config, falling back to disabled:', err)
-                setIsSecurityEnabled(false)
-            })
-    }, [])
+    const { formSecurityEnabled } = useSecurity()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!email) return
 
-        // Guard: check for Turnstile token ONLY if security is enabled on server
-        if (isSecurityEnabled === true && !turnstileToken) {
-            setStatus('error')
-            setMessage('Por favor, completa la verificación de seguridad antes de enviar.')
-            return
-        }
+        // Newsletter Policy: Fail-open
+        // We proceed even if turnstileToken is missing. The backend will log 
+        // the missing token but allow the submission in fail-open mode.
 
         setStatus('loading')
         try {
@@ -171,6 +152,11 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         disabled={status === 'loading' || status === 'success'}
                         className="flex-1 px-4 py-3 sm:py-3.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm placeholder:text-gray-400"
                     />
+                    {/* BUILD VERIFICATION MARK */}
+                    <div className="text-[8px] text-red-500/30 uppercase tracking-tighter mb-1 w-full text-right">
+                        Build v2-turnstile-ready
+                    </div>
+
                     <button
                         type="submit"
                         disabled={status === 'loading' || status === 'success'}

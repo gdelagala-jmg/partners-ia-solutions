@@ -31,6 +31,7 @@ export default function LeadCaptureSection() {
     const [errorMsg, setErrorMsg] = useState('')
     const [captchaToken, setCaptchaToken] = useState<string | null>(null)
     const captchaRef = useRef<{ reset: () => void } | null>(null)
+    const { formSecurityEnabled } = useSecurity()
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         const target = e.target as HTMLInputElement
@@ -55,9 +56,8 @@ export default function LeadCaptureSection() {
         setStatus('idle')
         setErrorMsg('')
 
-        // Guard: block if Turnstile key is set but token not yet obtained
-        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-        if (siteKey && !captchaToken) {
+        // Guard: block if Turnstile is enabled on server but token not yet obtained
+        if (formSecurityEnabled && !captchaToken) {
             setLoading(false)
             setStatus('error')
             setErrorMsg('Por favor, completa la verificación de seguridad antes de enviar.')
