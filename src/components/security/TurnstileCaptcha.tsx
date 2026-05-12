@@ -31,13 +31,19 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
         }))
 
         useEffect(() => {
-            if (!isLoaded || !containerRef.current || widgetId || !formSecurityEnabled) return
+            console.log('[SECURITY][TurnstileCaptcha] mounted — formSecurityEnabled:', formSecurityEnabled, '| isLoaded:', isLoaded, '| widgetId:', widgetId)
+            if (!isLoaded || !containerRef.current || widgetId || !formSecurityEnabled) {
+                console.log('[SECURITY][TurnstileCaptcha] skipping render — guard hit:', { isLoaded, hasContainer: !!containerRef.current, widgetId, formSecurityEnabled })
+                return
+            }
 
             const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+            console.log('[SECURITY][TurnstileCaptcha] siteKey present:', !!siteKey)
             if (!siteKey) return
 
             if ((window as any).turnstile) {
                 try {
+                    console.log('[SECURITY][TurnstileCaptcha] calling turnstile.render()')
                     const id = (window as any).turnstile.render(containerRef.current, {
                         sitekey: siteKey,
                         callback: (token: string) => onVerify(token),
@@ -46,10 +52,13 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                         appearance: appearance,
                         theme: 'light'
                     })
+                    console.log('[SECURITY][TurnstileCaptcha] render OK — widgetId:', id)
                     setWidgetId(id)
                 } catch (err) {
                     console.error('[Turnstile] Render failed:', err)
                 }
+            } else {
+                console.warn('[SECURITY][TurnstileCaptcha] window.turnstile NOT available yet')
             }
 
             return () => {
@@ -59,7 +68,10 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
             }
         }, [isLoaded, widgetId, onVerify, onError, onExpire, appearance, formSecurityEnabled])
 
-        if (!formSecurityEnabled) return null
+        if (!formSecurityEnabled) {
+            console.log('[SECURITY][TurnstileCaptcha] returning null — security disabled')
+            return null
+        }
 
         return (
             <div className="flex flex-col items-center justify-center my-4 min-h-[65px]">

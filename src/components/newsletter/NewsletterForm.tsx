@@ -18,6 +18,13 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
     const captchaRef = useRef<TurnstileHandle>(null)
     const { formSecurityEnabled } = useSecurity()
 
+    // [DIAG] Client-side diagnostic — remove after staging validation
+    useEffect(() => {
+        console.log('[SECURITY][NewsletterForm] formSecurityEnabled from context:', formSecurityEnabled)
+        console.log('[SECURITY][NewsletterForm] NEXT_PUBLIC_TURNSTILE_SITE_KEY present:', !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
+        console.log('[SECURITY][NewsletterForm] NEXT_PUBLIC_TURNSTILE_SITE_KEY value:', process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || 'UNDEFINED')
+    }, [formSecurityEnabled])
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!email) return
