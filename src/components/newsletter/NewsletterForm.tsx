@@ -14,15 +14,23 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const [isSecurityEnabled, setIsSecurityEnabled] = useState<boolean | null>(null)
     const captchaRef = useRef<TurnstileHandle>(null)
+
+    // Fetch security config
+    useEffect(() => {
+        fetch('/api/security/config')
+            .then(res => res.json())
+            .then(data => setIsSecurityEnabled(data.formSecurityEnabled))
+            .catch(() => setIsSecurityEnabled(false))
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!email) return
 
-        // Guard: check for Turnstile token ONLY if security is enabled
-        const isSecurityEnabled = process.env.NEXT_PUBLIC_ENABLE_FORM_SECURITY === 'true'
-        if (isSecurityEnabled && !turnstileToken) {
+        // Guard: check for Turnstile token ONLY if security is enabled on server
+        if (isSecurityEnabled === true && !turnstileToken) {
             setStatus('error')
             setMessage('Por favor, completa la verificación de seguridad antes de enviar.')
             return

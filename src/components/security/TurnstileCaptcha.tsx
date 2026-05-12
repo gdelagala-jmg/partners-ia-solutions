@@ -7,7 +7,7 @@ import Script from 'next/script'
  * TurnstileCaptcha - Client-side component for Cloudflare Turnstile.
  * 
  * Progressive Mode: 
- * If NEXT_PUBLIC_ENABLE_FORM_SECURITY is false, this component is a no-op.
+ * Fetches configuration from /api/security/config to determine if it should render.
  */
 
 export interface TurnstileHandle {
@@ -23,9 +23,7 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
         const containerRef = useRef<HTMLDivElement>(null)
         const [widgetId, setWidgetId] = useState<string | null>(null)
         const [isLoaded, setIsLoaded] = useState(false)
-
-        // Variable de control
-        const isSecurityEnabled = process.env.NEXT_PUBLIC_ENABLE_FORM_SECURITY === 'true'
+        const [isSecurityEnabled, setIsSecurityEnabled] = useState<boolean | null>(null)
 
         useImperativeHandle(ref, () => ({
             reset() {
@@ -35,7 +33,15 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
             }
         }))
 
-        // Efecto para renderizar el widget una vez cargado el script
+        // Fetch security configuration from server
+        useEffect(() => {
+            fetch('/api/security/config')
+                .then(res => res.json())
+                .then(data => setIsSecurityEnabled(data.formSecurityEnabled))
+                .catch(() => setIsSecurityEnabled(false)) // Fail-safe: disable if error
+        }, [])
+
+        // Render widget effect
         useEffect(() => {
             if (!isSecurityEnabled) return
 
@@ -50,7 +56,7 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                             console.error('[Turnstile] Widget error:', err)
                         },
                         theme: 'light',
-                        appearance: 'interaction-only' // Only show when interaction is needed
+                        appearance: 'interaction-only'
                     })
                     setWidgetId(id)
                 } catch (err) {
@@ -60,14 +66,13 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
 
             return () => {
                 if (widgetId && (window as any).turnstile) {
-                    // Cleanup can sometimes be flaky if script is already gone
                     try { (window as any).turnstile.remove(widgetId) } catch (e) {}
                 }
             }
         }, [isLoaded, widgetId, onVerify, isSecurityEnabled])
 
-        // Si la seguridad está desactivada, no renderizamos nada
-        if (!isSecurityEnabled) {
+        // Si aún no sabemos si está activado o si está desactivado, no renderizamos nada
+        if (isSecurityEnabled === null || isSecurityEnabled === false) {
             return null
         }
 
