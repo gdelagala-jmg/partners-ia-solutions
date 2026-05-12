@@ -2,11 +2,30 @@ import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 import { prisma } from '@/lib/prisma'
 import { sendTelegramNotification } from '@/lib/telegram'
+import { verifyTurnstileToken, isRateLimited, incrementRateLimit } from '@/lib/security/verifyTurnstile'
 
 export async function POST(request: Request) {
     try {
+        const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0'
+
+        // ── Rate limiting ────────────────────────────────────────────────────
+        if (isRateLimited(ip)) {
+            console.warn(`[Contact] Rate limit exceeded for IP: ${ip}`)
+            return NextResponse.json(
+                { error: 'Demasiados intentos. Por favor, espera unos minutos e inténtalo de nuevo.' },
+                { status: 429 }
+            )
+        }
+
         const body = await request.json()
-        const { name, email, phone, message } = body
+        const { name, email, phone, message, turnstileToken } = body
+
+        // ── Turnstile verification ───────────────────────────────────────────
+        const captcha = await verifyTurnstileToken(turnstileToken, ip)
+        if (!captcha.success) {
+            incrementRateLimit(ip)
+            return NextResponse.json({ error: captcha.error }, { status: 403 })
+        }
 
         // 1. Save to Database
         const lead = await prisma.lead.create({

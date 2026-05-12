@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -17,6 +17,7 @@ import {
     Send
 } from 'lucide-react'
 import { leadFormSchema, type LeadFormData } from '@/lib/validations/lead'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 
 interface LeadFormProps {
     layout?: 'inline' | 'modal'
@@ -40,6 +41,8 @@ export default function LeadForm({
 }: LeadFormProps) {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const captchaRef = useRef<TurnstileHandle>(null)
 
     const isPremium = variant === 'premium'
 
@@ -53,8 +56,17 @@ export default function LeadForm({
     })
 
     const onSubmit = async (data: LeadFormData) => {
-        setStatus('loading')
         setErrorMessage(null)
+
+        // Guard: block if Turnstile key is set but token not yet obtained
+        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+        if (siteKey && !turnstileToken) {
+            setStatus('error')
+            setErrorMessage('Por favor, completa la verificación de seguridad antes de enviar.')
+            return
+        }
+
+        setStatus('loading')
 
         try {
             const response = await fetch('/api/leads', {
@@ -64,6 +76,7 @@ export default function LeadForm({
                     ...data,
                     source,
                     ...context,
+                    turnstileToken,
                     sourceUrl: typeof window !== 'undefined' ? window.location.href : '',
                     sourcePage: context.sourcePage || (typeof document !== 'undefined' ? document.title : 'Unknown'),
                     consentAccepted: data.consent,
@@ -78,6 +91,7 @@ export default function LeadForm({
 
             setStatus('success')
             reset()
+            setTurnstileToken(null)
             if (onSuccess) {
                 setTimeout(onSuccess, 2000)
             }
@@ -85,8 +99,12 @@ export default function LeadForm({
             console.error('LeadForm Error:', error)
             setStatus('error')
             setErrorMessage(error.message || 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.')
+            // Reset captcha so user can retry
+            captchaRef.current?.reset()
+            setTurnstileToken(null)
         }
     }
+
 
     if (status === 'success') {
         return (
@@ -222,6 +240,16 @@ export default function LeadForm({
                     </label>
                     {errors.consent && <p className="text-[11px] text-red-500 font-medium mt-1.5 ml-8">{errors.consent.message}</p>}
                 </div>
+
+                {/* Turnstile CAPTCHA — invisible by default, renders challenge only if needed */}
+                <TurnstileCaptcha
+                    ref={captchaRef}
+                    onVerify={(token) => setTurnstileToken(token)}
+                    onExpire={() => setTurnstileToken(null)}
+                    onError={() => setTurnstileToken(null)}
+                    theme={isPremium ? 'light' : 'light'}
+                    appearance="interaction-only"
+                />
 
                 {/* Error Message */}
                 <AnimatePresence>

@@ -1,10 +1,28 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { verifyTurnstileToken, isRateLimited, incrementRateLimit } from '@/lib/security/verifyTurnstile'
 
 export async function POST(request: Request) {
     try {
+        const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0'
+
+        // ── Rate limiting ────────────────────────────────────────────────────
+        if (isRateLimited(ip)) {
+            return NextResponse.json(
+                { error: 'Demasiados intentos. Por favor, espera unos minutos.' },
+                { status: 429 }
+            )
+        }
+
         const body = await request.json()
-        const { name, phone, email, solutionSlug } = body
+        const { name, phone, email, solutionSlug, turnstileToken } = body
+
+        // ── Turnstile verification ───────────────────────────────────────────
+        const captcha = await verifyTurnstileToken(turnstileToken, ip)
+        if (!captcha.success) {
+            incrementRateLimit(ip)
+            return NextResponse.json({ error: captcha.error }, { status: 403 })
+        }
 
         if (!name || !email || !solutionSlug) {
             return NextResponse.json({ error: 'Faltan campos obligatorios' }, { status: 400 })

@@ -3,26 +3,46 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { sendEmail } from '@/lib/email'
 import { generateWelcomeEmailHtml } from '@/lib/newsletter-templates'
+import { verifyTurnstileToken, isRateLimited, incrementRateLimit } from '@/lib/security/verifyTurnstile'
 
 const subscribeSchema = z.object({
     email: z.string().email('Email inválido'),
     sourceUrl: z.string().optional(),
     sourceLocation: z.string().optional(),
+    turnstileToken: z.string().optional().nullable(),
 })
 
 export async function POST(req: Request) {
     try {
+        const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0'
+
+        // ── Rate limiting ────────────────────────────────────────────────────
+        if (isRateLimited(ip)) {
+            console.warn(`[Newsletter] Rate limit exceeded for IP: ${ip}`)
+            return NextResponse.json(
+                { error: 'Demasiados intentos. Por favor, espera unos minutos.' },
+                { status: 429 }
+            )
+        }
+
         const body = await req.json()
         const result = subscribeSchema.safeParse(body)
 
         if (!result.success) {
             return NextResponse.json(
-                { error: result.error.errors[0].message },
+                { error: result.error.issues[0]?.message ?? 'Datos inválidos' },
                 { status: 400 }
             )
         }
 
-        const { email, sourceUrl, sourceLocation } = result.data
+        const { email, sourceUrl, sourceLocation, turnstileToken } = result.data
+
+        // ── Turnstile verification ───────────────────────────────────────────
+        const captcha = await verifyTurnstileToken(turnstileToken, ip)
+        if (!captcha.success) {
+            incrementRateLimit(ip)
+            return NextResponse.json({ error: captcha.error }, { status: 403 })
+        }
 
         // Check if already subscribed
         const existing = await prisma.newsletterSubscriber.findUnique({

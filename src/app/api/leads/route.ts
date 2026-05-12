@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import nodemailer from 'nodemailer'
 import { z } from 'zod'
 import { sendTelegramNotification } from '@/lib/telegram'
+import { verifyTurnstileToken, isRateLimited, incrementRateLimit } from '@/lib/security/verifyTurnstile'
 
 // 1. Validation Schema
 const leadSchema = z.object({
@@ -32,6 +33,8 @@ const leadSchema = z.object({
     bottleneck: z.string().optional().nullable(),
     urgency: z.union([z.string(), z.number()]).optional().nullable(),
     desiredResult: z.string().optional().nullable(),
+    // Also accept turnstileToken in the payload (not validated via zod, handled separately)
+    turnstileToken: z.string().optional().nullable(),
 })
 
 export async function GET() {
@@ -53,10 +56,30 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
+        const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0'
+        const userAgent = request.headers.get('user-agent') || 'Unknown'
+
+        // ── Rate limiting ────────────────────────────────────────────────────
+        if (isRateLimited(ip)) {
+            console.warn(`[Leads] Rate limit exceeded for IP: ${ip}`)
+            return NextResponse.json(
+                { error: 'Demasiados intentos. Por favor, espera unos minutos.' },
+                { status: 429 }
+            )
+        }
+
         const body = await request.json()
-        
+        const { turnstileToken, ...rest } = body
+
+        // ── Turnstile verification ───────────────────────────────────────────
+        const captcha = await verifyTurnstileToken(turnstileToken, ip)
+        if (!captcha.success) {
+            incrementRateLimit(ip)
+            return NextResponse.json({ error: captcha.error }, { status: 403 })
+        }
+
         // 2. Validate Payload
-        const result = leadSchema.safeParse(body)
+        const result = leadSchema.safeParse(rest)
         if (!result.success) {
             return NextResponse.json({ 
                 error: 'Datos inválidos', 
@@ -65,8 +88,7 @@ export async function POST(request: Request) {
         }
 
         const data = result.data
-        const ip = request.headers.get('x-forwarded-for') || '0.0.0.0'
-        const userAgent = request.headers.get('user-agent') || 'Unknown'
+        // ip and userAgent already extracted above
 
         // 3. Save to Database (Lead)
         // We ensure DB persistence even if mail fails

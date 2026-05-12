@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 
 interface NewsletterFormProps {
     variant?: 'footer' | 'inline' | 'home'
@@ -12,10 +13,20 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
     const [email, setEmail] = useState('')
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const captchaRef = useRef<TurnstileHandle>(null)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!email) return
+
+        // Block submission if Turnstile hasn't verified yet
+        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+        if (siteKey && !turnstileToken) {
+            setStatus('error')
+            setMessage('Por favor, completa la verificación de seguridad antes de enviar.')
+            return
+        }
 
         setStatus('loading')
         try {
@@ -25,7 +36,8 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                 body: JSON.stringify({ 
                     email,
                     sourceUrl: window.location.href,
-                    sourceLocation: variant.toUpperCase()
+                    sourceLocation: variant.toUpperCase(),
+                    turnstileToken,
                 }),
             })
 
@@ -33,15 +45,21 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
             if (res.ok) {
                 setStatus('success')
                 setEmail('')
+                setTurnstileToken(null)
                 // Reset status after a few seconds
                 setTimeout(() => setStatus('idle'), 5000)
             } else {
                 setStatus('error')
                 setMessage(data.error || 'Algo salió mal. Inténtalo de nuevo.')
+                // Reset captcha so user can try again
+                captchaRef.current?.reset()
+                setTurnstileToken(null)
             }
         } catch (error) {
             setStatus('error')
             setMessage('Error de conexión. Inténtalo de nuevo.')
+            captchaRef.current?.reset()
+            setTurnstileToken(null)
         }
     }
 
@@ -69,6 +87,15 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                     </button>
                 </form>
+                {/* Turnstile - discrete in footer, rendered below input */}
+                <TurnstileCaptcha
+                    ref={captchaRef}
+                    onVerify={(token) => setTurnstileToken(token)}
+                    onExpire={() => setTurnstileToken(null)}
+                    onError={() => setTurnstileToken(null)}
+                    theme="light"
+                    appearance="interaction-only"
+                />
                 <AnimatePresence mode="wait">
                     {status === 'success' && (
                         <motion.p 
@@ -138,6 +165,18 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         {status === 'success' ? '¡Listo!' : 'Suscribirme'}
                     </button>
                 </form>
+
+                {/* Turnstile — invisible challenge, shown only when Cloudflare needs it */}
+                <div className="flex justify-center mt-4">
+                    <TurnstileCaptcha
+                        ref={captchaRef}
+                        onVerify={(token) => setTurnstileToken(token)}
+                        onExpire={() => setTurnstileToken(null)}
+                        onError={() => setTurnstileToken(null)}
+                        theme="light"
+                        appearance="interaction-only"
+                    />
+                </div>
 
                 <AnimatePresence mode="wait">
                     {status === 'success' && (
