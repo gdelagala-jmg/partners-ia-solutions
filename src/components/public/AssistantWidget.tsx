@@ -135,7 +135,7 @@ export default function AssistantWidget() {
     }
   }
 
-  if (isSystemActive === false) return null
+  if (isAssistantActive === false) return null
 
 const formatMessage = (text: string) => {
   const safeText = text.replace(/</g, '&lt;').replace(/>/g, '&gt;')
