@@ -1,24 +1,36 @@
+const PODCAST_SPOTIFY_HTML = `
+<div style="margin-top: 40px; margin-bottom: 0; padding: 28px 24px; background: linear-gradient(135deg, #0f1923 0%, #1a1a2e 60%, #0d1117 100%); border-radius: 20px; text-align: center;">
+    <div style="margin-bottom: 14px;">
+        <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_White.png" width="90" height="auto" alt="Spotify" style="display: inline-block; vertical-align: middle;">
+    </div>
+    <p style="font-size: 11px; font-weight: 700; color: #1DB954; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.12em;">🎙️ Nuestro Podcast</p>
+    <p style="font-size: 18px; font-weight: 800; color: #ffffff; margin: 0 0 6px 0; line-height: 1.3; letter-spacing: -0.02em;">Escucha el análisis de la noticia</p>
+    <p style="font-size: 14px; color: #a0aec0; margin: 0 0 22px 0; line-height: 1.5;">Cada día analizamos las noticias más relevantes de IA en nuestro podcast.</p>
+    <a href="https://open.spotify.com/show/2L0NV7YhTyXzUEcP7VAv7H"
+       style="display: inline-block; padding: 13px 28px; background-color: #1DB954; color: #000000; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 14px; letter-spacing: 0.02em;">
+        ▶&nbsp;&nbsp;Escuchar en Spotify
+    </a>
+</div>
+`
+
 const SOCIAL_LINKS_HTML = `
-<div style="margin-top: 40px; text-align: center; border-top: 1px solid #f2f2f7; padding-top: 30px;">
-    <p style="font-size: 13px; font-weight: 700; color: #1d1d1f; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.1em;">Síguenos y mantente conectado</p>
-    <div style="display: block; margin-bottom: 20px;">
-        <a href="https://www.linkedin.com/company/109997641/" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="28" height="28" alt="LinkedIn" style="display: block; opacity: 0.8;">
+<div style="margin-top: 32px; text-align: center; border-top: 1px solid #f2f2f7; padding-top: 28px;">
+    <p style="font-size: 12px; font-weight: 700; color: #86868b; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.1em;">Síguenos en redes sociales</p>
+    <div style="display: block; margin-bottom: 8px;">
+        <a href="https://www.linkedin.com/company/109997641/" style="display: inline-block; margin: 0 8px; text-decoration: none;" title="LinkedIn">
+            <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="26" height="26" alt="LinkedIn" style="display: block; opacity: 0.65;">
         </a>
-        <a href="https://open.spotify.com/show/2L0NV7YhTyXzUEcP7VAv7H" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3669/3669986.png" width="28" height="28" alt="Spotify" style="display: block; opacity: 0.8;">
+        <a href="https://api.whatsapp.com/send?phone=34639023805" style="display: inline-block; margin: 0 8px; text-decoration: none;" title="WhatsApp">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" width="26" height="26" alt="WhatsApp" style="display: block; opacity: 0.65;">
         </a>
-        <a href="https://api.whatsapp.com/send?phone=34639023805" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" width="28" height="28" alt="WhatsApp" style="display: block; opacity: 0.8;">
+        <a href="https://www.facebook.com/pgf.iasolutions" style="display: inline-block; margin: 0 8px; text-decoration: none;" title="Facebook">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670032.png" width="26" height="26" alt="Facebook" style="display: block; opacity: 0.65;">
         </a>
-        <a href="https://www.facebook.com/pgf.iasolutions" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670032.png" width="28" height="28" alt="Facebook" style="display: block; opacity: 0.8;">
+        <a href="https://www.instagram.com/pgf.iasolutions/" style="display: inline-block; margin: 0 8px; text-decoration: none;" title="Instagram">
+            <img src="https://cdn-icons-png.flaticon.com/512/3955/3955024.png" width="26" height="26" alt="Instagram" style="display: block; opacity: 0.65;">
         </a>
-        <a href="https://www.instagram.com/pgf.iasolutions/" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3955/3955024.png" width="28" height="28" alt="Instagram" style="display: block; opacity: 0.8;">
-        </a>
-        <a href="https://www.youtube.com/@PGF.IASolutions" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670147.png" width="28" height="28" alt="YouTube" style="display: block; opacity: 0.8;">
+        <a href="https://www.youtube.com/@PGF.IASolutions" style="display: inline-block; margin: 0 8px; text-decoration: none;" title="YouTube">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670147.png" width="26" height="26" alt="YouTube" style="display: block; opacity: 0.65;">
         </a>
     </div>
 </div>
@@ -95,6 +107,7 @@ export function generateNewsletterHtml(campaign: any, isTest: boolean = false, s
                 </div>
             ` : ''}
 
+            ${PODCAST_SPOTIFY_HTML}
             ${SOCIAL_LINKS_HTML}
             
             <div class="footer">
@@ -160,6 +173,7 @@ export function generateWelcomeEmailHtml(subscriberToken: string) {
                 </div>
             </div>
 
+            ${PODCAST_SPOTIFY_HTML}
             ${SOCIAL_LINKS_HTML}
             
             <div class="footer">
