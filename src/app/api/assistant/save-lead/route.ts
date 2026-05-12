@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendTelegramNotification } from '@/lib/telegram'
-import { isRateLimited, incrementRateLimit } from '@/lib/security/verifyTurnstile'
+import { isRateLimited, incrementRateLimit, verifyTurnstileToken } from '@/lib/security/verifyTurnstile'
 
 export async function POST(req: Request) {
   try {
@@ -17,7 +17,17 @@ export async function POST(req: Request) {
     }
 
     const data = await req.json()
-    const { name, email, phone, company, chatSummary } = data
+    const { name, email, phone, company, chatSummary, turnstileToken } = data
+
+    // ── Turnstile verification ───────────────────────────────────────────
+    const check = await verifyTurnstileToken(turnstileToken, ip)
+    if (!check.success) {
+        incrementRateLimit(ip)
+        return NextResponse.json(
+            { error: check.error },
+            { status: 403 }
+        )
+    }
 
     if (!name || !email) {
       incrementRateLimit(ip)

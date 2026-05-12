@@ -21,6 +21,7 @@ import {
     X, Mail, Send, CheckCircle2,
     AlertCircle, Loader2, Sparkles, Zap, ShieldCheck
 } from 'lucide-react'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 
 const TRUST = [
     { icon: Sparkles,    text: 'Contenido exclusivo' },
@@ -36,6 +37,8 @@ export default function NewsletterModal() {
     const [email,   setEmail]   = useState('')
     const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const captchaRef = useRef<TurnstileHandle>(null)
 
     const handleClose = useCallback(() => router.push('/'), [router])
 
@@ -68,6 +71,15 @@ export default function NewsletterModal() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!email) return
+
+        // Guard: block if Turnstile key is set but token not yet obtained
+        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+        if (siteKey && !turnstileToken) {
+            setStatus('error')
+            setMessage('Por favor, completa la verificación de seguridad.')
+            return
+        }
+
         setStatus('loading')
         try {
             const res = await fetch('/api/newsletter/subscribe', {
@@ -75,6 +87,7 @@ export default function NewsletterModal() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email,
+                    turnstileToken,
                     sourceUrl:      window.location.href,
                     sourceLocation: 'NEWSLETTER_MODAL',
                 }),
@@ -91,6 +104,8 @@ export default function NewsletterModal() {
         } catch {
             setStatus('error')
             setMessage('Error de conexión. Inténtalo de nuevo.')
+            captchaRef.current?.reset()
+            setTurnstileToken(null)
         }
     }
 
@@ -227,6 +242,18 @@ export default function NewsletterModal() {
                                         'transition-all disabled:opacity-50',
                                     ].join(' ')}
                                 />
+
+                                {/* Turnstile CAPTCHA */}
+                                <div className="flex justify-center py-1">
+                                    <TurnstileCaptcha
+                                        ref={captchaRef}
+                                        onVerify={(token) => setTurnstileToken(token)}
+                                        onExpire={() => setTurnstileToken(null)}
+                                        onError={() => setTurnstileToken(null)}
+                                        appearance="interaction-only"
+                                    />
+                                </div>
+
                                 <button
                                     type="submit"
                                     disabled={status === 'loading'}

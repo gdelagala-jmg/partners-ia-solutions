@@ -5,9 +5,10 @@
  * Centralised utility used by ALL public form API endpoints.
  *
  * Behaviour:
- *  - Production:  Verifies token against Cloudflare API.  Returns 403 on failure.
- *  - Development: If TURNSTILE_SECRET_KEY is absent, logs a warning and allows
- *                 the request through (dev mode bypass) so local work is unblocked.
+ *  - Development: Bypasses verification (always returns success: true).
+ *  - Production: 
+ *      - If ENABLE_FORM_SECURITY=true: Verifies token against Cloudflare.
+ *      - If ENABLE_FORM_SECURITY=false: Bypasses verification (rollback/progressive mode).
  *
  * Usage:
  *   const check = await verifyTurnstileToken(token, ip)
@@ -33,19 +34,23 @@ export async function verifyTurnstileToken(
 ): Promise<TurnstileResult> {
     const secretKey = process.env.TURNSTILE_SECRET_KEY
     const isDev = process.env.NODE_ENV !== 'production'
+    const isSecurityEnabled = process.env.ENABLE_FORM_SECURITY === 'true'
 
     // ── Development bypass ──────────────────────────────────────────────────
-    if (!secretKey) {
-        if (isDev) {
-            console.warn(
-                '[Turnstile] ⚠️  TURNSTILE_SECRET_KEY is not set. ' +
-                'Running in DEV bypass mode — all submissions are allowed. ' +
-                'Set the key before deploying to production.'
-            )
-            return { success: true }
-        }
+    if (isDev) {
+        console.log('[Turnstile] Bypass mode: Development')
+        return { success: true }
+    }
 
-        // Production: key missing → hard block
+    // ── Progressive/Rollback bypass ──────────────────────────────────────────
+    if (!isSecurityEnabled) {
+        console.log('[Turnstile] Bypass mode: Progressive/Rollback (ENABLE_FORM_SECURITY=false)')
+        return { success: true }
+    }
+
+    // ── Production checks ────────────────────────────────────────────────────
+    if (!secretKey) {
+        // Production: key missing AND security enabled → hard block
         console.error(
             '[Turnstile] 🚫 TURNSTILE_SECRET_KEY is missing in production! ' +
             'Blocking form submission.'
@@ -115,7 +120,6 @@ export async function verifyTurnstileToken(
 
 /**
  * Simple in-process rate limiter per IP.
- * For production consider a Redis-backed solution instead.
  */
 const ipAttemptMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT = 10        // max failed attempts
@@ -142,8 +146,6 @@ export function incrementRateLimit(ip: string): void {
         entry.count += 1
     }
 }
-
-// ── Internal audit logger ────────────────────────────────────────────────────
 
 function logFailedAttempt(reason: string, ip?: string | null): void {
     console.warn(

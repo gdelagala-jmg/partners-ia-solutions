@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Bot, X, Send, User, ChevronRight, Mail, Phone, Building2, CheckCircle2, Loader2, Sparkles, Calendar, ExternalLink } from 'lucide-react'
+import { Bot, X, Send, User, ChevronRight, Mail, Phone, Building2, CheckCircle2, Loader2, Sparkles, Calendar, ExternalLink, AlertCircle } from 'lucide-react'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 
 export default function AssistantWidget() {
   const [isOpen, setIsOpen] = useState(false)
@@ -14,6 +15,9 @@ export default function AssistantWidget() {
     phone: '',
     company: ''
   })
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const captchaRef = useRef<TurnstileHandle>(null)
   const [isSystemActive, setIsSystemActive] = useState<boolean | null>(null)
   const [messages, setMessages] = useState<{id: string, role: string, content: string, toolCalls?: any[]}[]>([])
   const [input, setInput] = useState('')
@@ -91,21 +95,41 @@ export default function AssistantWidget() {
 
   const handleSaveLead = async (e: React.FormEvent) => {
     e.preventDefault()
+    setErrorMsg(null)
+
+    /* Turnstile disabled for now
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+    if (siteKey && !turnstileToken) {
+        setErrorMsg('Por favor, completa la verificación de seguridad.')
+        return
+    }
+    */
+
     try {
       const res = await fetch('/api/assistant/save-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...leadData,
+          turnstileToken,
           chatSummary: messages.filter(m => m.role === 'user').map(m => m.content).join(' | ')
         })
       })
       if (res.ok) {
         setLeadSaved(true)
         setShowLeadForm(false)
+        setTurnstileToken(null)
+      } else {
+        const errorData = await res.json()
+        setErrorMsg(errorData.error || 'Error al guardar. Inténtalo de nuevo.')
+        captchaRef.current?.reset()
+        setTurnstileToken(null)
       }
     } catch (error) {
       console.error('Error saving lead:', error)
+      setErrorMsg('Error de conexión.')
+      captchaRef.current?.reset()
+      setTurnstileToken(null)
     }
   }
 
@@ -307,6 +331,27 @@ const formatMessage = (text: string) => {
                           onChange={e => setLeadData({...leadData, company: e.target.value})}
                         />
                       </div>
+
+                      {/* Turnstile */}
+                      <div className="flex justify-center scale-90 -mx-4">
+                        <TurnstileCaptcha
+                          ref={captchaRef}
+                          onVerify={setTurnstileToken}
+                          onExpire={() => setTurnstileToken(null)}
+                          onError={() => setTurnstileToken(null)}
+                          appearance="interaction-only"
+                          theme="dark"
+                        />
+                      </div>
+
+                      {/* Error Message */}
+                      {errorMsg && (
+                        <div className="p-2 bg-red-500/20 border border-red-500/30 rounded-xl text-red-200 text-[10px] flex items-center gap-2">
+                          <AlertCircle size={12} />
+                          {errorMsg}
+                        </div>
+                      )}
+
                       <button 
                         type="submit"
                         className="w-full bg-white text-black font-black py-2.5 rounded-xl text-[10px] hover:bg-gray-200 transition-all active:scale-95 uppercase tracking-widest"

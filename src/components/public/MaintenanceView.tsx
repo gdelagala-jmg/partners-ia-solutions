@@ -4,6 +4,8 @@ import { Mail, Send, Lock, CheckCircle2, AlertCircle, Instagram, Facebook, Linke
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
+import { useRef } from 'react'
 
 export default function MaintenanceView() {
     const [mounted, setMounted] = useState(false)
@@ -11,6 +13,8 @@ export default function MaintenanceView() {
     const [submitted, setSubmitted] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [email, setEmail] = useState('')
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const captchaRef = useRef<TurnstileHandle>(null)
 
     useEffect(() => {
         setMounted(true)
@@ -24,7 +28,7 @@ export default function MaintenanceView() {
         setError(null)
 
         try {
-            const response = await fetch('/api/leads', {
+            const res = await fetch('/api/leads', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -34,16 +38,20 @@ export default function MaintenanceView() {
                     email: email,
                     source: 'MAINTENANCE',
                     message: 'Usuario interesado en recibir notificación tras mantenimiento.',
+                    turnstileToken,
                 }),
             })
 
-            if (!response.ok) {
-                throw new Error('Hubo un problema al procesar tu solicitud.')
+            if (!res.ok) {
+                const errorData = await res.json()
+                throw new Error(errorData.error || 'Hubo un problema al procesar tu solicitud.')
             }
 
             setSubmitted(true)
         } catch (err: any) {
             setError(err.message || 'Algo salió mal. Por favor, inténtalo de nuevo.')
+            captchaRef.current?.reset()
+            setTurnstileToken(null)
         } finally {
             setIsSubmitting(false)
         }
@@ -176,6 +184,17 @@ export default function MaintenanceView() {
                                                 />
                                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98989D] group-focus-within:text-blue-500 transition-colors" size={20} />
                                             </div>
+                                        </div>
+
+                                        {/* Turnstile CAPTCHA */}
+                                        <div className="flex justify-center py-1">
+                                            <TurnstileCaptcha
+                                                ref={captchaRef}
+                                                onVerify={(token) => setTurnstileToken(token)}
+                                                onExpire={() => setTurnstileToken(null)}
+                                                onError={() => setTurnstileToken(null)}
+                                                appearance="interaction-only"
+                                            />
                                         </div>
 
                                         {error && (

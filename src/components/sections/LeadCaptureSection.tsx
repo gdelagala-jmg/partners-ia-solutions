@@ -55,6 +55,15 @@ export default function LeadCaptureSection() {
         setStatus('idle')
         setErrorMsg('')
 
+        // Guard: block if Turnstile key is set but token not yet obtained
+        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+        if (siteKey && !captchaToken) {
+            setLoading(false)
+            setStatus('error')
+            setErrorMsg('Por favor, completa la verificación de seguridad antes de enviar.')
+            return
+        }
+
         try {
             const res = await fetch('/api/leads', {
                 method: 'POST',
@@ -337,13 +346,14 @@ export default function LeadCaptureSection() {
                                     </div>
                                 )}
 
-                                 {/* Security - Hidden */}
-                                <div className="hidden">
+                                 {/* Security - Visible challenge if needed */}
+                                <div className="flex justify-center my-4">
                                     <TurnstileCaptcha 
                                         ref={captchaRef}
                                         onVerify={setCaptchaToken} 
                                         onError={() => setCaptchaToken(null)}
                                         onExpire={() => setCaptchaToken(null)}
+                                        appearance="interaction-only"
                                     />
                                 </div>
 

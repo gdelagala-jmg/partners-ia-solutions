@@ -9,6 +9,9 @@ import { Mail, Phone, MapPin, Send, Loader2, MessageCircle, Linkedin, Facebook, 
 import { motion } from 'framer-motion'
 
 import PageBadge from '@/components/ui/PageBadge'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
+import { useRef } from 'react'
+import { AlertCircle } from 'lucide-react'
 
 const contactSchema = z.object({
     name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
@@ -33,29 +36,51 @@ const socialLinks = [
 
 export default function ContactPage() {
     const [isSuccess, setIsSuccess] = useState(false)
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const [errorMsg, setErrorMsg] = useState<string | null>(null)
+    const captchaRef = useRef<TurnstileHandle>(null)
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<ContactFormValues>({
         resolver: zodResolver(contactSchema),
     })
 
     const onSubmit = async (data: ContactFormValues) => {
+        setErrorMsg(null)
+
+        /* Turnstile disabled for now
+        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+        if (siteKey && !turnstileToken) {
+            setErrorMsg('Por favor, completa la verificación de seguridad antes de enviar.')
+            return
+        }
+        */
+
         try {
             const res = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
+                body: JSON.stringify({
+                    ...data,
+                    turnstileToken
+                }),
             })
 
             if (res.ok) {
                 setIsSuccess(true)
                 reset()
+                setTurnstileToken(null)
                 setTimeout(() => setIsSuccess(false), 5000)
             } else {
-                alert('Hubo un error al enviar el mensaje. Inténtalo de nuevo.')
+                const errorData = await res.json()
+                setErrorMsg(errorData.error || 'Hubo un error al enviar el mensaje. Inténtalo de nuevo.')
+                captchaRef.current?.reset()
+                setTurnstileToken(null)
             }
         } catch (error) {
             console.error('Error submitting form:', error)
-            alert('Error de conexión.')
+            setErrorMsg('Error de conexión. Inténtalo de nuevo.')
+            captchaRef.current?.reset()
+            setTurnstileToken(null)
         }
     }
 
@@ -231,6 +256,24 @@ export default function ContactPage() {
                                         </label>
                                         {errors.privacyAccepted && <p className="mt-1.5 text-xs text-red-600">{errors.privacyAccepted.message}</p>}
                                     </div>
+
+                                    {/* Turnstile CAPTCHA */}
+                                    <div className="flex justify-center py-2">
+                                        <TurnstileCaptcha
+                                            ref={captchaRef}
+                                            onVerify={setTurnstileToken}
+                                            onExpire={() => setTurnstileToken(null)}
+                                            onError={() => setTurnstileToken(null)}
+                                            appearance="interaction-only"
+                                        />
+                                    </div>
+
+                                    {errorMsg && (
+                                        <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 text-sm flex items-center gap-2">
+                                            <AlertCircle size={16} />
+                                            {errorMsg}
+                                        </div>
+                                    )}
 
                                     <button
                                         type="submit"

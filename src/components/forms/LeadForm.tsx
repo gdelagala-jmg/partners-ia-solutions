@@ -58,13 +58,14 @@ export default function LeadForm({
     const onSubmit = async (data: LeadFormData) => {
         setErrorMessage(null)
 
-        // Guard: block if Turnstile key is set but token not yet obtained
+        /* Turnstile disabled for now
         const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
         if (siteKey && !turnstileToken) {
-            setStatus('error')
             setErrorMessage('Por favor, completa la verificación de seguridad antes de enviar.')
+            setStatus('error')
             return
         }
+        */
 
         setStatus('loading')
 
@@ -242,8 +243,7 @@ export default function LeadForm({
                 </div>
 
                 {/* Turnstile CAPTCHA — invisible by default, renders challenge only if needed */}
-                {/* Turnstile - Hidden */}
-                <div className="hidden">
+                <div className="flex justify-center mt-2">
                     <TurnstileCaptcha
                         ref={captchaRef}
                         onVerify={(token) => setTurnstileToken(token)}

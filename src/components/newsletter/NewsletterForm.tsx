@@ -20,9 +20,9 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
         e.preventDefault()
         if (!email) return
 
-        // Block submission if Turnstile hasn't verified yet
-        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-        if (siteKey && !turnstileToken) {
+        // Guard: check for Turnstile token ONLY if security is enabled
+        const isSecurityEnabled = process.env.NEXT_PUBLIC_ENABLE_FORM_SECURITY === 'true'
+        if (isSecurityEnabled && !turnstileToken) {
             setStatus('error')
             setMessage('Por favor, completa la verificación de seguridad antes de enviar.')
             return
@@ -87,8 +87,8 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                     </button>
                 </form>
-                {/* Turnstile - hidden */}
-                <div className="hidden">
+                {/* Turnstile - visible challenge if needed */}
+                <div className="flex justify-center">
                     <TurnstileCaptcha
                         ref={captchaRef}
                         onVerify={(token) => setTurnstileToken(token)}
