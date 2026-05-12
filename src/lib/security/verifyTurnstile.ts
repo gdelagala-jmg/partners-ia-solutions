@@ -42,13 +42,11 @@ export async function verifyTurnstileToken(
 
     // ── Development bypass ──────────────────────────────────────────────────
     if (isDev) {
-        console.log('[Turnstile] Bypass mode: Development')
         return { success: true }
     }
 
     // ── Progressive/Rollback bypass ──────────────────────────────────────────
     if (!isSecurityEnabled) {
-        console.log('[Turnstile] Bypass mode: Progressive/Rollback (ENABLE_FORM_SECURITY=false)')
         return { success: true }
     }
 
@@ -57,7 +55,6 @@ export async function verifyTurnstileToken(
         logFailedAttempt(reason, ip, policy)
         
         if (policy === 'fail-open') {
-            console.log(`[Turnstile] 🔓 Fail-open policy applied for ${reason}. Allowing submission.`)
             return { success: true }
         }
 
