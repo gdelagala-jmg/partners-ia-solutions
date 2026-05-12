@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
@@ -17,13 +17,6 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
     const captchaRef = useRef<TurnstileHandle>(null)
     const { formSecurityEnabled } = useSecurity()
-
-    // [DIAG] Client-side diagnostic — remove after staging validation
-    useEffect(() => {
-        console.log('[SECURITY][NewsletterForm] formSecurityEnabled from context:', formSecurityEnabled)
-        console.log('[SECURITY][NewsletterForm] NEXT_PUBLIC_TURNSTILE_SITE_KEY present:', !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
-        console.log('[SECURITY][NewsletterForm] NEXT_PUBLIC_TURNSTILE_SITE_KEY value:', process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || 'UNDEFINED')
-    }, [formSecurityEnabled])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

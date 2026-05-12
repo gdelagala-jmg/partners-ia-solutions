@@ -79,15 +79,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Read security config once in the server root
-  const rawSecurityEnv = process.env.ENABLE_FORM_SECURITY
+  // Read security config once at server render time — injected into SecurityProvider
   const securityConfig = {
-    formSecurityEnabled: rawSecurityEnv === 'true'
+    formSecurityEnabled: process.env.ENABLE_FORM_SECURITY === 'true'
   }
-
-  // [DIAG] Temporary server log — remove after staging validation
-  console.log('[SECURITY][layout.tsx] ENABLE_FORM_SECURITY raw value:', JSON.stringify(rawSecurityEnv))
-  console.log('[SECURITY][layout.tsx] formSecurityEnabled resolved to:', securityConfig.formSecurityEnabled)
 
   return (
     <html lang="es" suppressHydrationWarning>

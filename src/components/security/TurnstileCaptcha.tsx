@@ -20,7 +20,13 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
         const containerRef = useRef<HTMLDivElement>(null)
         const [widgetId, setWidgetId] = useState<string | null>(null)
         const [isLoaded, setIsLoaded] = useState(false)
+        // mounted prevents ANY client-only rendering during SSR → fixes hydration error #418
+        const [mounted, setMounted] = useState(false)
         const { formSecurityEnabled } = useSecurity()
+
+        useEffect(() => {
+            setMounted(true)
+        }, [])
 
         useImperativeHandle(ref, () => ({
             reset() {
@@ -31,19 +37,17 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
         }))
 
         useEffect(() => {
-            console.log('[SECURITY][TurnstileCaptcha] mounted — formSecurityEnabled:', formSecurityEnabled, '| isLoaded:', isLoaded, '| widgetId:', widgetId)
-            if (!isLoaded || !containerRef.current || widgetId || !formSecurityEnabled) {
-                console.log('[SECURITY][TurnstileCaptcha] skipping render — guard hit:', { isLoaded, hasContainer: !!containerRef.current, widgetId, formSecurityEnabled })
+            // All guards: only run on client, only when security is enabled, only once per widget
+            if (!mounted || !formSecurityEnabled || !isLoaded || !containerRef.current || widgetId) return
+
+            const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+            if (!siteKey) {
+                console.warn('[Turnstile] NEXT_PUBLIC_TURNSTILE_SITE_KEY is not defined')
                 return
             }
 
-            const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-            console.log('[SECURITY][TurnstileCaptcha] siteKey present:', !!siteKey)
-            if (!siteKey) return
-
             if ((window as any).turnstile) {
                 try {
-                    console.log('[SECURITY][TurnstileCaptcha] calling turnstile.render()')
                     const id = (window as any).turnstile.render(containerRef.current, {
                         sitekey: siteKey,
                         callback: (token: string) => onVerify(token),
@@ -52,13 +56,10 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                         appearance: appearance,
                         theme: 'light'
                     })
-                    console.log('[SECURITY][TurnstileCaptcha] render OK — widgetId:', id)
                     setWidgetId(id)
                 } catch (err) {
                     console.error('[Turnstile] Render failed:', err)
                 }
-            } else {
-                console.warn('[SECURITY][TurnstileCaptcha] window.turnstile NOT available yet')
             }
 
             return () => {
@@ -66,21 +67,25 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                     try { (window as any).turnstile.remove(widgetId) } catch (e) {}
                 }
             }
-        }, [isLoaded, widgetId, onVerify, onError, onExpire, appearance, formSecurityEnabled])
+        }, [mounted, isLoaded, widgetId, formSecurityEnabled, onVerify, onError, onExpire, appearance])
 
-        if (!formSecurityEnabled) {
-            console.log('[SECURITY][TurnstileCaptcha] returning null — security disabled')
-            return null
-        }
-
+        // Stable SSR output: always render this wrapper so HTML matches on hydration.
+        // Inner content is only shown after mount + security enabled.
         return (
-            <div className="flex flex-col items-center justify-center my-4 min-h-[65px]">
-                <Script
-                    src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-                    onLoad={() => setIsLoaded(true)}
-                    strategy="afterInteractive"
-                />
-                <div ref={containerRef} className="w-full flex justify-center" />
+            <div suppressHydrationWarning>
+                {mounted && formSecurityEnabled && (
+                    <>
+                        <Script
+                            src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+                            onLoad={() => setIsLoaded(true)}
+                            strategy="afterInteractive"
+                        />
+                        <div
+                            ref={containerRef}
+                            className="flex justify-center my-4 min-h-[65px]"
+                        />
+                    </>
+                )}
             </div>
         )
     }
