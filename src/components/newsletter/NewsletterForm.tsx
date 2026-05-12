@@ -152,10 +152,6 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         disabled={status === 'loading' || status === 'success'}
                         className="flex-1 px-4 py-3 sm:py-3.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm placeholder:text-gray-400"
                     />
-                    {/* BUILD VERIFICATION MARK */}
-                    <div className="text-[8px] text-red-500/30 uppercase tracking-tighter mb-1 w-full text-right">
-                        Build v2-turnstile-ready
-                    </div>
 
                     <button
                         type="submit"

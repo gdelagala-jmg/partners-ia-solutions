@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Zap, ChevronDown, Send, CheckCircle2, AlertCircle } from 'lucide-react'
 import TurnstileCaptcha from '../security/TurnstileCaptcha'
+import { useSecurity } from '@/context/SecurityContext'
 
 const SCOPE_OPTIONS = [
     'Gestión Profesional / Negocio',
