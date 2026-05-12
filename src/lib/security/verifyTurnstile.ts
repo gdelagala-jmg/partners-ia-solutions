@@ -66,15 +66,11 @@ export async function verifyTurnstileToken(
 
     // ── Production checks ────────────────────────────────────────────────────
     if (!secretKey) {
-        // Production: key missing AND security enabled → hard block
+        // Production: key missing AND security enabled → only hard block if policy is strict
         console.error(
-            '[Turnstile] 🚫 TURNSTILE_SECRET_KEY is missing in production! ' +
-            'Blocking form submission.'
+            '[Turnstile] 🚫 TURNSTILE_SECRET_KEY is missing in production!'
         )
-        return {
-            success: false,
-            error: 'Security configuration error. Please try again later.',
-        }
+        return handleFailure('MISSING_SECRET_KEY', 'Security configuration error. Please try again later.')
     }
 
     // ── Token missing ────────────────────────────────────────────────────────

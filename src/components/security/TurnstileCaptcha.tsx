@@ -69,11 +69,13 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
             }
         }, [mounted, isLoaded, widgetId, formSecurityEnabled, onVerify, onError, onExpire, appearance])
 
+        const siteKey = typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY : null
+
         // Stable SSR output: always render this wrapper so HTML matches on hydration.
-        // Inner content is only shown after mount + security enabled.
+        // Inner content is only shown after mount + security enabled + siteKey present.
         return (
             <div suppressHydrationWarning>
-                {mounted && formSecurityEnabled && (
+                {mounted && formSecurityEnabled && siteKey && (
                     <>
                         <Script
                             src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
