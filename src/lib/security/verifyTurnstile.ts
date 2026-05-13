@@ -37,8 +37,14 @@ export async function verifyTurnstileToken(
     policy: SecurityPolicy = 'strict'
 ): Promise<TurnstileResult> {
     const secretKey = process.env.TURNSTILE_SECRET_KEY
+    const hasPublicKey = !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
     const isDev = process.env.NODE_ENV !== 'production'
-    const isSecurityEnabled = process.env.ENABLE_FORM_SECURITY === 'true'
+    const isSecurityEnabled = process.env.ENABLE_FORM_SECURITY === 'true' && hasPublicKey && !!secretKey
+
+    // ── Log configuration issues in production ───────────────────────────────
+    if (process.env.ENABLE_FORM_SECURITY === 'true' && (!hasPublicKey || !secretKey) && !isDev) {
+        console.error('[Turnstile] 🚫 Security enabled but keys are missing! Bypassing to avoid blocking traffic.')
+    }
 
     // ── Development bypass ──────────────────────────────────────────────────
     if (isDev) {
@@ -64,17 +70,14 @@ export async function verifyTurnstileToken(
         }
     }
 
-    // ── Production checks ────────────────────────────────────────────────────
-    if (!secretKey) {
-        // Production: key missing AND security enabled → only hard block if policy is strict
-        console.error(
-            '[Turnstile] 🚫 TURNSTILE_SECRET_KEY is missing in production!'
-        )
-        return handleFailure('MISSING_SECRET_KEY', 'Security configuration error. Please try again later.')
-    }
-
     // ── Token missing ────────────────────────────────────────────────────────
     if (!token) {
+        // If policy is fail-open, we allow missing tokens to prioritize conversion
+        // (e.g. if the widget didn't render on the client).
+        if (policy === 'fail-open') {
+            console.warn(`[Turnstile] ⚠️ Token missing, but policy is fail-open. Allowing lead for conversion priority. ip=${ip ?? 'unknown'}`)
+            return { success: true }
+        }
         return handleFailure('TOKEN_MISSING', 'Se requiere completar la verificación de seguridad.')
     }
 

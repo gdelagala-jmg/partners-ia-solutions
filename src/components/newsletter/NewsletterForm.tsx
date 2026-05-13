@@ -15,6 +15,7 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const [securityOperational, setSecurityOperational] = useState(false)
     const captchaRef = useRef<TurnstileHandle>(null)
     const { formSecurityEnabled } = useSecurity()
 
@@ -22,9 +23,13 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
         e.preventDefault()
         if (!email) return
 
-        // Newsletter Policy: Fail-open
-        // We proceed even if turnstileToken is missing. The backend will log 
-        // the missing token but allow the submission in fail-open mode.
+        // Newsletter Policy: Intelligent Fail-Open
+        // We ONLY block if security is enabled AND the widget successfully rendered (operational).
+        if (formSecurityEnabled && securityOperational && !turnstileToken) {
+            setStatus('error')
+            setMessage('Por favor, completa la verificación de seguridad visible.')
+            return
+        }
 
         setStatus('loading')
         try {
@@ -90,9 +95,10 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                     <TurnstileCaptcha
                         ref={captchaRef}
                         onVerify={(token) => setTurnstileToken(token)}
+                        onLoaded={() => setSecurityOperational(true)}
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => setTurnstileToken(null)}
-                        appearance="interaction-only"
+                        appearance="always"
                     />
                 </div>
                 <AnimatePresence mode="wait">
@@ -173,7 +179,7 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         onVerify={(token) => setTurnstileToken(token)}
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => setTurnstileToken(null)}
-                        appearance="interaction-only"
+                        appearance="always"
                     />
                 </div>
 

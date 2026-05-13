@@ -142,6 +142,12 @@ export default function NewsPageClient() {
                                                 src={post.coverImage}
                                                 alt={post.title}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    if (!target.src.includes('placeholder')) {
+                                                        target.src = '/images/placeholder.jpg';
+                                                    }
+                                                }}
                                             />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 relative group-hover:scale-110 transition-transform duration-700 ease-out">

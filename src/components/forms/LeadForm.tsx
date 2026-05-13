@@ -44,6 +44,7 @@ export default function LeadForm({
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const [securityOperational, setSecurityOperational] = useState(false)
     const captchaRef = useRef<TurnstileHandle>(null)
     const { formSecurityEnabled } = useSecurity()
 
@@ -61,10 +62,12 @@ export default function LeadForm({
     const onSubmit = async (data: LeadFormData) => {
         setErrorMessage(null)
 
-        // Lead/Demo Policy: Fail-closed
-        // Security is MANDATORY if enabled on server.
-        if (formSecurityEnabled && !turnstileToken) {
-            setErrorMessage('La verificación de seguridad es obligatoria para enviar la solicitud.')
+        // Lead/Demo Policy: Intelligent Fail-Open
+        // We ONLY block if security is enabled AND the widget successfully rendered (operational).
+        // If the widget is missing or failed to load (securityOperational === false), we ALLOW submission
+        // to prioritize lead capture over security.
+        if (formSecurityEnabled && securityOperational && !turnstileToken) {
+            setErrorMessage('La verificación de seguridad es obligatoria para enviar la solicitud. Por favor, completa el captcha visible.')
             setStatus('error')
             return
         }
@@ -249,9 +252,10 @@ export default function LeadForm({
                     <TurnstileCaptcha
                         ref={captchaRef}
                         onVerify={(token) => setTurnstileToken(token)}
+                        onLoaded={() => setSecurityOperational(true)}
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => setTurnstileToken(null)}
-                        appearance="interaction-only"
+                        appearance="always"
                     />
                 </div>
 

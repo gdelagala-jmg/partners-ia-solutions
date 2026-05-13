@@ -72,7 +72,7 @@ export async function POST(request: Request) {
         const { turnstileToken, ...rest } = body
 
         // ── Turnstile verification ───────────────────────────────────────────
-        const captcha = await verifyTurnstileToken(turnstileToken, ip)
+        const captcha = await verifyTurnstileToken(turnstileToken, ip, 'fail-open')
         if (!captcha.success) {
             incrementRateLimit(ip)
             return NextResponse.json({ error: captcha.error }, { status: 403 })

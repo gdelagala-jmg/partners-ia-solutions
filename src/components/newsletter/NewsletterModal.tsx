@@ -22,6 +22,7 @@ import {
     AlertCircle, Loader2, Sparkles, Zap, ShieldCheck
 } from 'lucide-react'
 import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
+import { useSecurity } from '@/context/SecurityContext'
 
 const TRUST = [
     { icon: Sparkles,    text: 'Contenido exclusivo' },
@@ -38,7 +39,9 @@ export default function NewsletterModal() {
     const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const [securityOperational, setSecurityOperational] = useState(false)
     const captchaRef = useRef<TurnstileHandle>(null)
+    const { formSecurityEnabled } = useSecurity()
 
     const handleClose = useCallback(() => router.push('/'), [router])
 
@@ -72,11 +75,11 @@ export default function NewsletterModal() {
         e.preventDefault()
         if (!email) return
 
-        // Guard: block if Turnstile key is set but token not yet obtained
-        const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-        if (siteKey && !turnstileToken) {
+        // Newsletter Policy: Intelligent Fail-Open
+        // We ONLY block if security is enabled AND the widget successfully rendered (operational).
+        if (formSecurityEnabled && securityOperational && !turnstileToken) {
             setStatus('error')
-            setMessage('Por favor, completa la verificación de seguridad.')
+            setMessage('Por favor, completa la verificación de seguridad visible.')
             return
         }
 
@@ -248,9 +251,10 @@ export default function NewsletterModal() {
                                     <TurnstileCaptcha
                                         ref={captchaRef}
                                         onVerify={(token) => setTurnstileToken(token)}
+                                        onLoaded={() => setSecurityOperational(true)}
                                         onExpire={() => setTurnstileToken(null)}
                                         onError={() => setTurnstileToken(null)}
-                                        appearance="interaction-only"
+                                        appearance="always"
                                     />
                                 </div>
 

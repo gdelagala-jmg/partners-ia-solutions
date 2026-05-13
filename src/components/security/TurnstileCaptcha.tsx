@@ -10,13 +10,14 @@ export interface TurnstileHandle {
 
 interface TurnstileProps {
     onVerify: (token: string) => void
+    onLoaded?: () => void
     onError?: () => void
     onExpire?: () => void
     appearance?: 'always' | 'execute' | 'interaction-only'
 }
 
 const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
-    function TurnstileCaptcha({ onVerify, onError, onExpire, appearance = 'interaction-only' }, ref) {
+    function TurnstileCaptcha({ onVerify, onLoaded, onError, onExpire, appearance = 'always' }, ref) {
         const containerRef = useRef<HTMLDivElement>(null)
         const [widgetId, setWidgetId] = useState<string | null>(null)
         const [isLoaded, setIsLoaded] = useState(false)
@@ -57,6 +58,7 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                         theme: 'light'
                     })
                     setWidgetId(id)
+                    onLoaded?.()
                 } catch (err) {
                     console.error('[Turnstile] Render failed:', err)
                 }
@@ -69,13 +71,10 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
             }
         }, [mounted, isLoaded, widgetId, formSecurityEnabled, onVerify, onError, onExpire, appearance])
 
-        const siteKey = typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY : null
-
         // Stable SSR output: always render this wrapper so HTML matches on hydration.
-        // Inner content is only shown after mount + security enabled + siteKey present.
         return (
             <div suppressHydrationWarning>
-                {mounted && formSecurityEnabled && siteKey && (
+                {mounted && formSecurityEnabled && (
                     <>
                         <Script
                             src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
@@ -85,6 +84,7 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                         <div
                             ref={containerRef}
                             className="flex justify-center my-4 min-h-[65px]"
+                            data-turnstile-status={!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? 'missing-key' : widgetId ? 'rendered' : isLoaded ? 'script-ready' : 'loading-script'}
                         />
                     </>
                 )}

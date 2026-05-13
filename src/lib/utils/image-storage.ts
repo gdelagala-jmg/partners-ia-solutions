@@ -40,7 +40,8 @@ export async function downloadAndStoreImage(url: string, prefix: string = 'news'
 
         const fileName = `${prefix}-${Date.now()}.${extension}`
 
-        // 1. Production: Vercel Blob
+        // 1. Production: Vercel Blob (TEMPORARILY DISABLED due to connectivity issues)
+        /*
         if (process.env.BLOB_READ_WRITE_TOKEN) {
             const blob = await put(fileName, buffer, {
                 access: 'public',
@@ -48,6 +49,14 @@ export async function downloadAndStoreImage(url: string, prefix: string = 'news'
             })
             return blob.url
         }
+        */
+
+        // Return original URL for production if it's a valid http URL
+        if (url.startsWith('http')) {
+            console.log('--- TEMPORARY FALLBACK: Returning original image URL instead of Vercel Blob ---');
+            return url;
+        }
+
 
         // 2. Development: Local Filesystem
         const uploadDir = path.join(process.cwd(), 'public', 'uploads')

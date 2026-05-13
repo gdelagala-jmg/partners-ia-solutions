@@ -80,8 +80,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // Read security config once at server render time — injected into SecurityProvider
+  // FAIL-SAFE: If key is missing, force disable security to avoid blocking leads.
+  const hasSiteKey = !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const isProduction = process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production';
   const securityConfig = {
-    formSecurityEnabled: process.env.ENABLE_FORM_SECURITY === 'true'
+    // SECURITY POLICY:
+    // 1. Production: Always false until manually verified (Lead recovery mode).
+    // 2. Preview/Dev: Follows ENABLE_FORM_SECURITY flag if site key is present.
+    formSecurityEnabled: isProduction 
+      ? false 
+      : (process.env.ENABLE_FORM_SECURITY === 'true' && hasSiteKey)
   }
 
   return (

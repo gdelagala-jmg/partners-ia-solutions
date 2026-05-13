@@ -19,6 +19,7 @@ export default function AssistantWidget() {
   })
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [securityOperational, setSecurityOperational] = useState(false)
   const captchaRef = useRef<TurnstileHandle>(null)
   const [isAssistantActive, setIsAssistantActive] = useState<boolean | null>(null)
   const { formSecurityEnabled } = useSecurity()
@@ -100,9 +101,9 @@ export default function AssistantWidget() {
     e.preventDefault()
     setErrorMsg(null)
 
-    // AI Assistant Lead Policy: Fail-closed
-    // Security is MANDATORY if enabled on server.
-    if (formSecurityEnabled && !turnstileToken) {
+    // AI Assistant Lead Policy: Intelligent Fail-Open
+    // We ONLY block if security is enabled AND the widget successfully rendered (operational).
+    if (formSecurityEnabled && securityOperational && !turnstileToken) {
         setErrorMsg('La verificación de seguridad es obligatoria.')
         return
     }
@@ -339,9 +340,10 @@ const formatMessage = (text: string) => {
                         <TurnstileCaptcha
                           ref={captchaRef}
                           onVerify={setTurnstileToken}
+                          onLoaded={() => setSecurityOperational(true)}
                           onExpire={() => setTurnstileToken(null)}
                           onError={() => setTurnstileToken(null)}
-                          appearance="interaction-only"
+                          appearance="always"
                         />
                       </div>
 

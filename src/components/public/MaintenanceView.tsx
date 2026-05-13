@@ -193,7 +193,7 @@ export default function MaintenanceView() {
                                                 onVerify={(token) => setTurnstileToken(token)}
                                                 onExpire={() => setTurnstileToken(null)}
                                                 onError={() => setTurnstileToken(null)}
-                                                appearance="interaction-only"
+                                                appearance="always"
                                             />
                                         </div>
 

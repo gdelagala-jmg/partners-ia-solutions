@@ -354,7 +354,7 @@ export default function LeadCaptureSection() {
                                         onVerify={setCaptchaToken} 
                                         onError={() => setCaptchaToken(null)}
                                         onExpire={() => setCaptchaToken(null)}
-                                        appearance="interaction-only"
+                                        appearance="always"
                                     />
                                 </div>
 

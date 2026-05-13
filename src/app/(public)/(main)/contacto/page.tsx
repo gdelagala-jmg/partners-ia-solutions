@@ -39,6 +39,7 @@ export default function ContactPage() {
     const [isSuccess, setIsSuccess] = useState(false)
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
     const [errorMsg, setErrorMsg] = useState<string | null>(null)
+    const [securityOperational, setSecurityOperational] = useState(false)
     const captchaRef = useRef<TurnstileHandle>(null)
     const { formSecurityEnabled } = useSecurity()
 
@@ -49,11 +50,12 @@ export default function ContactPage() {
     const onSubmit = async (data: ContactFormValues) => {
         setErrorMsg(null)
 
-        // Contact Policy: Fail-closed
-        // If security is enabled on server, we REQUIRE a valid token.
-        // No bypass allowed for contact/leads to prevent spam.
-        if (formSecurityEnabled && !turnstileToken) {
-            setErrorMsg('La verificación de seguridad es obligatoria para contactar. Por favor, completa el captcha.')
+        // Conversion First Policy:
+        // We ONLY block if security is enabled AND the widget successfully rendered (operational).
+        // If the widget is missing or failed to load (securityOperational === false), we ALLOW submission
+        // to prioritize lead capture over security.
+        if (formSecurityEnabled && securityOperational && !turnstileToken) {
+            setErrorMsg('La verificación de seguridad es obligatoria para contactar. Por favor, completa el captcha visible.')
             return
         }
 
@@ -264,9 +266,10 @@ export default function ContactPage() {
                                         <TurnstileCaptcha
                                             ref={captchaRef}
                                             onVerify={setTurnstileToken}
+                                            onLoaded={() => setSecurityOperational(true)}
                                             onExpire={() => setTurnstileToken(null)}
                                             onError={() => setTurnstileToken(null)}
-                                            appearance="interaction-only"
+                                            appearance="always"
                                         />
                                     </div>
 

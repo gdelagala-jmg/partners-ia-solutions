@@ -39,6 +39,12 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                         src={post.coverImage}
                         alt={post.title}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            if (!target.src.includes('placeholder')) {
+                                target.src = '/images/placeholder.jpg';
+                            }
+                        }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 </div>

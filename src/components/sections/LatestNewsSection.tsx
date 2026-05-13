@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import SafeImage from '../ui/SafeImage'
 import { ArrowRight, Calendar, Tag, Newspaper, Building2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import PageBadge from '../ui/PageBadge'
@@ -86,7 +86,7 @@ export default function LatestNewsSection() {
                                 {/* Cover Image */}
                                 <div className="h-40 bg-gray-100 relative overflow-hidden">
                                     {post.coverImage ? (
-                                        <Image
+                                        <SafeImage
                                             src={post.coverImage}
                                             alt={post.title}
                                             fill
