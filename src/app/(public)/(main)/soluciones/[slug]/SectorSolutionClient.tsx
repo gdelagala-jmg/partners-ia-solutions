@@ -153,6 +153,23 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             <main className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-24">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                     
+                    {/* Hero Image Section */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8 }}
+                        className="lg:col-span-12 mb-8"
+                    >
+                        <div className="relative w-full aspect-video md:aspect-[21/9] rounded-[3rem] overflow-hidden bg-gray-50 border border-solutions-border shadow-2xl group">
+                            <img 
+                                src={sector.image || '/logo-ias.png'} 
+                                alt={sector.name} 
+                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
+                        </div>
+                    </motion.div>
+
                     {/* Content Section */}
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
