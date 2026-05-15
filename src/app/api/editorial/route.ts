@@ -31,28 +31,16 @@ export async function GET(req: NextRequest) {
         pageKey,
         sectionKey,
         isActive: true,
-        OR: [
+        AND: [
           {
-            AND: [
-              { startDate: { lte: now } },
-              { endDate: { gte: now } }
-            ]
-          },
-          {
-            AND: [
+            OR: [
               { startDate: null },
-              { endDate: null }
+              { startDate: { lte: now } }
             ]
           },
           {
-            AND: [
-              { startDate: { lte: now } },
-              { endDate: null }
-            ]
-          },
-          {
-            AND: [
-              { startDate: null },
+            OR: [
+              { endDate: null },
               { endDate: { gte: now } }
             ]
           }
@@ -73,28 +61,13 @@ export async function GET(req: NextRequest) {
         ctaUrl: true,
         category: true,
         tone: true
-        // pageKey, sectionKey, internalNotes, isActive, priority, etc. are NOT exposed
       }
     });
 
-    return NextResponse.json({
-      success: true,
-      data: content,
-      timestamp: now.toISOString()
-    });
+    return NextResponse.json(content);
 
   } catch (error) {
     console.error('[EDITORIAL_API_ERROR]:', error);
-    
-    // Return a safe fail-safe response instead of 500
-    // This ensures the frontend doesn't break if the DB is down
-    return NextResponse.json(
-      { 
-        success: false, 
-        data: [], 
-        message: 'Editorial service temporarily unavailable' 
-      },
-      { status: 200 } // We return 200 with empty data to avoid throwing errors on client fetch
-    );
+    return NextResponse.json([], { status: 200 });
   }
 }
