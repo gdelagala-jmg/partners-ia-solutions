@@ -32,10 +32,48 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
     const [demoData, setDemoData] = useState({ name: '', email: '', phone: '', solutionSlug: '' })
     const [demoSuccess, setDemoSuccess] = useState(false)
 
+    // FALLBACK Y ESTADO EDITORIAL
+    const FALLBACK_HERO = {
+        id: 'static-fallback',
+        badge: "Liderando la Revolución de la IA",
+        titleLine1: "Transformamos el Futuro",
+        titleLine2: "Con Inteligencia Artificial",
+        subtitle: "Diseñamos, construimos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
+        ctaText: "Explorar Soluciones",
+        ctaUrl: "/soluciones"
+    }
+    const [editorial, setEditorial] = useState(FALLBACK_HERO)
+
     useEffect(() => {
         // Shuffle and pick 6 random solutions
         const shuffled = [...featuredSolutions].sort(() => 0.5 - Math.random())
         setDisplaySolutions(shuffled.slice(0, 6))
+
+        // FETCH EDITORIAL CONTENT (HOME HERO)
+        const fetchEditorial = async () => {
+            try {
+                const res = await fetch('/api/editorial?page=home&section=hero')
+                if (res.ok) {
+                    const data = await res.json()
+                    if (Array.isArray(data) && data.length > 0) {
+                        // Selección controlada: uno aleatorio de los activos
+                        const selected = data[Math.floor(Math.random() * data.length)]
+                        setEditorial({
+                            id: selected.id,
+                            badge: selected.badge || FALLBACK_HERO.badge,
+                            titleLine1: selected.titleLine1 || FALLBACK_HERO.titleLine1,
+                            titleLine2: selected.titleLine2 || FALLBACK_HERO.titleLine2,
+                            subtitle: selected.subtitle || FALLBACK_HERO.subtitle,
+                            ctaText: selected.ctaText || FALLBACK_HERO.ctaText,
+                            ctaUrl: selected.ctaUrl || FALLBACK_HERO.ctaUrl,
+                        })
+                    }
+                }
+            } catch (error) {
+                console.error("Editorial API failed, using hardcoded fallback", error)
+            }
+        }
+        fetchEditorial()
     }, [featuredSolutions])
 
     const handleDemoSubmit = async (e: React.FormEvent) => {
@@ -74,32 +112,46 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
     return (
         <div className="bg-white">
             {/* HERO SECTION */}
-            <section className="relative flex items-center justify-center overflow-hidden bg-white">
+            <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-[60vh] md:min-h-[70vh]">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
-                <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center py-6 md:py-8">
-                    <PageBadge text="Liderando la Revolución de la IA" icon={<Sparkles size={14} className="text-blue-500" />} />
+                <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center py-6 md:py-12">
+                    
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={editorial.id + '-badge'}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.4 }}
+                        >
+                            <PageBadge text={editorial.badge} icon={<Sparkles size={14} className="text-blue-500" />} />
+                        </motion.div>
+                    </AnimatePresence>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-3xl md:text-5xl lg:text-6xl font-semibold text-[#000000] mb-5 tracking-tight leading-[1.1] overflow-hidden"
-                    >
-                        Transformamos el Futuro
-                        <br className="hidden sm:block" />
-                        <span className="text-blue-500 break-words">Con Inteligencia Artificial</span>
-                    </motion.h1>
+                    <div className="min-h-[120px] md:min-h-[200px] flex flex-col items-center justify-center">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={editorial.id + '-text'}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                className="w-full"
+                            >
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-[#000000] mb-5 tracking-tight leading-[1.1] overflow-hidden">
+                                    {editorial.titleLine1}
+                                    <br className="hidden sm:block" />
+                                    <span className="text-blue-500 break-words"> {editorial.titleLine2}</span>
+                                </h1>
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed"
-                    >
-                        Diseñamos, construimos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.
-                    </motion.p>
+                                <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
+                                    {editorial.subtitle}
+                                </p>
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -108,10 +160,10 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         className="flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
                         <Link
-                            href="/soluciones"
+                            href={editorial.ctaUrl}
                             className="group px-7 py-3.5 bg-black text-white font-medium rounded-xl transition-all hover:bg-gray-800 hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
                         >
-                            <span>Explorar Soluciones</span>
+                            <span>{editorial.ctaText}</span>
                             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                         <Link
