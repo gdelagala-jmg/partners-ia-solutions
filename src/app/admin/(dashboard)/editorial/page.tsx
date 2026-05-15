@@ -91,8 +91,13 @@ export default function EditorialPage() {
             header: 'Ubicación / Badge',
             accessor: (content: any) => (
                 <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 border border-blue-100">
-                        <Layout size={20} />
+                    <div className="flex items-center gap-2">
+                        <div className="cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-400 transition-colors">
+                            <History size={16} className="rotate-90" />
+                        </div>
+                        <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 border border-blue-100">
+                            <Layout size={20} />
+                        </div>
                     </div>
                     <div>
                         <div className="text-sm font-bold text-gray-900 capitalize">
@@ -151,30 +156,43 @@ export default function EditorialPage() {
         {
             header: 'Estado',
             accessor: (content: any) => (
-                content.isActive ? (
-                    <span className="flex items-center text-green-600 text-xs font-bold uppercase tracking-wider">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-2 animate-pulse" />
-                        Activo
+                <button
+                    onClick={() => handleToggleStatus(content)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all ${
+                        content.isActive 
+                            ? 'bg-green-50 text-green-600 hover:bg-green-100' 
+                            : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
+                    }`}
+                    title={content.isActive ? 'Click para desactivar' : 'Click para activar'}
+                >
+                    <div className={`w-2 h-2 rounded-full ${content.isActive ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`} />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">
+                        {content.isActive ? 'Activo' : 'Inactivo'}
                     </span>
-                ) : (
-                    <span className="flex items-center text-gray-400 text-xs font-bold uppercase tracking-wider">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mr-2" />
-                        Inactivo
-                    </span>
-                )
+                    {content.isActive ? <EyeOff size={14} className="ml-1 opacity-60" /> : <Globe size={14} className="ml-1 opacity-60" />}
+                </button>
             )
         },
         {
-            header: '',
+            header: 'Acciones',
             className: 'text-right',
             accessor: (content: any) => (
-                <AdminActionMenu
-                    actions={[
-                        { label: content.isActive ? 'Desactivar' : 'Activar', icon: content.isActive ? EyeOff : Globe, onClick: () => handleToggleStatus(content) },
-                        { label: 'Editar', icon: Edit, onClick: () => handleEdit(content) },
-                        { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(content.id) },
-                    ]}
-                />
+                <div className="flex items-center justify-end gap-2">
+                    <button
+                        onClick={() => handleEdit(content)}
+                        className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all"
+                        title="Editar"
+                    >
+                        <Edit size={18} />
+                    </button>
+                    <button
+                        onClick={() => handleDelete(content.id)}
+                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                        title="Eliminar"
+                    >
+                        <Trash2 size={18} />
+                    </button>
+                </div>
             )
         }
     ]
@@ -231,21 +249,33 @@ export default function EditorialPage() {
                                         </p>
                                     </div>
                                 </div>
-                                <AdminActionMenu
-                                    actions={[
-                                        { label: content.isActive ? 'Desactivar' : 'Activar', icon: content.isActive ? EyeOff : Globe, onClick: () => handleToggleStatus(content) },
-                                        { label: 'Editar', icon: Edit, onClick: () => handleEdit(content) },
-                                        { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(content.id) },
-                                    ]}
-                                />
+                                <div className="flex gap-1">
+                                    <button
+                                        onClick={() => handleEdit(content)}
+                                        className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all"
+                                    >
+                                        <Edit size={18} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(content.id)}
+                                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
+                                </div>
                             </div>
                             <div className="flex items-center justify-between pt-4 border-t border-gray-100/50">
                                 <div className="flex gap-2">
-                                    {content.isActive ? (
-                                        <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg uppercase tracking-wider">Activo</span>
-                                    ) : (
-                                        <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">Inactivo</span>
-                                    )}
+                                    <button
+                                        onClick={() => handleToggleStatus(content)}
+                                        className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${
+                                            content.isActive 
+                                                ? 'bg-green-50 text-green-600' 
+                                                : 'bg-gray-50 text-gray-400'
+                                        }`}
+                                    >
+                                        {content.isActive ? 'Activo' : 'Inactivo'}
+                                    </button>
                                     <span className="px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] font-bold rounded-lg uppercase tracking-wider">P{content.priority}</span>
                                     <span className="px-2 py-0.5 bg-gray-50 text-gray-500 text-[10px] font-bold rounded-lg uppercase tracking-wider">{content.tone}</span>
                                 </div>
