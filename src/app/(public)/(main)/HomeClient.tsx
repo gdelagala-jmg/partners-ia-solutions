@@ -121,10 +121,10 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={editorial.id + '-badge'}
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 5 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.4 }}
+                            exit={{ opacity: 0, y: -5 }}
+                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                         >
                             <PageBadge text={editorial.badge} icon={<Sparkles size={14} className="text-blue-500" />} />
                         </motion.div>
@@ -134,10 +134,10 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={editorial.id + '-text'}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                                exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+                                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                                 className="w-full"
                             >
                                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-[#000000] mb-5 tracking-tight leading-[1.1] overflow-hidden">

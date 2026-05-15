@@ -77,9 +77,80 @@ export async function POST(req: NextRequest) {
       }
     });
 
+
     return NextResponse.json(content);
   } catch (error) {
     console.error('[ADMIN_EDITORIAL_POST_ERROR]:', error);
     return NextResponse.json({ error: 'Error creating editorial content' }, { status: 500 });
+  }
+}
+
+/**
+ * PUT /api/admin/editorial
+ * Update existing editorial content (Admin only)
+ */
+export async function PUT(req: NextRequest) {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+    }
+
+    const body = await req.json();
+    
+    // Remove ID and other fields that shouldn't be updated directly via data spread
+    const { id: _, createdAt, updatedAt, ...updateData } = body;
+
+    const content = await prisma.editorialContent.update({
+      where: { id },
+      data: {
+        ...updateData,
+        // Ensure dates are correctly formatted
+        startDate: body.startDate ? new Date(body.startDate) : null,
+        endDate: body.endDate ? new Date(body.endDate) : null,
+        priority: body.priority !== undefined ? Number(body.priority) : undefined,
+      }
+    });
+
+    return NextResponse.json(content);
+  } catch (error) {
+    console.error('[ADMIN_EDITORIAL_PUT_ERROR]:', error);
+    return NextResponse.json({ error: 'Error updating editorial content' }, { status: 500 });
+  }
+}
+
+/**
+ * DELETE /api/admin/editorial
+ * Delete editorial content (Admin only)
+ */
+export async function DELETE(req: NextRequest) {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+    }
+
+    await prisma.editorialContent.delete({
+      where: { id }
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('[ADMIN_EDITORIAL_DELETE_ERROR]:', error);
+    return NextResponse.json({ error: 'Error deleting editorial content' }, { status: 500 });
   }
 }
