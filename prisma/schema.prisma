@@ -401,6 +401,6 @@ model EditorialContent {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  @@index([pageKey, sectionKey])
+  @@index([pageKey, sectionKey, isActive, priority])
   @@map("editorial_contents")
 }
