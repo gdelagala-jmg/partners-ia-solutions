@@ -448,7 +448,7 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
             const res = await fetch('/api/upload', { method: 'POST', body: formData })
             const data = await res.json()
             if (!res.ok) throw new Error(data.error || 'Upload failed')
-            setValue('coverImage', data.url)
+            setValue('coverImage', data.url, { shouldDirty: true, shouldValidate: true })
         } catch (err: any) {
             alert(err.message || 'Error al subir la imagen')
         } finally {
@@ -467,7 +467,7 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
             const res = await fetch('/api/upload', { method: 'POST', body: formData })
             const data = await res.json()
             if (!res.ok) throw new Error(data.error || 'Upload failed')
-            setValue('coverImage', data.url)
+            setValue('coverImage', data.url, { shouldDirty: true, shouldValidate: true })
         } catch (err: any) {
             alert(err.message || 'Error al subir la imagen')
         } finally {
