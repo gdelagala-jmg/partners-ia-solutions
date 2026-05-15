@@ -380,3 +380,27 @@ model SitePartnerSettings {
 
   @@map("site_partner_settings")
 }
+model EditorialContent {
+  id              String    @id @default(uuid())
+  pageKey         String    // e.g. "home", "soluciones"
+  sectionKey      String    // e.g. "hero", "footer-cta"
+  badge           String?
+  titleLine1      String?
+  titleLine2      String?
+  subtitle        String?   @db.Text
+  supportText     String?   @db.Text
+  ctaText         String?
+  ctaUrl          String?
+  category        String?   @default("GENERAL")
+  tone            String?   @default("DIRECT")
+  isActive        Boolean   @default(true)
+  priority        Int       @default(0)
+  startDate       DateTime?
+  endDate         DateTime?
+  internalNotes   String?   @db.Text
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([pageKey, sectionKey])
+  @@map("editorial_contents")
+}

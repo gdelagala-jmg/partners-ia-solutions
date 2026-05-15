@@ -23,7 +23,8 @@ import {
     Bot,
     LayoutGrid,
     Send,
-    Settings
+    Settings,
+    Sparkles
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
@@ -31,6 +32,7 @@ import { useState, useEffect } from 'react'
 
 const menuItems = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Hero Studio', href: '/admin/editorial', icon: Sparkles },
     { name: 'Asistente AI', href: '/admin/asistente', icon: Bot },
     { name: 'Sectores', href: '/admin/sectors', icon: Box },
     { name: 'Clientes', href: '/admin/clientes', icon: Users },
