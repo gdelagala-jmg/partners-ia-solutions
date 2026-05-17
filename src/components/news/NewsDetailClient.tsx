@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Calendar, Tag, ArrowLeft, Clock, Linkedin, Facebook, Twitter, MessageCircle, Mail, Link2, Send, AtSign, Printer } from 'lucide-react'
@@ -22,6 +23,14 @@ interface NewsPost {
 }
 
 export default function NewsDetailClient({ post }: { post: NewsPost }) {
+    const [isMounted, setIsMounted] = useState(false)
+    const [shareUrl, setShareUrl] = useState('')
+
+    useEffect(() => {
+        setIsMounted(true)
+        setShareUrl(window.location.href)
+    }, [])
+
     const publishDate = post.publishedAt || post.createdAt
     
     // Strip HTML tags to count words for reading time
@@ -29,6 +38,10 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
     const readingMinutes = Math.max(1, Math.ceil(plainText.split(' ').length / 250))
     // Only show first category in badge
     const primaryCategory = post.category?.split(',')[0]?.trim() || 'Noticia'
+
+    // Safe fallback canonical URL for SSR/pre-hydration
+    const canonicalUrl = `https://www.partnersiasolutions.com/noticias/${post.slug}`
+    const activeShareUrl = isMounted ? shareUrl : canonicalUrl
 
     return (
         <div className="min-h-screen bg-white">
@@ -169,7 +182,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                     <div className="flex flex-wrap gap-3">
                         {/* LinkedIn */}
                         <a
-                            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(activeShareUrl)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#0077b5] hover:text-white transition-all shadow-sm border border-gray-100 group"
@@ -180,7 +193,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
 
                         {/* Facebook */}
                         <a
-                            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(activeShareUrl)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#1877f2] hover:text-white transition-all shadow-sm border border-gray-100 group"
@@ -191,7 +204,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
 
                         {/* X (Twitter) */}
                         <a
-                            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(post.title)}`}
+                            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(activeShareUrl)}&text=${encodeURIComponent(post.title)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-black hover:text-white transition-all shadow-sm border border-gray-100 group"
@@ -202,7 +215,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
 
                         {/* Telegram */}
                         <a
-                            href={`https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(post.title)}`}
+                            href={`https://t.me/share/url?url=${encodeURIComponent(activeShareUrl)}&text=${encodeURIComponent(post.title)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#0088cc] hover:text-white transition-all shadow-sm border border-gray-100 group"
@@ -213,7 +226,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
 
                         {/* Threads */}
                         <a
-                            href={`https://threads.net/intent/post?text=${encodeURIComponent(`${post.title} ${typeof window !== 'undefined' ? window.location.href : ''}`)}`}
+                            href={`https://threads.net/intent/post?text=${encodeURIComponent(`${post.title} ${activeShareUrl}`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-black hover:text-white transition-all shadow-sm border border-gray-100 group"
@@ -224,7 +237,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
 
                         {/* WhatsApp */}
                         <a
-                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} ${typeof window !== 'undefined' ? window.location.href : ''}`)}`}
+                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} ${activeShareUrl}`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-[#25d366] hover:text-white transition-all shadow-sm border border-gray-100 group"
@@ -235,7 +248,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
 
                         {/* Email */}
                         <a
-                            href={`mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                            href={`mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(activeShareUrl)}`}
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-red-500 hover:text-white transition-all shadow-sm border border-gray-100 group"
                             title="Email"
                         >
@@ -254,7 +267,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                         {/* Copy Link */}
                         <button
                             onClick={() => {
-                                navigator.clipboard.writeText(window.location.href);
+                                navigator.clipboard.writeText(activeShareUrl);
                                 alert('¡Enlace copiado al portapapeles!');
                             }}
                             className="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-800 hover:text-white transition-all shadow-sm border border-gray-100 group"
