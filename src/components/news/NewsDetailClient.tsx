@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Calendar, Tag, ArrowLeft, Clock, Linkedin, Facebook, Twitter, MessageCircle, Mail, Link2, Send, AtSign, Printer } from 'lucide-react'
+import { Calendar, Tag, ArrowLeft, Clock, Linkedin, Facebook, Twitter, MessageCircle, Mail, Link2, Send, AtSign, Printer, Newspaper } from 'lucide-react'
 import NewsletterForm from '../newsletter/NewsletterForm'
 
 interface NewsPost {
@@ -25,11 +25,20 @@ interface NewsPost {
 export default function NewsDetailClient({ post }: { post: NewsPost }) {
     const [isMounted, setIsMounted] = useState(false)
     const [shareUrl, setShareUrl] = useState('')
+    const [imageError, setImageError] = useState(false)
+    const [imageTimeout, setImageTimeout] = useState(false)
 
     useEffect(() => {
         setIsMounted(true)
         setShareUrl(window.location.href)
-    }, [])
+
+        if (post.coverImage) {
+            const timer = setTimeout(() => {
+                setImageTimeout(true)
+            }, 1500)
+            return () => clearTimeout(timer)
+        }
+    }, [post.coverImage])
 
     const publishDate = post.publishedAt || post.createdAt
     
@@ -43,19 +52,35 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
     const canonicalUrl = `https://www.partnersiasolutions.com/noticias/${post.slug}`
     const activeShareUrl = isMounted ? shareUrl : canonicalUrl
 
+    const showCoverImage = post.coverImage && !imageError && !imageTimeout
+
     return (
         <div className="min-h-screen bg-white">
-            {/* Hero Cover */}
-            {post.coverImage && (
-                <div className="w-full h-72 md:h-96 relative overflow-hidden bg-gray-100">
-                    <img
-                        src={post.coverImage}
-                        alt={post.title}
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                </div>
-            )}
+            {/* Hero Cover / Premium Fail-Safe Banner */}
+            <div className="w-full h-72 md:h-96 relative overflow-hidden bg-gray-100">
+                {showCoverImage ? (
+                    <>
+                        <img
+                            src={post.coverImage!}
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                            onError={() => setImageError(true)}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                    </>
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 relative">
+                        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_30%,white_0%,transparent_100%)]" />
+                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                        <div className="flex flex-col items-center gap-2">
+                            <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                                <Newspaper size={32} className="text-white" />
+                            </div>
+                            <span className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">Intelligence Hub</span>
+                        </div>
+                    </div>
+                )}
+            </div>
 
             {/* Article Container */}
             <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 py-8">
