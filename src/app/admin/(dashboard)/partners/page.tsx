@@ -4,8 +4,22 @@ import { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, Globe, EyeOff, Handshake, ExternalLink, List, Settings } from 'lucide-react'
 import StrategicPartnerForm from '@/components/admin/StrategicPartnerForm'
 import PartnerSettingsForm from '@/components/admin/PartnerSettingsForm'
-import AdminTable from '@/components/admin/AdminTable'
-import AdminActionMenu from '@/components/admin/AdminActionMenu'
+import AdminTable from '@/components/admin/ui/AdminTable'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
+import AdminFilterBar from '@/components/admin/ui/AdminFilterBar'
+import AdminStatusBadge from '@/components/admin/ui/AdminStatusBadge'
+
+const CATEGORIES = [
+    { id: 'all', label: 'Todos' },
+    { id: 'Partners', label: 'Estratégicos' },
+    { id: 'AI', label: 'IA Solutions' },
+    { id: 'Cloud', label: 'Cloud' },
+    { id: 'Infrastructure', label: 'Infraestructura' },
+    { id: 'Strategic', label: 'Otros' }
+] as const
+
+type CategoryType = typeof CATEGORIES[number]['id']
 
 export default function StrategicPartnersPage() {
     const [partners, setPartners] = useState<any[]>([])
@@ -14,7 +28,7 @@ export default function StrategicPartnersPage() {
     const [isEditing, setIsEditing] = useState(false)
     const [currentPartner, setCurrentPartner] = useState<any>(null)
     const [activeTab, setActiveTab] = useState<'list' | 'settings'>('list')
-    const [categoryFilter, setCategoryFilter] = useState<string>('all')
+    const [categoryFilter, setCategoryFilter] = useState<CategoryType>('all')
 
     const filteredPartners = partners.filter(p => 
         categoryFilter === 'all' ? true : p.category === categoryFilter
@@ -121,7 +135,7 @@ export default function StrategicPartnersPage() {
             header: 'Partner / Logo',
             accessor: (partner: any) => (
                 <div className="flex items-center gap-4">
-                    <div className="h-12 w-24 rounded-xl bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 flex items-center justify-center p-2 shadow-sm">
+                    <div className="h-12 w-24 rounded-xl bg-gray-50/50 overflow-hidden flex-shrink-0 border border-gray-100 flex items-center justify-center p-2 shadow-inner">
                         {partner.logoUrl ? (
                             <img className="h-full w-full object-contain" src={partner.logoUrl} alt={partner.logoAlt} />
                         ) : (
@@ -129,7 +143,7 @@ export default function StrategicPartnersPage() {
                         )}
                     </div>
                     <div>
-                        <div className="text-sm font-black text-gray-900 leading-tight">{partner.name}</div>
+                        <div className="text-sm font-black text-[#1D1D1F] leading-tight">{partner.name}</div>
                         <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">{partner.category || 'STRATEGIC'}</div>
                     </div>
                 </div>
@@ -137,28 +151,22 @@ export default function StrategicPartnersPage() {
         },
         {
             header: 'Visibilidad',
+            className: 'hidden lg:table-cell',
             accessor: (partner: any) => (
-                <div className="flex gap-2">
-                    {partner.showInFooter && <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] font-bold rounded uppercase">Footer</span>}
-                    {partner.showInHomepage && <span className="px-2 py-0.5 bg-amber-50 text-amber-600 text-[9px] font-bold rounded uppercase">Home</span>}
-                    {partner.isFeatured && <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[9px] font-bold rounded uppercase">Destacado</span>}
+                <div className="flex flex-wrap gap-1.5">
+                    {partner.showInFooter && <AdminStatusBadge label="Footer" type="neutral" dot={false} className="text-[9px]" />}
+                    {partner.showInHomepage && <AdminStatusBadge label="Home" type="info" dot={false} className="text-[9px]" />}
+                    {partner.isFeatured && <AdminStatusBadge label="Top" type="warning" dot={false} className="text-[9px]" />}
                 </div>
             )
         },
         {
             header: 'Estado',
             accessor: (partner: any) => (
-                partner.isActive ? (
-                    <span className="flex items-center text-emerald-600 text-[10px] font-black uppercase tracking-widest">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse" />
-                        Activo
-                    </span>
-                ) : (
-                    <span className="flex items-center text-gray-300 text-[10px] font-black uppercase tracking-widest">
-                        <span className="w-2 h-2 rounded-full bg-gray-200 mr-2" />
-                        Inactivo
-                    </span>
-                )
+                <AdminStatusBadge 
+                    label={partner.isActive ? 'Activo' : 'Inactivo'} 
+                    type={partner.isActive ? 'success' : 'neutral'}
+                />
             )
         },
         {
@@ -167,67 +175,52 @@ export default function StrategicPartnersPage() {
             accessor: (partner: any) => (
                 <AdminActionMenu
                     actions={[
-                        { label: partner.isActive ? 'Desactivar' : 'Activar', icon: partner.isActive ? EyeOff : Globe, onClick: () => handleToggleStatus(partner) },
-                        { label: 'Editar Partner', icon: Edit, onClick: () => handleEdit(partner) },
-                        { label: partner.websiteUrl ? 'Ver Web' : '', icon: ExternalLink, onClick: () => partner.websiteUrl && window.open(partner.websiteUrl, '_blank') },
-                        { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(partner.id) },
+                        { label: partner.isActive ? 'Desactivar' : 'Activar', icon: <EyeOff size={16} />, onClick: () => handleToggleStatus(partner) },
+                        { label: 'Editar Partner', icon: <Edit size={16} />, onClick: () => handleEdit(partner) },
+                        { label: partner.websiteUrl ? 'Ver Web' : '', icon: <ExternalLink size={16} />, onClick: () => partner.websiteUrl && window.open(partner.websiteUrl, '_blank') },
+                        { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(partner.id) },
                     ].filter(a => a.label !== '')}
                 />
             )
         }
     ]
 
-    return (
-        <div className="space-y-8">
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4 md:px-0">
-                <div className="space-y-1">
-                    <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Partners Estratégicos</h1>
-                    <p className="text-gray-400 mt-1 font-medium max-w-xl">Gestión de alianzas tecnológicas y corporativas para el ecosistema IA.</p>
-                </div>
-                {!isEditing && (
-                    <div className="flex gap-3">
-                        <button
-                            onClick={() => setActiveTab(activeTab === 'list' ? 'settings' : 'list')}
-                            className="flex items-center justify-center px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-2xl hover:bg-gray-50 transition-all font-semibold shadow-sm"
-                        >
-                            {activeTab === 'list' ? <Settings size={20} className="mr-2" /> : <List size={20} className="mr-2" />}
-                            {activeTab === 'list' ? 'Ajustes' : 'Volver al Listado'}
-                        </button>
-                        <button
-                            onClick={handleCreate}
-                            className="flex items-center justify-center px-6 py-3 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all font-semibold shadow-[0_8px_20px_rgba(79,70,229,0.2)] whitespace-nowrap"
-                        >
-                            <Plus size={20} className="mr-2" />
-                            Nuevo Partner
-                        </button>
-                    </div>
-                )}
-            </header>
+    const filterOptions = CATEGORIES.map(cat => ({
+        ...cat,
+        count: cat.id === 'all' ? partners.length : partners.filter(p => p.category === cat.id).length
+    }))
 
-            {!isEditing && activeTab === 'list' && (
-                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                    <List size={18} className="text-gray-400" />
-                    <span className="text-sm font-bold text-gray-700">Filtrar por Categoría:</span>
-                    <select 
-                        value={categoryFilter}
-                        onChange={(e) => setCategoryFilter(e.target.value)}
-                        className="bg-gray-50 border-gray-200 border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-indigo-500 font-medium"
-                    >
-                        <option value="all">Todas las categorías</option>
-                        <option value="Partners">Partners Estratégicos</option>
-                        <option value="AI">Inteligencia Artificial</option>
-                        <option value="Cloud">Cloud</option>
-                        <option value="Infrastructure">Infraestructura</option>
-                        <option value="Strategic">Estratégicos (Otros)</option>
-                    </select>
-                    <div className="ml-auto text-[10px] font-black text-gray-300 uppercase tracking-widest">
-                        {filteredPartners.length} registros encontrados
+    return (
+        <div className="w-full max-w-full min-w-0 space-y-6">
+            <AdminToolbar
+                title="Partners Estratégicos"
+                description="Gestión de alianzas tecnológicas y corporativas."
+                actions={
+                    <div className="flex items-center gap-3">
+                        {!isEditing && (
+                            <>
+                                <button
+                                    onClick={() => setActiveTab(activeTab === 'list' ? 'settings' : 'list')}
+                                    className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-gray-200 text-[#1D1D1F] font-bold text-[11px] uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm"
+                                >
+                                    {activeTab === 'list' ? <Settings size={14} /> : <List size={14} />}
+                                    <span>{activeTab === 'list' ? 'Ajustes' : 'Listado'}</span>
+                                </button>
+                                <button
+                                    onClick={handleCreate}
+                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1D1D1F] text-white font-bold text-[11px] uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-gray-200"
+                                >
+                                    <Plus size={14} />
+                                    <span>Nuevo Partner</span>
+                                </button>
+                            </>
+                        )}
                     </div>
-                </div>
-            )}
+                }
+            />
 
             {isEditing ? (
-                <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <StrategicPartnerForm
                         initialData={currentPartner}
                         onSubmit={handleSubmitPartner}
@@ -235,7 +228,7 @@ export default function StrategicPartnersPage() {
                     />
                 </div>
             ) : activeTab === 'settings' ? (
-                <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {settings && (
                         <PartnerSettingsForm
                             initialData={settings}
@@ -244,42 +237,55 @@ export default function StrategicPartnersPage() {
                     )}
                 </div>
             ) : (
-                <AdminTable
-                    columns={columns}
-                    data={filteredPartners}
-                    loading={loading}
-                    emptyMessage="No hay partners estratégicos registrados."
-                    renderMobileCard={(partner) => (
-                        <div className="space-y-4">
-                            <div className="flex items-start justify-between">
-                                <div className="flex items-center gap-4">
-                                    <div className="h-12 w-20 bg-white rounded-xl border border-gray-100 flex items-center justify-center p-2 shadow-sm shrink-0">
-                                        {partner.logoUrl ? <img src={partner.logoUrl} className="h-full w-full object-contain" alt="" /> : <Handshake size={20} className="text-gray-300" />}
+                <div className="space-y-6">
+                    <AdminFilterBar
+                        options={filterOptions}
+                        activeId={categoryFilter}
+                        onChange={(id) => setCategoryFilter(id as CategoryType)}
+                    />
+
+                    <AdminTable
+                        columns={columns}
+                        data={filteredPartners}
+                        loading={loading}
+                        emptyMessage="No hay partners registrados."
+                        renderMobileCard={(partner) => (
+                            <div className="space-y-4">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="h-12 w-20 bg-white rounded-xl border border-gray-100 flex items-center justify-center p-2 shadow-sm shrink-0">
+                                            {partner.logoUrl ? (
+                                                <img src={partner.logoUrl} className="h-full w-full object-contain" alt="" />
+                                            ) : (
+                                                <Handshake size={20} className="text-gray-300" />
+                                            )}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h3 className="font-bold text-[#1D1D1F] leading-tight truncate">{partner.name}</h3>
+                                            <p className="text-[10px] text-gray-400 font-bold uppercase mt-0.5 tracking-wider">{partner.category}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="font-bold text-[#1D1D1F] leading-tight">{partner.name}</h3>
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase mt-0.5">{partner.category}</p>
-                                    </div>
+                                    <AdminActionMenu
+                                        actions={[
+                                            { label: partner.isActive ? 'Desactivar' : 'Activar', icon: <EyeOff size={16} />, onClick: () => handleToggleStatus(partner) },
+                                            { label: 'Editar', icon: <Edit size={16} />, onClick: () => handleEdit(partner) },
+                                            { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(partner.id) },
+                                        ]}
+                                    />
                                 </div>
-                                <AdminActionMenu
-                                    actions={[
-                                        { label: partner.isActive ? 'Desactivar' : 'Activar', icon: partner.isActive ? EyeOff : Globe, onClick: () => handleToggleStatus(partner) },
-                                        { label: 'Editar', icon: Edit, onClick: () => handleEdit(partner) },
-                                        { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(partner.id) },
-                                    ]}
-                                />
+                                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100/50">
+                                    <AdminStatusBadge 
+                                        label={partner.isActive ? 'Activo' : 'Inactivo'} 
+                                        type={partner.isActive ? 'success' : 'neutral'}
+                                        className="text-[9px]"
+                                    />
+                                    {partner.showInFooter && <AdminStatusBadge label="Footer" type="neutral" dot={false} className="text-[9px]" />}
+                                    {partner.isFeatured && <AdminStatusBadge label="Top Partner" type="warning" dot={false} className="text-[9px]" />}
+                                </div>
                             </div>
-                            <div className="flex gap-2">
-                                {partner.showInFooter && <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] font-bold rounded">Footer</span>}
-                                {partner.isActive ? (
-                                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[9px] font-bold rounded">Activo</span>
-                                ) : (
-                                    <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[9px] font-bold rounded">Inactivo</span>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                />
+                        )}
+                    />
+                </div>
             )}
         </div>
     )

@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Box, Users, Mail, TrendingUp, Settings2, Check, X, Loader2 } from 'lucide-react'
+import { Box, Users, Mail, Settings2, Check, X, Loader2, Save, XCircle } from 'lucide-react'
 import { DashboardGrid } from '@/components/admin/DashboardGrid'
 import { MetricCard, RecentActivity, SystemStatus } from '@/components/admin/DashboardModules'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
 
 // Widget definitions to map IDs to components
 const WIDGETS: Record<string, { title: string; component: React.ReactNode; className?: string }> = {
@@ -81,7 +83,9 @@ export default function DashboardPage() {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
                 <Loader2 className="animate-spin text-blue-500" size={32} />
-                <p className="text-gray-400 font-medium text-sm animate-pulse">Cargando Dashboard Personalizado...</p>
+                <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.3em] animate-pulse">
+                    Sincronizando Ecosistema...
+                </p>
             </div>
         )
     }
@@ -91,43 +95,52 @@ export default function DashboardPage() {
         .map(id => ({ id, ...WIDGETS[id] }))
         .filter(m => !!m.title)
 
-    return (
-        <div className="space-y-6">
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-4 md:px-0">
-                <div className="animate-in fade-in slide-in-from-left-4 duration-500">
-                    <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Panel de Control</h1>
-                    <p className="text-gray-400 mt-1 font-medium italic">Gestión inteligente de ecosistema digital.</p>
-                </div>
+    // Define actions for AdminActionMenu
+    const menuActions = [
+        {
+            label: isEditing ? 'Guardar Cambios' : 'Personalizar Grid',
+            icon: isEditing ? <Save size={16} /> : <Settings2 size={16} />,
+            onClick: isEditing ? handleSaveOrder : () => setIsEditing(true)
+        },
+        ...(isEditing ? [{
+            label: 'Cancelar Edición',
+            icon: <XCircle size={16} />,
+            onClick: () => setIsEditing(false),
+            variant: 'danger' as const
+        }] : [])
+    ]
 
-                <div className="flex items-center gap-3 animate-in fade-in slide-in-from-right-4 duration-700">
-                    {isEditing ? (
-                        <>
+    return (
+        <div className="w-full max-w-full min-w-0 space-y-2">
+            <AdminToolbar
+                title="Panel de Control"
+                description="Gestión inteligente de ecosistema digital."
+                actions={
+                    <div className="flex items-center gap-2">
+                        {/* Primary action always visible */}
+                        {!isEditing ? (
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1D1D1F] text-white font-bold text-[11px] uppercase tracking-widest hover:bg-black transition-all active:scale-95 shadow-lg shadow-gray-200"
+                            >
+                                <Settings2 size={14} />
+                                <span>Personalizar</span>
+                            </button>
+                        ) : (
                             <button
                                 onClick={handleSaveOrder}
-                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#1D1D1F] text-white font-semibold text-sm shadow-lg hover:bg-black transition-all active:scale-95"
+                                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-[11px] uppercase tracking-widest hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-100"
                             >
-                                <Check size={18} />
+                                <Check size={14} />
                                 <span>Guardar</span>
                             </button>
-                            <button
-                                onClick={() => setIsEditing(false)}
-                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white text-gray-500 font-semibold text-sm hover:bg-white transition-all active:scale-95"
-                            >
-                                <X size={18} />
-                                <span>Cancelar</span>
-                            </button>
-                        </>
-                    ) : (
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white text-[#1D1D1F] font-semibold text-sm shadow-sm hover:bg-white transition-all active:scale-95 group"
-                        >
-                            <Settings2 size={18} className="text-gray-400 group-hover:rotate-90 transition-transform duration-700" />
-                            <span>Personalizar</span>
-                        </button>
-                    )}
-                </div>
-            </header>
+                        )}
+
+                        {/* Action menu for mobile and secondary actions */}
+                        <AdminActionMenu actions={menuActions} direction="horizontal" />
+                    </div>
+                }
+            />
 
             <div className="pt-2">
                 <DashboardGrid
@@ -139,3 +152,4 @@ export default function DashboardPage() {
         </div>
     )
 }
+

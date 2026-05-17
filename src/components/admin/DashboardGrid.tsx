@@ -17,6 +17,7 @@ import {
     rectSortingStrategy,
 } from '@dnd-kit/sortable'
 import { DashboardModule } from './DashboardModule'
+import AdminResponsiveGrid from './ui/AdminResponsiveGrid'
 
 interface Module {
     id: string
@@ -63,7 +64,6 @@ export function DashboardGrid({ initialModules, isEditing, onOrderChange }: Dash
         }
     }
 
-    // Adapt grid based on screen width - Responsive Apple-style Grid
     return (
         <DndContext
             sensors={sensors}
@@ -74,7 +74,10 @@ export function DashboardGrid({ initialModules, isEditing, onOrderChange }: Dash
                 items={modules.map((m) => m.id)}
                 strategy={rectSortingStrategy}
             >
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 animate-in fade-in duration-700">
+                <AdminResponsiveGrid 
+                    cols={3} 
+                    className="animate-in fade-in duration-700"
+                >
                     {modules.map((module) => (
                         <DashboardModule
                             key={module.id}
@@ -86,8 +89,9 @@ export function DashboardGrid({ initialModules, isEditing, onOrderChange }: Dash
                             {module.component}
                         </DashboardModule>
                     ))}
-                </div>
+                </AdminResponsiveGrid>
             </SortableContext>
         </DndContext>
     )
 }
+

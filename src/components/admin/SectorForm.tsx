@@ -1,7 +1,13 @@
+'use client'
+
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useEffect, useState } from 'react'
+import { Upload, X, Globe, Tag, FileText, Settings, Image as ImageIcon, ExternalLink, CheckCircle2 } from 'lucide-react'
+import AdminFormShell from './ui/AdminFormShell'
+import AdminCard from './ui/AdminCard'
+import { cn } from '@/lib/utils'
 
 const sectorSchema = z.object({
     name: z.string().min(2, 'El nombre es obligatorio'),
@@ -22,59 +28,43 @@ interface SectorFormProps {
 }
 
 export default function SectorForm({ initialData, onSubmit, onCancel }: SectorFormProps) {
-    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, watch } = useForm<any>({
-        resolver: zodResolver(sectorSchema) as any,
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, watch } = useForm<SectorFormValues>({
+        resolver: zodResolver(sectorSchema),
         defaultValues: {
             active: true,
             order: 0,
+            ...initialData
         }
     })
 
-    useEffect(() => {
-        if (initialData) {
-            setValue('name', initialData.name)
-            setValue('slug', initialData.slug)
-            setValue('image', initialData.image)
-            setValue('externalUrl', initialData.externalUrl)
-            setValue('description', initialData.description || '')
-            setValue('order', initialData.order)
-            setValue('active', initialData.active)
-        }
-    }, [initialData, setValue])
+    const imageUrl = watch('image')
+    const active = watch('active')
+    const [uploading, setUploading] = useState(false)
 
     // Auto-generate slug from name
     const nameValue = watch('name')
     useEffect(() => {
         if (nameValue && !initialData) {
             const slug = nameValue.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/ /g, '-')
                 .replace(/[^\w-]+/g, '')
             setValue('slug', slug)
         }
     }, [nameValue, initialData, setValue])
 
-    const [uploading, setUploading] = useState(false)
-
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file) return
-
         setUploading(true)
         const formData = new FormData()
         formData.append('file', file)
-
         try {
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            })
-
+            const res = await fetch('/api/upload', { method: 'POST', body: formData })
             if (!res.ok) throw new Error('Upload failed')
-
             const data = await res.json()
             setValue('image', data.url)
         } catch (error) {
-            console.error('Upload error:', error)
             alert('Error al subir la imagen')
         } finally {
             setUploading(false)
@@ -82,153 +72,175 @@ export default function SectorForm({ initialData, onSubmit, onCancel }: SectorFo
     }
 
     const onLocalSubmit = (data: SectorFormValues) => {
-        // Handle URL transformation here
         let finalUrl = data.externalUrl
         if (finalUrl && !finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
             finalUrl = `https://${finalUrl}`
         }
-
-        // Basic URL validation
         try {
             new URL(finalUrl)
         } catch (e) {
-            alert('URL externa no es válida. Debe ser una dirección web válida.')
+            alert('URL externa no es válida.')
             return
         }
-
-        onSubmit({
-            ...data,
-            externalUrl: finalUrl
-        })
+        onSubmit({ ...data, externalUrl: finalUrl })
     }
 
     return (
-        <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
-                {initialData ? 'Editar Sector' : 'Nuevo Sector'}
-            </h2>
-
-            <form onSubmit={handleSubmit(onLocalSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Nombre */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
-                        <input
-                            {...register('name')}
-                            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                            placeholder="Ej. Finanzas"
-                        />
-                        {errors.name?.message && <p className="text-red-500 text-xs mt-1">{String(errors.name.message)}</p>}
-                    </div>
-
-                    {/* Slug */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Slug (URL)</label>
-                        <input
-                            {...register('slug')}
-                            className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500"
-                            placeholder="ej. finanzas"
-                        />
-                    </div>
-
-                    {/* Imagen URL & Upload */}
-                    <div className="md:col-span-2 space-y-3">
-                        <label className="block text-sm font-medium text-gray-700">Imagen</label>
-
-                        <div className="flex items-center space-x-4">
-                            <label className="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 px-4 py-2 rounded-lg transition-colors text-sm font-medium flex items-center">
-                                <span>{uploading ? 'Subiendo...' : 'Subir Imagen'}</span>
+        <AdminFormShell
+            title={initialData ? 'Editar Sector' : 'Nuevo Sector'}
+            description="Gestiona las categorías de industria y sus enlaces de redirección."
+            onSubmit={handleSubmit(onLocalSubmit)}
+            onCancel={onCancel}
+            isSubmitting={isSubmitting}
+            submitLabel={initialData ? 'Guardar Cambios' : 'Crear Sector'}
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main Content */}
+                <div className="lg:col-span-2 space-y-6">
+                    <AdminCard title="Información del Sector" icon={<Tag className="text-indigo-500" size={18} />}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div className="space-y-2">
+                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Nombre del Sector *</label>
                                 <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={handleFileUpload}
-                                    disabled={uploading}
+                                    {...register('name')}
+                                    placeholder="Ej: Finanzas"
+                                    className="w-full bg-gray-50/50 border-gray-200 border rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm font-medium"
                                 />
-                            </label>
-                            <span className="text-gray-500 text-xs">o ingresa URL manualmente:</span>
-                        </div>
+                                {errors.name && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase italic ml-1">{errors.name.message}</p>}
+                            </div>
 
-                        <input
-                            {...register('image')}
-                            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500"
-                            placeholder="https://..."
-                        />
-                        {errors.image?.message && <p className="text-red-500 text-xs mt-1">{String(errors.image.message)}</p>}
-
-                        {watch('image') && (
-                            <div className="mt-2 w-full h-40 bg-gray-50 rounded-lg overflow-hidden border border-gray-200 relative">
-                                <img
-                                    src={watch('image')}
-                                    alt="Preview"
-                                    className="w-full h-full object-cover opacity-90"
-                                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/600x400?text=Error+de+Imagen')}
+                            <div className="space-y-2">
+                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                    <Globe size={12} /> Slug (URL)
+                                </label>
+                                <input
+                                    {...register('slug')}
+                                    placeholder="ej-finanzas"
+                                    className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-600 outline-none font-mono focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm"
                                 />
                             </div>
-                        )}
-                    </div>
+                        </div>
 
-                    {/* External URL */}
-                    <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">URL Externa *</label>
-                        <input
-                            {...register('externalUrl')}
-                            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500"
-                            placeholder="https://partnersiasolutions.com/finanzas"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">Enlace al que se redirigirá al hacer clic.</p>
-                        {errors.externalUrl?.message && <p className="text-red-500 text-xs mt-1">{String(errors.externalUrl.message)}</p>}
-                    </div>
+                        <div className="space-y-2">
+                            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                <FileText size={12} /> Descripción (Opcional)
+                            </label>
+                            <textarea
+                                {...register('description')}
+                                rows={4}
+                                placeholder="Breve descripción del impacto de la IA en este sector..."
+                                className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm outline-none resize-none"
+                            />
+                        </div>
+                    </AdminCard>
 
-                    {/* Descripción */}
-                    <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Descripción (Opcional)</label>
-                        <textarea
-                            {...register('description')}
-                            rows={3}
-                            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500"
-                        />
-                    </div>
-
-                    {/* Orden */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Orden</label>
-                        <input
-                            type="number"
-                            {...register('order')}
-                            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500"
-                        />
-                    </div>
-
-                    {/* Active Checkbox */}
-                    <div className="flex items-center mt-6">
-                        <input
-                            type="checkbox"
-                            {...register('active')}
-                            id="active"
-                            className="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <label htmlFor="active" className="ml-2 text-sm text-gray-700">Activo (Visible en web)</label>
-                    </div>
+                    <AdminCard title="Redirección Externa" icon={<ExternalLink className="text-indigo-500" size={18} />}>
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                    <Globe size={12} /> URL de Destino *
+                                </label>
+                                <input
+                                    {...register('externalUrl')}
+                                    placeholder="https://..."
+                                    className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm outline-none font-mono font-medium"
+                                />
+                                <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-start gap-3 mt-2">
+                                    <div className="p-1.5 bg-indigo-100 rounded-lg text-indigo-600 mt-0.5">
+                                        <ExternalLink size={14} />
+                                    </div>
+                                    <p className="text-[10px] text-indigo-700 leading-relaxed font-medium">
+                                        Al hacer clic en este sector en la plataforma pública, los usuarios serán redirigidos automáticamente a esta dirección. Asegúrate de incluir el protocolo (http/https).
+                                    </p>
+                                </div>
+                                {errors.externalUrl && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase italic ml-1">{errors.externalUrl.message}</p>}
+                            </div>
+                        </div>
+                    </AdminCard>
                 </div>
 
-                <div className="flex justify-end space-x-4 pt-4 border-t border-gray-100">
-                    <button
-                        type="button"
-                        onClick={onCancel}
-                        className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
-                    >
-                        Cancelar
-                    </button>
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-medium disabled:opacity-50"
-                    >
-                        {isSubmitting ? 'Guardando...' : 'Guardar Sector'}
-                    </button>
+                {/* Sidebar */}
+                <div className="space-y-6">
+                    <AdminCard title="Estado y Orden" icon={<Settings className="text-gray-400" size={18} />}>
+                        <div className="space-y-6">
+                            <div className={cn(
+                                "flex items-center justify-between p-4 rounded-2xl border transition-all",
+                                active ? "bg-emerald-50/50 border-emerald-100" : "bg-gray-50 border-gray-200"
+                            )}>
+                                <div className="space-y-0.5">
+                                    <p className={cn("text-xs font-bold", active ? "text-emerald-900" : "text-gray-900")}>Sector Activo</p>
+                                    <p className={cn("text-[10px] font-medium uppercase tracking-tight", active ? "text-emerald-600" : "text-gray-500")}>
+                                        {active ? 'Visible en filtros' : 'Oculto'}
+                                    </p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" {...register('active')} className="sr-only peer" />
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                </label>
+                            </div>
+
+                            <div className="pt-4 border-t border-gray-100">
+                                <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50 border border-gray-100">
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-1.5 bg-white rounded-lg shadow-sm">
+                                            <Settings size={14} className="text-gray-400" />
+                                        </div>
+                                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tight">Orden Visual</span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        {...register('order')}
+                                        className="w-16 bg-white border border-gray-200 rounded-lg px-2 py-1 text-sm text-center font-bold outline-none focus:ring-2 focus:ring-indigo-50 focus:border-indigo-400 transition-all"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </AdminCard>
+
+                    <AdminCard title="Imagen de Portada" icon={<ImageIcon className="text-indigo-500" size={18} />}>
+                        <div className="space-y-4">
+                            <div 
+                                className={cn(
+                                    "relative aspect-video rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-3 overflow-hidden bg-gray-50/50",
+                                    imageUrl ? "border-solid border-gray-100 bg-white" : "border-gray-200 hover:border-indigo-300 hover:bg-white"
+                                )}
+                            >
+                                {imageUrl ? (
+                                    <>
+                                        <img src={imageUrl} className="absolute inset-0 w-full h-full object-cover" alt="Sector" />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                                            <button 
+                                                type="button"
+                                                onClick={() => setValue('image', '')}
+                                                className="p-2.5 bg-red-500 text-white rounded-xl hover:scale-110 transition-transform shadow-lg"
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex flex-col items-center gap-2 px-4 text-center">
+                                        <div className={cn(
+                                            "p-4 rounded-2xl transition-all bg-white shadow-sm",
+                                            uploading ? "animate-pulse" : ""
+                                        )}>
+                                            <Upload className={cn("w-6 h-6", uploading ? "text-indigo-500" : "text-gray-300")} />
+                                        </div>
+                                        <label className="cursor-pointer">
+                                            <span className="text-[10px] font-black text-indigo-500 uppercase tracking-tighter hover:underline">
+                                                {uploading ? 'SUBIENDO...' : 'SUBIR IMAGEN'}
+                                            </span>
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} disabled={uploading} />
+                                        </label>
+                                    </div>
+                                )}
+                            </div>
+                            <input {...register('image')} type="hidden" />
+                            {errors.image && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase italic text-center">{errors.image.message}</p>}
+                        </div>
+                    </AdminCard>
                 </div>
-            </form>
-        </div>
+            </div>
+        </AdminFormShell>
     )
 }

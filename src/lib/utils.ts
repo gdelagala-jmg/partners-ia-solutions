@@ -1,3 +1,13 @@
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+/**
+ * Standard utility for tailwind class merging and conditional joining.
+ */
+export function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs))
+}
+
 /**
  * Generates a URL-friendly slug from a given string.
  * Handles Spanish characters (accents, ñ, etc.) correctly.

@@ -25,6 +25,9 @@ import { useRouter, useParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import 'react-quill-new/dist/quill.snow.css'
 import { generateNewsletterHtml } from '@/lib/newsletter-templates'
+import AdminFormShell from '@/components/admin/ui/AdminFormShell'
+import AdminCard from '@/components/admin/ui/AdminCard'
+import { cn } from '@/lib/utils'
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false })
 
@@ -167,124 +170,122 @@ export default function CampaignEditor() {
     const renderedHtml = generateNewsletterHtml(campaign)
 
     return (
-        <div className="flex flex-col h-[calc(100vh-100px)] -m-4 md:-m-6">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 sticky top-0 z-30">
-                <div className="flex items-center gap-4">
-                    <button onClick={() => router.back()} className="p-2 hover:bg-gray-100 rounded-full">
-                        <ArrowLeft size={20} />
-                    </button>
-                    <div>
-                        <h1 className="text-lg font-bold text-gray-900 leading-tight truncate max-w-[200px] md:max-w-none">{campaign.title}</h1>
-                        <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">{campaign.status}</p>
-                    </div>
-                </div>
-
+        <AdminFormShell
+            title={campaign.title}
+            description={`ESTADO: ${campaign.status}`}
+            backUrl="/admin/newsletter"
+            actions={
                 <div className="flex items-center gap-3">
-                    <div className="hidden md:flex p-1 bg-gray-100 rounded-xl mr-4">
+                    <div className="hidden md:flex p-1 bg-gray-100/50 backdrop-blur-sm rounded-xl mr-2">
                         <button 
                             onClick={() => setPreviewMode('desktop')} 
-                            className={`p-2 rounded-lg transition-all ${previewMode === 'desktop' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-400'}`}
+                            className={cn(
+                                "p-2 rounded-lg transition-all",
+                                previewMode === 'desktop' ? "bg-white shadow-sm text-blue-600" : "text-gray-400"
+                            )}
                         >
-                            <Monitor size={18} />
+                            <Monitor size={16} />
                         </button>
                         <button 
                             onClick={() => setPreviewMode('mobile')} 
-                            className={`p-2 rounded-lg transition-all ${previewMode === 'mobile' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-400'}`}
+                            className={cn(
+                                "p-2 rounded-lg transition-all",
+                                previewMode === 'mobile' ? "bg-white shadow-sm text-blue-600" : "text-gray-400"
+                            )}
                         >
-                            <Smartphone size={18} />
+                            <Smartphone size={16} />
                         </button>
                         <button 
                             onClick={() => setPreviewMode('inbox')} 
-                            className={`p-2 rounded-lg transition-all ${previewMode === 'inbox' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-400'}`}
+                            className={cn(
+                                "p-2 rounded-lg transition-all",
+                                previewMode === 'inbox' ? "bg-white shadow-sm text-blue-600" : "text-gray-400"
+                            )}
                         >
-                            <Inbox size={18} />
+                            <Inbox size={16} />
                         </button>
                     </div>
                     <button 
                         onClick={() => setShowConfirmModal(true)} 
                         disabled={bulkSending || campaign.status === 'SENT' || campaign.status === 'SENDING'}
-                        className="flex items-center gap-2 px-5 py-2 bg-gray-900 text-white rounded-xl font-bold hover:bg-black transition-all disabled:opacity-50 disabled:bg-gray-200"
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-all disabled:opacity-50"
                     >
-                        {bulkSending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
-                        Enviar a Audiencia
+                        {bulkSending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                        <span className="hidden sm:inline">Enviar Campaña</span>
                     </button>
                     <button 
                         onClick={handleSave} 
                         disabled={saving}
-                        className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50"
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-all disabled:opacity-50"
                     >
-                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-                        Guardar
+                        {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                        <span>Guardar</span>
                     </button>
                 </div>
-            </div>
-
-            <div className="flex flex-1 overflow-hidden">
+            }
+        >
+            <div className="flex flex-col lg:flex-row gap-8 h-full">
                 {/* Editor Sidebar */}
-                <div className="w-full md:w-[450px] overflow-y-auto p-6 bg-gray-50 border-r border-gray-200 space-y-8 scrollbar-hide">
+                <div className="w-full lg:w-[450px] space-y-6">
                     {/* Stats Section */}
                     {campaign.status !== 'DRAFT' && (
-                        <section className="space-y-4">
-                            <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest">Estadísticas de Envío</h2>
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Enviados</p>
+                        <AdminCard title="ESTADÍSTICAS" glass>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-green-50/50 p-4 rounded-2xl border border-green-100">
+                                    <p className="text-[10px] font-black text-green-600/70 uppercase tracking-widest">Enviados</p>
                                     <p className="text-2xl font-black text-green-600">{campaignLogs.filter(l => l.deliveryStatus === 'SENT').length}</p>
                                 </div>
-                                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Fallidos</p>
+                                <div className="bg-red-50/50 p-4 rounded-2xl border border-red-100">
+                                    <p className="text-[10px] font-black text-red-600/70 uppercase tracking-widest">Fallidos</p>
                                     <p className="text-2xl font-black text-red-600">{campaignLogs.filter(l => l.deliveryStatus === 'FAILED').length}</p>
                                 </div>
                             </div>
-                        </section>
+                        </AdminCard>
                     )}
-                    {/* General Section */}
-                    <section className="space-y-4">
-                        <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest">General</h2>
-                        <div className="space-y-4 bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+
+                    <AdminCard title="GENERAL" glass>
+                        <div className="space-y-4">
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">Título Interno</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Título Interno</label>
                                 <input 
                                     type="text" 
                                     value={campaign.title} 
                                     onChange={(e) => updateField('title', e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/10 outline-none transition-all font-medium"
+                                    className="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/10 outline-none transition-all font-medium text-sm"
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">Asunto del Email</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Asunto del Email</label>
                                 <input 
                                     type="text" 
                                     value={campaign.subject} 
                                     onChange={(e) => updateField('subject', e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/10 outline-none transition-all font-medium"
+                                    className="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/10 outline-none transition-all font-medium text-sm"
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">Preheader (Texto invisible inicial)</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Preheader</label>
                                 <input 
                                     type="text" 
                                     value={campaign.preheader || ''} 
                                     onChange={(e) => updateField('preheader', e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/10 outline-none transition-all font-medium text-sm"
+                                    className="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/10 outline-none transition-all font-medium text-xs"
+                                    placeholder="Texto corto visible en la bandeja de entrada..."
                                 />
                             </div>
                         </div>
-                    </section>
+                    </AdminCard>
 
-                    {/* Content Section */}
-                    <section className="space-y-4">
-                        <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest">Contenido</h2>
-                        <div className="space-y-4 bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+                    <AdminCard title="CONTENIDO PRINCIPAL" glass>
+                        <div className="space-y-4">
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">Imagen Hero (URL)</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Imagen Hero (URL)</label>
                                 <div className="flex gap-2">
                                     <input 
                                         type="text" 
                                         value={campaign.heroImage || ''} 
                                         onChange={(e) => updateField('heroImage', e.target.value)}
-                                        className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm"
+                                        className="flex-1 px-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-xl outline-none text-xs"
                                         placeholder="https://..."
                                     />
                                     <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400">
@@ -293,16 +294,16 @@ export default function CampaignEditor() {
                                 </div>
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">Introducción (Corta)</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Introducción</label>
                                 <textarea 
                                     value={campaign.introText || ''} 
                                     onChange={(e) => updateField('introText', e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm min-h-[80px]"
+                                    className="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-xl outline-none text-sm min-h-[80px]"
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">Cuerpo del Mensaje</label>
-                                <div className="bg-gray-50 rounded-xl border border-gray-100 overflow-hidden min-h-[300px]">
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Cuerpo del Mensaje</label>
+                                <div className="bg-gray-50/50 rounded-xl border border-gray-100 overflow-hidden min-h-[300px] prose prose-sm max-w-none">
                                     <ReactQuill 
                                         theme="snow" 
                                         value={campaign.content || ''} 
@@ -318,39 +319,35 @@ export default function CampaignEditor() {
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </AdminCard>
 
-                    {/* CTA Section */}
-                    <section className="space-y-4">
-                        <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest">Botón Principal (CTA)</h2>
-                        <div className="grid grid-cols-2 gap-4 bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+                    <AdminCard title="BOTÓN DE ACCIÓN (CTA)" glass>
+                        <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">Texto</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Texto</label>
                                 <input 
                                     type="text" 
                                     value={campaign.primaryCtaText || ''} 
                                     onChange={(e) => updateField('primaryCtaText', e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm"
+                                    className="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-xl outline-none text-xs"
                                     placeholder="Leer más"
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 ml-1">URL</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">URL</label>
                                 <input 
                                     type="text" 
                                     value={campaign.primaryCtaUrl || ''} 
                                     onChange={(e) => updateField('primaryCtaUrl', e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm"
+                                    className="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-xl outline-none text-xs"
                                     placeholder="https://..."
                                 />
                             </div>
                         </div>
-                    </section>
+                    </AdminCard>
 
-                    {/* Solutions Section */}
-                    <section className="space-y-4">
-                        <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest">Soluciones Recomendadas</h2>
-                        <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+                    <AdminCard title="SOLUCIONES RECOMENDADAS" glass>
+                        <div className="space-y-4">
                             <div className="flex flex-wrap gap-2">
                                 {allSolutions.map(sol => {
                                     const isSelected = campaign.recommendedSolutions?.find((s: any) => s.id === sol.id)
@@ -358,11 +355,12 @@ export default function CampaignEditor() {
                                         <button
                                             key={sol.id}
                                             onClick={() => toggleSolution(sol)}
-                                            className={`px-3 py-1.5 rounded-full text-[10px] font-bold transition-all border ${
+                                            className={cn(
+                                                "px-3 py-1.5 rounded-full text-[10px] font-bold transition-all border",
                                                 isSelected 
-                                                    ? 'bg-blue-600 border-blue-600 text-white' 
-                                                    : 'bg-white border-gray-200 text-gray-500 hover:border-gray-400'
-                                            }`}
+                                                    ? "bg-blue-600 border-blue-600 text-white" 
+                                                    : "bg-white border-gray-200 text-gray-500 hover:border-gray-400"
+                                            )}
                                         >
                                             {sol.title}
                                         </button>
@@ -372,14 +370,14 @@ export default function CampaignEditor() {
                             
                             {campaign.recommendedSolutions?.length > 0 && (
                                 <div className="space-y-2 pt-4 border-t border-gray-100">
-                                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Seleccionadas</p>
-                                    {campaign.recommendedSolutions.map((s: any, idx: number) => (
-                                        <div key={s.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                    <p className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Seleccionadas</p>
+                                    {campaign.recommendedSolutions.map((s: any) => (
+                                        <div key={s.id} className="flex items-center justify-between p-3 bg-gray-50/50 rounded-xl border border-gray-100">
                                             <div className="min-w-0">
                                                 <p className="text-xs font-bold text-gray-700 truncate">{s.title}</p>
                                                 <p className="text-[10px] text-gray-400 truncate">{s.url}</p>
                                             </div>
-                                            <button onClick={() => toggleSolution(s)} className="text-gray-300 hover:text-red-500 p-1">
+                                            <button onClick={() => toggleSolution(s)} className="text-gray-300 hover:text-red-500 p-1 transition-colors">
                                                 <Trash2 size={14} />
                                             </button>
                                         </div>
@@ -387,47 +385,45 @@ export default function CampaignEditor() {
                                 </div>
                             )}
                         </div>
-                    </section>
+                    </AdminCard>
 
-                    {/* Test Send Section */}
-                    <section className="space-y-4 pb-12">
-                        <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest">Prueba Interna</h2>
-                        <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm space-y-4">
-                            <p className="text-xs text-gray-400">Envía una versión de prueba a un email específico para verificar el diseño real en bandeja de entrada.</p>
+                    <AdminCard title="PRUEBA INTERNA" glass>
+                        <div className="space-y-4">
+                            <p className="text-[11px] text-gray-400 font-medium">Verifica el diseño real enviando una prueba a tu bandeja de entrada.</p>
                             <div className="flex gap-2">
                                 <input 
                                     type="email" 
                                     placeholder="email@ejemplo.com"
                                     value={testEmail}
                                     onChange={(e) => setTestEmail(e.target.value)}
-                                    className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm"
+                                    className="flex-1 px-4 py-2 bg-gray-50/50 border border-gray-100 rounded-xl outline-none text-xs"
                                 />
                                 <button 
                                     onClick={handleSendTest}
                                     disabled={testSending}
-                                    className="px-4 bg-gray-900 text-white rounded-xl font-bold hover:bg-black transition-all disabled:opacity-50 flex items-center justify-center min-w-[80px]"
+                                    className="px-4 bg-gray-900 text-white rounded-xl font-bold text-xs hover:bg-black transition-all disabled:opacity-50 min-w-[70px]"
                                 >
-                                    {testSending ? <Loader2 size={18} className="animate-spin" /> : 'Test'}
+                                    {testSending ? <Loader2 size={14} className="animate-spin" /> : 'TEST'}
                                 </button>
                             </div>
                         </div>
-                    </section>
+                    </AdminCard>
                 </div>
 
                 {/* Preview Pane */}
-                <div className="hidden md:flex flex-1 bg-gray-200 p-8 overflow-y-auto items-start justify-center scrollbar-hide">
+                <div className="flex-1 min-h-[600px] lg:min-h-0 bg-gray-100/50 rounded-[2.5rem] p-4 md:p-8 flex items-start justify-center overflow-y-auto">
                     {previewMode === 'inbox' ? (
                         <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-                            <div className="p-6 border-b border-gray-100 bg-gray-50">
+                            <div className="p-6 border-b border-gray-100 bg-gray-50/50">
                                 <div className="flex gap-4">
-                                    <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black text-xl">P</div>
+                                    <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-200">P</div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between">
                                             <h3 className="font-bold text-gray-900">Partners IA Solutions</h3>
-                                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Recibido hace 1 min</span>
+                                            <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest">Recibido hace 1 min</span>
                                         </div>
-                                        <p className="text-sm font-bold text-gray-800 mt-0.5">{campaign.subject}</p>
-                                        <p className="text-xs text-gray-500 truncate mt-1">{campaign.preheader || campaign.introText}</p>
+                                        <p className="text-sm font-bold text-gray-800 mt-0.5">{campaign.subject || '(Sin asunto)'}</p>
+                                        <p className="text-xs text-gray-500 truncate mt-1">{campaign.preheader || campaign.introText || 'Previsualización del mensaje...'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -436,15 +432,18 @@ export default function CampaignEditor() {
                                 <div className="h-4 w-full bg-gray-50 rounded-full mb-2"></div>
                                 <div className="h-4 w-full bg-gray-50 rounded-full mb-2"></div>
                                 <div className="h-4 w-2/3 bg-gray-50 rounded-full mb-8"></div>
-                                <div className="h-32 w-full bg-gray-100 rounded-2xl"></div>
+                                <div className="h-48 w-full bg-gray-100 rounded-2xl"></div>
                             </div>
                         </div>
                     ) : (
-                        <div className={`bg-white shadow-2xl transition-all duration-500 overflow-hidden ${previewMode === 'mobile' ? 'w-[375px] rounded-[3rem] border-[10px] border-gray-900' : 'w-full max-w-[800px] rounded-3xl'}`}>
-                            {previewMode === 'mobile' && <div className="w-1/3 h-6 bg-gray-900 mx-auto rounded-b-3xl mb-4"></div>}
+                        <div className={cn(
+                            "bg-white shadow-2xl transition-all duration-500 overflow-hidden",
+                            previewMode === 'mobile' ? "w-[375px] h-[667px] rounded-[3rem] border-[12px] border-gray-900 ring-4 ring-gray-100" : "w-full max-w-[800px] min-h-[800px] rounded-3xl"
+                        )}>
+                            {previewMode === 'mobile' && <div className="w-1/3 h-6 bg-gray-900 mx-auto rounded-b-2xl mb-2"></div>}
                             <iframe 
                                 srcDoc={renderedHtml} 
-                                className="w-full min-h-[800px] border-none"
+                                className="w-full h-full border-none"
                                 title="Email Preview"
                             />
                         </div>
@@ -454,41 +453,44 @@ export default function CampaignEditor() {
 
             {/* Confirmation Modal */}
             {showConfirmModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
                     <div className="bg-white rounded-[2.5rem] shadow-2xl max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-300">
                         <div className="p-8 space-y-6">
-                            <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 mx-auto">
+                            <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 mx-auto shadow-sm">
                                 <AlertTriangle size={32} />
                             </div>
                             
                             <div className="text-center space-y-2">
                                 <h3 className="text-xl font-black text-gray-900 tracking-tight">¿Confirmar envío real?</h3>
-                                <p className="text-sm text-gray-500 font-medium leading-relaxed">
-                                    Estás a punto de enviar la campaña <span className="font-bold text-gray-900">"{campaign.title}"</span>.
+                                <p className="text-sm text-gray-500 font-medium leading-relaxed px-4">
+                                    Estás a punto de enviar la campaña <span className="font-bold text-gray-900">&quot;{campaign.title}&quot;</span> a tu audiencia.
                                 </p>
                             </div>
 
                             <div className="space-y-3">
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Seleccionar Destinatarios</p>
-                                <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
-                                    <label className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl cursor-pointer border border-blue-100">
+                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Destinatarios</p>
+                                <div className="max-h-[200px] overflow-y-auto space-y-2 p-1 custom-scrollbar">
+                                    <label className="flex items-center gap-3 p-3 bg-blue-50/50 rounded-xl cursor-pointer border border-blue-100 hover:bg-blue-50 transition-colors">
                                         <input 
                                             type="radio" 
                                             name="destinatarios"
                                             checked={selectedSubscriberIds.length === 0}
                                             onChange={() => setSelectedSubscriberIds([])}
-                                            className="text-blue-600 focus:ring-blue-500"
+                                            className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-blue-200"
                                         />
                                         <div className="min-w-0">
                                             <p className="text-xs font-bold text-blue-900">Toda la Audiencia Activa</p>
-                                            <p className="text-[10px] text-blue-700">{subscribers.filter(s => s.isActive).length} suscriptores</p>
+                                            <p className="text-[10px] text-blue-700 font-medium">{subscribers.filter(s => s.isActive).length} suscriptores</p>
                                         </div>
                                     </label>
                                     
-                                    <div className="relative">
-                                        <p className="text-[10px] font-bold text-gray-400 mb-2 mt-4 ml-1">O selecciona suscriptores de prueba:</p>
+                                    <div className="pt-2">
+                                        <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">O selección individual:</p>
                                         {subscribers.map(sub => (
-                                            <label key={sub.id} className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer border transition-all mb-2 ${selectedSubscriberIds.includes(sub.id) ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-100'}`}>
+                                            <label key={sub.id} className={cn(
+                                                "flex items-center gap-3 p-3 rounded-xl cursor-pointer border transition-all mb-2",
+                                                selectedSubscriberIds.includes(sub.id) ? "bg-blue-50/50 border-blue-200" : "bg-gray-50/30 border-gray-100 hover:border-gray-200"
+                                            )}>
                                                 <input 
                                                     type="checkbox" 
                                                     checked={selectedSubscriberIds.includes(sub.id)}
@@ -499,11 +501,11 @@ export default function CampaignEditor() {
                                                             setSelectedSubscriberIds(selectedSubscriberIds.filter(id => id !== sub.id))
                                                         }
                                                     }}
-                                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                 />
                                                 <div className="min-w-0">
                                                     <p className="text-xs font-bold text-gray-800 truncate">{sub.email}</p>
-                                                    <p className="text-[10px] text-gray-400">{sub.isActive ? 'Activo' : 'Inactivo'}</p>
+                                                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">{sub.isActive ? 'Activo' : 'Inactivo'}</p>
                                                 </div>
                                             </label>
                                         ))}
@@ -511,29 +513,31 @@ export default function CampaignEditor() {
                                 </div>
                             </div>
 
-                            <label className="flex items-start gap-3 p-4 bg-red-50/50 rounded-2xl cursor-pointer hover:bg-red-50 transition-colors border border-red-100">
-                                <input 
-                                    type="checkbox" 
-                                    checked={confirmCheck}
-                                    onChange={(e) => setConfirmCheck(e.target.checked)}
-                                    className="mt-1 rounded border-red-200 text-red-600 focus:ring-red-500"
-                                />
-                                <span className="text-xs font-bold text-red-700 leading-tight">
-                                    Confirmo que he revisado la campaña y deseo enviarla a la audiencia real.
-                                </span>
-                            </label>
+                            <div className="p-4 bg-red-50/30 rounded-2xl border border-red-100/50">
+                                <label className="flex items-start gap-3 cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={confirmCheck}
+                                        onChange={(e) => setConfirmCheck(e.target.checked)}
+                                        className="mt-1 w-4 h-4 rounded border-red-200 text-red-600 focus:ring-red-500"
+                                    />
+                                    <span className="text-[11px] font-bold text-red-700 leading-tight">
+                                        Confirmo que he revisado la campaña y deseo enviarla a la audiencia real.
+                                    </span>
+                                </label>
+                            </div>
 
                             <div className="flex gap-3">
                                 <button 
                                     onClick={() => setShowConfirmModal(false)}
-                                    className="flex-1 py-3 bg-gray-100 text-gray-500 rounded-xl font-bold hover:bg-gray-200 transition-all"
+                                    className="flex-1 py-3 bg-gray-100 text-gray-500 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all"
                                 >
                                     Cancelar
                                 </button>
                                 <button 
                                     onClick={handleBulkSend}
                                     disabled={!confirmCheck}
-                                    className="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200 disabled:opacity-50 disabled:shadow-none"
+                                    className="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold text-sm hover:bg-red-700 transition-all shadow-lg shadow-red-200 disabled:opacity-50 disabled:shadow-none"
                                 >
                                     Enviar ahora
                                 </button>
@@ -542,6 +546,6 @@ export default function CampaignEditor() {
                     </div>
                 </div>
             )}
-        </div>
+        </AdminFormShell>
     )
 }

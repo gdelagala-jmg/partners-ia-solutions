@@ -60,19 +60,22 @@ export function generateNewsletterHtml(campaign: any, isTest: boolean = false, s
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${subject}</title>
         <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1d1d1f; margin: 0; padding: 0; background-color: #ffffff; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { padding: 20px 0; border-bottom: 1px solid #f2f2f7; margin-bottom: 30px; text-align: center; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1d1d1f; margin: 0; padding: 0; background-color: #f5f5f7; }
+            .container { max-width: 600px; margin: 0 auto; padding: 24px 16px; background-color: #ffffff; box-shadow: 0 4px 24px rgba(0,0,0,0.04); }
+            .header { padding: 16px 0; border-bottom: 1px solid #f2f2f7; margin-bottom: 32px; text-align: center; }
             .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #000; text-decoration: none; }
-            .hero { width: 100%; border-radius: 16px; margin-bottom: 30px; display: block; }
-            .title { font-size: 32px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 20px; color: #000; }
-            .intro { font-size: 18px; color: #48484a; margin-bottom: 24px; }
-            .content { font-size: 16px; color: #1d1d1f; margin-bottom: 30px; }
-            .cta-container { margin: 40px 0; text-align: center; }
-            .cta-button { display: inline-block; padding: 16px 32px; background-color: #000000; color: #ffffff !important; text-decoration: none; border-radius: 14px; font-weight: 600; font-size: 16px; }
-            .footer { font-size: 12px; color: #86868b; margin-top: 20px; border-top: 1px solid #f2f2f7; padding-top: 30px; text-align: center; }
-            .test-banner { background-color: #fef3c7; color: #92400e; padding: 10px; text-align: center; font-size: 12px; font-weight: bold; border-radius: 8px; margin-bottom: 20px; }
-            img { max-width: 100%; height: auto; }
+            .hero { width: 100%; border-radius: 16px; margin-bottom: 32px; display: block; height: auto; }
+            .title { font-size: 32px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 24px; color: #000; word-break: break-word; }
+            .intro { font-size: 18px; color: #48484a; margin-bottom: 24px; font-weight: 500; }
+            .content { font-size: 16px; color: #1d1d1f; margin-bottom: 32px; word-break: break-word; }
+            .cta-container { margin: 48px 0; text-align: center; }
+            .cta-button { display: inline-block; padding: 18px 36px; background-color: #000000; color: #ffffff !important; text-decoration: none; border-radius: 16px; font-weight: 600; font-size: 16px; transition: all 0.2s ease; }
+            .footer { font-size: 12px; color: #86868b; margin-top: 24px; border-top: 1px solid #f2f2f7; padding-top: 32px; text-align: center; line-height: 1.8; }
+            .test-banner { background-color: #fef3c7; color: #92400e; padding: 12px; text-align: center; font-size: 12px; font-weight: bold; border-radius: 12px; margin-bottom: 24px; }
+            img { max-width: 100%; height: auto; border-radius: 12px; }
+            h2 { font-size: 22px; font-weight: 700; margin-top: 32px; margin-bottom: 16px; color: #000; }
+            ul { padding-left: 20px; margin-bottom: 24px; }
+            li { margin-bottom: 12px; }
         </style>
     </head>
     <body>

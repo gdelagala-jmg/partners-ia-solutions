@@ -1,19 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Globe, EyeOff, Video, Mic, Check, Search } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
+import AdminCard from '@/components/admin/ui/AdminCard'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
+import AdminFormShell from '@/components/admin/ui/AdminFormShell'
 import MediaForm from '@/components/admin/MediaForm'
-import AdminTable from '@/components/admin/AdminTable'
-import AdminActionMenu from '@/components/admin/AdminActionMenu'
+import AdminTable from '@/components/admin/ui/AdminTable'
+import { Plus, Video, Mic, Globe, Search, Trash2 } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
 
 export default function MediaManagementPage() {
+    const [search, setSearch] = useState('')
     const [mediaItems, setMediaItems] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
-    const [isEditing, setIsEditing] = useState(false)
-    const [currentMedia, setCurrentMedia] = useState<any>(null)
-    const [mainChannelHtml, setMainChannelHtml] = useState('')
-    const [savingSettings, setSavingSettings] = useState(false)
-    const [searchTerm, setSearchTerm] = useState('')
+    const [isFormOpen, setIsFormOpen] = useState(false)
 
     const fetchMedia = async () => {
         setLoading(true)
@@ -30,273 +32,171 @@ export default function MediaManagementPage() {
         }
     }
 
-    useEffect(() => {
-        fetchMedia()
-        fetchSettings()
-    }, [])
-
-    const fetchSettings = async () => {
-        try {
-            const res = await fetch('/api/settings?key=main_podcast_channel')
-            if (res.ok) {
-                const data = await res.json()
-                setMainChannelHtml(data.value || '')
-            }
-        } catch (error) {
-            console.error('Error fetching settings:', error)
-        }
-    }
-
-    const handleSaveSettings = async () => {
-        setSavingSettings(true)
-        try {
-            const res = await fetch('/api/settings', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ key: 'main_podcast_channel', value: mainChannelHtml })
-            })
-            if (res.ok) {
-                alert('Configuración guardada')
-            }
-        } catch (error) {
-            console.error('Error saving settings:', error)
-        } finally {
-            setSavingSettings(false)
-        }
-    }
-
-    const handleCreate = () => {
-        setCurrentMedia(null)
-        setIsEditing(true)
-    }
-
-    const handleEdit = (media: any) => {
-        setCurrentMedia(media)
-        setIsEditing(true)
-    }
-
     const handleDelete = async (id: string) => {
-        if (!confirm('¿Estás seguro de eliminar este elemento?')) return
-
+        if (!confirm('¿Estás seguro de eliminar este recurso?')) return
         try {
-            await fetch(`/api/media/${id}`, { method: 'DELETE' })
-            fetchMedia()
+            const res = await fetch(`/api/media/${id}`, { method: 'DELETE' })
+            if (res.ok) fetchMedia()
         } catch (error) {
             console.error('Error deleting media:', error)
         }
     }
 
-    const handleSubmit = async (data: any) => {
-        try {
-            const url = currentMedia ? `/api/media/${currentMedia.id}` : '/api/media'
-            const method = currentMedia ? 'PUT' : 'POST'
+    useEffect(() => {
+        fetchMedia()
+    }, [])
 
-            const res = await fetch(url, {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            })
-
-            if (res.ok) {
-                setIsEditing(false)
-                fetchMedia()
-            } else {
-                alert('Error al guardar')
-            }
-        } catch (error) {
-            console.error('Error saving media:', error)
-        }
-    }
-
-    const filteredMedia = mediaItems.filter(item => 
-        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredItems = mediaItems.filter(item => 
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.url.toLowerCase().includes(search.toLowerCase())
     )
 
     const columns = [
         {
-            header: 'Contenido',
+            header: 'Recurso',
+            className: 'max-w-[220px]',
             accessor: (item: any) => (
-                <div className="flex items-center gap-4">
-                    <div className={`p-2 rounded-xl bg-white border border-white shadow-sm flex items-center justify-center`}>
-                        {item.type === 'VIDEO' ? <Video size={18} className="text-[#1D1D1F]" /> : <Mic size={18} className="text-[#1D1D1F]" />}
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="hidden sm:flex w-9 h-9 bg-gray-100 rounded-lg items-center justify-center text-gray-400 group-hover:bg-white group-hover:shadow-sm transition-all shrink-0">
+                        {item.type?.toUpperCase() === 'VIDEO' ? <Video size={16} /> : <Mic size={16} />}
                     </div>
-                    <div>
-                        <div className="font-bold text-[#1D1D1F] tracking-tight">{item.title}</div>
-                        <div className="text-[10px] uppercase font-bold tracking-widest text-gray-400 mt-0.5">{item.type}</div>
+                    <div className="flex flex-col min-w-0">
+                        <span className="font-bold text-[#1D1D1F] truncate text-sm">{item.title}</span>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">{item.type}</span>
                     </div>
                 </div>
             )
         },
         {
-            header: 'Estado',
+            header: 'URL / Origen',
+            className: 'hidden lg:table-cell max-w-[240px]',
             accessor: (item: any) => (
-                item.published ? (
-                    <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs">
-                        <Globe size={14} />
-                        <span>PUBLICADO</span>
-                    </div>
-                ) : (
-                    <div className="flex items-center gap-1.5 text-gray-400 font-bold text-xs uppercase tracking-tighter">
-                        <EyeOff size={14} />
-                        <span>BORRADOR</span>
-                    </div>
-                )
+                <div className="flex items-center gap-2 text-gray-400 font-mono text-[11px] min-w-0">
+                    <Globe size={12} className="shrink-0" />
+                    <span className="truncate">{item.url}</span>
+                </div>
             )
         },
         {
             header: '',
-            className: 'text-right',
+            className: 'text-right w-12',
             accessor: (item: any) => (
-                <div className="flex items-center justify-end gap-2">
-                    <button
-                        onClick={() => window.open(item.url, '_blank')}
-                        className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50/50 rounded-xl transition-all"
-                        title="Ver publicación"
-                    >
-                        <Globe size={18} />
-                    </button>
-                    <AdminActionMenu
-                        actions={[
-                            {
-                                label: 'Editar',
-                                icon: Edit,
-                                onClick: () => handleEdit(item)
-                            },
-                            {
-                                label: 'Eliminar',
-                                icon: Trash2,
-                                onClick: () => handleDelete(item.id),
-                                variant: 'danger'
-                            }
-                        ]}
-                    />
-                </div>
+                <AdminActionMenu 
+                    actions={[
+                        {
+                            label: 'Eliminar',
+                            icon: Trash2,
+                            onClick: () => handleDelete(item.id),
+                            variant: 'danger'
+                        }
+                    ]}
+                />
             )
         }
     ]
 
-    return (
-        <div className="space-y-8 animate-in fade-in duration-700">
-            {/* Header Section */}
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-4 md:px-0">
-                <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 bg-white rounded-2xl border border-white shadow-sm flex items-center justify-center text-[#1D1D1F]">
-                            <Video size={24} />
-                        </div>
-                        <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Podcast y Media</h1>
-                    </div>
-                    <p className="text-gray-400 font-medium italic">Gestión de episodios, videos y contenido multimedia.</p>
-                </div>
-
-                {!isEditing && (
-                    <button
-                        onClick={handleCreate}
-                        className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#1D1D1F] text-white font-semibold text-sm shadow-lg hover:bg-black transition-all active:scale-95"
-                    >
-                        <Plus size={18} />
-                        <span>Añadir Multimedia</span>
-                    </button>
-                )}
-            </header>
-
-            {isEditing ? (
-                <MediaForm
-                    initialData={currentMedia}
-                    onSubmit={handleSubmit}
-                    onCancel={() => setIsEditing(false)}
+    if (isFormOpen) {
+        return (
+            <AdminFormShell
+                title="Añadir Recurso Media"
+                onCancel={() => setIsFormOpen(false)}
+            >
+                <MediaForm 
+                    onSubmit={async (data) => {
+                        try {
+                            const res = await fetch('/api/media', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data),
+                            })
+                            if (res.ok) {
+                                setIsFormOpen(false)
+                                fetchMedia()
+                            }
+                        } catch (error) {
+                            console.error('Error saving media:', error)
+                        }
+                    }}
+                    onCancel={() => setIsFormOpen(false)}
                 />
-            ) : (
-                <>
-                    {/* Canal Principal Config */}
-                    <div className="bg-white/60 backdrop-blur-md border border-white rounded-[2rem] p-8 shadow-sm group hover:shadow-xl transition-all duration-500">
-                        <div className="flex items-center justify-between mb-6">
-                            <div>
-                                <h2 className="text-xl font-bold text-[#1D1D1F] tracking-tight">Canal Principal de Podcast</h2>
-                                <p className="text-sm text-gray-400 font-medium mt-1">Configura el código embed para la vista general.</p>
-                            </div>
-                            <button
-                                onClick={handleSaveSettings}
-                                disabled={savingSettings}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-white text-xs font-bold text-[#1D1D1F] shadow-sm hover:shadow-md transition-all active:scale-95"
-                            >
-                                <Check size={16} className={savingSettings ? 'animate-pulse' : ''} />
-                                <span>{savingSettings ? 'Guardando...' : 'Guardar Cambios'}</span>
-                            </button>
+            </AdminFormShell>
+        )
+    }
+
+    return (
+        <div className="w-full max-w-full min-w-0 flex flex-col space-y-6">
+            <AdminToolbar 
+                title="Podcast y Media"
+                description="Gestión de contenidos audiovisuales y podcasts."
+                icon={Video}
+                actions={
+                    <button
+                        onClick={() => setIsFormOpen(true)}
+                        className="flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-[#1D1D1F] text-white rounded-xl text-sm font-bold hover:bg-black transition-all shadow-lg active:scale-95 whitespace-nowrap"
+                    >
+                        <Plus size={18} className="shrink-0" />
+                        <span className="hidden sm:inline">Añadir Contenido</span>
+                        <span className="sm:hidden">Nuevo</span>
+                    </button>
+                }
+            />
+
+            {/* Wave 5: admin-safe-container wraps the card to enforce overflow-x:hidden */}
+            <div className="admin-safe-container">
+                <AdminCard>
+                    {/* Search bar — min-w-0 prevents input from expanding the container */}
+                    <div className="flex items-center mb-6 min-w-0">
+                        <div className="relative w-full max-w-sm min-w-0">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 shrink-0" size={16} />
+                            <input 
+                                type="text" 
+                                placeholder="Buscar recurso..." 
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                className="w-full min-w-0 pl-10 pr-4 py-2 bg-gray-50/50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
+                            />
                         </div>
-                        <textarea
-                            value={mainChannelHtml}
-                            onChange={(e) => setMainChannelHtml(e.target.value)}
-                            className="w-full bg-white/40 backdrop-blur-sm border border-white focus:bg-white rounded-2xl p-5 text-sm font-mono text-gray-600 focus:outline-none transition-all h-32"
-                            placeholder="Inserta el <iframe> aquí..."
-                        />
                     </div>
 
-                    {/* Episodes List */}
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between px-4 md:px-0">
-                            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Episodios y Videos</h2>
-                            <div className="flex items-center gap-3">
-                                <div className="relative group">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1D1D1F] transition-colors" size={14} />
-                                    <input
-                                        type="text"
-                                        placeholder="Buscar..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-9 pr-4 py-1.5 bg-white/60 backdrop-blur-md border border-white rounded-xl text-xs font-bold focus:outline-none focus:bg-white transition-all w-48"
+                    <AdminTable
+                        columns={columns}
+                        data={filteredItems}
+                        loading={loading}
+                        emptyMessage="No se encontraron recursos media."
+                        renderMobileCard={(item) => (
+                            <div className="space-y-4">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="w-9 h-9 shrink-0 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+                                            {item.type?.toUpperCase() === 'VIDEO' ? <Video size={16} /> : <Mic size={16} />}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h3 className="text-sm font-bold text-[#1D1D1F] truncate">{item.title}</h3>
+                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{item.type}</p>
+                                        </div>
+                                    </div>
+                                    <AdminActionMenu 
+                                        actions={[
+                                            {
+                                                label: 'Eliminar',
+                                                icon: Trash2,
+                                                onClick: () => handleDelete(item.id),
+                                                variant: 'danger'
+                                            }
+                                        ]}
                                     />
                                 </div>
-                            </div>
-                        </div>
-
-                        <AdminTable
-                            columns={columns}
-                            data={filteredMedia}
-                            loading={loading}
-                            emptyMessage="No hay contenido multimedia registrado aún."
-                            renderMobileCard={(item) => (
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex items-center gap-3">
-                                            <div className="p-2 rounded-xl bg-white border border-white shadow-sm flex items-center justify-center">
-                                                {item.type === 'VIDEO' ? <Video size={16} /> : <Mic size={16} />}
-                                            </div>
-                                            <div>
-                                                <h3 className="font-bold text-[#1D1D1F] tracking-tight">{item.title}</h3>
-                                                <div className="text-[10px] uppercase font-bold tracking-widest text-gray-400">{item.type}</div>
-                                            </div>
-                                        </div>
-                                        {getStatusBadge(item.published)}
-                                    </div>
-                                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1D1D1F]/5">
-                                        <button
-                                            onClick={() => window.open(item.url, '_blank')}
-                                            className="px-3 py-1.5 text-xs font-bold text-blue-600 bg-blue-50 rounded-lg"
-                                        >
-                                            Ver Link
-                                        </button>
-                                        <AdminActionMenu
-                                            actions={[
-                                                { label: 'Editar', icon: Edit, onClick: () => handleEdit(item) },
-                                                { label: 'Eliminar', icon: Trash2, onClick: () => handleDelete(item.id), variant: 'danger' }
-                                            ]}
-                                        />
+                                <div className="pt-3 border-t border-gray-100/50">
+                                    <div className="flex items-center gap-2 text-gray-400 font-mono text-[10px] min-w-0">
+                                        <Globe size={12} className="shrink-0" />
+                                        <span className="truncate">{item.url}</span>
                                     </div>
                                 </div>
-                            )}
-                        />
-                    </div>
-                </>
-            )}
+                            </div>
+                        )}
+                    />
+                </AdminCard>
+            </div>
         </div>
-    )
-}
-
-function getStatusBadge(published: boolean) {
-    return published ? (
-        <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-100 uppercase tracking-widest">PUBLIK</span>
-    ) : (
-        <span className="bg-gray-100 text-gray-400 px-3 py-1 rounded-full text-[10px] font-bold border border-gray-200 uppercase tracking-widest">DRAFT</span>
     )
 }

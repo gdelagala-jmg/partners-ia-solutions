@@ -1,4 +1,4 @@
-import AdminLayoutShell from '@/components/admin/AdminLayoutShell'
+import AdminLayoutShell from '@/components/admin/ui/AdminLayoutShell'
 
 export default function AdminDashboardLayout({
     children,

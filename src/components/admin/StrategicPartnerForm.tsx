@@ -4,7 +4,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useEffect, useState } from 'react'
-import { Upload, X, Globe, User, Landmark, Tag, Palette, Layout, Settings, Handshake } from 'lucide-react'
+import { Upload, X, Globe, Landmark, Tag, Palette, Layout, Settings, Handshake, CheckCircle2, Share2, Eye } from 'lucide-react'
+import AdminFormShell from './ui/AdminFormShell'
+import AdminCard from './ui/AdminCard'
+import { cn } from '@/lib/utils'
 
 const partnerSchema = z.object({
     name: z.string().min(2, 'El nombre es obligatorio'),
@@ -66,9 +69,16 @@ export default function StrategicPartnerForm({ initialData, onSubmit, onCancel }
     })
 
     const nameValue = watch('name')
+    const logoUrl = watch('logoUrl')
+    const brandColor = watch('brandColor')
+    const isActive = watch('isActive')
+
     useEffect(() => {
         if (!initialData && nameValue) {
-            const slug = nameValue.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+            const slug = nameValue.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '')
             setValue('slug', slug, { shouldValidate: true })
         }
     }, [nameValue, setValue, initialData])
@@ -122,240 +132,231 @@ export default function StrategicPartnerForm({ initialData, onSubmit, onCancel }
     }
 
     return (
-        <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-xl shadow-gray-100/50">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
-                    <Handshake size={24} />
-                </div>
-                {initialData ? 'Editar Partner Estratégico' : 'Nuevo Partner Estratégico'}
-            </h2>
-
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Left Column */}
-                    <div className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                <Landmark size={16} className="text-gray-400" />
-                                Nombre del Partner *
-                            </label>
-                            <input
-                                {...register('name')}
-                                className="w-full bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-medium"
-                                placeholder="Ej. OpenAI, Google Cloud..."
-                            />
-                            {errors.name?.message && <p className="text-red-500 text-xs mt-1.5 font-bold">{String(errors.name.message)}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                <Tag size={16} className="text-gray-400" />
-                                Slug (identificador único) *
-                            </label>
-                            <input
-                                {...register('slug')}
-                                className="w-full bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-indigo-500 transition-all font-mono text-sm"
-                                placeholder="openai"
-                            />
-                            {errors.slug?.message && <p className="text-red-500 text-xs mt-1.5 font-bold">{String(errors.slug.message)}</p>}
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                    <Layout size={16} className="text-gray-400" />
-                                    Categoría
-                                </label>
-                                <select
-                                    {...register('category')}
-                                    className="w-full bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                                >
-                                    {CATEGORIES.map(cat => (
-                                        <option key={cat} value={cat}>{cat}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                    <Settings size={16} className="text-gray-400" />
-                                    Orden
-                                </label>
-                                <input
-                                    type="number"
-                                    {...register('displayOrder', { valueAsNumber: true })}
-                                    className="w-full bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                <Globe size={16} className="text-gray-400" />
-                                Website URL
-                            </label>
-                            <input
-                                {...register('websiteUrl')}
-                                className="w-full bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-indigo-500 transition-all font-mono text-sm"
-                                placeholder="https://www.partner.com"
-                            />
-                        </div>
-
-                        <div className="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100 space-y-4">
-                            <h3 className="text-sm font-black text-indigo-900 uppercase tracking-widest">Visibilidad</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" {...register('showInFooter')} className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                    <span className="text-sm font-bold text-gray-700 group-hover:text-indigo-600 transition-colors">Mostrar en Footer</span>
-                                </label>
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" {...register('showInHomepage')} className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                    <span className="text-sm font-bold text-gray-700 group-hover:text-indigo-600 transition-colors">Mostrar en Home</span>
-                                </label>
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" {...register('showInSolutions')} className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                    <span className="text-sm font-bold text-gray-700 group-hover:text-indigo-600 transition-colors">En Soluciones</span>
-                                </label>
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" {...register('isFeatured')} className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                    <span className="text-sm font-bold text-gray-700 group-hover:text-indigo-600 transition-colors">Destacado</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right Column */}
-                    <div className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                <Upload size={16} className="text-gray-400" />
-                                Logo del Partner
-                            </label>
-
+        <AdminFormShell
+            title={initialData ? 'Editar Partner' : 'Nuevo Partner'}
+            description={initialData ? `Gestión de identidad y presencia para ${initialData.name}` : 'Registra un nuevo socio estratégico en el ecosistema'}
+            onCancel={onCancel}
+            onSubmit={handleSubmit(onSubmit)}
+            isSubmitting={isSubmitting || uploading}
+            submitLabel={initialData ? 'Guardar Cambios' : 'Registrar Partner'}
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Sidebar */}
+                <div className="lg:col-span-1 space-y-6">
+                    <AdminCard title="Identidad Visual" icon={<Palette size={18} className="text-indigo-500" />}>
+                        <div className="space-y-6">
                             <div 
-                                className={`relative h-48 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-3 overflow-hidden ${
-                                    dragActive ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 bg-gray-50'
-                                }`}
+                                className={cn(
+                                    "relative h-48 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-3 overflow-hidden bg-gray-50/50",
+                                    dragActive ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:border-indigo-300 hover:bg-white"
+                                )}
                                 onDragEnter={handleDrag}
                                 onDragLeave={handleDrag}
                                 onDragOver={handleDrag}
                                 onDrop={handleDrop}
                             >
-                                {watch('logoUrl') ? (
+                                {logoUrl ? (
                                     <>
                                         <img 
-                                            src={watch('logoUrl')} 
+                                            src={logoUrl} 
                                             alt="Preview" 
-                                            className="absolute inset-0 w-full h-full object-contain p-4"
+                                            className="absolute inset-0 w-full h-full object-contain p-6"
                                         />
-                                        <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                                             <button 
                                                 type="button"
                                                 onClick={() => setValue('logoUrl', '')}
-                                                className="p-3 bg-red-500 text-white rounded-full hover:scale-110 transition-transform shadow-lg"
+                                                className="p-2.5 bg-red-500 text-white rounded-xl hover:scale-110 transition-transform shadow-lg"
                                             >
-                                                <X size={20} />
+                                                <X size={18} />
                                             </button>
-                                            <label className="p-3 bg-indigo-500 text-white rounded-full hover:scale-110 transition-transform cursor-pointer shadow-lg">
-                                                <Upload size={20} />
-                                                <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} />
-                                            </label>
                                         </div>
                                     </>
                                 ) : (
-                                    <>
-                                        <div className="p-4 bg-white rounded-2xl shadow-sm">
-                                            <Upload className={`w-8 h-8 ${uploading ? 'animate-bounce text-indigo-500' : 'text-gray-300'}`} />
+                                    <div className="flex flex-col items-center gap-2 px-4 text-center">
+                                        <div className={cn(
+                                            "p-4 rounded-2xl transition-all bg-white shadow-sm",
+                                            uploading ? "animate-pulse" : ""
+                                        )}>
+                                            <Upload className={cn("w-8 h-8", uploading ? "text-indigo-500" : "text-gray-300")} />
                                         </div>
-                                        <div className="text-center">
-                                            <p className="text-sm font-bold text-gray-700">{uploading ? 'Subiendo logo...' : 'Arrastra el logo aquí'}</p>
-                                            <label className="text-xs text-indigo-600 font-bold hover:underline cursor-pointer">
-                                                o haz clic para buscar
-                                                <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} />
-                                            </label>
-                                        </div>
-                                    </>
+                                        <label className="cursor-pointer">
+                                            <span className="text-[10px] font-black text-indigo-500 uppercase tracking-tighter hover:underline">
+                                                {uploading ? 'SUBIENDO...' : 'SUBIR LOGO'}
+                                            </span>
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} disabled={uploading} />
+                                        </label>
+                                    </div>
                                 )}
                             </div>
-                        </div>
 
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                <Palette size={16} className="text-gray-400" />
-                                Estética del Logo
-                            </label>
-                            <div className="space-y-4">
-                                <select
-                                    {...register('logoVariant')}
-                                    className="w-full bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                                >
-                                    {LOGO_VARIANTS.map(v => (
-                                        <option key={v.value} value={v.value}>{v.label}</option>
-                                    ))}
-                                </select>
+                            <div className="space-y-4 pt-2">
+                                <div className="space-y-2">
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Variante Visual</label>
+                                    <select
+                                        {...register('logoVariant')}
+                                        className="w-full bg-gray-50/50 border-gray-200 border rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm font-medium outline-none"
+                                    >
+                                        {LOGO_VARIANTS.map(v => (
+                                            <option key={v.value} value={v.value}>{v.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
                                 
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Color de Marca (HEX)</label>
-                                    <div className="flex gap-2">
+                                <div className="space-y-2">
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Color de Marca</label>
+                                    <div className="relative">
                                         <input
                                             {...register('brandColor')}
-                                            className="flex-1 bg-gray-50 border-gray-200 border rounded-xl px-4 py-2 text-gray-900 focus:outline-none focus:border-indigo-500 transition-all font-mono text-sm"
-                                            placeholder="#000000"
+                                            className="w-full bg-gray-50/50 border-gray-200 border rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm font-mono outline-none"
+                                            placeholder="#HEX"
                                         />
                                         <div 
-                                            className="w-10 h-10 rounded-xl border border-gray-100 shadow-sm"
-                                            style={{ backgroundColor: watch('brandColor') || '#eee' }}
+                                            className="absolute right-2.5 top-2 w-6 h-6 rounded-lg border border-gray-100 shadow-inner transition-colors"
+                                            style={{ backgroundColor: brandColor || '#eee' }}
                                         />
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </AdminCard>
 
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                <Tag size={16} className="text-gray-400" />
-                                Alt Text (SEO)
+                    <AdminCard title="Estado Global" icon={<Settings size={18} className="text-gray-400" />}>
+                        <div className={cn(
+                            "flex items-center justify-between p-4 rounded-2xl border transition-all",
+                            isActive ? "bg-emerald-50/50 border-emerald-100" : "bg-gray-50 border-gray-200"
+                        )}>
+                            <div className="space-y-0.5">
+                                <p className={cn("text-xs font-bold", isActive ? "text-emerald-900" : "text-gray-900")}>Partner Activo</p>
+                                <p className={cn("text-[10px] font-medium uppercase tracking-tight", isActive ? "text-emerald-600" : "text-gray-500")}>
+                                    {isActive ? 'Visible en web' : 'Oculto'}
+                                </p>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" {...register('isActive')} className="sr-only peer" />
+                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-emerald-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
                             </label>
-                            <input
-                                {...register('logoAlt')}
-                                className="w-full bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                                placeholder="Descriptivo para buscadores"
-                            />
                         </div>
-                    </div>
+                    </AdminCard>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-gray-100">
-                    <div className="flex items-center gap-3">
-                        <div className="relative inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                {...register('isActive')}
-                                id="isActive"
-                                className="sr-only peer"
-                            />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                            <label htmlFor="isActive" className="ml-3 text-sm font-bold text-gray-700">Partner Activo</label>
-                        </div>
-                    </div>
+                {/* Main Content */}
+                <div className="lg:col-span-2 space-y-6">
+                    <AdminCard title="Información General" icon={<Handshake size={18} className="text-indigo-500" />}>
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                    <Landmark size={12} className="text-gray-400" /> Nombre Comercial *
+                                </label>
+                                <input
+                                    {...register('name')}
+                                    placeholder="Ej. OpenAI, Microsoft, Google Cloud..."
+                                    className="w-full bg-gray-50/50 border-gray-200 border rounded-xl px-4 py-3 text-lg font-bold text-gray-900 focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm outline-none"
+                                />
+                                {errors.name && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase italic ml-1">{String(errors.name.message)}</p>}
+                            </div>
 
-                    <div className="flex items-center gap-4 w-full sm:w-auto">
-                        <button
-                            type="button"
-                            onClick={onCancel}
-                            className="flex-1 sm:flex-initial px-8 py-3 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition-all font-bold"
-                        >
-                            Cancelar
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isSubmitting || uploading}
-                            className="flex-1 sm:flex-initial px-10 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-black shadow-lg shadow-indigo-100 disabled:opacity-50 flex items-center justify-center gap-2"
-                        >
-                            {isSubmitting ? 'Guardando...' : initialData ? 'Actualizar Partner' : 'Guardar Partner'}
-                        </button>
-                    </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                        <Tag size={12} className="text-gray-400" /> Slug de URL
+                                    </label>
+                                    <input
+                                        {...register('slug')}
+                                        className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm outline-none"
+                                        placeholder="openai"
+                                    />
+                                    {errors.slug && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase italic ml-1">{String(errors.slug.message)}</p>}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                        <Globe size={12} className="text-gray-400" /> Sitio Web
+                                    </label>
+                                    <input
+                                        {...register('websiteUrl')}
+                                        className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm outline-none font-mono"
+                                        placeholder="https://..."
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                        <Layout size={12} className="text-gray-400" /> Clasificación
+                                    </label>
+                                    <select
+                                        {...register('category')}
+                                        className="w-full bg-gray-50/50 border-gray-200 border rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm font-medium outline-none"
+                                    >
+                                        {CATEGORIES.map(cat => (
+                                            <option key={cat} value={cat}>{cat}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                        <Settings size={12} className="text-gray-400" /> Orden Visual
+                                    </label>
+                                    <input
+                                        type="number"
+                                        {...register('displayOrder', { valueAsNumber: true })}
+                                        className="w-full bg-gray-50/50 border-gray-200 border rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm outline-none font-bold"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1 flex items-center gap-2">
+                                    <Share2 size={12} className="text-gray-400" /> Texto Alternativo (SEO)
+                                </label>
+                                <input
+                                    {...register('logoAlt')}
+                                    className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-400 transition-all shadow-sm outline-none"
+                                    placeholder="Logo de [Nombre Partner]..."
+                                />
+                            </div>
+                        </div>
+                    </AdminCard>
+
+                    <AdminCard title="Configuración de Visibilidad" icon={<Layout size={18} className="text-indigo-400" />}>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {[
+                                { id: 'showInFooter', label: 'Footer Global', icon: Layout, desc: 'Pie de página' },
+                                { id: 'showInHomepage', label: 'Home Showcase', icon: Globe, desc: 'Carrusel de inicio' },
+                                { id: 'showInSolutions', label: 'Catálogo Soluciones', icon: Settings, desc: 'Filtros técnicos' },
+                                { id: 'isFeatured', label: 'Partner Destacado', icon: Tag, desc: 'Prioridad visual' },
+                            ].map((item) => (
+                                <label 
+                                    key={item.id}
+                                    className={cn(
+                                        "flex items-start gap-4 p-4 rounded-2xl border transition-all cursor-pointer group",
+                                        watch(item.id as any) 
+                                            ? "bg-indigo-50/50 border-indigo-100 ring-1 ring-indigo-100" 
+                                            : "bg-white border-gray-100 hover:border-indigo-100 hover:bg-gray-50/50"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "p-2 rounded-xl border transition-all shadow-sm",
+                                        watch(item.id as any) ? "bg-white text-indigo-600 border-indigo-100" : "bg-gray-50 text-gray-300 border-gray-50"
+                                    )}>
+                                        <item.icon size={20} />
+                                    </div>
+                                    <div className="space-y-0.5">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-bold text-gray-900 leading-tight">{item.label}</span>
+                                            <input type="checkbox" {...register(item.id as any)} className="sr-only" />
+                                            {watch(item.id as any) && <CheckCircle2 size={14} className="text-emerald-500" />}
+                                        </div>
+                                        <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tight">{item.desc}</p>
+                                    </div>
+                                </label>
+                            ))}
+                        </div>
+                    </AdminCard>
                 </div>
-            </form>
-        </div>
+            </div>
+        </AdminFormShell>
     )
 }

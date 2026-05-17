@@ -1,8 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Globe, EyeOff, BookOpen } from 'lucide-react'
 import CourseForm from '@/components/admin/CourseForm'
+import AdminTable from '@/components/admin/ui/AdminTable'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
+import AdminStatusBadge from '@/components/admin/ui/AdminStatusBadge'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
+import { Plus, Edit, Trash2, BookOpen } from 'lucide-react'
 
 export default function CoursesAdminPage() {
     const [courses, setCourses] = useState<any[]>([])
@@ -70,104 +74,127 @@ export default function CoursesAdminPage() {
         }
     }
 
-    return (
-        <div>
-            <div className="flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="text-3xl font-bold text-white">Academia IA</h1>
-                    <p className="text-gray-400 mt-2">Gestiona los cursos y programas educativos.</p>
+    const columns = [
+        {
+            header: 'Curso',
+            accessor: (course: any) => (
+                <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 shrink-0 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center">
+                        <BookOpen size={18} className="text-blue-500" />
+                    </div>
+                    <div className="min-w-0">
+                        <div className="text-sm font-black text-[#1D1D1F] truncate pr-4">{course.title}</div>
+                        <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">{course.slug}</div>
+                    </div>
                 </div>
-                {!isEditing && (
+            )
+        },
+        {
+            header: 'Nivel / Duración',
+            className: 'hidden md:table-cell',
+            accessor: (course: any) => (
+                <div className="space-y-0.5">
+                    <div className="text-[11px] font-black text-gray-600 uppercase tracking-tight">{course.level}</div>
+                    <div className="text-[10px] text-gray-400 font-medium">{course.duration}</div>
+                </div>
+            )
+        },
+        {
+            header: 'Precio',
+            className: 'hidden sm:table-cell',
+            accessor: (course: any) => (
+                <span className="text-xs font-black text-blue-600 bg-blue-50/50 px-2.5 py-1 rounded-lg border border-blue-100">
+                    {course.price || 'Gratis'}
+                </span>
+            )
+        },
+        {
+            header: 'Estado',
+            className: 'hidden lg:table-cell',
+            accessor: (course: any) => (
+                <AdminStatusBadge 
+                    label={course.published ? 'Publicado' : 'Borrador'} 
+                    type={course.published ? 'success' : 'neutral'}
+                />
+            )
+        },
+        {
+            header: '',
+            className: 'text-right',
+            accessor: (course: any) => (
+                <AdminActionMenu
+                    actions={[
+                        { label: 'Editar', icon: <Edit size={16} />, onClick: () => handleEdit(course) },
+                        { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(course.id) },
+                    ]}
+                />
+            )
+        }
+    ]
+
+    return (
+        <div className="space-y-6">
+            <AdminToolbar
+                title="Academia IA"
+                description="Gestiona los cursos y programas educativos."
+                actions={
                     <button
                         onClick={handleCreate}
-                        className="flex items-center px-4 py-2 bg-cyan-500 text-black rounded-lg hover:bg-cyan-400 transition-colors font-medium shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                        className="px-5 py-2.5 rounded-xl bg-[#1D1D1F] text-white font-bold text-[11px] uppercase tracking-widest hover:bg-black transition-all shadow-lg"
                     >
-                        <Plus size={20} className="mr-2" />
-                        Nuevo Curso
+                        <Plus size={14} className="mr-2 inline-block" />
+                        <span>Nuevo Curso</span>
                     </button>
-                )}
-            </div>
+                }
+            />
 
             {isEditing ? (
-                <CourseForm
-                    initialData={currentCourse}
-                    onSubmit={handleSubmit}
-                    onCancel={() => setIsEditing(false)}
-                />
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <CourseForm
+                        initialData={currentCourse}
+                        onSubmit={handleSubmit}
+                        onCancel={() => setIsEditing(false)}
+                    />
+                </div>
             ) : (
-                <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg">
-                    {loading ? (
-                        <div className="p-8 text-center text-gray-400">Cargando cursos...</div>
-                    ) : courses.length === 0 ? (
-                        <div className="p-8 text-center text-gray-400">No hay cursos registrados.</div>
-                    ) : (
-
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-800">
-                                <thead className="bg-gray-950">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Curso</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nivel / Duración</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Precio</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Estado</th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Acciones</th>
-                                    </tr>
-                                </thead >
-                                <tbody className="divide-y divide-gray-800">
-                                    {courses.map((course) => (
-                                        <tr key={course.id} className="hover:bg-gray-800/50 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center">
-                                                    <div className="h-10 w-10 flex-shrink-0 bg-gray-800 rounded flex items-center justify-center mr-4">
-                                                        <BookOpen size={20} className="text-cyan-500" />
-                                                    </div>
-                                                    <div>
-                                                        <div className="text-sm font-medium text-white">{course.title}</div>
-                                                        <div className="text-xs text-gray-500">/{course.slug}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-300">{course.level}</div>
-                                                <div className="text-xs text-gray-500">{course.duration}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-400 font-medium">
-                                                {course.price || 'Gratis'}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                {course.published ? (
-                                                    <div className="flex items-center text-green-400 text-sm">
-                                                        <Globe size={16} className="mr-1" /> Publicado
-                                                    </div>
-                                                ) : (
-                                                    <div className="flex items-center text-gray-500 text-sm">
-                                                        <EyeOff size={16} className="mr-1" /> Borrador
-                                                    </div>
-                                                )}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <button
-                                                    onClick={() => handleEdit(course)}
-                                                    className="text-cyan-400 hover:text-cyan-300 mr-4"
-                                                >
-                                                    <Edit size={18} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(course.id)}
-                                                    className="text-red-400 hover:text-red-300"
-                                                >
-                                                    <Trash2 size={18} />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table >
-                        </div >
-                    )
-                    }
-                </div >
+                <AdminTable
+                    columns={columns}
+                    data={courses}
+                    loading={loading}
+                    emptyMessage="No hay cursos registrados."
+                    renderMobileCard={(course) => (
+                        <div className="space-y-4">
+                            <div className="flex items-start justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
+                                        <BookOpen size={20} />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-[#1D1D1F] leading-tight">{course.title}</h3>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">{course.level}</p>
+                                    </div>
+                                </div>
+                                <AdminActionMenu
+                                    actions={[
+                                        { label: 'Editar', icon: <Edit size={16} />, onClick: () => handleEdit(course) },
+                                        { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(course.id) },
+                                    ]}
+                                />
+                            </div>
+                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                                <AdminStatusBadge 
+                                    label={course.published ? 'Publicado' : 'Borrador'} 
+                                    type={course.published ? 'success' : 'neutral'}
+                                    className="text-[10px]"
+                                />
+                                <span className="text-xs font-black text-blue-600">
+                                    {course.price || 'Gratis'}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                />
             )}
-        </div >
+        </div>
     )
 }

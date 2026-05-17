@@ -1,25 +1,31 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Mail, Phone, Calendar, Archive, User, Target, AlertTriangle, TrendingUp, ChevronDown, ChevronUp, Filter } from 'lucide-react'
+import { Mail, Phone, Calendar, Archive, User, Target, AlertTriangle, TrendingUp, ChevronDown, ChevronUp, Filter, MoreHorizontal, CheckCircle2, Trash2, RotateCcw } from 'lucide-react'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
+import AdminCard from '@/components/admin/ui/AdminCard'
+import AdminStatusBadge from '@/components/admin/ui/AdminStatusBadge'
+import AdminFilterBar from '@/components/admin/ui/AdminFilterBar'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
+import { cn } from '@/lib/utils'
 
-const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-    NEW: { label: 'Nuevo', color: 'bg-blue-50/50 text-blue-600 border-blue-100' },
-    CONTACTED: { label: 'Contactado', color: 'bg-green-50/50 text-green-600 border-green-100' },
-    ARCHIVED: { label: 'Archivado', color: 'bg-gray-100/50 text-gray-500 border-gray-200' },
+const STATUS_CONFIG: Record<string, { label: string; type: 'info' | 'success' | 'default' }> = {
+    NEW: { label: 'Nuevo', type: 'info' },
+    CONTACTED: { label: 'Contactado', type: 'success' },
+    ARCHIVED: { label: 'Archivado', type: 'default' },
 }
 
-const SOURCE_LABELS: Record<string, { label: string; color: string }> = {
-    CONTACT: { label: 'Contacto', color: 'bg-purple-50/50 text-purple-600 border-purple-100' },
-    LEAD_CAPTURE: { label: 'Hoja de Ruta', color: 'bg-orange-50/50 text-orange-600 border-orange-100' },
-    DEMO_REQUEST: { label: 'Solicitud Demo', color: 'bg-indigo-50/50 text-indigo-600 border-indigo-100' },
-    ROADMAP_REQUEST: { label: 'Hoja de Ruta', color: 'bg-orange-50/50 text-orange-600 border-orange-100' },
+const SOURCE_CONFIG: Record<string, { label: string; color: string }> = {
+    CONTACT: { label: 'Contacto', color: 'text-purple-600 bg-purple-50' },
+    LEAD_CAPTURE: { label: 'Hoja de Ruta', color: 'text-orange-600 bg-orange-50' },
+    DEMO_REQUEST: { label: 'Solicitud Demo', color: 'text-indigo-600 bg-indigo-50' },
+    ROADMAP_REQUEST: { label: 'Hoja de Ruta', color: 'text-orange-600 bg-orange-50' },
 }
 
 const urgencyColor = (v?: number) => {
     if (!v) return 'text-gray-400'
-    if (v <= 3) return 'text-green-600'
-    if (v <= 6) return 'text-yellow-600'
+    if (v <= 3) return 'text-emerald-500'
+    if (v <= 6) return 'text-amber-500'
     if (v <= 8) return 'text-orange-500'
     return 'text-red-500'
 }
@@ -62,121 +68,216 @@ export default function LeadsPage() {
 
     const filteredLeads = filter === 'ALL' ? leads : leads.filter(l => l.status === filter)
 
-    const counts = {
-        ALL: leads.length,
-        NEW: leads.filter(l => l.status === 'NEW').length,
-        CONTACTED: leads.filter(l => l.status === 'CONTACTED').length,
-        ARCHIVED: leads.filter(l => l.status === 'ARCHIVED').length,
-    }
+    const filterOptions = [
+        { id: 'ALL' as const, label: 'Todos', count: leads.length },
+        { id: 'NEW' as const, label: 'Nuevos', count: leads.filter(l => l.status === 'NEW').length },
+        { id: 'CONTACTED' as const, label: 'Contactados', count: leads.filter(l => l.status === 'CONTACTED').length },
+        { id: 'ARCHIVED' as const, label: 'Archivados', count: leads.filter(l => l.status === 'ARCHIVED').length },
+    ]
 
     return (
-        <div className="space-y-8">
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4 md:px-0">
-                <div className="space-y-1">
-                    <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Contactos & Leads</h1>
-                    <p className="text-gray-400 mt-1 font-medium max-w-xl">Gestiona las interacciones y oportunidades capturadas desde la web.</p>
-                </div>
-            </header>
+        <div className="w-full max-w-full min-w-0 space-y-6 pb-6">
+            <AdminToolbar 
+                title="Contactos & Leads"
+                description="Gestiona las interacciones y oportunidades capturadas desde la web."
+                icon={Mail}
+            />
 
-            {/* Filter Tabs */}
-            <div className="flex gap-2 px-4 md:px-0 overflow-x-auto pb-2 scrollbar-hide no-scrollbar">
-                {(['ALL', 'NEW', 'CONTACTED', 'ARCHIVED'] as const).map(s => (
-                    <button
-                        key={s}
-                        onClick={() => setFilter(s)}
-                        className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-[13px] font-bold transition-all whitespace-nowrap ${filter === s
-                            ? 'bg-[#1D1D1F] text-white shadow-lg'
-                            : 'bg-white/60 backdrop-blur-md text-gray-500 border border-white hover:bg-white/80'
-                            }`}
-                    >
-                        {s === 'ALL' ? 'Todos' : STATUS_LABELS[s].label}
-                        <span className={`text-[10px] px-2 py-0.5 rounded-lg ${filter === s ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-400'}`}>
-                            {counts[s]}
-                        </span>
-                    </button>
-                ))}
+            <AdminFilterBar 
+                options={filterOptions}
+                activeId={filter}
+                onChange={setFilter}
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <AdminCard glass className="relative overflow-hidden group">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-blue-50 rounded-xl text-blue-600 transition-transform group-hover:scale-110 duration-500">
+                            <Mail size={18} />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Leads</p>
+                            <p className="text-xl font-black text-[#1D1D1F]">{leads.length}</p>
+                        </div>
+                    </div>
+                    <TrendingUp className="absolute -right-2 -bottom-2 text-blue-50/50 w-16 h-16 -rotate-12" />
+                </AdminCard>
+
+                <AdminCard glass className="relative overflow-hidden group">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-emerald-50 rounded-xl text-emerald-600 transition-transform group-hover:scale-110 duration-500">
+                            <Target size={18} />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nuevos (Pendientes)</p>
+                            <p className="text-xl font-black text-[#1D1D1F]">{leads.filter(l => l.status === 'NEW').length}</p>
+                        </div>
+                    </div>
+                    <div className="absolute top-2 right-2 flex gap-1">
+                        <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    </div>
+                </AdminCard>
+
+                <AdminCard glass className="relative overflow-hidden group">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-amber-50 rounded-xl text-amber-600 transition-transform group-hover:scale-110 duration-500">
+                            <Phone size={18} />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">En Seguimiento</p>
+                            <p className="text-xl font-black text-[#1D1D1F]">{leads.filter(l => l.status === 'CONTACTED').length}</p>
+                        </div>
+                    </div>
+                </AdminCard>
+
+                <AdminCard glass className="relative overflow-hidden group">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-purple-50 rounded-xl text-purple-600 transition-transform group-hover:scale-110 duration-500">
+                            <Calendar size={18} />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Últimos 7 días</p>
+                            <p className="text-xl font-black text-[#1D1D1F]">
+                                {leads.filter(l => {
+                                    const date = new Date(l.createdAt);
+                                    const now = new Date();
+                                    const diff = now.getTime() - date.getTime();
+                                    return diff < 7 * 24 * 60 * 60 * 1000;
+                                }).length}
+                            </p>
+                        </div>
+                    </div>
+                </AdminCard>
             </div>
 
             {loading ? (
-                <div className="text-gray-500">Cargando leads...</div>
+                <div className="flex items-center justify-center py-20">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1D1D1F]"></div>
+                </div>
             ) : filteredLeads.length === 0 ? (
-                <div className="bg-white border border-gray-100 rounded-xl p-12 text-center shadow-sm">
-                    <Mail className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+                <AdminCard className="p-20 text-center">
+                    <Mail className="mx-auto h-12 w-12 text-gray-200 mb-4" />
                     <h3 className="text-xl font-bold text-gray-900">No hay mensajes aún</h3>
                     <p className="text-gray-500">Los formularios enviados aparecerán aquí.</p>
-                </div>
+                </AdminCard>
             ) : (
-                <div className="grid gap-6 px-4 md:px-0">
+                <div className="space-y-4">
                     {filteredLeads.map((lead) => {
                         const isExpanded = expanded === lead.id
-                        const sourceInfo = SOURCE_LABELS[lead.source] || SOURCE_LABELS['CONTACT']
-                        const statusInfo = STATUS_LABELS[lead.status] || STATUS_LABELS['NEW']
+                        const sourceInfo = SOURCE_CONFIG[lead.source] || SOURCE_CONFIG['CONTACT']
+                        const statusConfig = STATUS_CONFIG[lead.status] || STATUS_CONFIG['NEW']
                         const isLeadCapture = lead.source === 'LEAD_CAPTURE'
 
+                        const actions = [
+                            {
+                                label: 'Marcar como Contactado',
+                                onClick: () => updateStatus(lead.id, 'CONTACTED'),
+                                icon: <CheckCircle2 size={14} />,
+                                show: lead.status !== 'CONTACTED'
+                            },
+                            {
+                                label: 'Archivar Lead',
+                                onClick: () => updateStatus(lead.id, 'ARCHIVED'),
+                                icon: <Archive size={14} />,
+                                show: lead.status !== 'ARCHIVED',
+                                variant: 'danger' as const
+                            },
+                            {
+                                label: 'Restaurar Lead',
+                                onClick: () => updateStatus(lead.id, 'NEW'),
+                                icon: <RotateCcw size={14} />,
+                                show: lead.status === 'ARCHIVED'
+                            }
+                        ].filter(a => a.show)
+
                         return (
-                            <div key={lead.id} className={`bg-white/70 backdrop-blur-xl border border-white rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all ${lead.status === 'ARCHIVED' ? 'opacity-60 saturate-50' : 'hover:bg-white/90'}`}>
-                                {/* Header */}
-                                <div className="p-7">
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-14 w-14 bg-white rounded-2xl flex items-center justify-center border border-gray-100 shadow-sm shrink-0">
-                                                <User className="text-[#1D1D1F]" size={24} />
+                            <AdminCard 
+                                key={lead.id} 
+                                noPadding
+                                className={cn(
+                                    "transition-all duration-300",
+                                    lead.status === 'ARCHIVED' && "opacity-60 grayscale-[0.5]"
+                                )}
+                            >
+                                <div className="p-5 md:p-6">
+                                    <div className="flex items-start justify-between gap-3">
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <div className="h-11 w-11 bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100 shrink-0">
+                                                <User className="text-gray-400" size={18} />
                                             </div>
-                                            <div>
-                                                <h3 className="text-xl font-bold text-[#1D1D1F] tracking-tight">{lead.name}</h3>
-                                                <div className="flex items-center flex-wrap gap-4 mt-1.5">
-                                                    <span className="flex items-center text-xs text-gray-400 font-medium tracking-tight">
-                                                        <Mail size={13} className="mr-2 opacity-50" /> {lead.email}
+                                            <div className="min-w-0">
+                                                <h3 className="text-base font-bold text-[#1D1D1F] tracking-tight truncate">{lead.name}</h3>
+                                                <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-1">
+                                                    <span className="flex items-center text-xs text-gray-500 min-w-0">
+                                                        <Mail size={11} className="mr-1 opacity-60 shrink-0" />
+                                                        <span className="truncate max-w-[160px] sm:max-w-none">{lead.email}</span>
                                                     </span>
                                                     {lead.phone && (
-                                                        <span className="flex items-center text-xs text-gray-400 font-medium tracking-tight">
-                                                            <Phone size={13} className="mr-2 opacity-50" /> {lead.phone}
+                                                        <span className="flex items-center text-xs text-gray-500 whitespace-nowrap">
+                                                            <Phone size={11} className="mr-1 opacity-60 shrink-0" /> {lead.phone}
                                                         </span>
                                                     )}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-col items-end gap-3 text-right">
-                                            <div className="flex items-center gap-2">
-                                                <span className={`text-[10px] px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider border border-white shadow-sm ${sourceInfo.color}`}>
+                                        <div className="flex flex-col md:flex-row items-end md:items-center gap-3">
+                                            <div className="hidden sm:flex items-center gap-2">
+                                                <span className={cn(
+                                                    "text-[10px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider",
+                                                    sourceInfo.color
+                                                )}>
                                                     {sourceInfo.label}
                                                 </span>
-                                                <span className={`text-[10px] px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider border border-white shadow-sm ${statusInfo.color}`}>
-                                                    {statusInfo.label}
-                                                </span>
+                                                <AdminStatusBadge 
+                                                    label={statusConfig.label} 
+                                                    type={statusConfig.type} 
+                                                />
                                             </div>
-                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest flex items-center">
-                                                {new Date(lead.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                            </span>
+                                            <AdminActionMenu actions={actions} />
                                         </div>
                                     </div>
 
-                                    {/* Lead quick preview (Contextual) */}
-                                    {(isLeadCapture || lead.solutionTitle || lead.company) && (
-                                        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {/* Mobile labels */}
+                                    <div className="flex sm:hidden items-center gap-2 mt-4 flex-wrap">
+                                        <span className={cn(
+                                            "text-[9px] px-2 py-0.5 rounded-lg font-bold uppercase tracking-widest border",
+                                            sourceInfo.color.replace('text-', 'border-').split(' ')[0] + '/20',
+                                            sourceInfo.color
+                                        )}>
+                                            {sourceInfo.label}
+                                        </span>
+                                        <AdminStatusBadge 
+                                            label={statusConfig.label} 
+                                            type={statusConfig.type} 
+                                        />
+                                    </div>
+
+                                    {/* Quick Info Grid */}
+                                    {(lead.company || lead.solutionTitle || lead.urgency) && (
+                                        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
                                             {lead.company && (
-                                                <div className="bg-white/40 border border-white rounded-2xl p-4 shadow-sm">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Empresa</p>
+                                                <div className="bg-gray-50/50 rounded-xl p-3 border border-gray-100">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Empresa</p>
                                                     <p className="text-[13px] font-bold text-[#1D1D1F] line-clamp-1">{lead.company}</p>
                                                 </div>
                                             )}
                                             {lead.solutionTitle && (
-                                                <div className="bg-blue-50/40 border border-blue-100 rounded-2xl p-4 shadow-sm">
-                                                    <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1.5">Solución</p>
+                                                <div className="bg-blue-50/50 rounded-xl p-3 border border-blue-100">
+                                                    <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Solución</p>
                                                     <p className="text-[13px] font-bold text-blue-700 line-clamp-1">{lead.solutionTitle}</p>
                                                 </div>
                                             )}
                                             {lead.scope && (
-                                                <div className="bg-white/40 border border-white rounded-2xl p-4 shadow-sm">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Ámbito</p>
+                                                <div className="bg-gray-50/50 rounded-xl p-3 border border-gray-100">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Ámbito</p>
                                                     <p className="text-[13px] font-bold text-[#1D1D1F]">{lead.scope}</p>
                                                 </div>
                                             )}
                                             {lead.urgency && (
-                                                <div className="bg-white/40 border border-white rounded-2xl p-4 shadow-sm">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Urgencia</p>
-                                                    <p className={`text-lg font-black ${urgencyColor(lead.urgency)}`}>
+                                                <div className="bg-gray-50/50 rounded-xl p-3 border border-gray-100">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Urgencia</p>
+                                                    <p className={cn("text-lg font-black leading-none", urgencyColor(lead.urgency))}>
                                                         {lead.urgency}<span className="text-[10px] opacity-40 ml-0.5">/10</span>
                                                     </p>
                                                 </div>
@@ -187,61 +288,58 @@ export default function LeadsPage() {
                                     {/* Expand toggle */}
                                     <button
                                         onClick={() => setExpanded(isExpanded ? null : lead.id)}
-                                        className="mt-6 w-full py-2 bg-white/50 border border-white rounded-xl flex items-center justify-center gap-2 text-[11px] font-bold text-gray-400 hover:text-[#1D1D1F] hover:bg-white transition-all uppercase tracking-widest"
+                                        className="mt-6 w-full py-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-xl flex items-center justify-center gap-2 text-[11px] font-bold text-gray-500 hover:text-[#1D1D1F] transition-all uppercase tracking-widest"
                                     >
                                         {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                                        {isExpanded ? 'Ocultar detalle' : 'Explorar respuesta completa'}
+                                        {isExpanded ? 'Ocultar detalle' : 'Ver respuesta completa'}
                                     </button>
                                 </div>
 
                                 {isExpanded && (
-                                    <div className="border-t border-white bg-white/30 p-7 space-y-6">
+                                    <div className="border-t border-gray-50 bg-gray-50/30 p-5 md:p-6 space-y-6 animate-in slide-in-from-top-2 duration-300">
                                         {lead.bottleneck && (
                                             <div>
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2.5">Análisis de Cuello de Botella</p>
-                                                <p className="text-[14px] text-gray-700 bg-white/60 backdrop-blur-sm border border-white rounded-2xl p-5 leading-relaxed shadow-sm">{lead.bottleneck}</p>
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Análisis de Cuello de Botella</p>
+                                                <div className="text-[14px] text-gray-700 bg-white border border-gray-100 rounded-2xl p-4 leading-relaxed shadow-sm">
+                                                    {lead.bottleneck}
+                                                </div>
                                             </div>
                                         )}
                                         {(lead.desiredResult || lead.message) && (
                                             <div>
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2.5">
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
                                                     {lead.desiredResult ? 'Objetivos y Resultados' : 'Mensaje del Usuario'}
                                                 </p>
-                                                <p className="text-[14px] text-gray-700 bg-white/60 backdrop-blur-sm border border-white rounded-2xl p-5 leading-relaxed whitespace-pre-wrap shadow-sm">
+                                                <div className="text-[14px] text-gray-700 bg-white border border-gray-100 rounded-2xl p-4 leading-relaxed whitespace-pre-wrap shadow-sm">
                                                     {lead.desiredResult || lead.message}
-                                                </p>
+                                                </div>
                                             </div>
                                         )}
 
-                                        <div className="flex items-center gap-4 pt-2">
+                                        <div className="flex items-center gap-3 pt-2">
                                             {lead.status !== 'CONTACTED' && (
                                                 <button
                                                     onClick={() => updateStatus(lead.id, 'CONTACTED')}
-                                                    className="px-6 py-2.5 bg-green-500 text-white rounded-xl text-xs font-bold hover:bg-green-600 transition-all shadow-md shadow-green-100"
+                                                    className="px-5 py-2 bg-emerald-500 text-white rounded-xl text-xs font-bold hover:bg-emerald-600 transition-all shadow-md shadow-emerald-100"
                                                 >
-                                                    Marcar como Contactado
+                                                    Contactado
                                                 </button>
                                             )}
                                             {lead.status !== 'ARCHIVED' && (
                                                 <button
                                                     onClick={() => updateStatus(lead.id, 'ARCHIVED')}
-                                                    className="px-6 py-2.5 bg-white text-gray-400 rounded-xl text-xs font-bold hover:text-gray-900 border border-gray-100 transition-all shadow-sm"
+                                                    className="px-5 py-2 bg-white text-gray-500 rounded-xl text-xs font-bold hover:text-red-500 border border-gray-200 transition-all shadow-sm"
                                                 >
-                                                    Archivar Lead
+                                                    Archivar
                                                 </button>
                                             )}
-                                            {lead.status === 'ARCHIVED' && (
-                                                <button
-                                                    onClick={() => updateStatus(lead.id, 'NEW')}
-                                                    className="px-6 py-2.5 bg-[#1D1D1F] text-white rounded-xl text-xs font-bold hover:bg-black transition-all"
-                                                >
-                                                    Restaurar Lead
-                                                </button>
-                                            )}
+                                            <span className="ml-auto text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                                                Recibido: {new Date(lead.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                            </span>
                                         </div>
                                     </div>
                                 )}
-                            </div>
+                            </AdminCard>
                         )
                     })}
                 </div>
@@ -249,3 +347,4 @@ export default function LeadsPage() {
         </div>
     )
 }
+

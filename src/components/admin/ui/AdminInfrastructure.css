@@ -1,0 +1,57 @@
+/* ============================================
+   ADMIN UX INFRASTRUCTURE
+   Responsive Hardening & Density Layer
+   ============================================ */
+
+/* Overflow Safety Primitives */
+.admin-safe-container {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden; /* Strict containment of child overflows */
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-horizontal-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Density Tokens */
+.admin-card-padding {
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .admin-card-padding {
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-card-padding {
+    padding: 1.5rem;
+  }
+}
+
+/* Text Hardening */
+.admin-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-width: 100%;
+}
+
+/* Scroll Safety Overrides */
+html.admin-active, 
+body.admin-active {
+  overflow: auto !important;
+  height: auto !important;
+}
+
+.admin-main-scroll {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}

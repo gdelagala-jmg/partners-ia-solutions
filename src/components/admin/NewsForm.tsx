@@ -4,8 +4,11 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { Calendar, Upload, X, Loader2, Tag, Plus, Code2, Eye, Zap, Share2, CheckCircle2 } from 'lucide-react'
+import { Calendar, Upload, X, Loader2, Tag, Plus, Code2, Eye, Zap, Share2, CheckCircle2, FileText, Settings2, Globe, Database, Image as ImageIcon } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import AdminFormShell from './ui/AdminFormShell'
+import AdminCard from './ui/AdminCard'
+import { cn } from '@/lib/utils'
 
 // Dynamic import so SSR doesn't try to load browser-only Quill
 const ReactQuill = dynamic(() => import('react-quill-new'), {
@@ -86,17 +89,17 @@ function ChipInput({
 
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">{label}</label>
             {/* Presets */}
             {presets && (
-                <div className="flex flex-wrap gap-1.5 mb-2">
+                <div className="flex flex-wrap gap-1.5 mb-3">
                     {presets.map(p => (
                         <button
                             key={p}
                             type="button"
                             onClick={() => !chips.includes(p) && onAdd(p)}
-                            className={`text-xs px-2.5 py-1 rounded-full border transition-all ${chips.includes(p)
-                                ? 'bg-blue-600 text-white border-blue-600'
+                            className={`text-[11px] px-2.5 py-1 rounded-full border transition-all ${chips.includes(p)
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
                                 : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400 hover:text-blue-600'
                                 }`}
                         >
@@ -106,15 +109,15 @@ function ChipInput({
                 </div>
             )}
             {/* Input + chips area */}
-            <div className="flex flex-wrap gap-1.5 items-center min-h-[42px] bg-white border border-gray-300 rounded-lg px-3 py-2 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+            <div className="flex flex-wrap gap-1.5 items-center min-h-[42px] bg-gray-50/50 border border-gray-200 rounded-xl px-3 py-2 focus-within:bg-white focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-50 transition-all">
                 {chips.map(chip => (
                     <span
                         key={chip}
-                        className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full px-2.5 py-0.5 text-xs font-medium"
+                        className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-lg px-2 py-0.5 text-xs font-semibold"
                     >
                         {chip}
                         <button type="button" onClick={() => onRemove(chip)} className="text-blue-400 hover:text-red-500 transition-colors">
-                            <X size={11} />
+                            <X size={12} />
                         </button>
                     </span>
                 ))}
@@ -126,7 +129,6 @@ function ChipInput({
                     className="flex-1 min-w-[120px] bg-transparent text-sm text-gray-800 placeholder-gray-400 outline-none border-none focus:ring-0"
                 />
             </div>
-            <p className="text-xs text-gray-400 mt-1">Pulsa Enter o coma para añadir</p>
         </div>
     )
 }
@@ -172,7 +174,7 @@ function SelectableMetadata({
 
     return (
         <div className="relative">
-            <label className="block text-[10px] font-bold text-blue-600 mb-2 uppercase tracking-wider">{label}</label>
+            <label className="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-widest">{label}</label>
             <div className="relative">
                 <input
                     type="text"
@@ -181,20 +183,20 @@ function SelectableMetadata({
                     onFocus={() => setIsOpen(true)}
                     onBlur={() => setTimeout(() => setIsOpen(false), 200)}
                     placeholder={placeholder}
-                    className="block w-full text-sm bg-white border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-10 px-3 pr-8"
+                    className="block w-full text-sm bg-gray-50/50 border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-10 px-3 pr-8"
                 />
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
                     <Plus size={14} className="text-gray-400" />
                 </div>
 
                 {isOpen && (filteredOptions.length > 0 || (localValue && !options.includes(localValue))) && (
-                    <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-48 overflow-y-auto py-1 animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute z-20 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-2xl max-h-48 overflow-y-auto py-1 animate-in fade-in zoom-in-95 duration-150">
                         {filteredOptions.map(opt => (
                             <button
                                 key={opt}
                                 type="button"
                                 onMouseDown={() => handleSelect(opt)}
-                                className={`w-full text-left px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors ${value === opt ? 'bg-blue-50 text-blue-700 font-medium' : ''}`}
+                                className={`w-full text-left px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors ${value === opt ? 'bg-blue-50 text-blue-700 font-bold' : ''}`}
                             >
                                 {opt}
                             </button>
@@ -207,7 +209,7 @@ function SelectableMetadata({
                                     onAddOption(localValue)
                                     handleSelect(localValue)
                                 }}
-                                className="w-full text-left px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors border-t border-gray-100 italic"
+                                className="w-full text-left px-4 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors border-t border-gray-50 italic"
                             >
                                 <Plus size={12} className="inline mr-1" /> Añadir "{localValue}"
                             </button>
@@ -417,7 +419,6 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     const lastContentLength = useRef(htmlContent.length)
     useEffect(() => {
         const currentLength = htmlContent.length
-        // If content jumps significantly (more than 200 chars), it's likely a paste
         if (currentLength > 200 && lastContentLength.current < 50) {
             analyzeContent()
         }
@@ -512,7 +513,6 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     }
 
     const handleFormSubmit = (data: NewsFormValues) => {
-        // Sanitize publishedAt: if it's an empty string, send as null
         const sanitizedData = {
             ...data,
             content: htmlContent,
@@ -524,296 +524,293 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     }
 
     return (
-        <form onSubmit={handleSubmit(handleFormSubmit, onError)} className="space-y-6 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-            {/* Title + Slug */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Título</label>
-                    <input
-                        {...register('title')}
-                        onChange={(e) => { register('title').onChange(e); handleTitleChange(e) }}
-                        className="mt-1 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Slug (URL)</label>
-                    <input
-                        {...register('slug')}
-                        className="mt-1 block w-full bg-gray-50 border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    {errors.slug && <p className="text-red-500 text-xs mt-1">{errors.slug.message}</p>}
-                </div>
-            </div>
-
-            {/* Categories + Tags */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ChipInput
-                    label="Categorías"
-                    chips={categories}
-                    onAdd={v => setCategories(prev => [...prev, v])}
-                    onRemove={v => setCategories(prev => prev.filter(c => c !== v))}
-                    placeholder="Escribe una categoría..."
-                    presets={CATEGORY_PRESETS}
-                />
-                <ChipInput
-                    label="Etiquetas"
-                    chips={tags}
-                    onAdd={v => setTags(prev => [...prev, v])}
-                    onRemove={v => setTags(prev => prev.filter(t => t !== v))}
-                    placeholder="Escribe una etiqueta..."
-                    presets={['OpenAI', 'Google', 'Microsoft', 'Nvidia', 'Meta', 'Tesla', 'Amazon', 'IBM', 'Apple', 'Anthropic', 'Hugging Face', 'xAI', 'Mistral', 'Cohere']}
-                />
-            </div>
-
-            {/* Date + Image */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Fecha de Publicación</label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Calendar className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <input
-                            type="datetime-local"
-                            {...register('publishedAt')}
-                            className="pl-10 block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">Dejar en blanco para usar la fecha actual al publicar.</p>
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Imagen Destacada</label>
-                    <div className="space-y-3">
-                        <input
-                            {...register('coverImage')}
-                            placeholder="https://..."
-                            className="block w-full bg-white border-gray-300 rounded-lg shadow-sm text-gray-900 focus:ring-blue-500 text-sm"
-                        />
-                        <div
-                            onDrop={handleDrop}
-                            onDragOver={e => e.preventDefault()}
-                            className="flex items-center gap-2"
-                        >
-                            <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 border border-gray-300">
-                                {uploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-                                {uploading ? 'Subiendo...' : 'Subir imagen'}
-                                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
-                            </label>
-                            <span className="text-xs text-gray-500">o arrastra un archivo aquí</span>
-                        </div>
-                        {coverImageUrl && (
-                            <div className="relative w-full h-40 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 group">
-                                <img src={coverImageUrl} alt="Preview" className="w-full h-full object-cover"
-                                    onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/400x200?text=Error')} />
-                                <button type="button" onClick={() => setValue('coverImage', '')}
-                                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <X size={14} />
-                                </button>
+        <AdminFormShell
+            title={initialData ? 'Editar Noticia' : 'Nueva Noticia'}
+            description={initialData ? `ID: ${initialData.id}` : 'Publica contenido de actualidad sobre IA'}
+            onCancel={onCancel}
+            onSubmit={handleSubmit(handleFormSubmit, onError)}
+            isSubmitting={isSubmitting}
+            submitLabel={initialData ? 'Actualizar Noticia' : 'Publicar Noticia'}
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main Content Column */}
+                <div className="lg:col-span-2 space-y-6">
+                    <AdminCard title="Contenido Principal">
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">Título de la Noticia</label>
+                                <input
+                                    {...register('title')}
+                                    onChange={(e) => {
+                                        register('title').onChange(e);
+                                        handleTitleChange(e);
+                                    }}
+                                    placeholder="Ej: Google lanza Gemini 1.5 Pro..."
+                                    className="block w-full bg-gray-50/50 border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-12 px-4 text-lg font-bold"
+                                />
+                                {errors.title && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.title.message}</p>}
                             </div>
-                        )}
-                    </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">Slug (URL amigable)</label>
+                                <div className="relative">
+                                    <input
+                                        {...register('slug')}
+                                        placeholder="google-lanza-gemini-pro"
+                                        className="block w-full bg-gray-50/50 border-gray-200 rounded-xl text-gray-500 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-10 px-3 pl-8 font-mono text-xs"
+                                    />
+                                    <Globe className="absolute left-2.5 top-3 text-gray-400" size={14} />
+                                </div>
+                                {errors.slug && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.slug.message}</p>}
+                            </div>
+
+                            <div>
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="block text-sm font-semibold text-gray-700">Cuerpo de la Noticia</label>
+                                    <div className="flex bg-gray-100 p-1 rounded-lg">
+                                        <button
+                                            type="button"
+                                            onClick={() => setEditorMode('visual')}
+                                            className={cn(
+                                                "px-3 py-1 text-[11px] font-bold rounded-md transition-all",
+                                                editorMode === 'visual' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                                            )}
+                                        >
+                                            Visual
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setEditorMode('html')}
+                                            className={cn(
+                                                "px-3 py-1 text-[11px] font-bold rounded-md transition-all",
+                                                editorMode === 'html' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                                            )}
+                                        >
+                                            HTML
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                {editorMode === 'visual' ? (
+                                    <div className="rounded-xl overflow-hidden border border-gray-200 bg-white">
+                                        <ReactQuill
+                                            theme="snow"
+                                            value={htmlContent}
+                                            onChange={handleQuillChange}
+                                            modules={quillModules}
+                                            className="min-h-[400px]"
+                                        />
+                                    </div>
+                                ) : (
+                                    <textarea
+                                        value={htmlContent}
+                                        onChange={handleHtmlChange}
+                                        rows={18}
+                                        spellCheck={false}
+                                        className="block w-full bg-gray-900 text-blue-100 border border-gray-800 rounded-xl font-mono text-sm p-5 focus:ring-2 focus:ring-blue-500 resize-none"
+                                        placeholder="<!-- Código HTML -->"
+                                    />
+                                )}
+                                {errors.content && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.content.message}</p>}
+                            </div>
+                        </div>
+                    </AdminCard>
+
+                    <AdminCard title="Multimedia y Podcast">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-3">Imagen de Portada</label>
+                                <div
+                                    onDragOver={e => e.preventDefault()}
+                                    onDrop={handleDrop}
+                                    className="relative aspect-video rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 flex flex-col items-center justify-center gap-3 overflow-hidden group hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer"
+                                    onClick={() => document.getElementById('cover-upload')?.click()}
+                                >
+                                    {coverImageUrl ? (
+                                        <>
+                                            <img src={coverImageUrl} alt="Cover" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <div className="bg-white/90 backdrop-blur p-2 rounded-full text-gray-900 shadow-xl">
+                                                    <Upload size={20} />
+                                                </div>
+                                            </div>
+                                            <button 
+                                                type="button" 
+                                                onClick={(e) => { e.stopPropagation(); setValue('coverImage', ''); }}
+                                                className="absolute top-3 right-3 p-1.5 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="p-4 bg-white rounded-2xl shadow-sm text-blue-500 group-hover:scale-110 transition-transform">
+                                                {uploading ? <Loader2 className="animate-spin" size={28} /> : <ImageIcon size={28} />}
+                                            </div>
+                                            <div className="text-center">
+                                                <p className="text-sm font-bold text-gray-700">{uploading ? 'Subiendo...' : 'Subir Imagen'}</p>
+                                                <p className="text-[11px] text-gray-400">O arrastra y suelta aquí</p>
+                                            </div>
+                                        </>
+                                    )}
+                                    <input id="cover-upload" type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 flex items-start gap-4">
+                                    <div className="p-2.5 bg-white rounded-xl shadow-sm text-indigo-600">
+                                        <Zap size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="block text-sm font-bold text-indigo-900 mb-1">Audio Podcast (NotebookLM)</label>
+                                        <input
+                                            {...register('podcastAudioUrl')}
+                                            placeholder="URL de audio o resumen..."
+                                            className="block w-full bg-white border-indigo-100 rounded-lg shadow-sm text-indigo-900 focus:ring-indigo-500 text-sm h-10 px-3"
+                                        />
+                                        <p className="text-[11px] text-indigo-600/70 mt-2 leading-relaxed">
+                                            Al guardar, el sistema procesará este enlace para distribuirlo automáticamente a Spotify.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </AdminCard>
                 </div>
 
-                <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-start gap-3">
-                    <Zap size={20} className="text-blue-500 mt-0.5 shrink-0" />
-                    <div className="flex-1">
-                        <label className="block text-sm font-semibold text-blue-900 mb-1">Enlace Audio Podcast (NotebookLM)</label>
-                        <input
-                            {...register('podcastAudioUrl')}
-                            placeholder="https://notebooklm.google.com/..."
-                            className="block w-full bg-white border-blue-200 rounded-lg shadow-sm text-blue-900 focus:ring-blue-500 text-sm h-10 px-3"
-                        />
-                        <p className="text-[11px] text-blue-600 mt-1.5 leading-relaxed">
-                            Pega aquí el enlace de descarga o la URL del resumen de audio de NotebookLM. 
-                            Al guardar, el sistema lo procesará y lo enviará automáticamente a tu canal de Spotify.
-                        </p>
-                    </div>
-                </div>
-            </div>
+                {/* Sidebar Column */}
+                <div className="space-y-6">
+                    <AdminCard title="Publicación" headerClassName="bg-gray-50/50">
+                        <div className="space-y-5">
+                            <div className="flex items-center justify-between p-3 bg-blue-50/30 rounded-xl border border-blue-100">
+                                <div className="flex items-center gap-3">
+                                    <div className={cn(
+                                        "w-2.5 h-2.5 rounded-full animate-pulse",
+                                        watch('published') ? "bg-green-500" : "bg-gray-300"
+                                    )} />
+                                    <label htmlFor="published" className="text-sm font-bold text-gray-700 cursor-pointer">Visibilidad Pública</label>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    id="published"
+                                    {...register('published')}
+                                    className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded-lg cursor-pointer"
+                                />
+                            </div>
 
-            {/* AI Meta Tags */}
-            <div className="bg-gray-50/80 p-5 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-                <div className="flex items-center justify-between border-b border-gray-200/60 pb-4">
-                    <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                        <Zap size={18} className="text-blue-600 fill-blue-600/20" />
-                        Metadatos Inteligentes
-                    </h3>
-                    <div className="flex flex-col items-center sm:items-end gap-2 text-right">
-                        <div className="flex gap-2">
-                            {initialData?.id && (
+                            <div>
+                                <label className="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Fecha Programada</label>
+                                <div className="relative">
+                                    <input
+                                        type="datetime-local"
+                                        {...register('publishedAt')}
+                                        className="block w-full bg-gray-50/50 border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-10 px-3 pl-10 text-sm"
+                                    />
+                                    <Calendar className="absolute left-3 top-2.5 text-gray-400" size={16} />
+                                </div>
+                            </div>
+                        </div>
+                    </AdminCard>
+
+                    <AdminCard title="Categorización" headerClassName="bg-gray-50/50">
+                        <div className="space-y-6">
+                            <ChipInput
+                                label="Categorías"
+                                chips={categories}
+                                onAdd={val => setCategories([...categories, val])}
+                                onRemove={val => setCategories(categories.filter(c => c !== val))}
+                                presets={CATEGORY_PRESETS}
+                                placeholder="Añadir categoría..."
+                            />
+
+                            <ChipInput
+                                label="Tags / Etiquetas"
+                                chips={tags}
+                                onAdd={val => setTags([...tags, val])}
+                                onRemove={val => setTags(tags.filter(t => t !== val))}
+                                placeholder="Añadir tag..."
+                            />
+                        </div>
+                    </AdminCard>
+
+                    <AdminCard title="IA Insight" headerClassName="bg-blue-50/50">
+                        <div className="space-y-4">
+                            <div className="flex gap-2 mb-2">
                                 <button
                                     type="button"
-                                    onClick={handleManualSync}
-                                    disabled={syncing}
-                                    title="Sincronizar con Google Business (Make.com)"
-                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all border shadow-sm transform hover:scale-[1.02] active:scale-[0.98] ${
-                                        syncSuccess 
-                                            ? 'bg-green-50 border-green-200 text-green-700' 
-                                            : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-                                    }`}
+                                    onClick={analyzeContent}
+                                    disabled={analyzing}
+                                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 disabled:opacity-50"
                                 >
-                                    {syncing ? (
-                                        <Loader2 size={16} className="animate-spin" />
-                                    ) : syncSuccess ? (
-                                        <CheckCircle2 size={16} className="text-green-600" />
-                                    ) : (
-                                        <Share2 size={16} className="text-blue-500" />
-                                    )}
-                                    {syncing ? 'Sincronizando...' : syncSuccess ? 'Sincronizado' : 'Sincronizar GMB'}
+                                    {analyzing ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} className="fill-white" />}
+                                    {analyzing ? 'Analizando...' : 'Auto-Mapeo IA'}
                                 </button>
-                            )}
-                            <button
-                                type="button"
-                                onClick={analyzeContent}
-                                disabled={analyzing}
-                                className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
-                            >
-                                {analyzing ? (
-                                    <Loader2 size={16} className="animate-spin" />
-                                ) : (
-                                    <Zap size={16} className="fill-white" />
+
+                                {initialData?.id && (
+                                    <button
+                                        type="button"
+                                        onClick={handleManualSync}
+                                        disabled={syncing}
+                                        title="Sincronizar con Google Business"
+                                        className={cn(
+                                            "p-2.5 rounded-xl border transition-all",
+                                            syncSuccess ? "bg-green-50 border-green-200 text-green-600" : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                                        )}
+                                    >
+                                        {syncing ? <Loader2 size={16} className="animate-spin" /> : syncSuccess ? <CheckCircle2 size={16} /> : <Share2 size={16} />}
+                                    </button>
                                 )}
-                                {analyzing ? 'Procesando Magia...' : 'Generar Mágicamente'}
-                            </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-4">
+                                <SelectableMetadata
+                                    label="Empresa"
+                                    value={company || ''}
+                                    onChange={val => setValue('company', val, { shouldDirty: true })}
+                                    options={companiesList}
+                                    onAddOption={val => setCompaniesList(prev => [...prev, val])}
+                                />
+                                <SelectableMetadata
+                                    label="Herramienta"
+                                    value={aiTool || ''}
+                                    onChange={val => setValue('aiTool', val, { shouldDirty: true })}
+                                    options={aiToolsList}
+                                    onAddOption={val => setAiToolsList(prev => [...prev, val])}
+                                />
+                                <SelectableMetadata
+                                    label="Tipo IA"
+                                    value={aiType || ''}
+                                    onChange={val => setValue('aiType', val, { shouldDirty: true })}
+                                    options={aiTypesList}
+                                    onAddOption={val => setAiTypesList(prev => [...prev, val])}
+                                />
+                                <SelectableMetadata
+                                    label="Área"
+                                    value={businessArea || ''}
+                                    onChange={val => setValue('businessArea', val, { shouldDirty: true })}
+                                    options={businessAreasList}
+                                    onAddOption={val => setBusinessAreasList(prev => [...prev, val])}
+                                />
+                                <SelectableMetadata
+                                    label="Sector"
+                                    value={sector || ''}
+                                    onChange={val => setValue('sector', val, { shouldDirty: true })}
+                                    options={sectorsList}
+                                    onAddOption={val => setSectorsList(prev => [...prev, val])}
+                                />
+                                <SelectableMetadata
+                                    label="Profesión"
+                                    value={profession || ''}
+                                    onChange={val => setValue('profession', val, { shouldDirty: true })}
+                                    options={professionsList}
+                                    onAddOption={val => setProfessionsList(prev => [...prev, val])}
+                                />
+                            </div>
                         </div>
-                        {analysedFields.length > 0 && (
-                            <p className="text-[10px] text-green-600 font-medium animate-fade-in pr-2">
-                                ✨ Detectado: {analysedFields.slice(0, 3).join(', ')}{analysedFields.length > 3 ? '...' : ''}
-                            </p>
-                        )}
-                    </div>
-                </div>
-                
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-                    <SelectableMetadata
-                        label="Empresas"
-                        value={company || ''}
-                        onChange={val => setValue('company', val, { shouldDirty: true })}
-                        options={companiesList}
-                        onAddOption={val => setCompaniesList(prev => [...prev, val])}
-                    />
-                    <SelectableMetadata
-                        label="Herramienta IA"
-                        value={aiTool || ''}
-                        onChange={val => setValue('aiTool', val, { shouldDirty: true })}
-                        options={aiToolsList}
-                        onAddOption={val => setAiToolsList(prev => [...prev, val])}
-                    />
-                    <SelectableMetadata
-                        label="Tipo de IA"
-                        value={aiType || ''}
-                        onChange={val => setValue('aiType', val, { shouldDirty: true })}
-                        options={aiTypesList}
-                        onAddOption={val => setAiTypesList(prev => [...prev, val])}
-                    />
-                    <SelectableMetadata
-                        label="Área Negocio"
-                        value={businessArea || ''}
-                        onChange={val => setValue('businessArea', val, { shouldDirty: true })}
-                        options={businessAreasList}
-                        onAddOption={val => setBusinessAreasList(prev => [...prev, val])}
-                    />
-                    <SelectableMetadata
-                        label="Sector"
-                        value={sector || ''}
-                        onChange={val => setValue('sector', val, { shouldDirty: true })}
-                        options={sectorsList}
-                        onAddOption={val => setSectorsList(prev => [...prev, val])}
-                    />
-                    <SelectableMetadata
-                        label="Profesión"
-                        value={profession || ''}
-                        onChange={val => setValue('profession', val, { shouldDirty: true })}
-                        options={professionsList}
-                        onAddOption={val => setProfessionsList(prev => [...prev, val])}
-                    />
+                    </AdminCard>
                 </div>
             </div>
-
-            {/* Content Editor — Visual / HTML toggle */}
-            <div>
-                <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                        <label className="block text-sm font-medium text-gray-700">Contenido</label>
-                    </div>
-                    {/* Toggle tabs */}
-                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden text-xs">
-                        <button
-                            type="button"
-                            onClick={() => setEditorMode('visual')}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 font-medium transition-colors ${editorMode === 'visual' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-                        >
-                            <Eye size={13} /> Visual
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setEditorMode('html')}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 font-medium transition-colors ${editorMode === 'html' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-                        >
-                            <Code2 size={13} /> HTML
-                        </button>
-                    </div>
-                </div>
-
-                {editorMode === 'visual' ? (
-                    <div className="rounded-lg overflow-hidden border border-gray-200">
-                        <ReactQuill
-                            theme="snow"
-                            value={htmlContent}
-                            onChange={handleQuillChange}
-                            modules={quillModules}
-                            style={{ minHeight: '280px', background: 'white' }}
-                        />
-                    </div>
-                ) : (
-                    <div className="relative">
-                        <textarea
-                            value={htmlContent}
-                            onChange={handleHtmlChange}
-                            rows={14}
-                            spellCheck={false}
-                            className="block w-full bg-gray-950 text-green-300 border border-gray-700 rounded-lg shadow-sm font-mono text-[13px] p-4 focus:ring-blue-500 focus:border-blue-500 resize-y"
-                            placeholder="<!-- Escribe o pega HTML aquí -->"
-                        />
-                        <span className="absolute top-2 right-3 text-[10px] text-gray-500 font-mono select-none">HTML</span>
-                    </div>
-                )}
-                {errors.content && <p className="text-red-500 text-xs mt-1">{errors.content.message}</p>}
-            </div>
-
-            {/* Publish + Actions */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-gray-100">
-                <div className="flex items-center">
-                    <input
-                        type="checkbox"
-                        id="published"
-                        {...register('published')}
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded bg-white"
-                    />
-                    <label htmlFor="published" className="ml-2 block text-sm text-gray-700">
-                        Publicar inmediatamente
-                    </label>
-                </div>
-
-                <div className="flex gap-3">
-                    <button
-                        type="button"
-                        onClick={onCancel}
-                        className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                        Cancelar
-                    </button>
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="px-5 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-                    >
-                        {isSubmitting ? 'Guardando...' : 'Guardar Noticia'}
-                    </button>
-                </div>
-            </div>
-        </form>
+        </AdminFormShell>
     )
 }

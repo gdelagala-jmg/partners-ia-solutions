@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, Link2, Trash2, Edit2, Power, ArrowUpDown, GripVertical, Check, X as CloseIcon } from 'lucide-react'
-import AdminTable from '@/components/admin/AdminTable'
-import AdminActionMenu from '@/components/admin/AdminActionMenu'
+import AdminTable from '@/components/admin/ui/AdminTable'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
 import NavLinkForm from '@/components/admin/NavLinkForm'
 import { motion, AnimatePresence, Reorder } from 'framer-motion'
 
@@ -195,41 +196,36 @@ export default function NavigationPage() {
     ]
 
     return (
-        <div className="space-y-8 pb-20">
-            {/* Header section with Apple style */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-4">
-                <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-white shadow-2xl shadow-gray-200 rounded-2xl flex items-center justify-center border border-gray-100">
-                        <Link2 size={26} className="text-black" />
-                    </div>
-                    <div>
-                        <h1 className="text-4xl font-bold text-gray-900 tracking-tight">Menús del Sitio</h1>
-                        <p className="text-gray-500 font-medium">Gestiona la arquitectura de navegación</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    {!isReorderMode && (
+        <div className="w-full max-w-full min-w-0 space-y-8 pb-20">
+            <AdminToolbar 
+                title="Menús del Sitio"
+                description="Gestiona la arquitectura de navegación"
+                icon={Link2}
+                actions={
+                    <div className="flex items-center gap-3">
+                        {!isReorderMode && (
+                            <button
+                                onClick={() => setIsReorderMode(true)}
+                                className="bg-white/60 backdrop-blur-md border border-white h-11 px-6 rounded-2xl flex items-center gap-2 hover:bg-white/80 transition-all font-bold text-gray-900 shadow-sm shadow-gray-100/50"
+                            >
+                                <ArrowUpDown size={18} />
+                                <span className="hidden sm:inline">Reordenar</span>
+                            </button>
+                        )}
                         <button
-                            onClick={() => setIsReorderMode(true)}
-                            className="bg-white/60 backdrop-blur-md border border-white h-12 px-6 rounded-2xl flex items-center gap-2 hover:bg-white/80 transition-all font-bold text-gray-900 shadow-sm shadow-gray-100/50"
+                            onClick={() => {
+                                setEditingLink(null)
+                                setIsFormOpen(true)
+                            }}
+                            className="bg-black h-11 px-4 sm:px-8 rounded-2xl flex items-center gap-2 hover:bg-gray-800 transition-all font-bold text-white shadow-xl shadow-gray-200 whitespace-nowrap"
                         >
-                            <ArrowUpDown size={18} />
-                            <span>Reordenar</span>
+                            <Plus size={18} className="shrink-0" />
+                            <span className="hidden sm:inline">Nuevo Enlace</span>
+                            <span className="sm:hidden">Nuevo</span>
                         </button>
-                    )}
-                    <button
-                        onClick={() => {
-                            setEditingLink(null)
-                            setIsFormOpen(true)
-                        }}
-                        className="bg-black h-12 px-8 rounded-2xl flex items-center gap-2 hover:bg-gray-800 transition-all font-bold text-white shadow-xl shadow-gray-200"
-                    >
-                        <Plus size={20} />
-                        <span>Nuevo Enlace</span>
-                    </button>
-                </div>
-            </div>
+                    </div>
+                }
+            />
 
             {message && (
                 <motion.div
@@ -341,12 +337,12 @@ export default function NavigationPage() {
                             columns={columns as any}
                             loading={loading}
                             renderMobileCard={(row: any) => (
-                                <div className="flex items-center justify-between p-1">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`w-3 h-3 rounded-full ${row.active ? 'bg-green-500' : 'bg-gray-300'}`} />
-                                        <div>
-                                            <h3 className="font-bold text-gray-900 tracking-tight">{row.name}</h3>
-                                            <p className="text-[11px] text-gray-400 font-mono mt-0.5">{row.href}</p>
+                                <div className="flex items-center justify-between gap-3 p-1">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className={`w-3 h-3 rounded-full shrink-0 ${row.active ? 'bg-green-500' : 'bg-gray-300'}`} />
+                                        <div className="min-w-0">
+                                            <h3 className="font-bold text-gray-900 tracking-tight truncate">{row.name}</h3>
+                                            <p className="text-[11px] text-gray-400 font-mono mt-0.5 truncate">{row.href}</p>
                                         </div>
                                     </div>
                                     <AdminActionMenu

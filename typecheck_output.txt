@@ -1,0 +1,120 @@
+src/app/(public)/(main)/soluciones/[slug]/page.tsx(67,11): error TS2322: Type '{ schema: { '@context': string; '@type': string; name: string; description: string; brand: { '@type': string; name: string; }; }; }' is not assignable to type 'IntrinsicAttributes & JSONLDProps'.
+  Property 'schema' does not exist on type 'IntrinsicAttributes & JSONLDProps'.
+src/app/(public)/(main)/soluciones/[slug]/page.tsx(102,9): error TS2322: Type '{ schema: { '@context': string; '@type': string; name: string; description: string; provider: { '@type': string; name: string; url: string; }; areaServed: string; serviceType: string; }; }' is not assignable to type 'IntrinsicAttributes & JSONLDProps'.
+  Property 'schema' does not exist on type 'IntrinsicAttributes & JSONLDProps'.
+src/app/(public)/(main)/soluciones/[slug]/SectorSolutionClient.tsx(138,37): error TS2322: Type '{ text: string; icon: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & PageBadgeProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & PageBadgeProps'.
+src/app/(public)/(main)/soluciones/SolutionsClient.tsx(141,117): error TS2322: Type '{ text: string; icon: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & PageBadgeProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & PageBadgeProps'.
+src/app/admin/(dashboard)/apps/page.tsx(134,21): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/apps/page.tsx(246,45): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/casos/page.tsx(12,17): error TS2322: Type '{ title: string; description: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }' is not assignable to type 'IntrinsicAttributes & AdminToolbarProps'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & AdminToolbarProps'.
+src/app/admin/(dashboard)/clientes/page.tsx(155,21): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/clientes/page.tsx(259,41): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/equipo/page.tsx(14,17): error TS2322: Type '{ title: string; description: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }' is not assignable to type 'IntrinsicAttributes & AdminToolbarProps'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & AdminToolbarProps'.
+src/app/admin/(dashboard)/media/page.tsx(60,21): error TS2322: Type '{ onSuccess: () => void; onCancel: () => void; }' is not assignable to type 'IntrinsicAttributes & Omit<MediaFormProps, "onCancel">'.
+  Property 'onSuccess' does not exist on type 'IntrinsicAttributes & Omit<MediaFormProps, "onCancel">'.
+src/app/admin/(dashboard)/navegacion/page.tsx(174,35): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/navegacion/page.tsx(180,35): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/navegacion/page.tsx(188,35): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/navegacion/page.tsx(203,17): error TS2322: Type '{ title: string; description: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; actions: Element; }' is not assignable to type 'IntrinsicAttributes & AdminToolbarProps'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & AdminToolbarProps'.
+src/app/admin/(dashboard)/navegacion/page.tsx(351,55): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/navegacion/page.tsx(357,55): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/navegacion/page.tsx(365,55): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/newsletter/campaigns/page.tsx(189,56): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/newsletter/campaigns/page.tsx(190,56): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/newsletter/campaigns/page.tsx(191,56): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/newsletter/page.tsx(145,21): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/newsletter/page.tsx(310,37): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/noticias/page.tsx(290,85): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/noticias/page.tsx(291,29): error TS2322: Type '{ label: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; onClick: () => Promise<...>; }' is not assignable to type 'ActionItem'.
+  Types of property 'icon' are incompatible.
+    Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/noticias/page.tsx(303,54): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/noticias/page.tsx(304,56): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/noticias/page.tsx(441,101): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/noticias/page.tsx(442,45): error TS2322: Type '{ label: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; onClick: () => Promise<...>; }' is not assignable to type 'ActionItem'.
+  Types of property 'icon' are incompatible.
+    Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/noticias/page.tsx(454,70): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/noticias/page.tsx(455,72): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+src/app/admin/(dashboard)/partners/page.tsx(156,79): error TS2322: Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/partners/page.tsx(167,21): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/partners/page.tsx(176,21): error TS2322: Type '({ label: string; icon: Element; onClick: () => void; variant?: undefined; } | { label: string; icon: Element; variant: string; onClick: () => Promise<void>; })[]' is not assignable to type 'ActionItem[]'.
+  Type '{ label: string; icon: Element; onClick: () => void; variant?: undefined; } | { label: string; icon: Element; variant: string; onClick: () => Promise<void>; }' is not assignable to type 'ActionItem'.
+    Type '{ label: string; icon: JSX.Element; variant: string; onClick: () => Promise<void>; }' is not assignable to type 'ActionItem'.
+      Types of property 'variant' are incompatible.
+        Type 'string' is not assignable to type '"default" | "danger" | undefined'.
+src/app/admin/(dashboard)/partners/page.tsx(278,41): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/partners/page.tsx(281,95): error TS2322: Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/sectors/page.tsx(125,21): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/sectors/page.tsx(226,41): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/soluciones/page.tsx(137,21): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/admin/(dashboard)/soluciones/page.tsx(256,45): error TS2322: Type '"success" | "neutral"' is not assignable to type 'StatusType | undefined'.
+  Type '"neutral"' is not assignable to type 'StatusType | undefined'.
+src/app/api/admin/newsletter/campaigns/route.ts(32,17): error TS2322: Type 'never[]' is not assignable to type 'string'.
+src/app/api/assistant/chat-rag/route.ts(107,11): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '({ motivo }: { motivo: any; }) => Promise<{ ui_type: string; motivo: any; }>' is not assignable to type 'undefined'.
+src/app/api/assistant/chat-rag/route.ts(107,29): error TS7031: Binding element 'motivo' implicitly has an 'any' type.
+src/app/api/assistant/chat/route.ts(33,11): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '({ motivo }: { motivo: any; }) => Promise<{ ui_type: string; motivo: any; }>' is not assignable to type 'undefined'.
+src/app/api/assistant/chat/route.ts(33,29): error TS7031: Binding element 'motivo' implicitly has an 'any' type.
+src/components/admin/AppForm.tsx(35,9): error TS2322: Type 'Resolver<{ name: string; slug: string; description?: string | null | undefined; image?: string | null | undefined; externalUrl?: string | null | undefined; content?: string | null | undefined; published?: boolean | undefined; order?: number | undefined; }, any, { ...; }>' is not assignable to type 'Resolver<{ name: string; slug: string; order: number; description?: string | null | undefined; image?: string | null | undefined; externalUrl?: string | null | undefined; content?: string | null | undefined; published?: boolean | undefined; }, any, { ...; }>'.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'ResolverOptions<{ name: string; slug: string; order: number; description?: string | null | undefined; image?: string | null | undefined; externalUrl?: string | null | undefined; content?: string | null | undefined; published?: boolean | undefined; }>' is not assignable to type 'ResolverOptions<{ name: string; slug: string; description?: string | null | undefined; image?: string | null | undefined; externalUrl?: string | null | undefined; content?: string | null | undefined; published?: boolean | undefined; order?: number | undefined; }>'.
+      Type 'number | undefined' is not assignable to type 'number'.
+        Type 'undefined' is not assignable to type 'number'.
+src/components/admin/AppForm.tsx(215,62): error TS2304: Cannot find name 'ImageIcon'.
+src/components/admin/AppForm.tsx(267,46): error TS2304: Cannot find name 'Sparkles'.
+src/components/admin/EditorialForm.tsx(40,5): error TS2322: Type 'Resolver<{ pageKey: string; sectionKey: string; badge?: string | null | undefined; titleLine1?: string | null | undefined; titleLine2?: string | null | undefined; subtitle?: string | null | undefined; ... 9 more ...; internalNotes?: string | ... 1 more ... | undefined; }, any, { ...; }>' is not assignable to type 'Resolver<{ pageKey: string; sectionKey: string; category: string; tone: string; priority: number; isActive: boolean; badge?: string | null | undefined; titleLine1?: string | null | undefined; titleLine2?: string | ... 1 more ... | undefined; ... 6 more ...; internalNotes?: string | ... 1 more ... | undefined; }, any...'.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'ResolverOptions<{ pageKey: string; sectionKey: string; category: string; tone: string; priority: number; isActive: boolean; badge?: string | null | undefined; titleLine1?: string | null | undefined; titleLine2?: string | ... 1 more ... | undefined; ... 6 more ...; internalNotes?: string | ... 1 more ... | undefined;...' is not assignable to type 'ResolverOptions<{ pageKey: string; sectionKey: string; badge?: string | null | undefined; titleLine1?: string | null | undefined; titleLine2?: string | null | undefined; subtitle?: string | null | undefined; ... 9 more ...; internalNotes?: string | ... 1 more ... | undefined; }>'.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+src/components/admin/SectorForm.tsx(32,9): error TS2322: Type 'Resolver<{ name: string; image: string; externalUrl: string; slug?: string | undefined; description?: string | undefined; order?: unknown; active?: boolean | undefined; }, any, { name: string; image: string; ... 4 more ...; description?: string | undefined; }>' is not assignable to type 'Resolver<{ name: string; image: string; externalUrl: string; order: number; active: boolean; slug?: string | undefined; description?: string | undefined; }, any, { name: string; image: string; externalUrl: string; order: number; active: boolean; slug?: string | undefined; description?: string | undefined; }>'.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'ResolverOptions<{ name: string; image: string; externalUrl: string; order: number; active: boolean; slug?: string | undefined; description?: string | undefined; }>' is not assignable to type 'ResolverOptions<{ name: string; image: string; externalUrl: string; slug?: string | undefined; description?: string | undefined; order?: unknown; active?: boolean | undefined; }>'.
+      Type 'unknown' is not assignable to type 'number'.
+src/components/admin/SectorForm.tsx(92,36): error TS2345: Argument of type '(data: SectorFormValues) => void' is not assignable to parameter of type 'SubmitHandler<TFieldValues>'.
+  Types of parameters 'data' and 'data' are incompatible.
+    Type 'TFieldValues' is not assignable to type '{ name: string; image: string; externalUrl: string; order: number; active: boolean; slug?: string | undefined; description?: string | undefined; }'.
+      Type 'FieldValues' is missing the following properties from type '{ name: string; image: string; externalUrl: string; order: number; active: boolean; slug?: string | undefined; description?: string | undefined; }': name, image, externalUrl, order, active
+src/components/admin/StrategicPartnerForm.tsx(51,9): error TS2322: Type 'Resolver<{ name: string; slug: string; logoUrl?: string | undefined; logoAlt?: string | undefined; websiteUrl?: string | undefined; category?: string | undefined; displayOrder?: number | undefined; ... 6 more ...; logoVariant?: string | undefined; }, any, { ...; }>' is not assignable to type 'Resolver<{ name: string; slug: string; category: string; displayOrder: number; isActive: boolean; isFeatured: boolean; showInFooter: boolean; showInHomepage: boolean; showInSolutions: boolean; logoVariant: string; logoUrl?: string | undefined; logoAlt?: string | undefined; websiteUrl?: string | undefined; brandColor...'.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'ResolverOptions<{ name: string; slug: string; category: string; displayOrder: number; isActive: boolean; isFeatured: boolean; showInFooter: boolean; showInHomepage: boolean; showInSolutions: boolean; logoVariant: string; logoUrl?: string | undefined; logoAlt?: string | undefined; websiteUrl?: string | undefined; bra...' is not assignable to type 'ResolverOptions<{ name: string; slug: string; logoUrl?: string | undefined; logoAlt?: string | undefined; websiteUrl?: string | undefined; category?: string | undefined; displayOrder?: number | undefined; ... 6 more ...; logoVariant?: string | undefined; }>'.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+src/components/admin/TeamForm.tsx(43,9): error TS2322: Type 'Resolver<{ name: string; phone?: string | null | undefined; photoUrl?: string | null | undefined; linkedIn?: string | null | undefined; role?: string | null | undefined; bio?: string | null | undefined; order?: number | undefined; showPhoto?: boolean | undefined; showName?: boolean | undefined; customFields?: string...' is not assignable to type 'Resolver<{ name: string; phone: string | null; photoUrl: string | null; linkedIn: string | null; role: string | null; bio: string | null; order: number; showPhoto: boolean; showName: boolean; customFields: string; }, any, { ...; }>'.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'ResolverOptions<{ name: string; phone: string | null; photoUrl: string | null; linkedIn: string | null; role: string | null; bio: string | null; order: number; showPhoto: boolean; showName: boolean; customFields: string; }>' is not assignable to type 'ResolverOptions<{ name: string; phone?: string | null | undefined; photoUrl?: string | null | undefined; linkedIn?: string | null | undefined; role?: string | null | undefined; bio?: string | null | undefined; order?: number | undefined; showPhoto?: boolean | undefined; showName?: boolean | undefined; customFields?:...'.
+      Type 'string | null | undefined' is not assignable to type 'string | null'.
+        Type 'undefined' is not assignable to type 'string | null'.
+src/components/admin/TeamForm.tsx(144,64): error TS2345: Argument of type '(data: TeamMemberValues) => void' is not assignable to parameter of type 'SubmitHandler<TFieldValues>'.
+  Types of parameters 'data' and 'data' are incompatible.
+    Type 'TFieldValues' is not assignable to type '{ name: string; phone: string | null; photoUrl: string | null; linkedIn: string | null; role: string | null; bio: string | null; order: number; showPhoto: boolean; showName: boolean; customFields: string; }'.
+      Type 'FieldValues' is missing the following properties from type '{ name: string; phone: string | null; photoUrl: string | null; linkedIn: string | null; role: string | null; bio: string | null; order: number; showPhoto: boolean; showName: boolean; customFields: string; }': name, phone, photoUrl, linkedIn, and 6 more.
+src/lib/knowledge/indexer.ts(70,17): error TS2339: Property 'length' does not exist on type 'any[][] | Record<string, any>[] | FullQueryResults<boolean>'.
+  Property 'length' does not exist on type 'FullQueryResults<boolean>'.
+src/lib/knowledge/indexer.ts(81,17): error TS2339: Property 'length' does not exist on type 'any[][] | Record<string, any>[] | FullQueryResults<boolean>'.
+  Property 'length' does not exist on type 'FullQueryResults<boolean>'.
+src/lib/knowledge/indexer.ts(106,26): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'any[][] | Record<string, any>[] | FullQueryResults<boolean>'.
+  Property '0' does not exist on type 'any[][] | Record<string, any>[] | FullQueryResults<boolean>'.
+src/lib/knowledge/retriever.ts(84,6): error TS2339: Property 'filter' does not exist on type 'any[][] | Record<string, any>[] | FullQueryResults<boolean>'.
+  Property 'filter' does not exist on type 'FullQueryResults<boolean>'.
+src/lib/newsletter-automation.ts(68,13): error TS2322: Type 'never[]' is not assignable to type 'string'.

@@ -1,9 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Plus, Search, LayoutGrid, Edit2, Trash2, Eye, EyeOff, ExternalLink, Loader2, MoreVertical, Layout, Globe, FileText, ChevronRight } from 'lucide-react'
+import { Plus, Search, LayoutGrid, Edit2, Trash2, EyeOff, ExternalLink, Globe, FileText } from 'lucide-react'
 import AppForm from '@/components/admin/AppForm'
-import { motion, AnimatePresence } from 'framer-motion'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
+import AdminTable from '@/components/admin/ui/AdminTable'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
+import AdminStatusBadge from '@/components/admin/ui/AdminStatusBadge'
 
 export default function AppsAdminPage() {
     const [apps, setApps] = useState<any[]>([])
@@ -90,182 +93,177 @@ export default function AppsAdminPage() {
         app.description?.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
-    return (
-        <div className="p-4 md:p-8 space-y-8 bg-gray-50/50 min-h-screen">
-            {/* Header section */}
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-                <div>
-                    <h1 className="text-3xl md:text-4xl font-black text-gray-900 flex items-center gap-3 tracking-tighter">
-                        <div className="p-2.5 bg-blue-600 rounded-2xl shadow-lg shadow-blue-100 hidden sm:block">
-                            <LayoutGrid size={28} className="text-white" />
-                        </div>
-                        Gestión de Aplicaciones
-                    </h1>
-                    <p className="text-gray-500 mt-2 font-medium flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-                        Configura landing pages, integraciones externas y herramientas propias.
-                    </p>
+    const columns = [
+        {
+            header: 'Aplicación',
+            accessor: (app: any) => (
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="h-10 w-10 rounded-xl bg-indigo-50/50 flex items-center justify-center text-indigo-500 border border-indigo-100 shrink-0 shadow-inner">
+                        <LayoutGrid size={20} strokeWidth={2.5} />
+                    </div>
+                    <div className="min-w-0">
+                        <div className="text-[13px] font-black text-[#1D1D1F] leading-tight truncate">{app.name}</div>
+                        <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5 truncate">/{app.slug}</div>
+                    </div>
                 </div>
-                
-                <button
-                    onClick={handleCreate}
-                    className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 rounded-2xl font-black transition-all hover:scale-[1.03] active:scale-95 shadow-xl shadow-blue-100 group"
-                >
-                    <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
-                    Nueva aplicación
-                </button>
-            </header>
-
-            <AnimatePresence>
-                {isFormOpen ? (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        className="max-w-4xl mx-auto"
-                    >
-                        <AppForm
-                            initialData={editingApp}
-                            onSubmit={onSubmit}
-                            onCancel={() => setIsFormOpen(false)}
-                        />
-                    </motion.div>
-                ) : (
-                    <div className="space-y-6">
-                        {/* Search and Filters */}
-                        <div className="flex flex-col md:flex-row items-center gap-4 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm ring-4 ring-gray-100/30">
-                            <div className="relative flex-1 group w-full">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={20} />
-                                <input
-                                    type="text"
-                                    placeholder="Buscar por nombre o descripción..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm font-medium text-gray-900"
-                                />
-                            </div>
-                            <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-xl border border-blue-100 text-blue-700 text-xs font-bold uppercase tracking-widest whitespace-nowrap">
-                                <Layout size={14} /> {apps.length} Total
-                            </div>
+            )
+        },
+        {
+            header: 'Tipo',
+            accessor: (app: any) => (
+                <div className="flex items-center gap-2">
+                    {app.externalUrl ? (
+                        <div className="flex items-center gap-1.5 text-blue-600 bg-blue-50/50 px-2 py-1 rounded-lg border border-blue-100">
+                            <Globe size={12} />
+                            <span className="text-[10px] font-black uppercase tracking-wider">Web / Externo</span>
                         </div>
+                    ) : (
+                        <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50/50 px-2 py-1 rounded-lg border border-emerald-100">
+                            <FileText size={12} />
+                            <span className="text-[10px] font-black uppercase tracking-wider">Página Interna</span>
+                        </div>
+                    )}
+                </div>
+            )
+        },
+        {
+            header: 'Estado',
+            accessor: (app: any) => (
+                <AdminStatusBadge 
+                    label={app.published ? 'Publicado' : 'Borrador'} 
+                    type={app.published ? 'success' : 'neutral'}
+                />
+            )
+        },
+        {
+            header: 'Orden',
+            accessor: (app: any) => (
+                <span className="text-[11px] font-black text-gray-400 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">
+                    #{app.order}
+                </span>
+            )
+        },
+        {
+            header: '',
+            className: 'text-right',
+            accessor: (app: any) => (
+                <div className="flex items-center justify-end gap-2">
+                    <button
+                        onClick={() => window.open(`/apps/${app.slug}`, '_blank')}
+                        className="p-2 text-gray-400 hover:text-blue-600 transition-all active:scale-90"
+                        title="Ver en la web"
+                    >
+                        <ExternalLink size={16} />
+                    </button>
+                    <AdminActionMenu
+                        actions={[
+                            { label: app.published ? 'Ocultar' : 'Publicar', icon: <EyeOff size={16} />, onClick: () => handleTogglePublication(app) },
+                            { label: 'Editar App', icon: <Edit2 size={16} />, onClick: () => handleEdit(app) },
+                            { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(app.id) },
+                        ]}
+                    />
+                </div>
+            )
+        }
+    ]
 
-                        {/* Apps List / Grid */}
-                        {loading ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="h-[250px] bg-white border border-gray-100 rounded-3xl animate-pulse ring-4 ring-gray-50" />
-                                ))}
-                            </div>
-                        ) : filteredApps.length === 0 ? (
-                            <div className="text-center py-24 bg-white rounded-[40px] border-2 border-dashed border-gray-100 shadow-inner group">
-                                <div className="p-6 bg-gray-50 rounded-full inline-block mb-6 group-hover:scale-110 transition-transform duration-500">
-                                    <LayoutGrid size={48} className="text-gray-300" />
-                                </div>
-                                <h3 className="text-2xl font-black text-gray-900 tracking-tight">Sin aplicaciones todavía</h3>
-                                <p className="text-gray-500 mt-2 max-w-xs mx-auto font-medium">Empieza creando tu primera aplicación para mostrarla en el portal.</p>
-                                <button
-                                    onClick={handleCreate}
-                                    className="mt-8 px-8 py-3 bg-gray-900 text-white rounded-2xl font-bold hover:bg-black transition-all hover:shadow-xl active:scale-95"
-                                >
-                                    ¡Empezar ahora!
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {filteredApps.map((app, idx) => (
-                                    <motion.div
-                                        key={app.id}
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ delay: idx * 0.05 }}
-                                        className="group bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500 flex flex-col overflow-hidden relative"
-                                    >
-                                        {/* Status Badge */}
-                                        <div className="absolute top-5 left-5 z-20">
-                                            <button 
-                                                onClick={(e) => { e.stopPropagation(); handleTogglePublication(app); }}
-                                                className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter flex items-center gap-1.5 backdrop-blur-md transition-all ${
-                                                    app.published 
-                                                        ? 'bg-green-100/90 text-green-700' 
-                                                        : 'bg-amber-100/90 text-amber-700'
-                                                }`}
-                                            >
-                                                <div className={`w-1.5 h-1.5 rounded-full ${app.published ? 'bg-green-500 animate-pulse' : 'bg-amber-500'}`} />
-                                                {app.published ? 'Publicado' : 'Oculto'}
-                                            </button>
-                                        </div>
-
-                                        {/* Image Header */}
-                                        <div className="relative h-48 w-full overflow-hidden bg-gray-50 p-2">
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
-                                            <div className="w-full h-full rounded-[2rem] overflow-hidden border border-gray-100/50">
-                                                <img 
-                                                    src={app.image || '/logo-ias.png'} 
-                                                    alt={app.name} 
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                    onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/400x200?text=App')}
-                                                />
-                                            </div>
-                                            
-                                            {/* Quick Actions Hover */}
-                                            <div className="absolute bottom-5 right-5 left-5 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-20 flex gap-2">
-                                                <button 
-                                                    onClick={() => handleEdit(app)}
-                                                    className="flex-1 bg-white hover:bg-blue-600 hover:text-white text-gray-900 py-2.5 rounded-xl text-xs font-black shadow-xl transition-all flex items-center justify-center gap-2"
-                                                >
-                                                    <Edit2 size={14} /> Editar
-                                                </button>
-                                                <a 
-                                                    href={`/apps/${app.slug}`} 
-                                                    target="_blank"
-                                                    className="p-2.5 bg-white hover:bg-gray-900 hover:text-white text-gray-900 rounded-xl shadow-xl transition-all"
-                                                >
-                                                    <ExternalLink size={16} />
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        {/* Content */}
-                                        <div className="p-6 pt-4 flex-1 flex flex-col">
-                                            <div className="flex items-start justify-between mb-3">
-                                                <div className="space-y-1">
-                                                    <h3 className="font-black text-xl text-gray-900 leading-none group-hover:text-blue-600 transition-colors">
-                                                        {app.name}
-                                                    </h3>
-                                                    <p className="text-[11px] font-mono text-gray-400">/apps/{app.slug}</p>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    {app.externalUrl ? (
-                                                        <Globe size={14} className="text-blue-400" />
-                                                    ) : (
-                                                        <FileText size={14} className="text-amber-400" />
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-6 flex-1">
-                                                {app.description || 'Sin descripción.'}
-                                            </p>
-
-                                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                                                <div className="text-[10px] font-black uppercase text-gray-400 tracking-widest bg-gray-50 px-2 py-1 rounded">
-                                                    Orden #{app.order}
-                                                </div>
-                                                <button 
-                                                    onClick={() => handleDelete(app.id)}
-                                                    className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
+    return (
+        <div className="w-full max-w-full min-w-0 space-y-6">
+            <AdminToolbar
+                title="Gestión de Aplicaciones"
+                description="Administra landings, integraciones externas y herramientas propias."
+                actions={
+                    <div className="flex items-center gap-3">
+                        {!isFormOpen && (
+                            <button
+                                onClick={handleCreate}
+                                className="flex items-center gap-1.5 px-3 sm:px-5 py-2.5 rounded-xl bg-[#1D1D1F] text-white font-bold text-[11px] uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-gray-200 whitespace-nowrap"
+                            >
+                                <Plus size={14} className="shrink-0" />
+                                <span className="hidden sm:inline">Nueva Aplicación</span>
+                                <span className="sm:hidden">Nueva</span>
+                            </button>
                         )}
                     </div>
-                )}
-            </AnimatePresence>
+                }
+            />
+
+            {isFormOpen ? (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-4xl mx-auto">
+                    <AppForm
+                        initialData={editingApp}
+                        onSubmit={onSubmit}
+                        onCancel={() => setIsFormOpen(false)}
+                    />
+                </div>
+            ) : (
+                <div className="space-y-6">
+                    {/* Search Bar */}
+                    <div className="relative group min-w-0">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                        <input
+                            type="text"
+                            placeholder="Buscar por nombre o descripción..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-2xl focus:ring-4 focus:ring-indigo-50/50 focus:border-indigo-200 outline-none transition-all text-sm font-bold text-[#1D1D1F] shadow-sm"
+                        />
+                    </div>
+
+                    <AdminTable
+                        columns={columns}
+                        data={filteredApps}
+                        loading={loading}
+                        emptyMessage="No hay aplicaciones configuradas."
+                        renderMobileCard={(app) => (
+                            <div className="space-y-5">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="h-12 w-12 rounded-2xl bg-white border border-gray-100 overflow-hidden flex items-center justify-center shadow-sm shrink-0">
+                                            {app.image ? (
+                                                <img src={app.image} className="h-full w-full object-cover" alt="" />
+                                            ) : (
+                                                <LayoutGrid size={24} className="text-gray-300" />
+                                            )}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h3 className="font-bold text-[#1D1D1F] leading-tight text-lg truncate">{app.name}</h3>
+                                            <p className="text-[10px] text-gray-400 font-mono mt-1 opacity-60 truncate">/{app.slug}</p>
+                                        </div>
+                                    </div>
+                                    <AdminActionMenu
+                                        actions={[
+                                            { label: app.published ? 'Ocultar' : 'Publicar', icon: <EyeOff size={16} />, onClick: () => handleTogglePublication(app) },
+                                            { label: 'Editar', icon: <Edit2 size={16} />, onClick: () => handleEdit(app) },
+                                            { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(app.id) },
+                                        ]}
+                                    />
+                                </div>
+                                
+                                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                                    <div className="flex gap-2">
+                                        <AdminStatusBadge 
+                                            label={app.published ? 'Publicado' : 'Borrador'} 
+                                            type={app.published ? 'success' : 'neutral'}
+                                            className="text-[9px]"
+                                        />
+                                        <div className="flex items-center gap-1.5 text-gray-400 bg-gray-50 px-2 py-0.5 rounded-lg border border-gray-100">
+                                            {app.externalUrl ? <Globe size={10} /> : <FileText size={10} />}
+                                            <span className="text-[9px] font-bold uppercase">{app.externalUrl ? 'Web' : 'Página'}</span>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={() => window.open(`/apps/${app.slug}`, '_blank')}
+                                        className="text-blue-500 hover:text-blue-700 bg-white p-2 rounded-full border border-gray-100 shadow-sm"
+                                    >
+                                        <ExternalLink size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    />
+                </div>
+            )}
         </div>
     )
 }

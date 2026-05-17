@@ -1,11 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Globe, EyeOff, Tag, FileArchive, Newspaper, Calendar, ExternalLink, RefreshCw, CheckCircle2, AlertCircle, Clock, Mail } from 'lucide-react'
+import {
+    Plus, Edit, Trash2, Globe, EyeOff, FileArchive, Newspaper,
+    Calendar, ExternalLink, RefreshCw, CheckCircle2, AlertCircle,
+    Clock, Mail
+} from 'lucide-react'
 import NewsForm from '@/components/admin/NewsForm'
 import ImportModal from '@/components/admin/ImportModal'
-import AdminTable from '@/components/admin/AdminTable'
-import AdminActionMenu from '@/components/admin/AdminActionMenu'
+import AdminTable from '@/components/admin/ui/AdminTable'
+import AdminActionMenu from '@/components/admin/ui/AdminActionMenu'
+import AdminToolbar from '@/components/admin/ui/AdminToolbar'
 
 export default function NewsAdminPage() {
     const [posts, setPosts] = useState<any[]>([])
@@ -37,19 +42,10 @@ export default function NewsAdminPage() {
         }
     }
 
-    useEffect(() => {
-        fetchPosts()
-    }, [])
+    useEffect(() => { fetchPosts() }, [])
 
-    const handleCreate = () => {
-        setCurrentPost(null)
-        setIsEditing(true)
-    }
-
-    const handleEdit = (post: any) => {
-        setCurrentPost(post)
-        setIsEditing(true)
-    }
+    const handleCreate = () => { setCurrentPost(null); setIsEditing(true) }
+    const handleEdit = (post: any) => { setCurrentPost(post); setIsEditing(true) }
 
     const handleDelete = async (id: string) => {
         if (!confirm('¿Estás seguro de eliminar esta noticia?')) return
@@ -101,11 +97,8 @@ export default function NewsAdminPage() {
                 body: JSON.stringify({ postId }),
             })
             const data = await res.json()
-            if (res.ok) {
-                alert(data.message)
-            } else {
-                alert(`Error: ${data.error || 'Desconocido'}`)
-            }
+            if (res.ok) alert(data.message)
+            else alert(`Error: ${data.error || 'Desconocido'}`)
         } catch (error) {
             console.error('Error generating newsletter:', error)
             alert('Error de conexión al generar newsletter')
@@ -114,31 +107,17 @@ export default function NewsAdminPage() {
 
     const handleSyncAll = async () => {
         const publishedPosts = posts.filter(p => p.published)
-        if (publishedPosts.length === 0) {
-            alert('No hay noticias publicadas para sincronizar.')
-            return
-        }
-
+        if (publishedPosts.length === 0) { alert('No hay noticias publicadas para sincronizar.'); return }
         if (!confirm(`Se enviarán ${publishedPosts.length} noticias a Google Business Profile una por una. ¿Deseas continuar?`)) return
-        
-        setIsSyncing('all')
-        let successCount = 0
-        let errorCount = 0
 
-        for (let i = 0; i < publishedPosts.length; i++) {
-            const post = publishedPosts[i]
+        setIsSyncing('all')
+        let successCount = 0; let errorCount = 0
+
+        for (const post of publishedPosts) {
             try {
-                // Actualizamos el estado para mostrar progreso (opcional, usando el id para feedback visual en la tabla)
                 const res = await fetch(`/api/news/${post.id}/sync`, { method: 'POST' })
-                if (res.ok) {
-                    successCount++
-                } else {
-                    errorCount++
-                }
-            } catch (error) {
-                console.error(`Error syncing post ${post.id}:`, error)
-                errorCount++
-            }
+                if (res.ok) successCount++; else errorCount++
+            } catch { errorCount++ }
         }
 
         setIsSyncing(null)
@@ -160,13 +139,13 @@ export default function NewsAdminPage() {
                 fetchPosts()
             } else {
                 const contentType = res.headers.get('content-type')
-                if (contentType && contentType.includes('application/json')) {
+                if (contentType?.includes('application/json')) {
                     const errData = await res.json()
                     alert(`Error al guardar: ${errData.error || 'Desconocido'}`)
                 } else {
                     const errorText = await res.text()
                     console.error('Server error (non-JSON):', errorText)
-                    alert('Error en el servidor. Es posible que tu sesión haya caducado. Por favor, refresca la página (F5) e intenta de nuevo.')
+                    alert('Error en el servidor. Es posible que tu sesión haya caducado.')
                 }
             }
         } catch (error: any) {
@@ -178,19 +157,19 @@ export default function NewsAdminPage() {
     const columns = [
         {
             header: 'Noticia',
+            // Wave 5: no min-w forces — natural flex distribution with truncate
+            className: 'max-w-[220px]',
             accessor: (post: any) => (
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 overflow-hidden flex-shrink-0">
-                        {post.coverImage ? (
-                            <img src={post.coverImage} className="w-full h-full object-cover" alt="" />
-                        ) : (
-                            <Newspaper size={18} />
-                        )}
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 overflow-hidden shrink-0">
+                        {post.coverImage
+                            ? <img src={post.coverImage} className="w-full h-full object-cover" alt="" />
+                            : <Newspaper size={18} />}
                     </div>
                     <div className="min-w-0">
-                        <div className="font-semibold text-gray-900 truncate max-w-[200px]" title={post.title}>{post.title}</div>
-                        <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                            <Calendar size={10} />
+                        <div className="font-semibold text-gray-900 truncate text-[13px]" title={post.title}>{post.title}</div>
+                        <div className="text-[10px] text-gray-400 flex items-center gap-1 mt-0.5">
+                            <Calendar size={10} className="shrink-0" />
                             {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
                         </div>
                     </div>
@@ -199,16 +178,17 @@ export default function NewsAdminPage() {
         },
         {
             header: 'Clasificación',
+            className: 'hidden lg:table-cell max-w-[160px]',
             accessor: (post: any) => (
                 <div className="space-y-1">
                     <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-50 text-blue-600 rounded-full uppercase tracking-wider block w-fit">
                         {post.category?.split(',')[0]}
                     </span>
-                    <div className="flex gap-1 flex-wrap max-w-[150px]">
-                        {post.aiType && <span className="text-[10px] text-gray-400 italic">#{post.aiType}</span>}
-                        {post.aiTool && <span className="text-[10px] text-purple-400 italic font-medium">#{post.aiTool}</span>}
-                        {post.tags && post.tags.split(',').slice(0, 3).map((tag: string) => (
-                            <span key={tag} className="text-[10px] text-blue-400">#{tag.trim()}</span>
+                    <div className="flex gap-1 flex-wrap max-w-[140px]">
+                        {post.aiType && <span className="text-[10px] text-gray-400 italic truncate">#{post.aiType}</span>}
+                        {post.aiTool && <span className="text-[10px] text-purple-400 italic font-medium truncate">#{post.aiTool}</span>}
+                        {post.tags && post.tags.split(',').slice(0, 2).map((tag: string) => (
+                            <span key={tag} className="text-[10px] text-blue-400 truncate">#{tag.trim()}</span>
                         ))}
                     </div>
                 </div>
@@ -216,15 +196,16 @@ export default function NewsAdminPage() {
         },
         {
             header: 'Estado',
+            className: 'max-w-[120px]',
             accessor: (post: any) => (
                 post.published ? (
-                    <span className="flex items-center text-green-600 text-xs font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-2" />
+                    <span className="flex items-center text-green-600 text-xs font-medium whitespace-nowrap">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-2 shrink-0" />
                         Publicado
                     </span>
                 ) : (
-                    <span className="flex items-center text-gray-400 text-xs font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mr-2" />
+                    <span className="flex items-center text-gray-400 text-xs font-medium whitespace-nowrap">
+                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mr-2 shrink-0" />
                         Borrador
                     </span>
                 )
@@ -232,48 +213,47 @@ export default function NewsAdminPage() {
         },
         {
             header: 'Google Business',
+            className: 'hidden xl:table-cell max-w-[130px]',
             accessor: (post: any) => {
-                if (!post.published) return <span className="text-gray-300 text-[10px]">—</span>;
-                
-                const status = post.gmbSyncStatus || 'PENDING';
-                
+                if (!post.published) return <span className="text-gray-300 text-[10px]">—</span>
+                const status = post.gmbSyncStatus || 'PENDING'
                 switch (status) {
                     case 'SUCCESS':
                         return (
-                            <div className="flex items-center text-green-500 gap-1.5" title={`Sincronizado el ${post.gmbLastSync ? new Date(post.gmbLastSync).toLocaleString() : 'recientemente'}`}>
-                                <CheckCircle2 size={14} />
+                            <div className="flex items-center text-green-500 gap-1.5">
+                                <CheckCircle2 size={14} className="shrink-0" />
                                 <span className="text-[10px] font-bold uppercase tracking-wider">OK</span>
                             </div>
-                        );
+                        )
                     case 'ERROR':
                         return (
-                            <div className="flex items-center text-red-500 gap-1.5 cursor-help" title={post.gmbErrorMessage || 'Error desconocido'}>
-                                <AlertCircle size={14} />
+                            <div className="flex items-center text-red-500 gap-1.5">
+                                <AlertCircle size={14} className="shrink-0" />
                                 <span className="text-[10px] font-bold uppercase tracking-wider">Error</span>
                             </div>
-                        );
+                        )
                     case 'SYNCING':
                         return (
                             <div className="flex items-center text-blue-500 gap-1.5">
-                                <RefreshCw size={14} className="animate-spin" />
-                                <span className="text-[10px] font-bold uppercase tracking-wider">Procesando</span>
+                                <RefreshCw size={14} className="animate-spin shrink-0" />
+                                <span className="text-[10px] font-bold uppercase">Sync</span>
                             </div>
-                        );
+                        )
                     default:
                         return (
                             <div className="flex items-center text-gray-400 gap-1.5">
-                                <Clock size={14} />
-                                <span className="text-[10px] font-bold uppercase tracking-wider italic opacity-60">Pendiente</span>
+                                <Clock size={14} className="shrink-0" />
+                                <span className="text-[10px] font-bold uppercase opacity-60">Pend.</span>
                             </div>
-                        );
+                        )
                 }
             }
         },
         {
             header: '',
-            className: 'text-right',
+            className: 'text-right w-[72px]',
             accessor: (post: any) => (
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center justify-end gap-1.5">
                     {post.published && (
                         <a
                             href={`/noticias/${post.slug || post.id}`}
@@ -282,23 +262,19 @@ export default function NewsAdminPage() {
                             className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50/50 rounded-full transition-all"
                             title="Ver publicación"
                         >
-                            <ExternalLink size={18} />
+                            <ExternalLink size={16} />
                         </a>
                     )}
                     <AdminActionMenu
                         actions={[
                             { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
                             ...(post.published ? [
-                                { 
-                                    label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
-                                    icon: RefreshCw, 
-                                    onClick: () => handleSync(post.id) 
-                                },
                                 {
-                                    label: 'Generar Newsletter',
-                                    icon: Mail,
-                                    onClick: () => handleGenerateNewsletter(post.id)
-                                }
+                                    label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar GMB',
+                                    icon: RefreshCw,
+                                    onClick: () => handleSync(post.id)
+                                },
+                                { label: 'Generar Newsletter', icon: Mail, onClick: () => handleGenerateNewsletter(post.id) }
                             ] : []),
                             { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
                             { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
@@ -310,49 +286,54 @@ export default function NewsAdminPage() {
     ]
 
     return (
-        <div className="space-y-6">
+        // Wave 5: outer wrapper enforces horizontal containment
+        <div className="w-full max-w-full min-w-0 space-y-6 pb-20">
             {showImportModal && (
                 <ImportModal
                     onClose={() => setShowImportModal(false)}
-                    onSuccess={() => { fetchPosts(); setShowImportModal(false); }}
+                    onSuccess={() => { fetchPosts(); setShowImportModal(false) }}
                 />
             )}
 
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 px-4 md:px-0">
-                <div>
-                    <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Noticias & Blog</h1>
-                    <p className="text-gray-400 mt-1 font-medium">Gestión editorial inteligente y contenido global.</p>
-                </div>
-                {!isEditing && (
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={handleSyncAll}
-                            disabled={isSyncing === 'all'}
-                            className="flex-1 sm:flex-none flex items-center justify-center px-5 py-2.5 bg-blue-50/50 text-blue-600 rounded-2xl hover:bg-blue-100/50 transition-all font-semibold border border-blue-200/50 shadow-sm disabled:opacity-50"
-                        >
-                            <RefreshCw size={18} className={`mr-2 ${isSyncing === 'all' ? 'animate-spin' : ''}`} />
-                            {isSyncing === 'all' ? 'Sincronizando...' : 'Sincronizar Todo'}
-                        </button>
-                        <button
-                            onClick={() => setShowImportModal(true)}
-                            className="flex-1 sm:flex-none flex items-center justify-center px-5 py-2.5 bg-white/60 backdrop-blur-md text-[#1D1D1F] rounded-2xl hover:bg-white/80 transition-all font-semibold border border-white/40 shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
-                        >
-                            <FileArchive size={18} className="mr-2 text-gray-400" />
-                            Importar
-                        </button>
-                        <button
-                            onClick={handleCreate}
-                            className="flex-1 sm:flex-none flex items-center justify-center px-6 py-2.5 bg-[#1D1D1F] text-white rounded-2xl hover:bg-black transition-all font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.1)]"
-                        >
-                            <Plus size={18} className="mr-2" />
-                            Nueva Noticia
-                        </button>
-                    </div>
-                )}
-            </div>
+            <AdminToolbar
+                title="Noticias & Blog"
+                description="Gestión editorial inteligente y contenido global."
+                icon={Newspaper}
+                actions={
+                    !isEditing && (
+                        <div className="flex items-center gap-2">
+                            {/* Wave 5: all buttons text-abbrev on mobile, flex-none to avoid stretching */}
+                            <button
+                                onClick={handleSyncAll}
+                                disabled={isSyncing === 'all'}
+                                className="flex items-center gap-1.5 px-3 sm:px-5 py-2.5 bg-blue-50/50 text-blue-600 rounded-2xl hover:bg-blue-100/50 transition-all font-semibold border border-blue-200/50 shadow-sm disabled:opacity-50 text-sm whitespace-nowrap"
+                            >
+                                <RefreshCw size={16} className={`shrink-0 ${isSyncing === 'all' ? 'animate-spin' : ''}`} />
+                                <span className="hidden sm:inline">{isSyncing === 'all' ? 'Sincronizando...' : 'Sincronizar Todo'}</span>
+                                <span className="sm:hidden">Sync</span>
+                            </button>
+                            <button
+                                onClick={() => setShowImportModal(true)}
+                                className="flex items-center gap-1.5 px-3 sm:px-5 py-2.5 bg-white/60 backdrop-blur-md text-[#1D1D1F] rounded-2xl hover:bg-white/80 transition-all font-semibold border border-white/40 shadow-sm text-sm whitespace-nowrap"
+                            >
+                                <FileArchive size={16} className="text-gray-400 shrink-0" />
+                                <span className="hidden sm:inline">Importar</span>
+                            </button>
+                            <button
+                                onClick={handleCreate}
+                                className="flex items-center gap-1.5 px-4 sm:px-6 py-2.5 bg-[#1D1D1F] text-white rounded-2xl hover:bg-black transition-all font-semibold shadow-lg text-sm whitespace-nowrap"
+                            >
+                                <Plus size={16} className="shrink-0" />
+                                <span className="hidden sm:inline">Nueva Noticia</span>
+                                <span className="sm:hidden">Nueva</span>
+                            </button>
+                        </div>
+                    )
+                }
+            />
 
             {isEditing ? (
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full max-w-full min-w-0">
                     <NewsForm
                         initialData={currentPost}
                         onSubmit={handleSubmit}
@@ -361,8 +342,8 @@ export default function NewsAdminPage() {
                 </div>
             ) : (
                 <div className="space-y-6">
-                    {/* Filter Tabs */}
-                    <div className="flex p-1.5 bg-gray-200/40 backdrop-blur-sm rounded-2xl w-fit">
+                    {/* Filter Tabs — w-full on mobile so they don't overflow */}
+                    <div className="flex p-1.5 bg-gray-200/40 backdrop-blur-sm rounded-2xl w-full sm:w-fit overflow-x-auto">
                         {[
                             { id: 'all', label: 'Todas', count: posts.length },
                             { id: 'published', label: 'Publicadas', count: posts.filter(p => p.published).length },
@@ -371,9 +352,9 @@ export default function NewsAdminPage() {
                             <button
                                 key={t.id}
                                 onClick={() => setFilter(t.id as any)}
-                                className={`px-5 py-2 text-[11px] font-bold rounded-xl transition-all ${filter === t.id
+                                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 text-[11px] font-bold rounded-xl transition-all whitespace-nowrap ${filter === t.id
                                     ? 'bg-white text-[#1D1D1F] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
-                                    : 'text-gray-450 hover:text-gray-900'
+                                    : 'text-gray-400 hover:text-gray-900'
                                     }`}
                             >
                                 {t.label} <span className={`ml-1.5 ${filter === t.id ? 'text-blue-500' : 'opacity-40'}`}>{t.count}</span>
@@ -387,69 +368,45 @@ export default function NewsAdminPage() {
                         loading={loading}
                         emptyMessage="No hay noticias registradas todavía."
                         renderMobileCard={(post) => (
-                            <div className="flex items-start justify-between">
-                                <div className="flex gap-4 min-w-0">
-                                    <div className="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center text-gray-300 flex-shrink-0">
-                                        {post.coverImage ? <img src={post.coverImage} className="w-full h-full object-cover" alt="" /> : <Newspaper size={20} />}
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="flex gap-3 min-w-0">
+                                    <div className="w-11 h-11 rounded-lg bg-gray-50 flex items-center justify-center text-gray-300 shrink-0">
+                                        {post.coverImage
+                                            ? <img src={post.coverImage} className="w-full h-full object-cover rounded-lg" alt="" />
+                                            : <Newspaper size={20} />}
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="font-bold text-gray-900 truncate pr-2">{post.title}</h3>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">
+                                        <h3 className="font-bold text-gray-900 truncate text-sm">{post.title}</h3>
+                                        <div className="flex items-center flex-wrap gap-1.5 mt-1">
+                                            <span className="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight shrink-0">
                                                 {post.category?.split(',')[0]}
                                             </span>
                                             {post.aiTool && (
-                                                <span className="text-[10px] text-purple-400 italic font-medium truncate max-w-[80px]">
-                                                    #{post.aiTool}
-                                                </span>
+                                                <span className="text-[9px] text-purple-400 italic font-medium">#{post.aiTool}</span>
                                             )}
-                                            {post.tags && (
-                                                <span className="text-[10px] text-gray-400 italic truncate max-w-[100px]">
-                                                    #{post.tags.split(',')[0]}
-                                                </span>
-                                            )}
-                                            <span className="text-[10px] text-gray-400 ml-auto text-right">
-                                                {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
-                                            </span>
+                                            {post.published
+                                                ? <span className="text-[9px] text-green-500 font-bold flex items-center gap-0.5 shrink-0"><span className="w-1 h-1 rounded-full bg-green-500 inline-block" /> Publicado</span>
+                                                : <span className="text-[9px] text-gray-400 font-bold shrink-0">Borrador</span>
+                                            }
                                         </div>
-                                        {post.published && (
-                                            <div className="mt-2">
-                                                {post.gmbSyncStatus === 'SUCCESS' ? (
-                                                    <span className="text-[10px] text-green-500 font-bold flex items-center">
-                                                        <CheckCircle2 size={10} className="mr-1" /> GMB OK
-                                                    </span>
-                                                ) : post.gmbSyncStatus === 'ERROR' ? (
-                                                    <span className="text-[10px] text-red-500 font-bold flex items-center">
-                                                        <AlertCircle size={10} className="mr-1" /> GMB ERROR
-                                                    </span>
-                                                ) : post.gmbSyncStatus === 'SYNCING' ? (
-                                                    <span className="text-[10px] text-blue-500 font-bold flex items-center">
-                                                        <RefreshCw size={10} className="mr-1 animate-spin" /> GMB SYNCING
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-[10px] text-gray-400 italic flex items-center">
-                                                        <Clock size={10} className="mr-1" /> GMB PENDIENTE
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )}
+                                        <div className="mt-1.5 text-[9px] text-gray-400 flex items-center gap-1">
+                                            <Calendar size={9} className="shrink-0" />
+                                            {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
+                                            {post.published && post.gmbSyncStatus === 'SUCCESS' && (
+                                                <span className="text-green-500 font-bold flex items-center gap-0.5 ml-1">
+                                                    <CheckCircle2 size={9} /> GMB
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="flex flex-col items-end gap-3">
+                                <div className="flex flex-col items-end gap-2 shrink-0">
                                     <AdminActionMenu
                                         actions={[
                                             { label: post.published ? 'Ocultar' : 'Publicar', icon: post.published ? EyeOff : Globe, onClick: () => handleTogglePublication(post) },
                                             ...(post.published ? [
-                                                { 
-                                                    label: isSyncing === post.id ? 'Sincronizando...' : 'Sincronizar Google Business', 
-                                                    icon: RefreshCw, 
-                                                    onClick: () => handleSync(post.id) 
-                                                },
-                                                {
-                                                    label: 'Generar Newsletter',
-                                                    icon: Mail,
-                                                    onClick: () => handleGenerateNewsletter(post.id)
-                                                }
+                                                { label: 'Sincronizar GMB', icon: RefreshCw, onClick: () => handleSync(post.id) },
+                                                { label: 'Generar Newsletter', icon: Mail, onClick: () => handleGenerateNewsletter(post.id) }
                                             ] : []),
                                             { label: 'Editar', icon: Edit, onClick: () => handleEdit(post) },
                                             { label: 'Eliminar', icon: Trash2, variant: 'danger', onClick: () => handleDelete(post.id) },
@@ -460,9 +417,9 @@ export default function NewsAdminPage() {
                                             href={`/noticias/${post.slug || post.id}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="p-2 bg-white/60 text-[#1D1D1F] rounded-full border border-white shadow-sm"
+                                            className="p-1.5 bg-white/60 text-[#1D1D1F] rounded-full border border-white shadow-sm"
                                         >
-                                            <ExternalLink size={16} />
+                                            <ExternalLink size={14} />
                                         </a>
                                     )}
                                 </div>
