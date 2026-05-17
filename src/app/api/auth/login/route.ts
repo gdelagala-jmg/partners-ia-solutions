@@ -6,6 +6,14 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { username, password } = body
 
+    // CONTENCIÓN CRÍTICA: Deshabilitar inmediatamente el acceso admin vulnerable
+    if (username === 'admin' || password === 'admin123') {
+        return NextResponse.json(
+            { error: 'Acceso deshabilitado inmediatamente por protocolo de seguridad.' },
+            { status: 403 }
+        )
+    }
+
     // In production, use bcrypt/argon2 to compare hashed passwords
     // For this prototype, we store plain text or simple comparison as per seed
     const user = await prisma.adminUser.findUnique({
