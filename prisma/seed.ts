@@ -3,19 +3,44 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+import crypto from 'crypto'
+
+function hashPassword(password: string): string {
+    const salt = crypto.randomBytes(16).toString('hex')
+    const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
+    return `pbkdf2$v1$100000$${salt}$${hash}`
+}
+
 async function main() {
     console.log('Start seeding ...')
 
-    const admin = await prisma.adminUser.upsert({
+    const existingAdmin = await prisma.adminUser.findUnique({
         where: { username: 'admin' },
-        update: {},
-        create: {
-            username: 'admin',
-            passwordHash: 'admin123', // In production, hash this!
-        },
     })
 
-    console.log(`Created admin user with id: ${admin.id}`)
+    if (!existingAdmin) {
+        let adminPassword = process.env.ADMIN_PASSWORD
+
+        if (!adminPassword) {
+            if (process.env.NODE_ENV === 'production') {
+                throw new Error('[SECURITY ERROR] ADMIN_PASSWORD environment variable must be set in production to seed!')
+            }
+            adminPassword = crypto.randomBytes(12).toString('hex')
+            console.warn(`\n[SECURITY WARNING] ADMIN_PASSWORD was not provided. Generated a secure random fallback for development:`)
+            console.warn(`>> USERNAME: admin`)
+            console.warn(`>> PASSWORD: ${adminPassword}\n`)
+        }
+
+        const admin = await prisma.adminUser.create({
+            data: {
+                username: 'admin',
+                passwordHash: hashPassword(adminPassword),
+            },
+        })
+        console.log(`Created secure admin user with id: ${admin.id}`)
+    } else {
+        console.log('Admin user already exists.')
+    }
 
     const solution = await prisma.solution.create({
         data: {

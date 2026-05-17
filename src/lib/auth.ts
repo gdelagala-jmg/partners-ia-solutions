@@ -30,12 +30,7 @@ export async function getSession() {
     const session = cookieStore.get('session')?.value
     if (!session) return null
     try {
-        const decrypted = await decrypt(session)
-        // CONTENCIÓN CRÍTICA: Invalidar inmediatamente cualquier sesión activa del usuario admin
-        if (decrypted?.user?.username === 'admin') {
-            return null
-        }
-        return decrypted
+        return await decrypt(session)
     } catch (e) {
         return null
     }

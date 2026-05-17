@@ -3,22 +3,43 @@ require('dotenv').config()
 
 const prisma = new PrismaClient()
 
+const crypto = require('crypto')
+
+function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString('hex')
+    const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
+    return `pbkdf2$v1$100000$${salt}$${hash}`
+}
+
 async function main() {
     console.log('Start seeding ...')
 
-    // 1. Admin User
+    // 1. Admin User Seeding
     const existingAdmin = await prisma.adminUser.findUnique({
         where: { username: 'admin' },
     })
 
     if (!existingAdmin) {
+        let adminPassword = process.env.ADMIN_PASSWORD
+        
+        if (!adminPassword) {
+            if (process.env.NODE_ENV === 'production') {
+                throw new Error('[SECURITY ERROR] ADMIN_PASSWORD environment variable must be set in production to seed the administrator user!')
+            }
+            // Generate a secure high-entropy 24-character random password in development
+            adminPassword = crypto.randomBytes(12).toString('hex')
+            console.warn(`\n[SECURITY WARNING] ADMIN_PASSWORD was not provided. Generated a secure random fallback for development:`)
+            console.warn(`>> USERNAME: admin`)
+            console.warn(`>> PASSWORD: ${adminPassword}\n`)
+        }
+
         await prisma.adminUser.create({
             data: {
                 username: 'admin',
-                passwordHash: 'admin123',
+                passwordHash: hashPassword(adminPassword),
             },
         })
-        console.log('Created admin user')
+        console.log('Created secure admin user with PBKDF2 hash.')
     }
 
     // 2. Solutions (Featured)
