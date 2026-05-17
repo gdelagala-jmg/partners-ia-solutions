@@ -14,7 +14,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
         ? solution.gallery 
         : solution.multimedia 
             ? [{ url: solution.multimedia, alt: solution.title }] 
-            : [{ url: '/images/visuals/placeholder.jpg', alt: 'Placeholder' }]
+            : [{ url: '/images/placeholder.jpg', alt: 'Placeholder' }]
 
     const nextImage = () => setCurrentImageIdx((prev) => (prev < images.length - 1 ? prev + 1 : 0))
     const prevImage = () => setCurrentImageIdx((prev) => (prev > 0 ? prev - 1 : images.length - 1))

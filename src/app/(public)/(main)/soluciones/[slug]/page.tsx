@@ -5,6 +5,8 @@ import SectorSolutionClient from './SectorSolutionClient'
 import SolutionDetailClient from './SolutionDetailClient'
 import JSONLD from '@/components/seo/JSONLD'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: { slug: string }
 }

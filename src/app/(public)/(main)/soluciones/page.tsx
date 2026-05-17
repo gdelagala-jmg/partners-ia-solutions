@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import SolutionsClient from './SolutionsClient'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Soluciones de IA por Industrias | Partners IA Solutions',
   description: 'Explora nuestras soluciones de Inteligencia Artificial especializadas por sector: Legal, Inmobiliario, Finanzas, Salud y más. Automatización inteligente a tu alcance.',
@@ -11,6 +13,7 @@ export const metadata: Metadata = {
     images: ['/logo-ias.png'],
   }
 }
+
 
 export default async function SolutionsPage() {
   const sectors = await prisma.sector.findMany({
