@@ -46,3 +46,4 @@ next-env.d.ts
 /prisma/dev.db
 /scratch
 /scripts
+/CREDENTIALS_SECURE.txt
