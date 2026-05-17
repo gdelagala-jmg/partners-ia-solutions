@@ -39,36 +39,65 @@ export async function POST(request: Request) {
             }, { status: 400 })
         }
 
-        // Use Vercel Blob in production
-        if (process.env.BLOB_READ_WRITE_TOKEN) {
+        const isProduction = process.env.NODE_ENV === 'production'
+
+        // 1. Production Mode: Strict validation
+        if (isProduction) {
+            if (!process.env.BLOB_READ_WRITE_TOKEN) {
+                console.error('[STORAGE_ERROR] CRITICAL: Attempted upload in production but BLOB_READ_WRITE_TOKEN is missing. Local filesystem fallback blocked.');
+                return NextResponse.json({ 
+                    error: 'Error de configuración: El almacenamiento persistente no está configurado en producción. Escritura local bloqueada.' 
+                }, { status: 500 })
+            }
+
             try {
                 const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
+                console.log(`[STORAGE_INFO] Starting upload to Vercel Blob in production for file: ${filename}`);
                 const blob = await put(filename, file, {
                     access: 'public',
                 })
+                console.log(`[STORAGE_SUCCESS] Uploaded successfully to Vercel Blob. Final URL: ${blob.url}`);
                 return NextResponse.json({ url: blob.url })
             } catch (blobError: any) {
+                console.error('[STORAGE_ERROR] Error uploading to Vercel Blob:', blobError.message);
                 if (blobError.message.includes('public access on a private store')) {
-                    throw new Error('Tu almacén de Vercel está configurado como PRIVADO. Por favor, cámbialo a PÚBLICO en el panel de Vercel.')
+                    return NextResponse.json({ 
+                        error: 'Tu almacén de Vercel está configurado como PRIVADO. Por favor, cámbialo a PÚBLICO en el panel de Vercel.' 
+                    }, { status: 500 })
                 }
-                throw blobError
+                return NextResponse.json({ error: 'Error al comunicarse con el almacenamiento persistente.' }, { status: 500 })
             }
         }
 
-        // Fallback si no hay Vercel Blob configurado (útil para pruebas locales con npm run build/start)
-        if (!process.env.BLOB_READ_WRITE_TOKEN) {
-            const { writeFile, mkdir } = await import('fs/promises')
-            const bytes = await file.arrayBuffer()
-            const buffer = Buffer.from(bytes)
-            const filename = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-            const uploadDir = path.join(process.cwd(), 'public/uploads')
-            await mkdir(uploadDir, { recursive: true })
-            const filepath = path.join(uploadDir, filename)
-            await writeFile(filepath, buffer)
-            return NextResponse.json({ url: `/uploads/${filename}` })
+        // 2. Development Mode: Allow local fallback if no token
+        console.log('[STORAGE_INFO] Development environment detected.');
+        if (process.env.BLOB_READ_WRITE_TOKEN) {
+            try {
+                const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
+                console.log(`[STORAGE_INFO] Development: Uploading to Vercel Blob using token for: ${filename}`);
+                const blob = await put(filename, file, {
+                    access: 'public',
+                })
+                console.log(`[STORAGE_SUCCESS] Development: Uploaded successfully to Vercel Blob. Final URL: ${blob.url}`);
+                return NextResponse.json({ url: blob.url })
+            } catch (err: any) {
+                console.warn('[STORAGE_WARNING] Development Vercel Blob upload failed. Attempting local fallback...', err.message);
+            }
         }
 
-        throw new Error('No hay almacenamiento configurado.')
+        // Local filesystem fallback (strictly for development)
+        console.log('[STORAGE_WARNING] Running local filesystem fallback in development.');
+        const { writeFile, mkdir } = await import('fs/promises')
+        const bytes = await file.arrayBuffer()
+        const buffer = Buffer.from(bytes)
+        const filename = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+        const uploadDir = path.join(process.cwd(), 'public/uploads')
+        await mkdir(uploadDir, { recursive: true })
+        const filepath = path.join(uploadDir, filename)
+        await writeFile(filepath, buffer)
+        
+        console.log(`[STORAGE_SUCCESS] Local fallback complete. File stored at: /uploads/${filename}`);
+        return NextResponse.json({ url: `/uploads/${filename}` })
 
     } catch (error: any) {
         console.error('Error uploading file:', error)

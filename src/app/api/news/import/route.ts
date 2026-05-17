@@ -3,6 +3,7 @@ import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { ensureNewsletterCampaign } from '@/lib/newsletter-automation'
 import { generateSlug } from '@/lib/utils'
+import { put } from '@vercel/blob'
 import AdmZip from 'adm-zip'
 import path from 'path'
 import fs from 'fs'
@@ -85,9 +86,46 @@ export async function POST(request: Request) {
                 if (post.imageFilename && zipEntries.length > 0) {
                     const imageEntry = zipEntries.find((entry: any) => entry.entryName.includes(post.imageFilename))
                     if (imageEntry) {
-                        const targetPath = path.join(uploadDir, post.imageFilename)
-                        fs.writeFileSync(targetPath, imageEntry.getData())
-                        coverImageUrl = `/uploads/${post.imageFilename}`
+                        const isProduction = process.env.NODE_ENV === 'production'
+                        const buffer = imageEntry.getData()
+                        
+                        if (isProduction) {
+                            if (!process.env.BLOB_READ_WRITE_TOKEN) {
+                                console.error('[STORAGE_ERROR] News Import: Attempted local zip image save in production but BLOB_READ_WRITE_TOKEN is missing. Blocked.');
+                                throw new Error(`Fallo de configuración: No se puede importar imágenes de noticias en producción sin almacenamiento persistente. Faltan credenciales.`);
+                            }
+                            
+                            console.log(`[STORAGE_INFO] News Import: Uploading image ${post.imageFilename} to Vercel Blob in production...`);
+                            const blob = await put(post.imageFilename, buffer, {
+                                access: 'public',
+                            })
+                            console.log(`[STORAGE_SUCCESS] News Import: Uploaded to Vercel Blob. URL: ${blob.url}`);
+                            coverImageUrl = blob.url
+                        } else {
+                            // Local development fallback
+                            console.log(`[STORAGE_INFO] News Import (Dev): Uploading image ${post.imageFilename} using Vercel Blob if token exists...`);
+                            let uploaded = false;
+                            if (process.env.BLOB_READ_WRITE_TOKEN) {
+                                try {
+                                    const blob = await put(post.imageFilename, buffer, {
+                                        access: 'public',
+                                    })
+                                    console.log(`[STORAGE_SUCCESS] News Import (Dev): Vercel Blob success. URL: ${blob.url}`);
+                                    coverImageUrl = blob.url
+                                    uploaded = true;
+                                } catch (err: any) {
+                                    console.warn('[STORAGE_WARNING] News Import (Dev): Vercel Blob failed. Falling back to local...', err.message);
+                                }
+                            }
+                            
+                            if (!uploaded) {
+                                console.log(`[STORAGE_WARNING] News Import (Dev): Writing image ${post.imageFilename} to local filesystem.`);
+                                const targetPath = path.join(uploadDir, post.imageFilename)
+                                fs.writeFileSync(targetPath, buffer)
+                                coverImageUrl = `/uploads/${post.imageFilename}`
+                                console.log(`[STORAGE_SUCCESS] News Import (Dev): Stored locally at: ${coverImageUrl}`);
+                            }
+                        }
                     }
                 }
 
