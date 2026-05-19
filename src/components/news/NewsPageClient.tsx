@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import NewsFilterBar from '@/components/news/NewsFilterBar'
 import FlashNewsList from '@/components/news/FlashNewsList'
 import Link from 'next/link'
-import { Calendar, Tag, Newspaper, Building2, Brain } from 'lucide-react'
+import { Calendar, Tag, Newspaper, Building2, Brain, FileArchive } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 
@@ -32,6 +32,49 @@ export default function NewsPageClient() {
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const searchParams = useSearchParams()
+
+    // Configuración del Modo Archivo Visual
+    const [archiveMode, setArchiveMode] = useState(true)
+    const [thresholdDays, setThresholdDays] = useState(60)
+
+    useEffect(() => {
+        const fetchArchiveSettings = async () => {
+            try {
+                const [modeRes, thresholdRes] = await Promise.all([
+                    fetch('/api/settings?key=visual_archive_mode'),
+                    fetch('/api/settings?key=visual_archive_threshold_days')
+                ])
+                if (modeRes.ok) {
+                    const modeData = await modeRes.json()
+                    // Por defecto es true
+                    setArchiveMode(modeData.value !== 'false')
+                }
+                if (thresholdRes.ok) {
+                    const thresholdData = await thresholdRes.json()
+                    const days = parseInt(thresholdData.value)
+                    if (!isNaN(days) && days > 0) {
+                        setThresholdDays(days)
+                    }
+                }
+            } catch (e) {
+                console.error('Error fetching archive settings:', e)
+            }
+        }
+        fetchArchiveSettings()
+    }, [])
+
+    const cutoffDate = new Date()
+    cutoffDate.setDate(cutoffDate.getDate() - thresholdDays)
+
+    const recentPosts = posts.filter(post => {
+        const postDate = new Date(post.createdAt)
+        return postDate >= cutoffDate
+    })
+
+    const archivePosts = posts.filter(post => {
+        const postDate = new Date(post.createdAt)
+        return postDate < cutoffDate
+    })
 
     // Reset page to 1 when filters change natively
     useEffect(() => {
@@ -107,7 +150,6 @@ export default function NewsPageClient() {
                 </div>
             </section>
 
-            {/* News Grid */}
             <section className="py-8 lg:py-8">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     {loading ? (
@@ -121,6 +163,180 @@ export default function NewsPageClient() {
                             <Newspaper size={48} className="mx-auto text-gray-300 mb-4" />
                             <h3 className="text-xl font-semibold text-gray-900 mb-2">No hay noticias</h3>
                             <p className="text-gray-600 text-sm">Intenta ajustar tus filtros de búsqueda.</p>
+                        </div>
+                    ) : archiveMode ? (
+                        <div className="space-y-16">
+                            {recentPosts.length > 0 && (
+                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                    {recentPosts.map((post, idx) => (
+                                        <motion.article
+                                            key={post.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, delay: idx * 0.05 }}
+                                            className="group bg-white border border-gray-100 rounded-[1.5rem] overflow-hidden hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-500/5 transition-all flex flex-col h-full items-start text-left w-full relative"
+                                        >
+                                            {/* Link overlay */}
+                                            <Link href={`/noticias/${post.slug}`} className="absolute inset-0 z-10" />
+
+                                            {/* Cover Image */}
+                                            <div className="h-44 bg-gray-50 relative overflow-hidden w-full">
+                                                {post.coverImage ? (
+                                                    <img
+                                                        src={post.coverImage}
+                                                        alt={post.title}
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 relative group-hover:scale-110 transition-transform duration-700 ease-out">
+                                                        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_30%,white_0%,transparent_100%)]" />
+                                                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                                                        <div className="flex flex-col items-center gap-2">
+                                                            <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                                                                <Newspaper size={32} className="text-white" />
+                                                            </div>
+                                                            <span className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">Intelligence Hub</span>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className="absolute top-4 left-4 z-20">
+                                                    <span className="px-3 py-1 rounded-xl text-[10px] font-black tracking-wider uppercase bg-black/40 backdrop-blur-md text-white border border-white/10">
+                                                        {post.category?.split(',')[0]?.trim()}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Content */}
+                                            <div className="p-4 lg:p-5 flex-1 flex flex-col w-full">
+                                                {/* Tags */}
+                                                <div className="flex flex-wrap gap-2 mb-3 items-center">
+                                                    {post.company && (
+                                                        <span className="inline-flex items-center text-[10px] font-bold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full border border-gray-100 uppercase tracking-tight">
+                                                            <Building2 size={10} className="mr-1.5 opacity-70" /> {post.company}
+                                                        </span>
+                                                    )}
+                                                    {post.aiTool && (
+                                                        <span className="inline-flex items-center text-[10px] font-bold bg-purple-50 text-purple-600 px-2.5 py-1 rounded-full border border-purple-100/50 uppercase tracking-tight">
+                                                            {post.aiTool}
+                                                        </span>
+                                                    )}
+                                                    {post.aiType && (
+                                                        <span className="inline-flex items-center text-[10px] font-bold bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full border border-blue-100/50 uppercase tracking-tight">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2" /> {post.aiType}
+                                                        </span>
+                                                    )}
+                                                    {post.sector && !post.company && (
+                                                        <span className="inline-flex items-center text-[10px] font-bold bg-gray-50 text-gray-400 px-2.5 py-1 rounded-full border border-gray-100 uppercase tracking-tight">
+                                                            {post.sector}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="text-[28px] font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
+                                                    {post.title}
+                                                </div>
+
+                                                <p className="text-gray-500 text-sm mb-4 line-clamp-3 flex-1 leading-relaxed font-medium">
+                                                    {post.content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 150)}...
+                                                </p>
+
+                                                {/* Meta */}
+                                                <div className="pt-3 border-t border-gray-50 flex items-center justify-between text-[11px] text-gray-400 font-bold uppercase tracking-wider">
+                                                    <span className="flex items-center gap-2">
+                                                        <Calendar size={14} className="text-blue-500" />
+                                                        {new Date(post.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                    </span>
+                                                    <div className="flex items-center gap-1.5 px-2 py-1 bg-gray-50 rounded-lg">
+                                                        <div className="w-1 h-1 rounded-full bg-gray-300" />
+                                                        <span>Lectura {Math.max(1, Math.ceil((post.content.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length || 1) / 250))} min</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </motion.article>
+                                    ))}
+                                </div>
+                            )}
+
+                            {recentPosts.length === 0 && archivePosts.length > 0 && (
+                                <div className="text-center py-8 bg-gray-50 rounded-3xl border border-gray-200">
+                                    <Newspaper size={48} className="mx-auto text-gray-300 mb-4" />
+                                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Sin noticias recientes</h3>
+                                    <p className="text-gray-600 text-sm">Todas las noticias disponibles se encuentran en el archivo histórico abajo.</p>
+                                </div>
+                            )}
+
+                            {archivePosts.length > 0 && (
+                                <div className="pt-16 border-t border-gray-100">
+                                    <div className="flex items-center gap-3 mb-8">
+                                        <div className="p-2 bg-gray-50 border border-gray-200/50 rounded-xl text-gray-400">
+                                            <FileArchive size={20} />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-bold text-gray-900">Archivo de Noticias</h2>
+                                            <p className="text-xs text-gray-500 font-medium">Contenido histórico del hub de información.</p>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {archivePosts.map((post, idx) => (
+                                            <motion.article
+                                                key={post.id}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.5, delay: idx * 0.05 }}
+                                                className="group bg-white border border-gray-100 rounded-[1.5rem] p-6 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-500/5 transition-all flex flex-col h-full items-start text-left w-full relative"
+                                            >
+                                                {/* Link overlay */}
+                                                <Link href={`/noticias/${post.slug}`} className="absolute inset-0 z-10" />
+
+                                                {/* Header category badge */}
+                                                <div className="mb-3">
+                                                    <span className="px-2.5 py-1 rounded-lg text-[9px] font-black tracking-wider uppercase bg-gray-50 border border-gray-100 text-gray-500">
+                                                        {post.category?.split(',')[0]?.trim()}
+                                                    </span>
+                                                </div>
+
+                                                {/* Tags */}
+                                                <div className="flex flex-wrap gap-1.5 mb-3 items-center">
+                                                    {post.company && (
+                                                        <span className="inline-flex items-center text-[9px] font-bold bg-gray-50 text-gray-500 px-2 py-0.5 rounded-md border border-gray-100 uppercase tracking-tight">
+                                                            <Building2 size={9} className="mr-1 opacity-70" /> {post.company}
+                                                        </span>
+                                                    )}
+                                                    {post.aiTool && (
+                                                        <span className="inline-flex items-center text-[9px] font-bold bg-purple-50/50 text-purple-600 px-2 py-0.5 rounded-md border border-purple-100/30 uppercase tracking-tight">
+                                                            {post.aiTool}
+                                                        </span>
+                                                    )}
+                                                    {post.aiType && (
+                                                        <span className="inline-flex items-center text-[9px] font-bold bg-blue-50/50 text-blue-600 px-2 py-0.5 rounded-md border border-blue-100/30 uppercase tracking-tight">
+                                                            <div className="w-1 h-1 rounded-full bg-blue-500 mr-2 shrink-0" /> {post.aiType}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
+                                                    {post.title}
+                                                </div>
+
+                                                <p className="text-gray-500 text-xs mb-4 line-clamp-3 flex-1 leading-relaxed font-medium">
+                                                    {post.content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 120)}...
+                                                </p>
+
+                                                {/* Meta */}
+                                                <div className="w-full pt-3 border-t border-gray-50 flex items-center justify-between text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <Calendar size={12} className="text-blue-500" />
+                                                        {new Date(post.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                                    </span>
+                                                    <div className="flex items-center gap-1 px-1.5 py-0.5 bg-gray-50 rounded-md">
+                                                        <span>{Math.max(1, Math.ceil((post.content.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length || 1) / 250))} min</span>
+                                                    </div>
+                                                </div>
+                                            </motion.article>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -209,7 +425,6 @@ export default function NewsPageClient() {
                                         </div>
                                     </div>
                                 </motion.article>
-
                             ))}
                         </div>
                     )}

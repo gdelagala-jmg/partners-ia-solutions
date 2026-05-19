@@ -3,7 +3,7 @@ import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { ensureNewsletterCampaign } from '@/lib/newsletter-automation'
 import { generateSlug } from '@/lib/utils'
-import { put } from '@vercel/blob'
+import { uploadToPersistentMedia } from '@/lib/media-upload'
 import AdmZip from 'adm-zip'
 import path from 'path'
 import fs from 'fs'
@@ -90,31 +90,27 @@ export async function POST(request: Request) {
                         const buffer = imageEntry.getData()
                         
                         if (isProduction) {
-                            if (!process.env.BLOB_READ_WRITE_TOKEN) {
-                                console.error('[STORAGE_ERROR] News Import: Attempted local zip image save in production but BLOB_READ_WRITE_TOKEN is missing. Blocked.');
+                            if (!process.env.MEDIA_UPLOAD_SECRET) {
+                                console.error('[STORAGE_ERROR] News Import: Attempted local zip image save in production but MEDIA_UPLOAD_SECRET is missing. Blocked.');
                                 throw new Error(`Fallo de configuración: No se puede importar imágenes de noticias en producción sin almacenamiento persistente. Faltan credenciales.`);
                             }
                             
-                            console.log(`[STORAGE_INFO] News Import: Uploading image ${post.imageFilename} to Vercel Blob in production...`);
-                            const blob = await put(post.imageFilename, buffer, {
-                                access: 'public',
-                            })
-                            console.log(`[STORAGE_SUCCESS] News Import: Uploaded to Vercel Blob. URL: ${blob.url}`);
-                            coverImageUrl = blob.url
+                            console.log(`[STORAGE_INFO] News Import: Uploading image ${post.imageFilename} to Hostinger in production...`);
+                            const url = await uploadToPersistentMedia(buffer, post.imageFilename);
+                            console.log(`[STORAGE_SUCCESS] News Import: Uploaded to Hostinger. URL: ${url}`);
+                            coverImageUrl = url
                         } else {
                             // Local development fallback
-                            console.log(`[STORAGE_INFO] News Import (Dev): Uploading image ${post.imageFilename} using Vercel Blob if token exists...`);
+                            console.log(`[STORAGE_INFO] News Import (Dev): Uploading image ${post.imageFilename} using Hostinger if secret exists...`);
                             let uploaded = false;
-                            if (process.env.BLOB_READ_WRITE_TOKEN) {
+                            if (process.env.MEDIA_UPLOAD_SECRET) {
                                 try {
-                                    const blob = await put(post.imageFilename, buffer, {
-                                        access: 'public',
-                                    })
-                                    console.log(`[STORAGE_SUCCESS] News Import (Dev): Vercel Blob success. URL: ${blob.url}`);
-                                    coverImageUrl = blob.url
+                                    const url = await uploadToPersistentMedia(buffer, post.imageFilename);
+                                    console.log(`[STORAGE_SUCCESS] News Import (Dev): Hostinger success. URL: ${url}`);
+                                    coverImageUrl = url
                                     uploaded = true;
                                 } catch (err: any) {
-                                    console.warn('[STORAGE_WARNING] News Import (Dev): Vercel Blob failed. Falling back to local...', err.message);
+                                    console.warn('[STORAGE_WARNING] News Import (Dev): Hostinger upload failed. Falling back to local...', err.message);
                                 }
                             }
                             

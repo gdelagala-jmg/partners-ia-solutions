@@ -26,19 +26,20 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
     const [isMounted, setIsMounted] = useState(false)
     const [shareUrl, setShareUrl] = useState('')
     const [imageError, setImageError] = useState(false)
+    const [imageLoaded, setImageLoaded] = useState(false)
     const [imageTimeout, setImageTimeout] = useState(false)
 
     useEffect(() => {
         setIsMounted(true)
         setShareUrl(window.location.href)
 
-        if (post.coverImage) {
+        if (post.coverImage && !imageLoaded) {
             const timer = setTimeout(() => {
                 setImageTimeout(true)
-            }, 1500)
+            }, 5000) // 5 seconds fail-safe timeout
             return () => clearTimeout(timer)
         }
-    }, [post.coverImage])
+    }, [post.coverImage, imageLoaded])
 
     const publishDate = post.publishedAt || post.createdAt
     
@@ -52,7 +53,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
     const canonicalUrl = `https://www.partnersiasolutions.com/noticias/${post.slug}`
     const activeShareUrl = isMounted ? shareUrl : canonicalUrl
 
-    const showCoverImage = post.coverImage && !imageError && !imageTimeout
+    const showCoverImage = post.coverImage && !imageError && (!imageTimeout || imageLoaded)
 
     return (
         <div className="min-h-screen bg-white">
@@ -64,6 +65,7 @@ export default function NewsDetailClient({ post }: { post: NewsPost }) {
                             src={post.coverImage!}
                             alt={post.title}
                             className="w-full h-full object-cover"
+                            onLoad={() => setImageLoaded(true)}
                             onError={() => setImageError(true)}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
