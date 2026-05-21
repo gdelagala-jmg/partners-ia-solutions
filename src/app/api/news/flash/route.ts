@@ -79,7 +79,11 @@ export async function GET() {
         // Sort by date descending
         allNews.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 
-        return NextResponse.json(allNews);
+        return NextResponse.json(allNews, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=3600'
+            }
+        });
     } catch (error) {
         console.error('Error fetching flash news:', error);
         return NextResponse.json({ error: 'Failed to fetch flash news' }, { status: 500 });
