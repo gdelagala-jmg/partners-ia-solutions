@@ -17,7 +17,7 @@ export async function uploadToPersistentMedia(
   fileName: string,
   contentType?: string
 ): Promise<string> {
-  const secret = process.env.MEDIA_UPLOAD_SECRET || 'ps_media_9xK72mQaP4vL8nZwR1cHt6YbF3uJ9sXe';
+  const secret = process.env.MEDIA_UPLOAD_SECRET;
   const endpoint = 'https://media.partnersiasolutions.com/api/secure-receiver.php';
 
   const timestamp = Math.floor(Date.now() / 1000);
@@ -52,6 +52,10 @@ export async function uploadToPersistentMedia(
   const fileExt = finalFileName.split('.').pop()?.toLowerCase() || '';
   if (!allowedExtensions.includes(fileExt)) {
     throw new Error(`File extension '.${fileExt}' is prohibited in FASE 1. Only image uploads are allowed.`);
+  }
+
+  if (!secret) {
+    throw new Error('MEDIA_UPLOAD_SECRET is not defined. Cannot sign media upload request.');
   }
 
   // Signature = HMAC-SHA256(secret, timestamp + fileName + fileSize)
