@@ -1,0 +1,60 @@
+{
+  "projectName": "Partners IA Solutions",
+  "clientName": "Partners IA Solutions",
+  "primaryDomain": "partnersiasolutions.com",
+  "githubRepository": "gdelagala-jmg/partners-ia-solutions",
+  "vercelProject": "VALIDATION REQUIRES EXTERNAL ACCESS",
+  "databaseProvider": "MySQL (Hostinger) & PostgreSQL (Neon RAG)",
+  "cmsProvider": "Custom Native Admin Panel (Next.js)",
+  "emailProvider": "Hostinger SMTP",
+  "paymentProvider": "Ninguno",
+  "allowedServices": [
+    "hostinger",
+    "neon",
+    "cloudflare",
+    "make",
+    "telegram",
+    "vercel",
+    "google_gemini",
+    "firebase"
+  ],
+  "allowedDomains": [
+    "partnersiasolutions.com",
+    "*.partnersiasolutions.com",
+    "srv1471.hstgr.io",
+    "*.neon.tech",
+    "hook.eu2.make.com",
+    "api.telegram.org",
+    "firebasestorage.googleapis.com",
+    "storage.googleapis.com"
+  ],
+  "authorizedSubproducts": [
+    "SaveFuel"
+  ],
+  "blockedProjects": [
+    "DELAGALA",
+    "InmoIA360",
+    "MCPE",
+    "Booking OS",
+    "J&C Pool OS",
+    "JMG TC"
+  ],
+  "blockedDomains": [
+    "idelagala.com",
+    "jmg-tc.com",
+    "mcpsicologiaemocional.com"
+  ],
+  "projectFingerprint": {
+    "requiredTerms": [
+      "Partners IA"
+    ],
+    "forbiddenTerms": [
+      "DELAGALA",
+      "InmoIA360",
+      "MCPE",
+      "Booking OS",
+      "J&C Pool OS",
+      "JMG TC"
+    ]
+  }
+}
