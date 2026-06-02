@@ -135,7 +135,7 @@ export default function SolutionsPage() {
             accessor: (solution: any) => (
                 <AdminStatusBadge 
                     label={solution.published ? 'Publicado' : 'Borrador'} 
-                    type={solution.published ? 'success' : 'neutral'}
+                    type={solution.published ? 'success' : 'default'}
                 />
             )
         },
@@ -219,65 +219,67 @@ export default function SolutionsPage() {
                         onChange={(id) => setFilter(id as FilterType)}
                     />
 
-                    <AdminTable
-                        columns={columns}
-                        data={filteredSolutions}
-                        loading={loading}
-                        emptyMessage="No hay soluciones registradas."
-                        renderMobileCard={(solution) => (
-                            <div className="space-y-5">
-                                <div className="flex items-start justify-between gap-4">
-                                    <div className="flex items-center gap-3 min-w-0">
-                                        <div className="h-12 w-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-blue-500 shadow-sm shrink-0">
-                                            <Puzzle size={24} strokeWidth={2.5} />
+                    <div className="workspace-flat-table-container">
+                        <AdminTable
+                            columns={columns}
+                            data={filteredSolutions}
+                            loading={loading}
+                            emptyMessage="No hay soluciones registradas."
+                            renderMobileCard={(solution) => (
+                                <div className="space-y-5">
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <div className="h-12 w-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-blue-500 shadow-sm shrink-0">
+                                                <Puzzle size={24} strokeWidth={2.5} />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <h3 className="font-bold text-[#1D1D1F] leading-tight text-lg truncate">{solution.title}</h3>
+                                                <p className="text-[10px] text-gray-400 font-mono mt-1 opacity-60 truncate">/{solution.slug}</p>
+                                            </div>
                                         </div>
-                                        <div className="min-w-0">
-                                            <h3 className="font-bold text-[#1D1D1F] leading-tight text-lg truncate">{solution.title}</h3>
-                                            <p className="text-[10px] text-gray-400 font-mono mt-1 opacity-60 truncate">/{solution.slug}</p>
-                                        </div>
-                                    </div>
-                                    <AdminActionMenu
-                                        actions={[
-                                            { label: solution.published ? 'Ocultar' : 'Publicar', icon: <EyeOff size={16} />, onClick: () => handleTogglePublication(solution) },
-                                            { label: 'Editar', icon: <Edit size={16} />, onClick: () => handleEdit(solution) },
-                                            { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(solution.id) },
-                                        ]}
-                                    />
-                                </div>
-                                
-                                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                                    <div className="flex gap-2">
-                                        <AdminStatusBadge 
-                                            label={solution.type === 'SOLUTION' ? 'Solución' : 'LAB IA'} 
-                                            type={solution.type === 'SOLUTION' ? 'info' : 'warning'}
-                                            dot={false}
-                                            className="text-[9px]"
-                                        />
-                                        <AdminStatusBadge 
-                                            label={solution.published ? 'Publicado' : 'Borrador'} 
-                                            type={solution.published ? 'success' : 'neutral'}
-                                            className="text-[9px]"
+                                        <AdminActionMenu
+                                            actions={[
+                                                { label: solution.published ? 'Ocultar' : 'Publicar', icon: <EyeOff size={16} />, onClick: () => handleTogglePublication(solution) },
+                                                { label: 'Editar', icon: <Edit size={16} />, onClick: () => handleEdit(solution) },
+                                                { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(solution.id) },
+                                            ]}
                                         />
                                     </div>
-                                    {solution.featured && (
-                                        <div className="flex items-center gap-1 text-amber-500">
-                                            <Star size={14} className="fill-amber-500" />
-                                            <span className="text-[9px] font-black uppercase">Destacada</span>
+                                    
+                                    <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                                        <div className="flex gap-2">
+                                            <AdminStatusBadge 
+                                                label={solution.type === 'SOLUTION' ? 'Solución' : 'LAB IA'} 
+                                                type={solution.type === 'SOLUTION' ? 'info' : 'warning'}
+                                                dot={false}
+                                                className="text-[9px]"
+                                            />
+                                            <AdminStatusBadge 
+                                                label={solution.published ? 'Publicado' : 'Borrador'} 
+                                                type={solution.published ? 'success' : 'default'}
+                                                className="text-[9px]"
+                                            />
                                         </div>
+                                        {solution.featured && (
+                                            <div className="flex items-center gap-1 text-amber-500">
+                                                <Star size={14} className="fill-amber-500" />
+                                                <span className="text-[9px] font-black uppercase">Destacada</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {solution.published && (
+                                        <button 
+                                            onClick={() => window.open(`/soluciones/${solution.slug}`, '_blank')}
+                                            className="w-full py-2.5 bg-gray-50 text-[#1D1D1F] text-[11px] font-black uppercase tracking-widest rounded-xl border border-gray-100 hover:bg-gray-100 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            <ExternalLink size={14} />
+                                            Explorar Solución
+                                        </button>
                                     )}
                                 </div>
-                                {solution.published && (
-                                    <button 
-                                        onClick={() => window.open(`/soluciones/${solution.slug}`, '_blank')}
-                                        className="w-full py-2.5 bg-gray-50 text-[#1D1D1F] text-[11px] font-black uppercase tracking-widest rounded-xl border border-gray-100 hover:bg-gray-100 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        <ExternalLink size={14} />
-                                        Explorar Solución
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                    />
+                            )}
+                        />
+                    </div>
                 </div>
             )}
         </div>

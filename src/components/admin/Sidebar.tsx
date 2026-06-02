@@ -24,32 +24,74 @@ import {
     LayoutGrid,
     Send,
     Settings,
-    Sparkles
+    Sparkles,
+    GripVertical,
+    Star,
+    Activity,
+    Sliders
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import FavAnchor from './ui/FavAnchor'
 
-const menuItems = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-    { name: 'Hero Studio', href: '/admin/editorial', icon: Sparkles },
-    { name: 'Asistente AI', href: '/admin/asistente', icon: Bot },
-    { name: 'Sectores', href: '/admin/sectors', icon: Box },
-    { name: 'Clientes', href: '/admin/clientes', icon: Users },
-    { name: 'Partners', href: '/admin/partners', icon: Handshake },
-    { name: 'Navegación', href: '/admin/navegacion', icon: Link2 },
-    { name: 'Aplicaciones', href: '/admin/apps', icon: LayoutGrid },
-    { name: 'Soluciones', href: '/admin/soluciones', icon: Puzzle },
-    { name: 'Academia', href: '/admin/escuela', icon: BookOpen },
-    { name: 'Noticias', href: '/admin/noticias', icon: FileText },
-    { name: 'Audiencia', href: '/admin/newsletter', icon: Users },
-    { name: 'Campañas', href: '/admin/newsletter/campaigns', icon: Send },
-    { name: 'Newsletter Config', href: '/admin/newsletter/settings', icon: Settings },
-    { name: 'Mensajes', href: '/admin/leads', icon: Mail },
-    { name: 'Equipo', icon: Users, href: '/admin/equipo' },
-    { name: 'Casos Éxito', icon: Trophy, href: '/admin/casos' },
-    { name: 'Media', icon: Video, href: '/admin/media' },
-    { name: 'Convenios', icon: Handshake, href: '/admin/convenios' },
+// Organized Sidebar Domains based on human workflow V2
+const sidebarGroups = [
+    {
+        title: 'Páginas',
+        items: [
+            { name: 'Inicio', href: '/admin/editorial', icon: Sparkles },
+            { name: 'Soluciones', href: '/admin/soluciones', icon: Puzzle },
+            { name: 'Sectores', href: '/admin/sectors', icon: Box },
+            { name: 'Academia', href: '/admin/escuela', icon: BookOpen },
+            { name: 'Casos de Éxito', href: '/admin/casos', icon: Trophy },
+            { name: 'Partners', href: '/admin/partners', icon: Handshake },
+            { name: 'Convenios', href: '/admin/convenios', icon: Handshake },
+            { name: 'Clientes', href: '/admin/clientes', icon: Users },
+        ]
+    },
+    {
+        title: 'Contenido',
+        items: [
+            { name: 'Noticias', href: '/admin/noticias', icon: FileText },
+            { name: 'Hero Studio', href: '/admin/editorial', icon: Sparkles },
+            { name: 'Biblioteca Multimedia', href: '/admin/media', icon: Video },
+        ]
+    },
+    {
+        title: 'Negocio',
+        items: [
+            { name: 'Leads', href: '/admin/leads', icon: Mail },
+            { name: 'Inbox', href: '/admin/leads?view=inbox', icon: Mail },
+            { name: 'Campañas', href: '/admin/newsletter/campaigns', icon: Send },
+            { name: 'Newsletter', href: '/admin/newsletter', icon: Users },
+            { name: 'Conversaciones IA', href: '/admin/asistente?view=chats', icon: Bot },
+        ]
+    },
+    {
+        title: 'Inteligencia',
+        items: [
+            { name: 'Asistente AI', href: '/admin/asistente', icon: Bot },
+            { name: 'RAG Status', href: '/admin/asistente?view=rag', icon: Sliders },
+            { name: 'Insights', href: '/admin/asistente?view=insights', icon: Activity },
+            { name: 'Analytics IA', href: '/admin/dashboard', icon: LayoutDashboard },
+        ]
+    },
+    {
+        title: 'Sistema',
+        items: [
+            { name: 'Navegación', href: '/admin/navegacion', icon: Link2 },
+            { name: 'Equipo', href: '/admin/equipo', icon: Users },
+            { name: 'SMTP Config', href: '/admin/newsletter/settings', icon: Settings },
+        ]
+    }
+]
+
+// Mocked Favorites for the UX demonstration (Class A daily modules)
+const initialFavorites = [
+    { name: 'Noticias CMS', href: '/admin/noticias' },
+    { name: 'Asistente AI Leads', href: '/admin/asistente' },
+    { name: 'Bandeja Leads', href: '/admin/leads' }
 ]
 
 interface SidebarProps {
@@ -61,6 +103,7 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
     const router = useRouter()
     const [isMaintenance, setIsMaintenance] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [favorites, setFavorites] = useState(initialFavorites)
 
     useEffect(() => {
         fetch('/api/settings?key=maintenance_mode')
@@ -96,96 +139,156 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
     }
 
     return (
-        <div className="flex flex-col h-full bg-white/70 backdrop-blur-xl border-r border-[#F2F2F7]">
-            {/* Header - Minimalist Apple Style */}
-            <div className="px-6 py-8 border-b border-[#F2F2F7]/50 hidden lg:block">
-                <div className="flex justify-center p-4">
+        <div className="flex flex-col h-full glass-dock rounded-[2rem] overflow-hidden select-none">
+            {/* Header - Minimalist premium Apple Style */}
+            <div className="px-5 pt-7 pb-4 hidden lg:block bg-transparent">
+                <div className="flex justify-start pl-1">
                     <Link href="/" className="flex items-center group">
-                        <div className="relative h-8 w-40" style={{ position: 'relative', height: '2rem', width: '10rem', overflow: 'hidden' }}>
-                            <Image
-                                src="/logo-ias.png"
-                                alt="Partners IA Solutions Logo"
-                                fill
-                                style={{ objectFit: 'contain' }}
-                                className="transition-transform group-hover:scale-105 duration-500"
-                                priority
-                            />
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-gray-900 tracking-tight select-none">
+                            <div className="w-5 h-5 rounded-lg bg-blue-600 flex items-center justify-center text-white shrink-0 shadow-sm shadow-blue-500/10 transition-transform group-hover:scale-105 duration-300">
+                                <Sparkles size={11} className="fill-white" />
+                            </div>
+                            <span>Partners IA • Workspace</span>
                         </div>
                     </Link>
                 </div>
             </div>
 
-            {/* Mobile Header Close - Refined */}
-            <div className="px-6 py-4 border-b border-[#F2F2F7]/50 lg:hidden flex justify-between items-center bg-white/50">
-                <span className="text-sm font-bold tracking-widest text-gray-400 uppercase">Menú Principal</span>
+            {/* Mobile Header Close */}
+            <div className="px-5 py-4 border-b border-gray-100 lg:hidden flex justify-between items-center bg-transparent">
+                <span className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Menú Principal</span>
                 <button
                     onClick={onCloseMobile}
-                    className="p-1.5 bg-gray-50/50 rounded-xl text-gray-400 hover:text-gray-900 transition-all border border-gray-100/50 active:scale-90"
+                    className="p-1.5 bg-gray-50 rounded-xl text-gray-400 hover:text-gray-900 transition-all border border-gray-100 active:scale-90"
                 >
-                    <X size={18} />
+                    <X size={16} />
                 </button>
             </div>
 
-            {/* Navigation - Compact Apple List style */}
-            <nav className="flex-1 px-4 py-6 space-y-0.5 overflow-y-auto custom-scrollbar">
-                {menuItems.map((item) => {
-                    const Icon = item.icon
-                    const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
-
-                    return (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={onCloseMobile}
+            {/* Navigation Workspace - Breathing and Categorized */}
+            <div className="flex-1 px-3 py-4 space-y-5 overflow-y-auto no-scrollbar bg-transparent">
+                {/* 1. Main Navigation Shortcut (Mi Espacio de Trabajo) */}
+                <div className="space-y-1">
+                    <Link
+                        href="/admin/dashboard"
+                        onClick={onCloseMobile}
+                        className={clsx(
+                            "flex items-center px-3 py-2 text-[12px] font-bold rounded-xl transition-all duration-300 group relative border border-transparent",
+                            pathname === '/admin/dashboard'
+                                ? "active-premium-item text-gray-950"
+                                : "text-gray-500 hover:bg-gray-50/50 hover:text-gray-950"
+                        )}
+                    >
+                        <LayoutDashboard
+                            size={14}
                             className={clsx(
-                                "flex items-center px-4 py-2.5 text-[13px] font-semibold rounded-xl transition-all duration-300 group relative",
-                                isActive
-                                    ? "bg-[#007AFF] text-white shadow-lg shadow-[#007AFF]/20"
-                                    : "text-[#1D1D1F]/70 hover:bg-[#F2F2F7]/80 hover:text-[#1D1D1F]"
+                                "mr-2.5 transition-colors duration-300 shrink-0",
+                                pathname === '/admin/dashboard' ? "text-blue-600" : "text-gray-400 group-hover:text-gray-950"
                             )}
-                        >
-                            <Icon
-                                size={16}
-                                className={clsx(
-                                    "mr-3 transition-colors duration-300",
-                                    isActive ? "text-white" : "text-gray-400 group-hover:text-[#007AFF]"
-                                )}
-                            />
-                            {item.name}
-                            
-                            {isActive && (
-                                <div className="absolute left-0 w-1 h-4 bg-white/50 rounded-full" />
-                            )}
-                        </Link>
-                    )
-                })}
-            </nav>
+                        />
+                        <span className="truncate">Mi Espacio de Trabajo</span>
 
-            {/* Footer Actions - Tight Spacing */}
-            <div className="px-4 py-6 border-t border-[#F2F2F7]/50 space-y-1 bg-gray-50/20">
+                        {pathname === '/admin/dashboard' && (
+                            <div className="ml-auto w-1 h-3 bg-blue-500 rounded-full" />
+                        )}
+                    </Link>
+                </div>
+
+                {/* 2. ⭐ FAVORITOS SECTION */}
+                <div className="space-y-1">
+                    <div className="px-3 text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center justify-between">
+                        <span>Favoritos</span>
+                        <span className="text-[8px] font-semibold text-gray-300 lowercase italic opacity-40">D&D</span>
+                    </div>
+                    <div className="space-y-0.5 pt-1">
+                        {favorites.map((fav) => (
+                            <FavAnchor 
+                                key={fav.href}
+                                name={fav.name}
+                                href={fav.href}
+                                isActive={pathname === fav.href}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* 3. WORKFLOW DOMAINS */}
+                {sidebarGroups.map((group, groupIdx) => (
+                    <div key={groupIdx} className="space-y-1">
+                        <div className="px-3 text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                            {group.title}
+                        </div>
+                        <div className="space-y-0.5 pt-1">
+                            {group.items.map((item) => {
+                                const Icon = item.icon
+                                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+
+                                return (
+                                    <div 
+                                        key={item.href}
+                                        className="group/item relative flex items-center rounded-xl transition-all duration-300"
+                                    >
+                                        {/* Drag Handle on hover for future D&D ready architecture */}
+                                        <div className="absolute left-1 opacity-0 group-hover/item:opacity-30 transition-opacity duration-200 text-gray-400 cursor-grab active:cursor-grabbing dd-grab-handle">
+                                            <GripVertical size={10} />
+                                        </div>
+
+                                        <Link
+                                            href={item.href}
+                                            onClick={onCloseMobile}
+                                            className={clsx(
+                                                "flex-1 flex items-center px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-all duration-300 border border-transparent",
+                                                isActive
+                                                    ? "active-premium-item text-gray-950"
+                                                    : "text-gray-500 hover:bg-gray-50/55 hover:text-gray-950"
+                                            )}
+                                        >
+                                            <Icon
+                                                size={12}
+                                                className={clsx(
+                                                    "mr-2.5 transition-colors duration-300 shrink-0",
+                                                    isActive ? "text-blue-500" : "text-gray-400 group-hover/item:text-gray-950"
+                                                )}
+                                            />
+                                            <span className="truncate">{item.name}</span>
+
+                                            {isActive && (
+                                                <div className="ml-auto w-1 h-3 bg-blue-500 rounded-full" />
+                                            )}
+                                        </Link>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Footer Actions - Compact Apple Style */}
+            <div className="px-3 py-4 border-t border-gray-100 space-y-1 bg-gray-50/5">
                 {!loading && (
                     <button
                         onClick={toggleMaintenance}
                         className={clsx(
-                            "flex w-full items-center px-4 py-2.5 text-[12px] font-bold rounded-xl transition-all border border-transparent group mb-2",
+                            "flex w-full items-center px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all border group mb-1.5",
                             isMaintenance 
-                                ? "bg-amber-50/50 text-amber-700 hover:bg-amber-100/50 border-amber-100" 
-                                : "bg-emerald-50/50 text-emerald-700 hover:bg-emerald-100/50 border-emerald-100"
+                                ? "bg-amber-50/50 text-amber-700 hover:bg-amber-100/50 border-amber-100/50" 
+                                : "bg-emerald-50/30 text-emerald-700 hover:bg-emerald-100/30 border-emerald-100/30"
                         )}
                     >
                         {isMaintenance ? (
-                            <ShieldAlert size={14} className="mr-3" />
+                            <ShieldAlert size={12} className="mr-2 shrink-0" />
                         ) : (
-                            <ShieldCheck size={14} className="mr-3" />
+                            <ShieldCheck size={12} className="mr-2 shrink-0" />
                         )}
-                        <span className="flex-1 text-left uppercase tracking-tighter">Mantenimiento</span>
+                        <span className="flex-1 text-left uppercase tracking-tight text-[9px]">Mantenimiento</span>
                         <div className={clsx(
-                            "w-8 h-4 rounded-full relative transition-colors duration-500",
+                            "w-6 h-3 rounded-full relative transition-colors duration-500 shrink-0",
                             isMaintenance ? "bg-amber-500" : "bg-emerald-400"
                         )}>
                             <div className={clsx(
-                                "absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all duration-500 shadow-sm",
-                                isMaintenance ? "left-4.5" : "left-0.5"
+                                "absolute top-0.5 w-2 h-2 bg-white rounded-full transition-all duration-500 shadow-sm",
+                                isMaintenance ? "left-3.5" : "left-0.5"
                             )} />
                         </div>
                     </button>
@@ -194,16 +297,16 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
                 <Link
                     href="/"
                     target="_blank"
-                    className="flex w-full items-center px-4 py-2 text-[12px] font-semibold text-gray-400 hover:bg-gray-100/50 hover:text-[#007AFF] rounded-xl transition-all group"
+                    className="flex w-full items-center px-3 py-1.5 text-[10px] font-semibold text-gray-400 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-all group"
                 >
-                    <ExternalLink size={14} className="mr-3 text-gray-300 group-hover:text-[#007AFF]" />
-                    Ver Sitio Público
+                    <ExternalLink size={12} className="mr-2 text-gray-300 group-hover:text-gray-900 shrink-0" />
+                    Sitio Público
                 </Link>
                 <button
                     onClick={handleLogout}
-                    className="flex w-full items-center px-4 py-2 text-[12px] font-semibold text-gray-400 hover:bg-red-50/50 hover:text-red-500 rounded-xl transition-all group"
+                    className="flex w-full items-center px-3 py-1.5 text-[10px] font-semibold text-gray-400 hover:bg-red-50/20 hover:text-red-500 rounded-lg transition-all group"
                 >
-                    <LogOut size={14} className="mr-3 text-gray-300 group-hover:text-red-500" />
+                    <LogOut size={12} className="mr-2 text-gray-300 group-hover:text-red-500 shrink-0" />
                     Cerrar Sesión
                 </button>
             </div>
