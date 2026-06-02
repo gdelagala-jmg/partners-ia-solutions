@@ -123,7 +123,7 @@ export default function SectorsPage() {
             accessor: (sector: any) => (
                 <AdminStatusBadge 
                     label={sector.active ? 'Activo' : 'Inactivo'} 
-                    type={sector.active ? 'success' : 'neutral'}
+                    type={sector.active ? 'success' : 'default'}
                 />
             )
         },
@@ -192,56 +192,58 @@ export default function SectorsPage() {
                     />
                 </div>
             ) : (
-                <AdminTable
-                    columns={columns}
-                    data={sectors}
-                    loading={loading}
-                    emptyMessage="No hay sectores configurados."
-                    renderMobileCard={(sector) => (
-                        <div className="space-y-5">
-                            <div className="flex items-start justify-between gap-4">
-                                <div className="flex items-center gap-3 min-w-0">
-                                    <div className="h-12 w-12 rounded-2xl bg-white border border-gray-100 overflow-hidden flex items-center justify-center shadow-sm shrink-0">
-                                        {sector.image ? (
-                                            <img src={sector.image} className="h-full w-full object-cover" alt="" />
-                                        ) : (
-                                            <Box size={24} className="text-gray-300" />
-                                        )}
+                <div className="workspace-flat-table-container">
+                    <AdminTable
+                        columns={columns}
+                        data={sectors}
+                        loading={loading}
+                        emptyMessage="No hay sectores configurados."
+                        renderMobileCard={(sector) => (
+                            <div className="space-y-5">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="h-12 w-12 rounded-2xl bg-white border border-gray-100 overflow-hidden flex items-center justify-center shadow-sm shrink-0">
+                                            {sector.image ? (
+                                                <img src={sector.image} className="h-full w-full object-cover" alt="" />
+                                            ) : (
+                                                <Box size={24} className="text-gray-300" />
+                                            )}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h3 className="font-bold text-[#1D1D1F] leading-tight text-lg truncate">{sector.name}</h3>
+                                            <p className="text-[10px] text-gray-400 font-mono mt-1 opacity-60 truncate">/{sector.slug}</p>
+                                        </div>
                                     </div>
-                                    <div className="min-w-0">
-                                        <h3 className="font-bold text-[#1D1D1F] leading-tight text-lg truncate">{sector.name}</h3>
-                                        <p className="text-[10px] text-gray-400 font-mono mt-1 opacity-60 truncate">/{sector.slug}</p>
-                                    </div>
-                                </div>
-                                <AdminActionMenu
-                                    actions={[
-                                        { label: sector.active ? 'Desactivar' : 'Activar', icon: <EyeOff size={16} />, onClick: () => handleToggleStatus(sector) },
-                                        { label: 'Editar', icon: <Edit size={16} />, onClick: () => handleEdit(sector) },
-                                        { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(sector.id) },
-                                    ]}
-                                />
-                            </div>
-                            
-                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                                <div className="flex gap-2">
-                                    <AdminStatusBadge 
-                                        label={sector.active ? 'Activo' : 'Inactivo'} 
-                                        type={sector.active ? 'success' : 'neutral'}
-                                        className="text-[9px]"
+                                    <AdminActionMenu
+                                        actions={[
+                                            { label: sector.active ? 'Desactivar' : 'Activar', icon: <EyeOff size={16} />, onClick: () => handleToggleStatus(sector) },
+                                            { label: 'Editar', icon: <Edit size={16} />, onClick: () => handleEdit(sector) },
+                                            { label: 'Eliminar', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDelete(sector.id) },
+                                        ]}
                                     />
-                                    <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-lg uppercase tracking-wider">
-                                        {sector._count?.solutions || 0} Soluciones
-                                    </span>
                                 </div>
-                                {sector.externalUrl && (
-                                    <a href={sector.externalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 bg-white/60 p-2 rounded-full border border-white shadow-sm transition-all active:scale-90">
-                                        <ExternalLink size={16} />
-                                    </a>
-                                )}
+                                
+                                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                                    <div className="flex gap-2">
+                                        <AdminStatusBadge 
+                                            label={sector.active ? 'Activo' : 'Inactivo'} 
+                                            type={sector.active ? 'success' : 'default'}
+                                            className="text-[9px]"
+                                        />
+                                        <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                                            {sector._count?.solutions || 0} Soluciones
+                                        </span>
+                                    </div>
+                                    {sector.externalUrl && (
+                                        <a href={sector.externalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 bg-white/60 p-2 rounded-full border border-white shadow-sm transition-all active:scale-90">
+                                            <ExternalLink size={16} />
+                                        </a>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                />
+                        )}
+                    />
+                </div>
             )}
         </div>
     )

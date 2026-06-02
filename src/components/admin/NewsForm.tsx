@@ -229,6 +229,7 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     const [analysedFields, setAnalysedFields] = useState<string[]>([])
     const [editorMode, setEditorMode] = useState<'visual' | 'html'>('visual')
     const [htmlContent, setHtmlContent] = useState(initialData?.content || '')
+    const [showPreview, setShowPreview] = useState(false)
 
     // Stateful lists for metadata
     const [companiesList, setCompaniesList] = useState(COMPANIES_LIST)
@@ -277,6 +278,88 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
     const businessArea = watch('businessArea')
     const sector = watch('sector')
     const profession = watch('profession')
+    const publishedVal = watch('published') || false
+    const publishedAtVal = watch('publishedAt') || null
+    const titleVal = watch('title') || ''
+    const contentVal = watch('content') || ''
+
+    // Sincronizar borrador cambiando published a false
+    const handleSaveDraft = () => {
+        setValue('published', false)
+        handleSubmit(handleFormSubmit, onError)()
+    }
+
+    // Calcular estado editorial
+    const getEditorialStatus = () => {
+        if (!publishedVal) return 'DRAFT'
+        if (publishedAtVal) {
+            const date = new Date(publishedAtVal)
+            const now = new Date()
+            if (date > now) return 'SCHEDULED'
+        }
+        return 'PUBLISHED'
+    }
+    const status = getEditorialStatus()
+
+    // Calcular Score Editorial Heurístico (0-100)
+    const calculateScore = () => {
+        let score = 0
+        const details: string[] = []
+
+        // 1. Título (Max 30)
+        if (titleVal.trim().length > 0) {
+            score += 20
+            if (titleVal.trim().length >= 25 && titleVal.trim().length <= 70) {
+                score += 10
+            } else {
+                details.push("Optimizar largo de título (25-70 caracteres)")
+            }
+        } else {
+            details.push("Añadir título principal")
+        }
+
+        // 2. Imagen de Portada (Max 20)
+        if (coverImageUrl) {
+            score += 20
+        } else {
+            details.push("Subir imagen de portada")
+        }
+
+        // 3. Longitud de Contenido (Max 20)
+        const wordCount = contentVal.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length
+        if (wordCount >= 300) {
+            score += 20
+        } else if (wordCount >= 100) {
+            score += 10
+            details.push("Extender cuerpo (>300 palabras)")
+        } else {
+            details.push("Escribir cuerpo de la noticia")
+        }
+
+        // 4. SEO & Categorización (Max 20)
+        if (categories.length > 0 && categories[0] !== '') {
+            score += 10
+        } else {
+            details.push("Asignar categorías")
+        }
+        if (tags.length > 0) {
+            score += 10
+        } else {
+            details.push("Añadir tags / etiquetas")
+        }
+
+        // 5. IA Insights (Max 10)
+        const aiFieldsCount = [company, aiTool, aiType, businessArea, sector, profession].filter(Boolean).length
+        if (aiFieldsCount >= 3) {
+            score += 10
+        } else {
+            details.push("Completar al menos 3 campos de IA Insight")
+        }
+
+        return { score, details }
+    }
+
+    const { score: editorialScore, details: pendingDetails } = calculateScore()
 
     // Keep form value in sync with rich editor
     const handleQuillChange = (val: string) => {
@@ -319,7 +402,7 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
                     { label: 'Legal', kw: ['ley', 'abogado', 'legal', 'normativa', 'contrato', 'jurídico', 'compliance', 'regulación'] }
                 ],
                 sector: [
-                    { label: 'Banca', kw: ['banco', 'pagos', 'seguro', 'fraud', 'bancario', 'fintech', 'financiero'] },
+                    { label: 'Banca', kw: ['banco', 'pagos', 'seguro', 'fraud', 'bancario', 'financiero'] },
                     { label: 'Ecommerce', kw: ['tienda', 'venta', 'carrito', 'retail', 'negocio', 'consumo', 'online', 'tiendas', 'retail'] },
                     { label: 'Software', kw: ['app', 'herramienta', 'saas', 'tecnológico', 'digita', 'plataforma', 'nube', 'devops'] },
                     { label: 'Educación', kw: ['aprendizaje', 'estudiante', 'clase', 'universidad', 'escuela', 'enseñanza', 'formación', 'edtech', 'curso'] },
@@ -527,290 +610,439 @@ export default function NewsForm({ initialData, onSubmit, onCancel }: any) {
         <AdminFormShell
             title={initialData ? 'Editar Noticia' : 'Nueva Noticia'}
             description={initialData ? `ID: ${initialData.id}` : 'Publica contenido de actualidad sobre IA'}
-            onCancel={onCancel}
-            onSubmit={handleSubmit(handleFormSubmit, onError)}
-            isSubmitting={isSubmitting}
-            submitLabel={initialData ? 'Actualizar Noticia' : 'Publicar Noticia'}
+            actions={<div className="hidden" />}
+            footerClassName="hidden"
         >
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Main Content Column */}
-                <div className="lg:col-span-2 space-y-6">
-                    <AdminCard title="Contenido Principal">
-                        <div className="space-y-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Título de la Noticia</label>
-                                <input
-                                    {...register('title')}
-                                    onChange={(e) => {
-                                        register('title').onChange(e);
-                                        handleTitleChange(e);
-                                    }}
-                                    placeholder="Ej: Google lanza Gemini 1.5 Pro..."
-                                    className="block w-full bg-gray-50/50 border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-12 px-4 text-lg font-bold"
-                                />
-                                {errors.title && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.title.message}</p>}
-                            </div>
+            <div className="space-y-8 select-none">
+                {/* Telemetría y Estado Superior */}
+                <div className="premium-white-surface p-6 flex flex-wrap items-center justify-between gap-6">
+                    <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Estado:</span>
+                        {status === 'DRAFT' && (
+                            <span className="px-2.5 py-1 bg-gray-100 text-gray-700 border border-gray-250 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                                Borrador
+                            </span>
+                        )}
+                        {status === 'SCHEDULED' && (
+                            <span className="px-2.5 py-1 bg-amber-50 text-amber-700 border border-amber-100 rounded-lg text-[10px] font-black uppercase tracking-wider animate-pulse">
+                                Programado
+                            </span>
+                        )}
+                        {status === 'PUBLISHED' && (
+                            <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                                Publicado
+                            </span>
+                        )}
+                    </div>
 
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Slug (URL amigable)</label>
-                                <div className="relative">
-                                    <input
-                                        {...register('slug')}
-                                        placeholder="google-lanza-gemini-pro"
-                                        className="block w-full bg-gray-50/50 border-gray-200 rounded-xl text-gray-500 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-10 px-3 pl-8 font-mono text-xs"
-                                    />
-                                    <Globe className="absolute left-2.5 top-3 text-gray-400" size={14} />
-                                </div>
-                                {errors.slug && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.slug.message}</p>}
+                    <div className="flex-1 max-w-md flex items-center gap-4">
+                        <div className="flex-1">
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest mb-1.5">
+                                <span className="text-gray-400">Calidad Editorial</span>
+                                <span className={cn(
+                                    "text-xs font-black",
+                                    editorialScore >= 80 ? "text-emerald-500" : (editorialScore >= 50 ? "text-amber-500" : "text-red-500")
+                                )}>
+                                    {editorialScore}%
+                                </span>
                             </div>
-
-                            <div>
-                                <div className="flex items-center justify-between mb-2">
-                                    <label className="block text-sm font-semibold text-gray-700">Cuerpo de la Noticia</label>
-                                    <div className="flex bg-gray-100 p-1 rounded-lg">
-                                        <button
-                                            type="button"
-                                            onClick={() => setEditorMode('visual')}
-                                            className={cn(
-                                                "px-3 py-1 text-[11px] font-bold rounded-md transition-all",
-                                                editorMode === 'visual' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
-                                            )}
-                                        >
-                                            Visual
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setEditorMode('html')}
-                                            className={cn(
-                                                "px-3 py-1 text-[11px] font-bold rounded-md transition-all",
-                                                editorMode === 'html' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
-                                            )}
-                                        >
-                                            HTML
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                {editorMode === 'visual' ? (
-                                    <div className="rounded-xl overflow-hidden border border-gray-200 bg-white">
-                                        <ReactQuill
-                                            theme="snow"
-                                            value={htmlContent}
-                                            onChange={handleQuillChange}
-                                            modules={quillModules}
-                                            className="min-h-[400px]"
-                                        />
-                                    </div>
-                                ) : (
-                                    <textarea
-                                        value={htmlContent}
-                                        onChange={handleHtmlChange}
-                                        rows={18}
-                                        spellCheck={false}
-                                        className="block w-full bg-gray-900 text-blue-100 border border-gray-800 rounded-xl font-mono text-sm p-5 focus:ring-2 focus:ring-blue-500 resize-none"
-                                        placeholder="<!-- Código HTML -->"
-                                    />
-                                )}
-                                {errors.content && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.content.message}</p>}
-                            </div>
-                        </div>
-                    </AdminCard>
-
-                    <AdminCard title="Multimedia y Podcast">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-3">Imagen de Portada</label>
-                                <div
-                                    onDragOver={e => e.preventDefault()}
-                                    onDrop={handleDrop}
-                                    className="relative aspect-video rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 flex flex-col items-center justify-center gap-3 overflow-hidden group hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer"
-                                    onClick={() => document.getElementById('cover-upload')?.click()}
-                                >
-                                    {coverImageUrl ? (
-                                        <>
-                                            <img src={coverImageUrl} alt="Cover" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <div className="bg-white/90 backdrop-blur p-2 rounded-full text-gray-900 shadow-xl">
-                                                    <Upload size={20} />
-                                                </div>
-                                            </div>
-                                            <button 
-                                                type="button" 
-                                                onClick={(e) => { e.stopPropagation(); setValue('coverImage', ''); }}
-                                                className="absolute top-3 right-3 p-1.5 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors"
-                                            >
-                                                <X size={14} />
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="p-4 bg-white rounded-2xl shadow-sm text-blue-500 group-hover:scale-110 transition-transform">
-                                                {uploading ? <Loader2 className="animate-spin" size={28} /> : <ImageIcon size={28} />}
-                                            </div>
-                                            <div className="text-center">
-                                                <p className="text-sm font-bold text-gray-700">{uploading ? 'Subiendo...' : 'Subir Imagen'}</p>
-                                                <p className="text-[11px] text-gray-400">O arrastra y suelta aquí</p>
-                                            </div>
-                                        </>
+                            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden border border-gray-150 shadow-inner">
+                                <div 
+                                    className={cn(
+                                        "h-full transition-all duration-500 rounded-full",
+                                        editorialScore >= 80 ? "bg-emerald-500" : (editorialScore >= 50 ? "bg-amber-500" : "bg-red-500")
                                     )}
-                                    <input id="cover-upload" type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div className="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 flex items-start gap-4">
-                                    <div className="p-2.5 bg-white rounded-xl shadow-sm text-indigo-600">
-                                        <Zap size={20} />
-                                    </div>
-                                    <div className="flex-1">
-                                        <label className="block text-sm font-bold text-indigo-900 mb-1">Audio Podcast (NotebookLM)</label>
-                                        <input
-                                            {...register('podcastAudioUrl')}
-                                            placeholder="URL de audio o resumen..."
-                                            className="block w-full bg-white border-indigo-100 rounded-lg shadow-sm text-indigo-900 focus:ring-indigo-500 text-sm h-10 px-3"
-                                        />
-                                        <p className="text-[11px] text-indigo-600/70 mt-2 leading-relaxed">
-                                            Al guardar, el sistema procesará este enlace para distribuirlo automáticamente a Spotify.
-                                        </p>
-                                    </div>
-                                </div>
+                                    style={{ width: `${editorialScore}%` }}
+                                />
                             </div>
                         </div>
-                    </AdminCard>
+                    </div>
+                    
+                    {pendingDetails.length > 0 && (
+                        <div className="text-[10px] font-bold text-gray-400 italic">
+                            Sugerencia: {pendingDetails[0]}
+                        </div>
+                    )}
                 </div>
 
-                {/* Sidebar Column */}
-                <div className="space-y-6">
-                    <AdminCard title="Publicación" headerClassName="bg-gray-50/50">
-                        <div className="space-y-5">
-                            <div className="flex items-center justify-between p-3 bg-blue-50/30 rounded-xl border border-blue-100">
-                                <div className="flex items-center gap-3">
-                                    <div className={cn(
-                                        "w-2.5 h-2.5 rounded-full animate-pulse",
-                                        watch('published') ? "bg-green-500" : "bg-gray-300"
-                                    )} />
-                                    <label htmlFor="published" className="text-sm font-bold text-gray-700 cursor-pointer">Visibilidad Pública</label>
+                <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
+                    {/* Main Content Column (70%) */}
+                    <div className="lg:col-span-7 space-y-6">
+                        <AdminCard title="Contenido Principal">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2.5">Título de la Noticia</label>
+                                    <input
+                                        {...register('title')}
+                                        onChange={(e) => {
+                                            register('title').onChange(e);
+                                            handleTitleChange(e);
+                                        }}
+                                        placeholder="Ej: Google lanza Gemini 1.5 Pro..."
+                                        className="block w-full bg-gray-50/50 border border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-12 px-4 text-lg font-bold"
+                                    />
+                                    {errors.title && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.title.message}</p>}
                                 </div>
-                                <input
-                                    type="checkbox"
-                                    id="published"
-                                    {...register('published')}
-                                    className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded-lg cursor-pointer"
+
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Slug (URL amigable)</label>
+                                    <div className="relative">
+                                        <input
+                                            {...register('slug')}
+                                            placeholder="google-lanza-gemini-pro"
+                                            className="block w-full bg-gray-50/50 border border-gray-200 rounded-xl text-gray-500 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-10 px-3 pl-8 font-mono text-xs"
+                                        />
+                                        <Globe className="absolute left-2.5 top-3 text-gray-400" size={14} />
+                                    </div>
+                                    {errors.slug && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.slug.message}</p>}
+                                    <p className="text-[10px] text-gray-400 italic mt-2 ml-1">
+                                        * El primer párrafo de la noticia actuará automáticamente como copete de presentación.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <div className="flex items-center justify-between mb-2.5">
+                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest">Cuerpo de la Noticia</label>
+                                        <div className="flex bg-gray-100 p-1 rounded-lg">
+                                            <button
+                                                type="button"
+                                                onClick={() => setEditorMode('visual')}
+                                                className={cn(
+                                                    "px-3 py-1 text-[10px] font-black rounded-md transition-all uppercase tracking-wider",
+                                                    editorMode === 'visual' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                                                )}
+                                            >
+                                                Visual
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setEditorMode('html')}
+                                                className={cn(
+                                                    "px-3 py-1 text-[10px] font-black rounded-md transition-all uppercase tracking-wider",
+                                                    editorMode === 'html' ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                                                )}
+                                            >
+                                                HTML
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    {editorMode === 'visual' ? (
+                                        <div className="rounded-xl overflow-hidden border border-gray-200 bg-white">
+                                            <ReactQuill
+                                                theme="snow"
+                                                value={htmlContent}
+                                                onChange={handleQuillChange}
+                                                modules={quillModules}
+                                                className="min-h-[400px]"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <textarea
+                                            value={htmlContent}
+                                            onChange={handleHtmlChange}
+                                            rows={18}
+                                            spellCheck={false}
+                                            className="block w-full bg-gray-900 text-blue-100 border border-gray-800 rounded-xl font-mono text-sm p-5 focus:ring-2 focus:ring-blue-500 resize-none"
+                                            placeholder="<!-- Código HTML -->"
+                                        />
+                                    )}
+                                    {errors.content && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.content.message}</p>}
+                                </div>
+                            </div>
+                        </AdminCard>
+
+                        <AdminCard title="Multimedia y Respaldo">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Imagen de Portada</label>
+                                    <div
+                                        onDragOver={e => e.preventDefault()}
+                                        onDrop={handleDrop}
+                                        className="relative aspect-video rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 flex flex-col items-center justify-center gap-3 overflow-hidden group hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer"
+                                        onClick={() => document.getElementById('cover-upload')?.click()}
+                                    >
+                                        {coverImageUrl ? (
+                                            <>
+                                                <img src={coverImageUrl} alt="Cover" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <div className="bg-white/90 backdrop-blur p-2 rounded-full text-gray-900 shadow-xl">
+                                                        <Upload size={20} />
+                                                    </div>
+                                                </div>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={(e) => { e.stopPropagation(); setValue('coverImage', ''); }}
+                                                    className="absolute top-3 right-3 p-1.5 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="p-4 bg-white rounded-2xl shadow-sm text-blue-500 group-hover:scale-110 transition-transform">
+                                                    {uploading ? <Loader2 className="animate-spin" size={28} /> : <ImageIcon size={28} />}
+                                                </div>
+                                                <div className="text-center">
+                                                    <p className="text-sm font-bold text-gray-700">{uploading ? 'Subiendo...' : 'Subir Imagen'}</p>
+                                                    <p className="text-[11px] text-gray-400">O arrastra y suelta aquí</p>
+                                                </div>
+                                            </>
+                                        )}
+                                        <input id="cover-upload" type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 flex items-start gap-4">
+                                        <div className="p-2.5 bg-white rounded-xl shadow-sm text-indigo-600">
+                                            <Zap size={20} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <label className="block text-xs font-bold text-indigo-900 mb-1 uppercase tracking-wider">Audio Podcast (NotebookLM)</label>
+                                            <input
+                                                {...register('podcastAudioUrl')}
+                                                placeholder="URL de audio..."
+                                                className="block w-full bg-white border-indigo-100 rounded-lg shadow-sm text-indigo-900 focus:ring-indigo-500 text-sm h-10 px-3"
+                                            />
+                                            <p className="text-[10px] text-indigo-600/70 mt-2 leading-relaxed font-semibold">
+                                                Al guardar, el sistema procesará este enlace para distribuirlo automáticamente a Spotify.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </AdminCard>
+                    </div>
+
+                    {/* Sidebar Column (30%) */}
+                    <div className="lg:col-span-3 space-y-6">
+                        <AdminCard title="Publicación" headerClassName="bg-gray-50/50">
+                            <div className="space-y-5">
+                                <div className={cn(
+                                    "flex items-center justify-between p-3 rounded-xl border transition-all",
+                                    publishedVal ? "bg-emerald-50/30 border-emerald-100" : "bg-gray-50 border-gray-200"
+                                )}>
+                                    <div className="flex items-center gap-3">
+                                        <div className={cn(
+                                            "w-2.5 h-2.5 rounded-full",
+                                            publishedVal ? "bg-emerald-500 animate-pulse" : "bg-gray-300"
+                                        )} />
+                                        <label htmlFor="published" className="text-xs font-bold text-gray-700 cursor-pointer uppercase tracking-wider">Visibilidad Pública</label>
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        id="published"
+                                        {...register('published')}
+                                        className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded-lg cursor-pointer transition-all"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Fecha Programada</label>
+                                    <div className="relative">
+                                        <input
+                                            type="datetime-local"
+                                            {...register('publishedAt')}
+                                            className="block w-full bg-gray-50/50 border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-10 px-3 pl-10 text-sm"
+                                        />
+                                        <Calendar className="absolute left-3 top-2.5 text-gray-400" size={16} />
+                                    </div>
+                                </div>
+                            </div>
+                        </AdminCard>
+
+                        <AdminCard title="Categorización" headerClassName="bg-gray-50/50">
+                            <div className="space-y-6">
+                                <ChipInput
+                                    label="Categorías"
+                                    chips={categories}
+                                    onAdd={val => setCategories([...categories, val])}
+                                    onRemove={val => setCategories(categories.filter(c => c !== val))}
+                                    presets={CATEGORY_PRESETS}
+                                    placeholder="Añadir categoría..."
+                                />
+
+                                <ChipInput
+                                    label="Tags / Etiquetas"
+                                    chips={tags}
+                                    onAdd={val => setTags([...tags, val])}
+                                    onRemove={val => setTags(tags.filter(t => t !== val))}
+                                    placeholder="Añadir tag..."
                                 />
                             </div>
+                        </AdminCard>
 
-                            <div>
-                                <label className="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Fecha Programada</label>
-                                <div className="relative">
-                                    <input
-                                        type="datetime-local"
-                                        {...register('publishedAt')}
-                                        className="block w-full bg-gray-50/50 border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-400 shadow-sm transition-all h-10 px-3 pl-10 text-sm"
-                                    />
-                                    <Calendar className="absolute left-3 top-2.5 text-gray-400" size={16} />
-                                </div>
-                            </div>
-                        </div>
-                    </AdminCard>
-
-                    <AdminCard title="Categorización" headerClassName="bg-gray-50/50">
-                        <div className="space-y-6">
-                            <ChipInput
-                                label="Categorías"
-                                chips={categories}
-                                onAdd={val => setCategories([...categories, val])}
-                                onRemove={val => setCategories(categories.filter(c => c !== val))}
-                                presets={CATEGORY_PRESETS}
-                                placeholder="Añadir categoría..."
-                            />
-
-                            <ChipInput
-                                label="Tags / Etiquetas"
-                                chips={tags}
-                                onAdd={val => setTags([...tags, val])}
-                                onRemove={val => setTags(tags.filter(t => t !== val))}
-                                placeholder="Añadir tag..."
-                            />
-                        </div>
-                    </AdminCard>
-
-                    <AdminCard title="IA Insight" headerClassName="bg-blue-50/50">
-                        <div className="space-y-4">
-                            <div className="flex gap-2 mb-2">
+                        <AdminCard title="IA Insight & Mapeo" headerClassName="bg-blue-50/50">
+                            <div className="space-y-4">
                                 <button
                                     type="button"
                                     onClick={analyzeContent}
                                     disabled={analyzing}
-                                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 disabled:opacity-50"
+                                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 disabled:opacity-50"
                                 >
                                     {analyzing ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} className="fill-white" />}
-                                    {analyzing ? 'Analizando...' : 'Auto-Mapeo IA'}
+                                    <span>{analyzing ? 'Analizando...' : 'Auto-Mapeo IA'}</span>
                                 </button>
 
-                                {initialData?.id && (
-                                    <button
-                                        type="button"
-                                        onClick={handleManualSync}
-                                        disabled={syncing}
-                                        title="Sincronizar con Google Business"
-                                        className={cn(
-                                            "p-2.5 rounded-xl border transition-all",
-                                            syncSuccess ? "bg-green-50 border-green-200 text-green-600" : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
-                                        )}
-                                    >
-                                        {syncing ? <Loader2 size={16} className="animate-spin" /> : syncSuccess ? <CheckCircle2 size={16} /> : <Share2 size={16} />}
-                                    </button>
-                                )}
+                                <div className="grid grid-cols-1 gap-4 pt-2 border-t border-gray-100">
+                                    <SelectableMetadata
+                                        label="Empresa"
+                                        value={company || ''}
+                                        onChange={val => setValue('company', val, { shouldDirty: true })}
+                                        options={companiesList}
+                                        onAddOption={val => setCompaniesList(prev => [...prev, val])}
+                                    />
+                                    <SelectableMetadata
+                                        label="Herramienta"
+                                        value={aiTool || ''}
+                                        onChange={val => setValue('aiTool', val, { shouldDirty: true })}
+                                        options={aiToolsList}
+                                        onAddOption={val => setAiToolsList(prev => [...prev, val])}
+                                    />
+                                    <SelectableMetadata
+                                        label="Tipo IA"
+                                        value={aiType || ''}
+                                        onChange={val => setValue('aiType', val, { shouldDirty: true })}
+                                        options={aiTypesList}
+                                        onAddOption={val => setAiTypesList(prev => [...prev, val])}
+                                    />
+                                    <SelectableMetadata
+                                        label="Área"
+                                        value={businessArea || ''}
+                                        onChange={val => setValue('businessArea', val, { shouldDirty: true })}
+                                        options={businessAreasList}
+                                        onAddOption={val => setBusinessAreasList(prev => [...prev, val])}
+                                    />
+                                    <SelectableMetadata
+                                        label="Sector"
+                                        value={sector || ''}
+                                        onChange={val => setValue('sector', val, { shouldDirty: true })}
+                                        options={sectorsList}
+                                        onAddOption={val => setSectorsList(prev => [...prev, val])}
+                                    />
+                                    <SelectableMetadata
+                                        label="Profesión"
+                                        value={profession || ''}
+                                        onChange={val => setValue('profession', val, { shouldDirty: true })}
+                                        options={professionsList}
+                                        onAddOption={val => setProfessionsList(prev => [...prev, val])}
+                                    />
+                                </div>
                             </div>
+                        </AdminCard>
+                    </div>
+                </div>
 
-                            <div className="grid grid-cols-1 gap-4">
-                                <SelectableMetadata
-                                    label="Empresa"
-                                    value={company || ''}
-                                    onChange={val => setValue('company', val, { shouldDirty: true })}
-                                    options={companiesList}
-                                    onAddOption={val => setCompaniesList(prev => [...prev, val])}
-                                />
-                                <SelectableMetadata
-                                    label="Herramienta"
-                                    value={aiTool || ''}
-                                    onChange={val => setValue('aiTool', val, { shouldDirty: true })}
-                                    options={aiToolsList}
-                                    onAddOption={val => setAiToolsList(prev => [...prev, val])}
-                                />
-                                <SelectableMetadata
-                                    label="Tipo IA"
-                                    value={aiType || ''}
-                                    onChange={val => setValue('aiType', val, { shouldDirty: true })}
-                                    options={aiTypesList}
-                                    onAddOption={val => setAiTypesList(prev => [...prev, val])}
-                                />
-                                <SelectableMetadata
-                                    label="Área"
-                                    value={businessArea || ''}
-                                    onChange={val => setValue('businessArea', val, { shouldDirty: true })}
-                                    options={businessAreasList}
-                                    onAddOption={val => setBusinessAreasList(prev => [...prev, val])}
-                                />
-                                <SelectableMetadata
-                                    label="Sector"
-                                    value={sector || ''}
-                                    onChange={val => setValue('sector', val, { shouldDirty: true })}
-                                    options={sectorsList}
-                                    onAddOption={val => setSectorsList(prev => [...prev, val])}
-                                />
-                                <SelectableMetadata
-                                    label="Profesión"
-                                    value={profession || ''}
-                                    onChange={val => setValue('profession', val, { shouldDirty: true })}
-                                    options={professionsList}
-                                    onAddOption={val => setProfessionsList(prev => [...prev, val])}
-                                />
-                            </div>
-                        </div>
-                    </AdminCard>
+                {/* Sticky Action Bar */}
+                <div className="sticky bottom-6 z-30 w-full bg-white/95 backdrop-blur-md border border-gray-150 rounded-2xl p-4 shadow-xl flex flex-wrap items-center justify-between gap-4 animate-in slide-in-from-bottom-5 duration-300 mt-8">
+                    {/* Left: Acciones Editoriales */}
+                    <div className="flex items-center gap-2.5">
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className="px-4 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 bg-white border border-gray-200 hover:border-gray-300 rounded-xl transition-all shadow-sm"
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleSaveDraft}
+                            className="px-4 py-2 text-xs font-bold text-gray-700 bg-white border border-gray-250 hover:border-gray-355 rounded-xl transition-all shadow-sm"
+                        >
+                            Guardar Borrador
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setShowPreview(true)}
+                            className="px-4 py-2 text-xs font-bold text-blue-600 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-xl transition-all"
+                        >
+                            Vista Previa
+                        </button>
+                    </div>
+
+                    {/* Right: Acciones Distribución & Publicación Primaria */}
+                    <div className="flex items-center gap-2.5 ml-auto">
+                        {initialData?.id && (
+                            <button
+                                type="button"
+                                onClick={handleManualSync}
+                                disabled={syncing}
+                                className={cn(
+                                    "px-4 py-2 text-xs font-bold rounded-xl border transition-all flex items-center gap-1.5",
+                                    syncSuccess 
+                                        ? "bg-green-50 border-green-200 text-green-600" 
+                                        : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                                )}
+                            >
+                                {syncing ? <Loader2 size={12} className="animate-spin" /> : <Share2 size={12} />}
+                                <span>{syncSuccess ? 'Sincronizado GMB' : 'Sincronizar GMB'}</span>
+                            </button>
+                        )}
+
+                        <button
+                            type="button"
+                            onClick={handleSubmit(handleFormSubmit, onError)}
+                            disabled={isSubmitting}
+                            className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-200 transition-all flex items-center gap-2 disabled:opacity-50"
+                        >
+                            {isSubmitting ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
+                            <span>{status === 'SCHEDULED' ? 'Programar Noticia' : (initialData ? 'Actualizar Noticia' : 'Publicar Noticia')}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            {/* Preview Modal */}
+            {showPreview && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[85vh] overflow-y-auto shadow-2xl flex flex-col animate-in zoom-in-95 duration-200">
+                        {/* Modal Header */}
+                        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 rounded-t-3xl">
+                            <div>
+                                <h3 className="text-base font-bold text-gray-900">Previsualización de Noticia</h3>
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Así es como se verá en el sitio público</p>
+                            </div>
+                            <button
+                                onClick={() => setShowPreview(false)}
+                                className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-400 hover:text-gray-900"
+                            >
+                                <X size={16} />
+                            </button>
+                        </div>
+
+                        {/* Modal Content */}
+                        <div className="p-8 md:p-12 space-y-6 flex-1 overflow-y-auto select-text">
+                            {coverImageUrl && (
+                                <div className="aspect-video w-full rounded-2xl overflow-hidden border border-gray-150 shadow-sm">
+                                    <img src={coverImageUrl} className="w-full h-full object-cover" alt="Cover" />
+                                </div>
+                            )}
+                            
+                            <div className="space-y-4">
+                                <div className="flex flex-wrap gap-2 text-[9px] font-black text-blue-600 uppercase tracking-widest">
+                                    {categories.map(c => <span key={c} className="px-2 py-0.5 bg-blue-50 rounded-md border border-blue-100/50">{c}</span>)}
+                                </div>
+                                
+                                <h1 className="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight Outfit">
+                                    {titleVal || 'Título de la Noticia'}
+                                </h1>
+
+                                <div className="text-xs text-gray-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                    <span>Autor: Partners IA</span>
+                                    <span>•</span>
+                                    <span>{new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+                                </div>
+                            </div>
+
+                            <div 
+                                className="prose prose-blue max-w-none text-gray-700 leading-relaxed text-sm md:text-base border-t border-gray-100 pt-6"
+                                dangerouslySetInnerHTML={{ __html: htmlContent || '<p class="text-gray-400 italic">Escribe el contenido en el editor para previsualizarlo aquí...</p>' }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </AdminFormShell>
     )
 }

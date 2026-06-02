@@ -1,41 +1,120 @@
 /* ============================================
-   ADMIN UX INFRASTRUCTURE
-   Responsive Hardening & Density Layer
+   ADMIN UX INFRASTRUCTURE — LIGHT PREMIUM V2
+   Continuous Surfaces, Ingravid Shadows, Apple & Stripe Aesthetics
    ============================================ */
 
-/* Overflow Safety Primitives */
+/* Root Overrides for Light Premium Interface */
+:root {
+  --background: #FFFFFF !important;
+  --background-secondary: #FAFAFB !important;
+  --foreground: #111111 !important;
+  --foreground-secondary: #6E6E73 !important;
+  --border-premium: rgba(0, 0, 0, 0.03);
+  
+  /* System Acentuations */
+  --accent-blue: #007AFF;
+  --accent-violet: #8B5CF6;
+  --accent-cian: #06B6D4;
+  
+  /* Ingravid Shadows (Stripe / Apple Style) */
+  --shadow-premium: 0 8px 30px rgba(0, 0, 0, 0.01);
+  --shadow-premium-hover: 0 16px 48px rgba(0, 0, 0, 0.02);
+  --shadow-violet-glow: 0 4px 24px rgba(139, 92, 246, 0.03);
+  --shadow-cian-glow: 0 4px 24px rgba(6, 182, 212, 0.03);
+}
+
+/* Base resets for a breathing workspace */
 .admin-safe-container {
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  overflow-x: hidden; /* Strict containment of child overflows */
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  background-color: var(--background);
+  background-image: radial-gradient(at top left, #FAFAFB, #FFFFFF);
 }
 
-.admin-horizontal-scroll {
-  width: 100%;
-  overflow-x: auto;
+.admin-main-scroll {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  background-color: var(--background);
 }
 
-/* Density Tokens */
+/* Premium White Surface V2 (No border, wide ingravid shadows) */
+.premium-white-surface {
+  background: #FFFFFF;
+  background-image: radial-gradient(at top left, #FFFFFF, rgba(250, 250, 251, 0.4));
+  border: 1px solid var(--border-premium);
+  border-radius: 24px; /* 1.5rem */
+  box-shadow: var(--shadow-premium);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-white-surface:hover {
+  box-shadow: var(--shadow-premium-hover);
+  border-color: rgba(139, 92, 246, 0.08); /* Sutil purple hint */
+  transform: translateY(-1px);
+}
+
+/* AI Interactive Glows V2 */
+.ai-violet-glow {
+  box-shadow: var(--shadow-violet-glow);
+  border-color: rgba(139, 92, 246, 0.05);
+}
+
+.ai-violet-glow:hover {
+  box-shadow: 0 16px 40px rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.12);
+}
+
+.ai-cian-glow {
+  box-shadow: var(--shadow-cian-glow);
+  border-color: rgba(6, 182, 212, 0.05);
+}
+
+.ai-cian-glow:hover {
+  box-shadow: 0 16px 40px rgba(6, 182, 212, 0.06);
+  border-color: rgba(6, 182, 212, 0.12);
+}
+
+/* Drag & Drop Visual Preparedness */
+.dd-grab-handle {
+  cursor: grab;
+  transition: all 0.2s ease;
+}
+
+.dd-grab-handle:active {
+  cursor: grabbing;
+}
+
+.dd-grab-handle:hover {
+  background-color: rgba(0, 0, 0, 0.015);
+  border-radius: 8px;
+}
+
+/* Density tokens - breathing space */
 .admin-card-padding {
-  padding: 1rem;
+  padding: 1.75rem; /* 28px */
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .admin-card-padding {
-    padding: 1.25rem;
+    padding: 2.25rem; /* 36px - More Air */
   }
 }
 
-@media (min-width: 1024px) {
-  .admin-card-padding {
-    padding: 1.5rem;
-  }
+/* Sub-headings for domain separation V2 */
+.sidebar-domain-header {
+  font-size: 9px;
+  font-weight: 800;
+  color: #C1C1C6;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  padding: 1.5rem 1rem 0.5rem 1rem;
 }
 
-/* Text Hardening */
+/* Truncations */
 .admin-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -44,14 +123,103 @@
   max-width: 100%;
 }
 
-/* Scroll Safety Overrides */
-html.admin-active, 
-body.admin-active {
-  overflow: auto !important;
-  height: auto !important;
+/* Clean transparent inputs V2 (Stripe Style) */
+.clean-premium-input {
+  width: 100%;
+  padding: 0.75rem 1.125rem;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  color: #111111;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.005);
 }
 
-.admin-main-scroll {
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;
+.clean-premium-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.06);
 }
+
+/* ============================================
+   VISUAL REBIRTH V2A.5 GLASS DOCK & WORKSPACE
+   ============================================ */
+
+.glass-dock {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(0, 0, 0, 0.035) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.015) !important;
+}
+
+.active-premium-item {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.03) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+}
+
+.workspace-continuous-hairline {
+  border-color: rgba(0, 0, 0, 0.035) !important;
+}
+
+/* Custom Hide Scrollbar for breathing workspaces */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================
+   VISUAL REFINEMENT V2A.7 SOLID WORKSPACE
+   ============================================ */
+
+.workspace-widget-solid {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.045) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.002) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.workspace-widget-solid:hover {
+  border-color: rgba(0, 0, 0, 0.075) !important;
+}
+
+/* ============================================
+   VISUAL REFINEMENT V2A.7 — FLAT TABLE OVERRIDES
+   ============================================ */
+
+.workspace-flat-table-container > div > div {
+  background-color: #FFFFFF !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.045) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.002) !important;
+}
+
+.workspace-flat-table-container .md\:hidden > div {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.045) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.001) !important;
+}
+
+/* Compact spacing for high visual density */
+.workspace-flat-table-container th,
+.workspace-flat-table-container td {
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03) !important;
+}
+
+.workspace-flat-table-container tr:last-child td {
+  border-bottom: none !important;
+}
+
+.workspace-flat-table-container tr:hover td {
+  background-color: rgba(0, 0, 0, 0.008) !important;
+}
+
