@@ -48,9 +48,10 @@ export default function AdminLayoutShell({
                 onClick={() => setIsSidebarOpen(false)}
             />
 
-            {/* Sidebar Section - Sticky on desktop for persistent navigation */}
+            {/* Sidebar Section - Padded container for V2A.5 floating capsule dock */}
             <aside className={cn(
-                "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
+                "fixed inset-y-0 left-0 z-50 w-60 bg-transparent transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
+                "py-3 pl-3 pr-1.5",
                 isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <Sidebar onCloseMobile={() => setIsSidebarOpen(false)} />
