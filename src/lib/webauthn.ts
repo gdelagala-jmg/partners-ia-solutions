@@ -16,12 +16,19 @@ export function getWebAuthnConfig(request?: Request) {
     const envOrigin = process.env.WEBAUTHN_ORIGIN
     
     let rpId = envRpId || 'localhost'
-    let origin = envOrigin || 'http://localhost:3000'
+    let origin: string | string[] = envOrigin 
+        ? envOrigin.split(',').map(o => o.trim()) 
+        : 'http://localhost:3000'
     
     if (process.env.NODE_ENV === 'production') {
         // Enforce production domain defaults if not set in env
         rpId = envRpId || 'partnersiasolutions.com'
-        origin = envOrigin || 'https://partnersiasolutions.com'
+        origin = envOrigin 
+            ? envOrigin.split(',').map(o => o.trim()) 
+            : [
+                'https://partnersiasolutions.com',
+                'https://www.partnersiasolutions.com'
+              ]
     } else if (request) {
         // Dynamic detection for easier testing in development / staging
         const host = request.headers.get('host')
