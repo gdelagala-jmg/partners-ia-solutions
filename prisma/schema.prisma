@@ -164,11 +164,29 @@ model Lead {
 }
 
 model AdminUser {
-  id              String   @id @default(uuid())
-  username        String   @unique
+  id              String          @id @default(uuid())
+  username        String          @unique
   passwordHash    String
-  createdAt       DateTime @default(now())
-  dashboardConfig String?  @db.LongText
+  createdAt       DateTime        @default(now())
+  dashboardConfig String?         @db.LongText
+  authenticators  Authenticator[]
+}
+
+model Authenticator {
+  id                   String    @id @default(uuid())
+  credentialID         String    @unique
+  credentialPublicKey  String    @db.VarChar(1024)
+  counter              BigInt    @default(0)
+  credentialDeviceType String
+  credentialBackedUp   Boolean   @default(false)
+  transports           String?
+  name                 String
+  createdAt            DateTime  @default(now())
+  lastUsedAt           DateTime?
+  adminUserId          String
+  adminUser            AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
 }
 
 model Course {

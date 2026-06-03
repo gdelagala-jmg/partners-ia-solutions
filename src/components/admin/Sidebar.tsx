@@ -83,6 +83,7 @@ const sidebarGroups = [
             { name: 'Navegación', href: '/admin/navegacion', icon: Link2 },
             { name: 'Equipo', href: '/admin/equipo', icon: Users },
             { name: 'SMTP Config', href: '/admin/newsletter/settings', icon: Settings },
+            { name: 'Seguridad', href: '/admin/seguridad', icon: ShieldCheck },
         ]
     }
 ]
