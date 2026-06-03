@@ -21,6 +21,8 @@
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.1.0",
     "@prisma/client": "^6.19.2",
+    "@simplewebauthn/browser": "^13.3.0",
+    "@simplewebauthn/server": "^13.3.1",
     "@vercel/blob": "^2.3.1",
     "adm-zip": "^0.5.16",
     "ai": "^6.0.147",

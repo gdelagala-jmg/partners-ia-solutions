@@ -1,19 +1,96 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Lock } from 'lucide-react'
+import { Lock, Fingerprint } from 'lucide-react'
+import { startAuthentication } from '@simplewebauthn/browser'
 
 export default function AdminLogin() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const [isWebAuthnSupported, setIsWebAuthnSupported] = useState(false)
+    const [buttonText, setButtonText] = useState('Acceder con Passkey')
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Check basic WebAuthn support
+            if (window.PublicKeyCredential) {
+                setIsWebAuthnSupported(true)
+            }
+
+            // Adapt button text based on the platform user agent
+            const userAgent = window.navigator.userAgent.toLowerCase()
+            if (/iphone|ipad|ipod|macintosh/.test(userAgent)) {
+                setButtonText('Acceder con Face ID / Touch ID')
+            } else if (/windows/.test(userAgent)) {
+                setButtonText('Acceder con Windows Hello')
+            } else if (/android/.test(userAgent)) {
+                setButtonText('Acceder con Huella / Rostro')
+            } else {
+                setButtonText('Acceder con Passkey')
+            }
+        }
+    }, [])
+
+    const handleBiometricLogin = async () => {
+        setError('')
+        setIsLoading(true)
+        try {
+            // 1. Get authentication options from server (targeted to default admin)
+            const optionsRes = await fetch(`/api/auth/webauthn/login/options?username=admin`)
+            if (!optionsRes.ok) {
+                const data = await optionsRes.json()
+                throw new Error(data.error || 'No se pudieron obtener las opciones de autenticación')
+            }
+            const options = await optionsRes.json()
+
+            // UX Optimization: Prevent opening browser dialog if user has no registered authenticators
+            if (!options.allowCredentials || options.allowCredentials.length === 0) {
+                throw new Error('No tienes ningún dispositivo biométrico registrado. Inicia sesión con contraseña y vincúlalo en Seguridad de acceso.')
+            }
+
+            // 2. Start authentication using simplewebauthn browser client
+            let authResponse
+            try {
+                authResponse = await startAuthentication({ optionsJSON: options })
+            } catch (err: any) {
+                // Friendly cancelation handling
+                if (err.name === 'NotAllowedError') {
+                    throw new Error('Autenticación biométrica cancelada.')
+                }
+                throw err
+            }
+
+            // 3. Send verification to server
+            const verifyRes = await fetch('/api/auth/webauthn/login/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ response: authResponse })
+            })
+
+            if (verifyRes.ok) {
+                router.push('/admin/dashboard')
+                router.refresh()
+            } else {
+                const data = await verifyRes.json()
+                throw new Error(data.error || 'La verificación biométrica falló')
+            }
+        } catch (err: any) {
+            console.error(err)
+            setError(err.message || 'Error de autenticación biométrica')
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
+        setIsLoading(true)
 
         try {
             const res = await fetch('/api/auth/login', {
@@ -27,10 +104,12 @@ export default function AdminLogin() {
                 router.refresh()
             } else {
                 const data = await res.json()
-                setError(data.error || 'Login failed')
+                setError(data.error || 'Credenciales incorrectas')
             }
         } catch (err) {
-            setError('An error occurred')
+            setError('Ocurrió un error al iniciar sesión')
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -55,7 +134,7 @@ export default function AdminLogin() {
                     {error && (
                         <div className="bg-red-50 border border-red-100 text-red-600 text-[11px] font-bold p-3 rounded-xl flex items-center gap-2 animate-in slide-in-from-top-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
-                            {error}
+                            <span className="leading-snug">{error}</span>
                         </div>
                     )}
 
@@ -68,8 +147,9 @@ export default function AdminLogin() {
                                 id="username"
                                 type="text"
                                 required
+                                disabled={isLoading}
                                 placeholder="tú@ejemplo.com"
-                                className="w-full px-4 py-3 bg-[#F5F5F7] border border-transparent rounded-xl text-sm text-[#1D1D1F] placeholder:text-[#98989D] focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/20 transition-all duration-300 font-medium"
+                                className="w-full px-4 py-3 bg-[#F5F5F7] border border-transparent rounded-xl text-sm text-[#1D1D1F] placeholder:text-[#98989D] focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/20 transition-all duration-300 font-medium disabled:opacity-60"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
@@ -82,8 +162,9 @@ export default function AdminLogin() {
                                 id="password"
                                 type="password"
                                 required
+                                disabled={isLoading}
                                 placeholder="••••••••"
-                                className="w-full px-4 py-3 bg-[#F5F5F7] border border-transparent rounded-xl text-sm text-[#1D1D1F] placeholder:text-[#98989D] focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/20 transition-all duration-300 font-medium"
+                                className="w-full px-4 py-3 bg-[#F5F5F7] border border-transparent rounded-xl text-sm text-[#1D1D1F] placeholder:text-[#98989D] focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/20 transition-all duration-300 font-medium disabled:opacity-60"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -92,11 +173,36 @@ export default function AdminLogin() {
 
                     <button
                         type="submit"
-                        className="w-full flex justify-center py-3.5 px-6 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] transition-all duration-300 shadow-lg shadow-blue-100"
+                        disabled={isLoading}
+                        className="w-full flex justify-center py-3.5 px-6 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] transition-all duration-300 shadow-lg shadow-blue-100 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                        Acceder al Panel
+                        {isLoading ? 'Cargando...' : 'Acceder al Panel'}
                     </button>
                 </form>
+
+                {isWebAuthnSupported && (
+                    <div className="space-y-3 pt-2 animate-in fade-in slide-in-from-bottom-2 duration-700">
+                        <div className="flex items-center gap-3">
+                            <div className="h-[1px] bg-[#E8E8ED] grow" />
+                            <span className="text-[9px] font-bold text-[#8E8E93] uppercase tracking-wider">o accede con tu dispositivo</span>
+                            <div className="h-[1px] bg-[#E8E8ED] grow" />
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={handleBiometricLogin}
+                            disabled={isLoading}
+                            className="w-full flex justify-center items-center gap-2.5 py-3.5 px-6 rounded-xl text-xs font-bold text-blue-600 bg-blue-50/50 hover:bg-blue-100/70 border border-blue-100/50 hover:border-blue-200/50 active:scale-[0.98] transition-all duration-300 cursor-pointer shadow-sm shadow-blue-50/30 disabled:opacity-60"
+                        >
+                            <Fingerprint size={16} className="text-blue-500 shrink-0" />
+                            {buttonText}
+                        </button>
+                        
+                        <p className="text-center text-[9px] text-[#8E8E93] font-medium leading-relaxed max-w-[240px] mx-auto">
+                            Usa el dispositivo vinculado desde <Link href="/admin/seguridad" className="font-bold text-[#6E6E73] hover:text-blue-600 transition-colors">Seguridad de acceso</Link>.
+                        </p>
+                    </div>
+                )}
 
                 <div className="pt-2 text-center">
                     <Link href="/" className="text-[9px] text-[#98989D] font-bold uppercase tracking-[0.2em] hover:text-blue-600 transition-colors">
@@ -107,3 +213,4 @@ export default function AdminLogin() {
         </div>
     )
 }
+
