@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Sparkles, Bot, ShieldCheck, Zap, HelpCircle, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
 import PageBadge from '@/components/ui/PageBadge'
 import FAQItem from '@/components/ui/FAQItem'
 import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
@@ -87,8 +88,8 @@ export default function FAQPage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="py-8 lg:py-8 bg-gray-50 border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center">
+      <section className="pt-10 md:pt-6 pb-8 lg:pb-12 bg-gray-50 border-b border-gray-100">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center pt-6 md:pt-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -109,7 +110,7 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ Categories & Items */}
-      <section className="py-20 px-4 md:px-6 lg:px-8">
+      <section className="py-10 md:py-14 px-4 md:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-20">
           {faqCategories.map((category, catIdx) => (
             <motion.div 
@@ -147,17 +148,17 @@ export default function FAQPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gray-50 py-16 border-y border-gray-100">
+      <section className="bg-gray-50 py-10 md:py-14 border-y border-gray-100">
         <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
             <h3 className="text-2xl font-bold text-black mb-4 tracking-tight">¿Alguna otra duda especial?</h3>
             <p className="text-gray-600 mb-8 font-medium">Nuestro equipo de expertos está listo para resolver tus inquietudes técnicas o estratégicas.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a 
+                <Link 
                     href="/contacto" 
                     className="px-8 py-3.5 bg-black text-white font-bold rounded-2xl hover:bg-gray-800 transition-all hover:scale-105 shadow-xl shadow-gray-200"
                 >
                     Contactar Ahora
-                </a>
+                </Link>
                 <a 
                     href="https://api.whatsapp.com/send?phone=34639023805" 
                     target="_blank"
