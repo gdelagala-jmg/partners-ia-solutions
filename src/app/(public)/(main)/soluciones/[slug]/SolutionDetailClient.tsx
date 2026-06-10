@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import LeadForm from '@/components/forms/LeadForm'
+import PageBadge from '@/components/ui/PageBadge'
 
 export default function SolutionDetailClient({ solution }: { solution: any }) {
     const [currentImageIdx, setCurrentImageIdx] = useState(0)
@@ -28,30 +29,10 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
             </div>
 
             {/* HERO SECTION */}
-            <div className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
-                <div className="max-w-6xl mx-auto px-5 md:px-6 lg:px-8 relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <Link href="/soluciones" className="group inline-flex items-center text-sm font-medium text-solutions-text-secondary hover:text-blue-600 mb-10 transition-all">
-                            <div className="p-2 rounded-full bg-white border border-solutions-border mr-3 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm">
-                                <ArrowLeft size={16} />
-                            </div>
-                            Volver al catálogo de IA
-                        </Link>
-                    </motion.div>
-                    
+            <div className="relative pt-10 pb-16 md:pt-6 md:pb-24 overflow-hidden">
+                <div className="max-w-6xl mx-auto px-5 md:px-6 lg:px-8 relative z-10 pt-6 md:pt-5">
                     <div className="flex flex-col items-center text-center">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-6"
-                        >
-                            <Sparkles size={12} />
-                            Solución Inteligente
-                        </motion.div>
+                        <PageBadge text="Solución Inteligente" icon={<Sparkles size={14} className="text-blue-500" />} />
                         
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
@@ -72,11 +53,25 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                                 {solution.description}
                             </motion.p>
                         )}
+                        
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="mt-10"
+                        >
+                            <Link href="/soluciones" className="group inline-flex items-center text-sm font-medium text-solutions-text-secondary hover:text-blue-600 transition-all">
+                                <div className="p-2 rounded-full bg-white border border-solutions-border mr-3 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm">
+                                    <ArrowLeft size={16} />
+                                </div>
+                                Volver al catálogo de IA
+                            </Link>
+                        </motion.div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-32">
+            <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-16 md:pb-20">
                 {/* CONTAINER */}
                 <motion.div 
                     initial={{ opacity: 0, y: 40 }}
@@ -130,7 +125,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
 
                         {/* DETAILS SECTION */}
                         <div className="px-6 md:px-10 py-12 md:py-20 border-t border-solutions-border">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16">
                                 <div className="space-y-12">
                                     {solution.functionalDescription && (
                                         <motion.div
@@ -233,7 +228,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                         </div>
 
                         {/* PREMIUM DEMO SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-                        <div id="demo-section" className="relative px-5 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
+                        <div id="demo-section" className="relative px-5 py-16 md:py-20 bg-solutions-bg-commercial border-t border-solutions-border">
                             <div className="max-w-4xl mx-auto">
                                 <div className="text-center mb-10 md:mb-16">
                                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-6">
@@ -268,7 +263,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                                     className="relative"
                                 >
                                     <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 rounded-[3rem] blur-2xl opacity-50" />
-                                    <div className="relative md:bg-white md:border md:border-solutions-border md:rounded-[2.5rem] p-0 sm:p-4 md:p-16 md:shadow-2xl overflow-hidden">
+                                    <div className="relative md:bg-white md:border md:border-solutions-border md:rounded-[2.5rem] p-0 sm:p-4 md:p-10 md:shadow-2xl overflow-hidden">
                                         <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10 hidden md:block" />
                                         <LeadForm 
                                             layout="inline"

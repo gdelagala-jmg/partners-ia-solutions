@@ -150,7 +150,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             </header>
 
             {/* Main Content Grid */}
-            <main className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-24">
+            <main className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-16 md:pb-20">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                     
                     {/* Hero Image Section */}
@@ -216,7 +216,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             </main>
 
             {/* PREMIUM DOSSIER SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-            <section className="relative px-5 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
+            <section className="relative px-5 py-16 md:py-20 bg-solutions-bg-commercial border-t border-solutions-border">
                 <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-10 md:mb-16">
                         <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 mx-auto shadow-sm">
@@ -240,7 +240,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                         {/* Outer Glow */}
                         <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 rounded-[3rem] blur-2xl opacity-50 transition duration-1000" />
                         
-                        <div className="relative md:bg-white md:border md:border-solutions-border md:rounded-[2.5rem] p-0 sm:p-4 md:p-16 md:shadow-2xl overflow-hidden">
+                        <div className="relative md:bg-white md:border md:border-solutions-border md:rounded-[2.5rem] p-0 sm:p-4 md:p-10 md:shadow-2xl overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10 hidden md:block" />
                             <LeadForm 
                                 variant="premium" 

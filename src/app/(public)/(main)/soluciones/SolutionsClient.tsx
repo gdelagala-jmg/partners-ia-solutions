@@ -131,8 +131,8 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             </div>
 
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden border-b border-solutions-border">
-                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center relative z-10">
+            <section className="relative pt-10 pb-6 md:pt-6 md:pb-8 overflow-hidden border-b border-solutions-border">
+                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center relative z-10 pt-6 md:pt-5">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -155,7 +155,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             </section>
 
             {/* Sectors Grid */}
-            <section id="sectores" className="py-24 relative bg-solutions-bg-main scroll-mt-24">
+            <section id="sectores" className="pt-6 pb-8 md:pt-8 md:pb-10 relative bg-solutions-bg-main scroll-mt-24">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     <div className="mb-16 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                         <div className="max-w-2xl">
@@ -230,7 +230,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Final Solutions */}
             {finalSolutions.length > 0 && (
-                <section id="soluciones_finales" className="py-32 bg-solutions-bg-commercial border-y border-solutions-border relative scroll-mt-24">
+                <section id="soluciones_finales" className="py-10 md:py-12 bg-solutions-bg-commercial border-y border-solutions-border relative scroll-mt-24">
                     <div className="absolute inset-0 bg-blue-50/30 pointer-events-none" />
                     <div className="max-w-5xl mx-auto px-5 md:px-6 lg:px-8 relative z-10">
                         <div className="mb-16 text-center">
@@ -250,7 +250,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Lab Prototypes */}
             {labPrototypes.length > 0 && (
-                <section id="labs" className="py-32 relative bg-solutions-bg-main scroll-mt-24">
+                <section id="labs" className="py-8 md:py-10 relative bg-solutions-bg-main scroll-mt-24">
                     <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                         <div className="mb-16 text-center lg:text-left">
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-cyan-50 text-cyan-700 text-[10px] font-mono font-bold tracking-[0.3em] rounded-full border border-cyan-100">
@@ -272,9 +272,9 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             )}
 
             {/* CTA Final */}
-            <section className="py-24">
+            <section className="py-8 md:py-10">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                    <div className="bg-gray-50 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden border border-gray-100">
+                    <div className="bg-gray-50 rounded-[3rem] p-8 md:p-12 text-center relative overflow-hidden border border-gray-100">
                         {/* Decorative background elements for CTA */}
                         <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" 
                              style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} 

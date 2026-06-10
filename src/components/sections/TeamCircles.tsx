@@ -91,7 +91,7 @@ export default function TeamCircles() {
 
     if (loading) {
         return (
-            <div className="flex justify-center py-20">
+            <div className="flex justify-center py-16">
                 <Loader2 className="animate-spin text-blue-400/40" size={28} />
             </div>
         )
@@ -102,7 +102,7 @@ export default function TeamCircles() {
     const visibleMembers = order.filter(m => m.showPhoto)
 
     return (
-        <section className="py-10 md:py-24 relative overflow-hidden bg-transparent">
+        <section className="py-10 md:py-16 relative overflow-hidden bg-transparent">
             {/* Halo de luz azul central como en la versión original */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(219,234,254,0.35)_0%,_rgba(255,255,255,0)_60%)] pointer-events-none" />
 
@@ -125,8 +125,8 @@ export default function TeamCircles() {
                     className="
                         grid grid-cols-2 gap-y-12 gap-x-4
                         sm:grid-cols-3 sm:gap-x-8
-                        md:flex md:flex-wrap md:justify-center md:gap-12 lg:gap-20
-                        py-6 md:py-12 items-center
+                        md:flex md:flex-wrap md:justify-center md:gap-8 lg:gap-12
+                        py-4 md:py-8 items-center
                     "
                 >
                     <AnimatePresence mode="popLayout">

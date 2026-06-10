@@ -112,11 +112,11 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
     return (
         <div className="bg-white">
             {/* HERO SECTION */}
-            <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-[60vh] md:min-h-[70vh]">
+            <section className="relative flex items-center justify-center overflow-hidden bg-white pt-10 pb-16 md:pt-6 md:pb-24">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
-                <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center py-6 md:py-12">
+                <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center pt-6 pb-6 md:pt-5 md:pb-10">
                     
                     <AnimatePresence mode="wait">
                         <motion.div
@@ -130,7 +130,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         </motion.div>
                     </AnimatePresence>
 
-                    <div className="min-h-[120px] md:min-h-[200px] flex flex-col items-center justify-center">
+                    <div className="min-h-[100px] md:min-h-[140px] flex flex-col items-center justify-center">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={editorial.id + '-text'}
