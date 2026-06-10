@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import LeadForm from '@/components/forms/LeadForm'
 import PageBadge from '@/components/ui/PageBadge'
+import SectionBlock from '@/components/ui/layout/SectionBlock'
+import SectionHeader from '@/components/ui/layout/SectionHeader'
 
 interface Sector {
   id: string
@@ -150,7 +152,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             </header>
 
             {/* Main Content Grid */}
-            <main className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-24">
+            <main className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-16 md:pb-20">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                     
                     {/* Hero Image Section */}
@@ -216,20 +218,14 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             </main>
 
             {/* PREMIUM DOSSIER SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-            <section className="relative px-5 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
-                <div className="max-w-4xl mx-auto">
-                    <div className="text-center mb-10 md:mb-16">
-                        <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 mx-auto shadow-sm">
-                            <Mail size={32} />
-                        </div>
-                        <h3 className="text-4xl md:text-5xl font-black text-solutions-text-primary mb-4 leading-tight">
-                            Solicita un dossier estratégico para <br className="hidden md:block" />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{sector.name}</span>
-                        </h3>
-                        <p className="text-solutions-text-secondary text-lg md:text-xl font-light max-w-2xl mx-auto">
-                            Analizaremos tu caso y te enviaremos una propuesta detallada con soluciones de IA adaptadas específicamente a tu sector.
-                        </p>
+            <SectionBlock spacing="standard" containerWidth="narrow" className="bg-solutions-bg-commercial border-t border-solutions-border">
+                    <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 mx-auto shadow-sm">
+                        <Mail size={32} />
                     </div>
+                    <SectionHeader 
+                        title={<>Solicita un dossier estratégico para <br className="hidden md:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{sector.name}</span></>}
+                        subtitle="Analizaremos tu caso y te enviaremos una propuesta detallada con soluciones de IA adaptadas específicamente a tu sector."
+                    />
 
                     <motion.div 
                         initial={{ opacity: 0, y: 30 }}
@@ -265,8 +261,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
                             </div>
                         </div>
                     </motion.div>
-                </div>
-            </section>
+            </SectionBlock>
         </div>
     </div>
   )
