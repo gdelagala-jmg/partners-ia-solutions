@@ -10,6 +10,7 @@ import { useSearchParams } from 'next/navigation'
 
 import PageBadge from '@/components/ui/PageBadge'
 import CardGrid from '@/components/ui/layout/CardGrid'
+import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 
 interface NewsPost {
     id: string
@@ -463,6 +464,7 @@ export default function NewsPageClient() {
                     <FlashNewsList />
                 </div>
             </section>
+            <LeadCaptureSection spacing="compact" />
         </div>
     )
 }
