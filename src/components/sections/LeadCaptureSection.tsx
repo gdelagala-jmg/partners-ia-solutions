@@ -15,7 +15,7 @@ const SCOPE_OPTIONS = [
 
 import PageBadge from '../ui/PageBadge'
 
-export default function LeadCaptureSection() {
+export default function LeadCaptureSection({ spacing = 'standard' }: { spacing?: 'compact' | 'standard' } = {}) {
     const [form, setForm] = useState({
         scope: '',
         bottleneck: '',
@@ -114,8 +114,10 @@ export default function LeadCaptureSection() {
         return 'text-red-500'
     }
 
+    const paddingClass = spacing === 'compact' ? 'py-10 md:py-14' : 'py-10 md:py-16'
+
     return (
-        <section className="py-10 md:py-16 bg-gray-50">
+        <section className={`${paddingClass} bg-gray-50`}>
             <div className="max-w-5xl mx-auto px-5 md:px-6">
 
                 {/* Header */}

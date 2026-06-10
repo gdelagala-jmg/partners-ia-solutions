@@ -312,7 +312,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             </section>
 
 
-            <LeadCaptureSection />
+            <LeadCaptureSection spacing="compact" />
 
             {/* DEMO MODAL */}
             <AnimatePresence>
