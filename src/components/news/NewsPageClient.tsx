@@ -9,6 +9,8 @@ import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 
 import PageBadge from '@/components/ui/PageBadge'
+import CardGrid from '@/components/ui/layout/CardGrid'
+import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 
 interface NewsPost {
     id: string
@@ -124,8 +126,8 @@ export default function NewsPageClient() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-8 lg:py-8 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 text-center">
+            <section className="pt-10 pb-8 md:pt-6 lg:pb-12 bg-gray-50">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 text-center pt-6 md:pt-5">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -153,11 +155,11 @@ export default function NewsPageClient() {
             <section className="py-8 lg:py-8">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                     {loading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <CardGrid columns={4}>
                             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                                 <div key={i} className="h-80 bg-gray-100 rounded-2xl animate-pulse" />
                             ))}
-                        </div>
+                        </CardGrid>
                     ) : posts.length === 0 ? (
                         <div className="text-center py-8 bg-gray-50 rounded-3xl border border-gray-200">
                             <Newspaper size={48} className="mx-auto text-gray-300 mb-4" />
@@ -167,7 +169,7 @@ export default function NewsPageClient() {
                     ) : archiveMode ? (
                         <div className="space-y-16">
                             {recentPosts.length > 0 && (
-                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                <CardGrid columns={4}>
                                     {recentPosts.map((post, idx) => (
                                         <motion.article
                                             key={post.id}
@@ -254,7 +256,7 @@ export default function NewsPageClient() {
                                             </div>
                                         </motion.article>
                                     ))}
-                                </div>
+                                </CardGrid>
                             )}
 
                             {recentPosts.length === 0 && archivePosts.length > 0 && (
@@ -276,7 +278,7 @@ export default function NewsPageClient() {
                                             <p className="text-xs text-gray-500 font-medium">Contenido histórico del hub de información.</p>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <CardGrid columns={3}>
                                         {archivePosts.map((post, idx) => (
                                             <motion.article
                                                 key={post.id}
@@ -334,12 +336,12 @@ export default function NewsPageClient() {
                                                 </div>
                                             </motion.article>
                                         ))}
-                                    </div>
+                                    </CardGrid>
                                 </div>
                             )}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <CardGrid columns={4}>
                             {posts.map((post, idx) => (
                                 <motion.article
                                     key={post.id}
@@ -426,7 +428,7 @@ export default function NewsPageClient() {
                                     </div>
                                 </motion.article>
                             ))}
-                        </div>
+                        </CardGrid>
                     )}
 
                     {/* Pagination Controls */}
@@ -462,6 +464,7 @@ export default function NewsPageClient() {
                     <FlashNewsList />
                 </div>
             </section>
+            <LeadCaptureSection spacing="compact" />
         </div>
     )
 }
