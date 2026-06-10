@@ -6,7 +6,8 @@ import { FileWarning, Loader2, Sparkles } from 'lucide-react'
 export default function EmpresasFormPortal() {
     const [isLoading, setIsLoading] = useState(true)
     const [hasUrl, setHasUrl] = useState(false)
-    const formUrl = process.env.NEXT_PUBLIC_EMPRESAS_FORM_URL
+    const FALLBACK_URL = 'https://docs.google.com/forms/d/12-MgNvZ-SgtKTKc2u_SOZcNhKCGyNOEI1Ztd6yXOxGU/viewform?embedded=true'
+    const formUrl = process.env.NEXT_PUBLIC_EMPRESAS_FORM_URL || FALLBACK_URL
 
     useEffect(() => {
         if (formUrl && formUrl.trim() !== '') {
