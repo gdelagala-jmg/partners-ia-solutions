@@ -16,6 +16,7 @@ import {
 
 import PageBadge from '@/components/ui/PageBadge'
 import TeamCircles from '@/components/sections/TeamCircles'
+import CardGrid from '@/components/ui/layout/CardGrid'
 
 const skills = [
     {
@@ -54,7 +55,7 @@ export default function TeamPage() {
     return (
         <div className="min-h-screen bg-slate-50 overflow-hidden">
             {/* Hero Section */}
-            <section className="relative py-8 lg:py-8 px-4 md:px-6 overflow-hidden flex items-center">
+            <section className="relative pt-10 md:pt-6 pb-8 lg:pb-12 px-4 md:px-6 overflow-hidden flex items-center">
                 {/* Background Image Layer */}
                 <div className="absolute inset-0 z-0">
                     {/* Opacity Overlay to maintain focus on content */}
@@ -68,7 +69,7 @@ export default function TeamPage() {
                     />
                 </div>
 
-                <div className="container mx-auto max-w-4xl relative z-10 text-center">
+                <div className="container mx-auto max-w-4xl relative z-10 text-center pt-6 md:pt-5">
                     <PageBadge text="Expertos en Innovación Inteligente" icon={<Users size={14} className="text-blue-500" />} />
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
@@ -90,7 +91,7 @@ export default function TeamPage() {
             </section>
 
             {/* Story Section */}
-            <section className="py-10 md:py-16 bg-white relative">
+            <section className="py-10 md:py-14 bg-white relative">
                 <div className="container mx-auto max-w-5xl px-4 md:px-6">
                     <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                         <motion.div
@@ -135,7 +136,7 @@ export default function TeamPage() {
             </section>
 
             {/* Circular Dream Team Section */}
-            <section className="py-10 md:py-16 bg-slate-50 relative z-10">
+            <section className="py-10 md:py-14 bg-slate-50 relative z-10">
                 <div className="container mx-auto px-4 md:px-6 relative">
                     <div className="text-center mb-8 md:mb-14">
                         <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-3">The Dream Team</h2>
@@ -248,14 +249,14 @@ export default function TeamPage() {
             </section>
 
             {/* Why Trust Us Section */}
-            <section className="py-10 md:py-16 bg-white">
+            <section className="py-10 md:py-14 bg-white">
                 <div className="container mx-auto px-4 md:px-6 max-w-6xl">
                     <div className="text-center mb-8 md:mb-12">
                         <h2 className="text-2xl md:text-3xl font-bold text-slate-900">¿Por qué confiar en nosotros?</h2>
                         <div className="w-20 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full" />
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-5">
+                    <CardGrid columns={3}>
                         {[
                             {
                                 title: "Formación de Élite",
@@ -292,12 +293,12 @@ export default function TeamPage() {
                                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">{item.desc}</p>
                             </motion.div>
                         ))}
-                    </div>
+                    </CardGrid>
                 </div>
             </section>
 
             {/* CTA Section */}
-            <section className="py-12 md:py-24 px-4 md:px-6 relative bg-slate-50">
+            <section className="py-10 md:py-14 px-4 md:px-6 relative bg-slate-50">
                 <div className="container mx-auto max-w-4xl relative">
                     <motion.div 
                         initial={{ opacity: 0, y: 30 }}
