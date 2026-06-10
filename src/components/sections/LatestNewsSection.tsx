@@ -21,7 +21,7 @@ interface NewsPost {
     content: string
 }
 
-export default function LatestNewsSection() {
+export default function LatestNewsSection({ spacing = 'standard' }: { spacing?: 'compact' | 'standard' } = {}) {
     const [posts, setPosts] = useState<NewsPost[]>([])
     const [loading, setLoading] = useState(true)
 
@@ -44,8 +44,10 @@ export default function LatestNewsSection() {
 
     if (!loading && posts.length === 0) return null
 
+    const paddingClass = spacing === 'compact' ? 'py-10 md:py-14' : 'py-7 md:py-10 lg:py-16'
+
     return (
-        <section className="py-7 md:py-10 lg:py-16 bg-gray-50">
+        <section className={`${paddingClass} bg-gray-50`}>
             <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-4 px-0 md:px-4 text-center md:text-left items-center md:items-end">
                     <div>

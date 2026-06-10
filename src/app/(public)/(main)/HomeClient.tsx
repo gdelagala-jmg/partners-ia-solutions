@@ -11,6 +11,8 @@ import ClientCarousel from '@/components/sections/ClientCarousel'
 import PageBadge from '@/components/ui/PageBadge'
 import { isLabSolution } from '@/lib/utils'
 import NewsletterForm from '@/components/newsletter/NewsletterForm'
+import SectionHeader from '@/components/ui/layout/SectionHeader'
+import CardGrid from '@/components/ui/layout/CardGrid'
 
 interface HomeSolution {
     id: string
@@ -112,11 +114,11 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
     return (
         <div className="bg-white">
             {/* HERO SECTION */}
-            <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-[60vh] md:min-h-[70vh]">
+            <section className="relative flex flex-col justify-start overflow-hidden bg-white min-h-[60vh] md:min-h-[70vh] pt-10 md:pt-6">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
-                <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center py-6 md:py-12">
+                <div className="relative z-10 flex flex-col flex-1 w-full max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center pb-6 md:pb-12 pt-6 md:pt-5">
                     
                     <AnimatePresence mode="wait">
                         <motion.div
@@ -178,7 +180,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 1 }}
-                        className="flex flex-col items-center gap-2 mt-12"
+                        className="flex flex-col items-center gap-2 mt-auto pb-8"
                     >
                         <div className="animate-bounce flex flex-col items-center gap-1.5">
                             <div className="w-6 h-10 rounded-full border-2 border-gray-300 flex items-start justify-center pt-2">
@@ -193,20 +195,19 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             {/* FEATURED SOLUTIONS SECTION */}
             <section className="py-6 md:py-10 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                    <div className="text-center mb-6 md:mb-8">
-                        <PageBadge text="Nuestras Soluciones" icon={<Target size={14} className="text-blue-500" />} />
-                        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 tracking-tight">
-                            Soluciones Destacadas
-                        </h2>
-                        <p className="text-sm text-gray-600 max-w-xl mx-auto">
-                            Ecosistemas de Inteligencia Artificial diseñados para resolver los retos específicos de tu industria
-                        </p>
-                    </div>
+                    <SectionHeader 
+                        badgeText="Nuestras Soluciones" 
+                        badgeIcon={<Target size={14} className="text-blue-500" />} 
+                        title="Soluciones Destacadas" 
+                        subtitle="Ecosistemas de Inteligencia Artificial diseñados para resolver los retos específicos de tu industria" 
+                        align="center" 
+                        className="!mb-6 md:!mb-8" 
+                    />
 
                     {displaySolutions.length === 0 ? (
                         <div className="text-center text-gray-500 bg-white py-8 rounded-2xl border border-gray-100">Cargando soluciones...</div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <CardGrid columns={3}>
                             {displaySolutions.map((solution) => (
                                 <Link
                                     key={solution.id}
@@ -244,7 +245,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                     </div>
                                 </Link>
                             ))}
-                        </div>
+                        </CardGrid>
                     )}
 
                     <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -268,7 +269,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
 
 
             <PodcastHomeSection />
-            <LatestNewsSection />
+            <LatestNewsSection spacing="compact" />
 
             {/* Newsletter Section */}
             <section id="newsletter" className="py-8 md:py-12 bg-white scroll-mt-20">
@@ -312,7 +313,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             </section>
 
 
-            <LeadCaptureSection />
+            <LeadCaptureSection spacing="compact" />
 
             {/* DEMO MODAL */}
             <AnimatePresence>
