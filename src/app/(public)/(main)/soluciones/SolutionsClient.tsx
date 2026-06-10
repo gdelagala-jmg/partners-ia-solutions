@@ -135,8 +135,8 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             </div>
 
             {/* Hero Section */}
-            <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden border-b border-solutions-border">
-                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center relative z-10">
+            <section className="relative pt-10 pb-20 md:pt-6 lg:pb-32 overflow-hidden border-b border-solutions-border">
+                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center relative z-10 pt-6 md:pt-5">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
