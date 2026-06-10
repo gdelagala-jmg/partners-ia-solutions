@@ -298,7 +298,7 @@ export default function TeamPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-12 md:py-24 px-4 md:px-6 relative bg-slate-50">
+            <section className="py-10 md:py-14 px-4 md:px-6 relative bg-slate-50">
                 <div className="container mx-auto max-w-4xl relative">
                     <motion.div 
                         initial={{ opacity: 0, y: 30 }}
