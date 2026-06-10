@@ -18,11 +18,11 @@ export default function SectionBlock({
     containerClassName = '',
     ...props
 }: SectionBlockProps) {
-    // Definimos los tokens de ritmo vertical
+    // Definimos los tokens de ritmo vertical (Reducidos ~10-15%)
     const spacingClasses = {
-        compact: 'py-12 md:py-16',
-        standard: 'py-20 md:py-24',
-        spacious: 'py-32 lg:py-40',
+        compact: 'py-10 md:py-14',
+        standard: 'py-16 md:py-20',
+        spacious: 'py-24 lg:py-32',
         none: ''
     }
 

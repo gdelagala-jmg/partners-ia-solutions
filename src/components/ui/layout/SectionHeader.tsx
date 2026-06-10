@@ -21,7 +21,7 @@ export default function SectionHeader({
     const alignmentClasses = align === 'center' ? 'text-center mx-auto' : 'text-left'
 
     return (
-        <div className={`mb-12 md:mb-16 ${alignmentClasses} ${className}`}>
+        <div className={`mb-10 md:mb-14 ${alignmentClasses} ${className}`}>
             {badgeText && (
                 <div className={align === 'center' ? 'flex justify-center mb-6' : 'mb-6'}>
                     <PageBadge text={badgeText} icon={badgeIcon} />

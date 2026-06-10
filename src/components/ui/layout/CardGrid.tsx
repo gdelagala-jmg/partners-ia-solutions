@@ -19,7 +19,7 @@ export default function CardGrid({
     }
 
     return (
-        <div className={`grid ${gridColsClasses[columns]} gap-6 md:gap-8 ${className}`}>
+        <div className={`grid ${gridColsClasses[columns]} gap-5 md:gap-7 ${className}`}>
             {children}
         </div>
     )

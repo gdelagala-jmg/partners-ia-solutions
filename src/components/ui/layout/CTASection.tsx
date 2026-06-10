@@ -14,9 +14,9 @@ export default function CTASection({
     className = ''
 }: CTASectionProps) {
     return (
-        <section className={`py-24 bg-white ${className}`}>
+        <section className={`py-20 bg-white ${className}`}>
             <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                <div className="bg-gray-50 rounded-[3rem] p-10 md:p-16 lg:p-20 text-center relative overflow-hidden border border-gray-100">
+                <div className="bg-gray-50 rounded-[3rem] p-8 md:p-14 lg:p-16 text-center relative overflow-hidden border border-gray-100">
                     {/* Decorative background grid (subtle, standard IA Solutions style) */}
                     <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" 
                          style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} 
