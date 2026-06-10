@@ -124,8 +124,8 @@ export default function NewsPageClient() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="py-8 lg:py-8 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 text-center">
+            <section className="pt-10 pb-8 md:pt-6 lg:pb-12 bg-gray-50">
+                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 text-center pt-6 md:pt-5">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
