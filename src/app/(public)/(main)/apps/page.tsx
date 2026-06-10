@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { LayoutGrid, ArrowRight, ExternalLink, Globe, FileText, Bot, Zap, Box, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import CardGrid from '@/components/ui/layout/CardGrid'
+import LeadCaptureSection from '@/components/sections/LeadCaptureSection'
 
 interface App {
     id: string
@@ -165,6 +166,8 @@ export default function AppsIndexPage() {
                     </CardGrid>
                 )}
             </section>
+
+            <LeadCaptureSection spacing="compact" />
         </div>
     )
 }
