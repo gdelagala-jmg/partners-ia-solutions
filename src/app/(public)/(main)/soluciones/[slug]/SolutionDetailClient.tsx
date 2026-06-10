@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import LeadForm from '@/components/forms/LeadForm'
+import SectionBlock from '@/components/ui/layout/SectionBlock'
+import SectionHeader from '@/components/ui/layout/SectionHeader'
 
 export default function SolutionDetailClient({ solution }: { solution: any }) {
     const [currentImageIdx, setCurrentImageIdx] = useState(0)
@@ -76,7 +78,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-32">
+            <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
                 {/* CONTAINER */}
                 <motion.div 
                     initial={{ opacity: 0, y: 40 }}
@@ -233,32 +235,24 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                         </div>
 
                         {/* PREMIUM DEMO SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-                        <div id="demo-section" className="relative px-5 py-20 md:py-32 bg-solutions-bg-commercial border-t border-solutions-border">
-                            <div className="max-w-4xl mx-auto">
-                                <div className="text-center mb-10 md:mb-16">
-                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-6">
-                                        <Zap size={12} />
-                                        Prueba de Concepto
-                                    </div>
-                                    <h2 className="text-4xl md:text-6xl font-black text-solutions-text-primary mb-6 leading-[1.05]">
-                                        Visualiza el futuro de tu <br className="hidden md:block" />
-                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">operativa inteligente</span>
-                                    </h2>
-                                    <p className="text-solutions-text-secondary text-xl md:text-2xl font-light leading-relaxed max-w-3xl mx-auto mb-10">
-                                        No te conformes con la teoría. Agenda una sesión técnica estratégica para ver <span className="text-solutions-text-primary font-medium">{solution.title}</span> resolviendo casos de uso reales de tu sector.
-                                    </p>
-                                    <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-solutions-text-secondary">
-                                        {[
-                                            'Sesión estratégica 1:1',
-                                            'Análisis de integración',
-                                            'Estimación de ROI'
-                                        ].map((item, i) => (
-                                            <div key={i} className="flex items-center gap-2">
-                                                <CheckCircle2 size={16} className="text-blue-600" />
-                                                <span className="italic">{item}</span>
-                                            </div>
-                                        ))}
-                                    </div>
+                        <SectionBlock id="demo-section" spacing="compact" containerWidth="narrow" className="bg-solutions-bg-commercial border-t border-solutions-border">
+                                <SectionHeader 
+                                    badgeText="Prueba de Concepto"
+                                    badgeIcon={<Zap size={12} />}
+                                    title={<>Visualiza el futuro de tu <br className="hidden md:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">operativa inteligente</span></>}
+                                    subtitle={<>No te conformes con la teoría. Agenda una sesión técnica estratégica para ver <span className="text-solutions-text-primary font-medium">{solution.title}</span> resolviendo casos de uso reales de tu sector.</>}
+                                />
+                                <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-solutions-text-secondary mb-8 md:mb-10 -mt-4">
+                                    {[
+                                        'Sesión estratégica 1:1',
+                                        'Análisis de integración',
+                                        'Estimación de ROI'
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex items-center gap-2">
+                                            <CheckCircle2 size={16} className="text-blue-600" />
+                                            <span className="italic">{item}</span>
+                                        </div>
+                                    ))}
                                 </div>
                                 
                                 <motion.div 
@@ -283,8 +277,7 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                                         />
                                     </div>
                                 </motion.div>
-                            </div>
-                        </div>
+                        </SectionBlock>
                     </div>
                 </motion.div>
             </div>

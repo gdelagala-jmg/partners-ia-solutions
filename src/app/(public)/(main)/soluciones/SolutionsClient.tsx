@@ -5,6 +5,10 @@ import { Cpu, ArrowRight, ArrowUpRight, Beaker, Box, Layers, Globe, Zap, ShieldC
 import { isFinalSolution, isLabSolution } from '@/lib/utils'
 import Link from 'next/link'
 import PageBadge from '@/components/ui/PageBadge'
+import SectionBlock from '@/components/ui/layout/SectionBlock'
+import SectionHeader from '@/components/ui/layout/SectionHeader'
+import CardGrid from '@/components/ui/layout/CardGrid'
+import CTASection from '@/components/ui/layout/CTASection'
 
 interface Sector {
     id: string
@@ -131,8 +135,8 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             </div>
 
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden border-b border-solutions-border">
-                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center relative z-10">
+            <section className="relative pt-10 pb-20 md:pt-6 lg:pb-32 overflow-hidden border-b border-solutions-border">
+                <div className="max-w-4xl mx-auto px-5 md:px-6 lg:px-8 text-center relative z-10 pt-6 md:pt-5">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -155,29 +159,28 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             </section>
 
             {/* Sectors Grid */}
-            <section id="sectores" className="py-24 relative bg-solutions-bg-main scroll-mt-24">
-                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                    <div className="mb-16 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-                        <div className="max-w-2xl">
-                            <h2 className="text-3xl md:text-5xl font-bold text-solutions-text-primary tracking-tight mb-4">Explorar por Industria</h2>
-                            <p className="text-solutions-text-secondary text-lg font-light">
-                                Selecciona tu sector para descubrir implementaciones de IA adaptadas a tus desafíos operativos únicos.
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-4 text-solutions-muted text-sm font-mono uppercase tracking-widest pb-2">
-                            <span className="w-12 h-[1px] bg-solutions-border" />
-                            Industrias Activas
-                        </div>
+            <SectionBlock id="sectores" spacing="compact" className="relative bg-solutions-bg-main scroll-mt-24">
+                <div className="mb-10 md:mb-14 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                    <div className="max-w-2xl">
+                        <h2 className="text-3xl md:text-5xl font-bold text-solutions-text-primary tracking-tight mb-4">Explorar por Industria</h2>
+                        <p className="text-solutions-text-secondary text-lg font-light">
+                            Selecciona tu sector para descubrir implementaciones de IA adaptadas a tus desafíos operativos únicos.
+                        </p>
                     </div>
+                    <div className="flex items-center gap-4 text-solutions-muted text-sm font-mono uppercase tracking-widest pb-2">
+                        <span className="w-12 h-[1px] bg-solutions-border" />
+                        Industrias Activas
+                    </div>
+                </div>
 
-                    {sectors.length === 0 ? (
-                        <div className="text-center py-20 bg-solutions-bg-commercial rounded-[3rem] border border-solutions-border">
-                            <Box size={64} className="mx-auto text-solutions-muted mb-6 stroke-1" />
-                            <h3 className="text-2xl font-bold text-solutions-text-primary">Catálogo en preparación</h3>
-                            <p className="text-solutions-text-secondary mt-2 font-light">Pronto publicaremos nuestras soluciones especializadas por industria.</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {sectors.length === 0 ? (
+                    <div className="text-center py-20 bg-solutions-bg-commercial rounded-[3rem] border border-solutions-border">
+                        <Box size={64} className="mx-auto text-solutions-muted mb-6 stroke-1" />
+                        <h3 className="text-2xl font-bold text-solutions-text-primary">Catálogo en preparación</h3>
+                        <p className="text-solutions-text-secondary mt-2 font-light">Pronto publicaremos nuestras soluciones especializadas por industria.</p>
+                    </div>
+                ) : (
+                    <CardGrid columns={3}>
                             {sectors.map((sector, i) => (
                                 <motion.div
                                     key={sector.id}
@@ -223,81 +226,63 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
                                     </Link>
                                 </motion.div>
                             ))}
-                        </div>
-                    )}
-                </div>
-            </section>
+                    </CardGrid>
+                )}
+            </SectionBlock>
 
             {/* Final Solutions */}
             {finalSolutions.length > 0 && (
-                <section id="soluciones_finales" className="py-32 bg-solutions-bg-commercial border-y border-solutions-border relative scroll-mt-24">
-                    <div className="absolute inset-0 bg-blue-50/30 pointer-events-none" />
-                    <div className="max-w-5xl mx-auto px-5 md:px-6 lg:px-8 relative z-10">
-                        <div className="mb-16 text-center">
-                            <h2 className="text-4xl md:text-6xl font-bold text-solutions-text-primary tracking-tight mb-6">Soluciones Finales</h2>
-                            <p className="text-solutions-text-secondary text-xl font-light max-w-2xl mx-auto leading-relaxed">
-                                Productos de IA estables, validados y listos para implementarse en entornos de producción comerciales.
-                            </p>
-                        </div>
+                <SectionBlock id="soluciones_finales" spacing="compact" containerWidth="narrow" className="bg-solutions-bg-commercial border-y border-solutions-border relative scroll-mt-24">
+                    <div className="absolute inset-0 bg-blue-50/30 pointer-events-none z-0" />
+                    <div className="relative z-10">
+                        <SectionHeader 
+                            title="Soluciones Finales"
+                            subtitle="Productos de IA estables, validados y listos para implementarse en entornos de producción comerciales."
+                        />
                         <div className="flex flex-col gap-10">
                             {finalSolutions.map(sol => (
                                 <FinalSolutionCard key={sol.id} solution={sol} />
                             ))}
                         </div>
                     </div>
-                </section>
+                </SectionBlock>
             )}
 
             {/* Lab Prototypes */}
             {labPrototypes.length > 0 && (
-                <section id="labs" className="py-32 relative bg-solutions-bg-main scroll-mt-24">
-                    <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                        <div className="mb-16 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-cyan-50 text-cyan-700 text-[10px] font-mono font-bold tracking-[0.3em] rounded-full border border-cyan-100">
-                                <Beaker size={14} />
-                                INNOVATION LAB
-                            </div>
-                            <h2 className="text-4xl md:text-5xl font-bold text-solutions-text-primary tracking-tight mb-4">Prototipos y Demos</h2>
-                            <p className="text-solutions-text-secondary text-lg font-light max-w-2xl leading-relaxed">
-                                Exploramos las fronteras de la IA. Accede a nuestras investigaciones y prototipos experimentales en fase de validación técnica.
-                            </p>
+                <SectionBlock id="labs" spacing="compact" className="relative bg-solutions-bg-main scroll-mt-24">
+                    <div className="mb-10 md:mb-14 text-center lg:text-left">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-cyan-50 text-cyan-700 text-[10px] font-mono font-bold tracking-[0.3em] rounded-full border border-cyan-100">
+                            <Beaker size={14} />
+                            INNOVATION LAB
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {labPrototypes.map(sol => (
-                                <LabPrototypeCard key={sol.id} solution={sol} />
-                            ))}
-                        </div>
+                        <h2 className="text-4xl md:text-5xl font-bold text-solutions-text-primary tracking-tight mb-4">Prototipos y Demos</h2>
+                        <p className="text-solutions-text-secondary text-lg font-light max-w-2xl leading-relaxed">
+                            Exploramos las fronteras de la IA. Accede a nuestras investigaciones y prototipos experimentales en fase de validación técnica.
+                        </p>
                     </div>
-                </section>
+                    <CardGrid columns={3}>
+                        {labPrototypes.map(sol => (
+                            <LabPrototypeCard key={sol.id} solution={sol} />
+                        ))}
+                    </CardGrid>
+                </SectionBlock>
             )}
 
             {/* CTA Final */}
-            <section className="py-24">
-                <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                    <div className="bg-gray-50 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden border border-gray-100">
-                        {/* Decorative background elements for CTA */}
-                        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" 
-                             style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} 
-                        />
-                        
-                        <div className="relative z-10 max-w-3xl mx-auto">
-                            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-8 tracking-tight">
-                                ¿No encuentras la solución <br/> exacta para tu problema?
-                            </h2>
-                            <p className="text-gray-600 text-lg mb-12 font-light leading-relaxed">
-                                Somos expertos en diseñar ecosistemas de IA a medida. Cuéntanos tu desafío y construiremos la herramienta perfecta para tu negocio.
-                            </p>
-                            <Link 
-                                href="/contacto" 
-                                className="inline-flex items-center px-10 py-5 bg-black text-white font-bold rounded-2xl hover:bg-gray-800 transition-all duration-300 hover:scale-105 shadow-xl"
-                            >
-                                Hablar con un Consultor
-                                <ArrowRight className="ml-3" size={20} />
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <CTASection 
+                title={<>¿No encuentras la solución <br/> exacta para tu problema?</>}
+                subtitle="Somos expertos en diseñar ecosistemas de IA a medida. Cuéntanos tu desafío y construiremos la herramienta perfecta para tu negocio."
+                className="!py-10 md:!py-14"
+            >
+                <Link 
+                    href="/contacto" 
+                    className="inline-flex items-center px-10 py-5 bg-black text-white font-bold rounded-2xl hover:bg-gray-800 transition-all duration-300 hover:scale-105 shadow-xl"
+                >
+                    Hablar con un Consultor
+                    <ArrowRight className="ml-3" size={20} />
+                </Link>
+            </CTASection>
 
         </div>
     )
