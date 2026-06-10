@@ -11,6 +11,8 @@ import ClientCarousel from '@/components/sections/ClientCarousel'
 import PageBadge from '@/components/ui/PageBadge'
 import { isLabSolution } from '@/lib/utils'
 import NewsletterForm from '@/components/newsletter/NewsletterForm'
+import SectionHeader from '@/components/ui/layout/SectionHeader'
+import CardGrid from '@/components/ui/layout/CardGrid'
 
 interface HomeSolution {
     id: string
@@ -193,20 +195,19 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             {/* FEATURED SOLUTIONS SECTION */}
             <section className="py-6 md:py-10 bg-gray-50 border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
-                    <div className="text-center mb-6 md:mb-8">
-                        <PageBadge text="Nuestras Soluciones" icon={<Target size={14} className="text-blue-500" />} />
-                        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 tracking-tight">
-                            Soluciones Destacadas
-                        </h2>
-                        <p className="text-sm text-gray-600 max-w-xl mx-auto">
-                            Ecosistemas de Inteligencia Artificial diseñados para resolver los retos específicos de tu industria
-                        </p>
-                    </div>
+                    <SectionHeader 
+                        badgeText="Nuestras Soluciones" 
+                        badgeIcon={<Target size={14} className="text-blue-500" />} 
+                        title="Soluciones Destacadas" 
+                        subtitle="Ecosistemas de Inteligencia Artificial diseñados para resolver los retos específicos de tu industria" 
+                        align="center" 
+                        className="!mb-6 md:!mb-8" 
+                    />
 
                     {displaySolutions.length === 0 ? (
                         <div className="text-center text-gray-500 bg-white py-8 rounded-2xl border border-gray-100">Cargando soluciones...</div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <CardGrid columns={3}>
                             {displaySolutions.map((solution) => (
                                 <Link
                                     key={solution.id}
@@ -244,7 +245,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                     </div>
                                 </Link>
                             ))}
-                        </div>
+                        </CardGrid>
                     )}
 
                     <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
