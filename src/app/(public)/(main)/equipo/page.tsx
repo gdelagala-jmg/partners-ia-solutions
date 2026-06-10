@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { 
     Users, 
@@ -310,14 +311,16 @@ export default function TeamPage() {
                             "¿Hablamos de soluciones reales?{' '}
                             <span className="text-blue-600">Convirtamos la IA en tu ventaja competitiva.</span>"
                         </h2>
-                        <motion.button 
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-900 px-6 md:px-10 py-4 md:py-5 rounded-2xl md:rounded-full font-bold text-base md:text-lg shadow-sm hover:bg-slate-200 transition-all border border-slate-200"
-                        >
-                            <Calendar size={18} className="text-blue-600 flex-shrink-0" />
-                            <span>Agendar Consultoría Estratégica</span>
-                        </motion.button>
+                        <Link href="/contacto?tema=consultoria" className="w-full md:w-auto inline-block">
+                            <motion.div 
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-900 px-6 md:px-10 py-4 md:py-5 rounded-2xl md:rounded-full font-bold text-base md:text-lg shadow-sm hover:bg-slate-200 transition-all border border-slate-200 cursor-pointer"
+                            >
+                                <Calendar size={18} className="text-blue-600 flex-shrink-0" />
+                                <span>Agendar Consultoría Estratégica</span>
+                            </motion.div>
+                        </Link>
                         
                         <p className="mt-6 md:mt-8 text-slate-500 text-sm font-medium">
                             Sin compromiso · 100% pragmático · Resultados medibles
