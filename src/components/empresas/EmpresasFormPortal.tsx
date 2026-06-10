@@ -19,7 +19,7 @@ export default function EmpresasFormPortal() {
     }, [formUrl])
 
     return (
-        <section id="diagnostico" className="py-24 bg-gray-50 relative overflow-hidden scroll-mt-24">
+        <section id="diagnostico" className="py-12 md:py-16 bg-gray-50 relative overflow-hidden scroll-mt-24">
             {/* Decorative background elements for CTA */}
             <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" 
                  style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} 
