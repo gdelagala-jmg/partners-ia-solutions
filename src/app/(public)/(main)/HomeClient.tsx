@@ -268,7 +268,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
 
 
             <PodcastHomeSection />
-            <LatestNewsSection />
+            <LatestNewsSection spacing="compact" />
 
             {/* Newsletter Section */}
             <section id="newsletter" className="py-8 md:py-12 bg-white scroll-mt-20">
