@@ -114,11 +114,11 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
     return (
         <div className="bg-white">
             {/* HERO SECTION */}
-            <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-[60vh] md:min-h-[70vh]">
+            <section className="relative flex flex-col justify-start overflow-hidden bg-white min-h-[60vh] md:min-h-[70vh] pt-10 md:pt-6">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,113,227,0.03),transparent_50%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,113,227,0.02),transparent_50%)]" />
 
-                <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center py-6 md:py-12">
+                <div className="relative z-10 flex flex-col flex-1 w-full max-w-5xl mx-auto px-5 md:px-6 lg:px-8 text-center pb-6 md:pb-12 pt-6 md:pt-5">
                     
                     <AnimatePresence mode="wait">
                         <motion.div
@@ -180,7 +180,7 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 1 }}
-                        className="flex flex-col items-center gap-2 mt-12"
+                        className="flex flex-col items-center gap-2 mt-auto pb-8"
                     >
                         <div className="animate-bounce flex flex-col items-center gap-1.5">
                             <div className="w-6 h-10 rounded-full border-2 border-gray-300 flex items-start justify-center pt-2">
