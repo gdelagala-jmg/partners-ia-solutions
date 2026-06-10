@@ -4,7 +4,7 @@ import PageBadge from '@/components/ui/PageBadge'
 
 export default function EmpresasHero() {
     return (
-        <section className="relative overflow-hidden bg-white border-b border-gray-100 pt-10 pb-16 md:pt-6 md:pb-24">
+        <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-white border-b border-gray-100">
             {/* Background Decorations */}
             <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3">
                 <div className="w-96 h-96 bg-blue-50/50 rounded-full blur-3xl" />

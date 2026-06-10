@@ -23,7 +23,7 @@ const steps = [
 
 export default function EmpresasProcess() {
     return (
-        <section className="py-20 bg-white border-t border-gray-100">
+        <section id="proceso" className="py-32 relative bg-white border-t border-gray-100 scroll-mt-24">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
                     <div className="lg:w-1/3 lg:sticky lg:top-24">

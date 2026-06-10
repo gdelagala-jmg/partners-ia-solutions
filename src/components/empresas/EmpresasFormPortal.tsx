@@ -19,17 +19,16 @@ export default function EmpresasFormPortal() {
     }, [formUrl])
 
     return (
-        <section id="diagnostico" className="py-24 bg-gray-900 relative overflow-hidden">
-            {/* Dark premium background decor */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full opacity-30 pointer-events-none">
-                <div className="absolute top-1/4 left-0 w-64 h-64 bg-blue-500 rounded-full blur-[100px]" />
-                <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px]" />
-            </div>
+        <section id="diagnostico" className="py-24 bg-gray-50 relative overflow-hidden scroll-mt-24">
+            {/* Decorative background elements for CTA */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" 
+                 style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} 
+            />
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Inicia tu Diagnóstico IA</h2>
-                    <p className="text-gray-400 text-lg">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Inicia tu Diagnóstico IA</h2>
+                    <p className="text-gray-600 text-lg">
                         Cuéntanos sobre tu empresa y qué procesos te gustaría optimizar. 
                         Analizaremos la viabilidad y nos pondremos en contacto contigo.
                     </p>
