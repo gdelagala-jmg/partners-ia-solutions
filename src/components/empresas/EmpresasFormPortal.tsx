@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { FileWarning, Loader2, Sparkles } from 'lucide-react'
+import SectionBlock from '@/components/ui/layout/SectionBlock'
+import SectionHeader from '@/components/ui/layout/SectionHeader'
 
 export default function EmpresasFormPortal() {
     const [isLoading, setIsLoading] = useState(true)
@@ -19,20 +21,17 @@ export default function EmpresasFormPortal() {
     }, [formUrl])
 
     return (
-        <section id="diagnostico" className="py-12 md:py-16 bg-gray-50 relative overflow-hidden scroll-mt-24">
+        <SectionBlock id="diagnostico" className="bg-gray-50 relative overflow-hidden scroll-mt-24" spacing="compact" containerWidth="narrow">
             {/* Decorative background elements for CTA */}
             <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" 
                  style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} 
             />
 
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Inicia tu Diagnóstico IA</h2>
-                    <p className="text-gray-600 text-lg">
-                        Cuéntanos sobre tu empresa y qué procesos te gustaría optimizar. 
-                        Analizaremos la viabilidad y nos pondremos en contacto contigo.
-                    </p>
-                </div>
+            <div className="relative z-10 max-w-4xl mx-auto">
+                <SectionHeader 
+                    title="Inicia tu Diagnóstico IA"
+                    subtitle="Cuéntanos sobre tu empresa y qué procesos te gustaría optimizar. Analizaremos la viabilidad y nos pondremos en contacto contigo."
+                />
 
                 <div className="bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[500px] flex flex-col border border-white/10 relative">
                     {isLoading ? (
@@ -75,6 +74,6 @@ export default function EmpresasFormPortal() {
                     )}
                 </div>
             </div>
-        </section>
+        </SectionBlock>
     )
 }
