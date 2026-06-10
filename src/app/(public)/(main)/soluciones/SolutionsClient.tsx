@@ -159,8 +159,8 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             </section>
 
             {/* Sectors Grid */}
-            <SectionBlock id="sectores" spacing="standard" className="relative bg-solutions-bg-main scroll-mt-24">
-                <div className="mb-16 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <SectionBlock id="sectores" spacing="compact" className="relative bg-solutions-bg-main scroll-mt-24">
+                <div className="mb-10 md:mb-14 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                     <div className="max-w-2xl">
                         <h2 className="text-3xl md:text-5xl font-bold text-solutions-text-primary tracking-tight mb-4">Explorar por Industria</h2>
                         <p className="text-solutions-text-secondary text-lg font-light">
@@ -232,7 +232,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Final Solutions */}
             {finalSolutions.length > 0 && (
-                <SectionBlock id="soluciones_finales" spacing="standard" containerWidth="narrow" className="bg-solutions-bg-commercial border-y border-solutions-border relative scroll-mt-24">
+                <SectionBlock id="soluciones_finales" spacing="compact" containerWidth="narrow" className="bg-solutions-bg-commercial border-y border-solutions-border relative scroll-mt-24">
                     <div className="absolute inset-0 bg-blue-50/30 pointer-events-none z-0" />
                     <div className="relative z-10">
                         <SectionHeader 
@@ -250,8 +250,8 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
 
             {/* Lab Prototypes */}
             {labPrototypes.length > 0 && (
-                <SectionBlock id="labs" spacing="standard" className="relative bg-solutions-bg-main scroll-mt-24">
-                    <div className="mb-16 text-center lg:text-left">
+                <SectionBlock id="labs" spacing="compact" className="relative bg-solutions-bg-main scroll-mt-24">
+                    <div className="mb-10 md:mb-14 text-center lg:text-left">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-cyan-50 text-cyan-700 text-[10px] font-mono font-bold tracking-[0.3em] rounded-full border border-cyan-100">
                             <Beaker size={14} />
                             INNOVATION LAB
@@ -273,6 +273,7 @@ export default function SolutionsClient({ sectors, solutions = [] }: SolutionsCl
             <CTASection 
                 title={<>¿No encuentras la solución <br/> exacta para tu problema?</>}
                 subtitle="Somos expertos en diseñar ecosistemas de IA a medida. Cuéntanos tu desafío y construiremos la herramienta perfecta para tu negocio."
+                className="!py-10 md:!py-14"
             >
                 <Link 
                     href="/contacto" 

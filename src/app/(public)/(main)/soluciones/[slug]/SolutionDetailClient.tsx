@@ -235,14 +235,14 @@ export default function SolutionDetailClient({ solution }: { solution: any }) {
                         </div>
 
                         {/* PREMIUM DEMO SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-                        <SectionBlock id="demo-section" spacing="standard" containerWidth="narrow" className="bg-solutions-bg-commercial border-t border-solutions-border">
+                        <SectionBlock id="demo-section" spacing="compact" containerWidth="narrow" className="bg-solutions-bg-commercial border-t border-solutions-border">
                                 <SectionHeader 
                                     badgeText="Prueba de Concepto"
                                     badgeIcon={<Zap size={12} />}
                                     title={<>Visualiza el futuro de tu <br className="hidden md:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">operativa inteligente</span></>}
                                     subtitle={<>No te conformes con la teoría. Agenda una sesión técnica estratégica para ver <span className="text-solutions-text-primary font-medium">{solution.title}</span> resolviendo casos de uso reales de tu sector.</>}
                                 />
-                                <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-solutions-text-secondary mb-10 md:mb-16 -mt-4">
+                                <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-solutions-text-secondary mb-8 md:mb-10 -mt-4">
                                     {[
                                         'Sesión estratégica 1:1',
                                         'Análisis de integración',

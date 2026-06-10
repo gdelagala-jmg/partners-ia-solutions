@@ -152,7 +152,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             </header>
 
             {/* Main Content Grid */}
-            <main className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-16 md:pb-20">
+            <main className="max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pb-10 md:pb-14">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                     
                     {/* Hero Image Section */}
@@ -218,7 +218,7 @@ export default function SectorSolutionClient({ sector }: SectorSolutionClientPro
             </main>
 
             {/* PREMIUM DOSSIER SECTION - REPLICATING HOJA DE RUTA STRUCTURE */}
-            <SectionBlock spacing="standard" containerWidth="narrow" className="bg-solutions-bg-commercial border-t border-solutions-border">
+            <SectionBlock spacing="compact" containerWidth="narrow" className="bg-solutions-bg-commercial border-t border-solutions-border">
                     <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 mx-auto shadow-sm">
                         <Mail size={32} />
                     </div>
