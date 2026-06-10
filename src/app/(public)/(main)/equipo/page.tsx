@@ -16,6 +16,7 @@ import {
 
 import PageBadge from '@/components/ui/PageBadge'
 import TeamCircles from '@/components/sections/TeamCircles'
+import CardGrid from '@/components/ui/layout/CardGrid'
 
 const skills = [
     {
@@ -255,7 +256,7 @@ export default function TeamPage() {
                         <div className="w-20 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full" />
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-5">
+                    <CardGrid columns={3}>
                         {[
                             {
                                 title: "Formación de Élite",
@@ -292,7 +293,7 @@ export default function TeamPage() {
                                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">{item.desc}</p>
                             </motion.div>
                         ))}
-                    </div>
+                    </CardGrid>
                 </div>
             </section>
 
