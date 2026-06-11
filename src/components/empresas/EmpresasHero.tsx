@@ -1,21 +1,50 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Building2 } from 'lucide-react'
 
+const backgroundImages = [
+    {
+        src: "/images/hero-empresas-bizkaia.png",
+        alt: "Taller industrial moderno en Bizkaia gestionando operaciones"
+    },
+    {
+        src: "/images/hero-empresas.png",
+        alt: "Dueña de cafetería local gestionando su negocio"
+    }
+]
+
 export default function EmpresasHero() {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length)
+        }, 5000) // Cambia de imagen cada 5 segundos
+        
+        return () => clearInterval(interval)
+    }, [])
+
     return (
         <section className="relative w-full pt-10 md:pt-6 pb-24 md:pb-32 lg:pb-40">
-            {/* Background Image */}
-            <div className="absolute inset-0 w-full h-full z-0">
-                <Image 
-                    src="/images/hero-empresas.png" 
-                    alt="Dueña de comercio local gestionando su negocio" 
-                    fill 
-                    className="object-cover object-[70%_30%] z-0"
-                    priority
-                    sizes="100vw"
-                    quality={90}
-                />
+            {/* Background Image Slider */}
+            <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-gray-900">
+                {backgroundImages.map((image, index) => (
+                    <Image 
+                        key={image.src}
+                        src={image.src}
+                        alt={image.alt}
+                        fill 
+                        className={`object-cover object-[70%_center] md:object-center z-0 transition-opacity duration-[1500ms] ease-in-out ${
+                            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                        }`}
+                        priority={index === 0}
+                        sizes="100vw"
+                        quality={90}
+                    />
+                ))}
                 {/* Gradient Overlay for text readability */}
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/50 to-transparent z-10 pointer-events-none" />
                 <div className="absolute inset-0 bg-gray-900/40 md:hidden z-10 pointer-events-none" /> {/* Darker on mobile for text contrast */}
