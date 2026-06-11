@@ -51,17 +51,44 @@ export default function FundingCTA() {
 
     return (
         <>
-            {/* Floating Trigger Button */}
-            <div className="fixed right-2 sm:right-6 top-1/2 -translate-y-1/2 z-[9990]">
+            {/* Floating Trigger Buttons */}
+            <div className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-[9990] flex flex-col gap-2">
+                {/* Desktop/Tablet Capsule Button */}
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="flex items-center gap-2 bg-white text-blue-900 p-3 sm:px-5 sm:py-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:scale-105 group"
+                    className="hidden sm:flex items-center gap-2 bg-white text-blue-900 px-5 py-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:scale-105 group"
                     aria-label="Consultar Ayudas"
                 >
                     <div className="bg-blue-100 p-2.5 rounded-full group-hover:bg-blue-200 transition-colors">
                         <Lightbulb className="w-5 h-5 text-blue-700" />
                     </div>
-                    <span className="font-semibold text-sm hidden sm:block pr-2">Consultar Ayudas</span>
+                    <span className="font-semibold text-sm pr-2">Consultar Ayudas</span>
+                </button>
+
+                {/* Mobile Circular Button */}
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="sm:hidden relative flex items-center justify-center w-[90px] h-[90px] bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-2xl transition-all duration-300 hover:scale-105 group border border-blue-50"
+                    aria-label="Consultar Ayudas y Subvenciones"
+                >
+                    {/* SVG Circular Text */}
+                    <svg viewBox="0 0 120 120" className="absolute inset-0 w-full h-full text-[#1d4ed8] pointer-events-none">
+                        <defs>
+                            <path id="curve-top" d="M 24 60 A 36 36 0 0 1 96 60" />
+                            <path id="curve-bottom" d="M 12 60 A 48 48 0 0 0 108 60" />
+                        </defs>
+                        <text fill="currentColor" fontSize="11" fontWeight="bold" letterSpacing="0.25em" className="uppercase">
+                            <textPath href="#curve-top" startOffset="50%" textAnchor="middle">AYUDAS</textPath>
+                        </text>
+                        <text fill="currentColor" fontSize="10.5" fontWeight="bold" letterSpacing="0.15em" className="uppercase">
+                            <textPath href="#curve-bottom" startOffset="50%" textAnchor="middle">SUBVENCIONES</textPath>
+                        </text>
+                    </svg>
+
+                    {/* Center Icon */}
+                    <div className="bg-[#e0e7ff] w-[36px] h-[36px] rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors relative z-10">
+                        <Lightbulb className="w-4 h-4 text-[#1d4ed8]" />
+                    </div>
                 </button>
             </div>
 
@@ -75,7 +102,7 @@ export default function FundingCTA() {
                     />
 
                     {/* Modal Content */}
-                    <div className="relative w-[calc(100vw-24px)] sm:w-full max-w-md max-h-[calc(100dvh-24px)] sm:max-h-[calc(100vh-32px)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1d4ed8] to-[#1e3a8a] text-white shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col">
+                    <div className="relative w-[calc(100vw-24px)] sm:w-full max-w-sm max-h-[calc(100dvh-24px)] sm:max-h-[calc(100vh-32px)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1d4ed8] to-[#1e3a8a] text-white shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col">
                         {/* Close Button */}
                         <button
                             onClick={handleClose}
@@ -84,7 +111,7 @@ export default function FundingCTA() {
                             <X className="w-5 h-5" />
                         </button>
 
-                        <div className="p-5 sm:p-6 flex flex-col justify-center h-full">
+                        <div className="p-4 sm:p-5 flex flex-col justify-center h-full">
                             {isSuccess ? (
                                 <div className="text-center py-4">
                                     <CheckCircle2 className="w-12 h-12 mx-auto mb-3 text-emerald-400" />
@@ -101,20 +128,20 @@ export default function FundingCTA() {
                                 </div>
                             ) : (
                                 <>
-                                    <h2 className="text-lg sm:text-xl font-bold leading-snug mb-1.5 !text-white pr-6">
+                                    <h2 className="text-base sm:text-lg font-bold leading-tight mb-1 !text-white pr-6">
                                         ¿Sabías que tu proyecto puede acceder a fondos y ayudas directas?
                                     </h2>
-                                    <p className="!text-white text-xs sm:text-sm mb-4 leading-relaxed">
+                                    <p className="!text-white text-xs sm:text-[13px] mb-3 leading-snug">
                                         Descubre tus opciones de respaldo económico y te acompañamos en la tramitación.
                                     </p>
 
                                     {error && (
-                                        <div className="bg-red-500/20 text-red-100 p-2.5 rounded-lg text-xs mb-4 border border-red-500/30">
+                                        <div className="bg-red-500/20 text-red-100 p-2 rounded-lg text-xs mb-3 border border-red-500/30">
                                             {error}
                                         </div>
                                     )}
 
-                                    <form onSubmit={handleSubmit} className="space-y-2.5">
+                                    <form onSubmit={handleSubmit} className="space-y-2">
                                         <div>
                                             <label htmlFor="name" className="sr-only">Nombre</label>
                                             <input
@@ -123,7 +150,7 @@ export default function FundingCTA() {
                                                 name="name"
                                                 required
                                                 placeholder="Nombre"
-                                                className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/60 px-3 py-2 rounded-xl outline-none focus:ring-2 focus:ring-white/50 transition-all text-sm"
+                                                className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/60 px-3 py-1.5 rounded-xl outline-none focus:ring-2 focus:ring-white/50 transition-all text-sm"
                                             />
                                         </div>
                                         <div>
@@ -134,7 +161,7 @@ export default function FundingCTA() {
                                                 name="company"
                                                 required
                                                 placeholder="Nombre de la empresa"
-                                                className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/60 px-3 py-2 rounded-xl outline-none focus:ring-2 focus:ring-white/50 transition-all text-sm"
+                                                className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/60 px-3 py-1.5 rounded-xl outline-none focus:ring-2 focus:ring-white/50 transition-all text-sm"
                                             />
                                         </div>
                                         <div>
@@ -145,7 +172,7 @@ export default function FundingCTA() {
                                                 name="phone"
                                                 required
                                                 placeholder="Teléfono"
-                                                className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/60 px-3 py-2 rounded-xl outline-none focus:ring-2 focus:ring-white/50 transition-all text-sm"
+                                                className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/60 px-3 py-1.5 rounded-xl outline-none focus:ring-2 focus:ring-white/50 transition-all text-sm"
                                             />
                                         </div>
 
@@ -158,7 +185,7 @@ export default function FundingCTA() {
                                                 defaultChecked
                                                 className="mt-0.5 w-3.5 h-3.5 rounded border-white/30 bg-white/10 text-blue-600 focus:ring-white/50 cursor-pointer"
                                             />
-                                            <label htmlFor="privacy" className="text-[10px] sm:text-xs !text-white/80 leading-tight cursor-pointer">
+                                            <label htmlFor="privacy" className="text-[10px] sm:text-[11px] !text-white/80 leading-tight cursor-pointer">
                                                 He leído y acepto la{' '}
                                                 <a href="/politica-privacidad" target="_blank" rel="noopener noreferrer" className="underline hover:!text-white transition-colors">
                                                     política de privacidad
@@ -170,7 +197,7 @@ export default function FundingCTA() {
                                             <button
                                                 type="submit"
                                                 disabled={isLoading}
-                                                className="w-full flex items-center justify-center gap-2 bg-white text-blue-900 font-bold py-2.5 px-6 rounded-full hover:bg-gray-50 transition-colors shadow-lg shadow-white/10 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
+                                                className="w-full flex items-center justify-center gap-2 bg-white text-blue-900 font-bold py-2 px-6 rounded-full hover:bg-gray-50 transition-colors shadow-lg shadow-white/10 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
                                             >
                                                 {isLoading ? (
                                                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -180,7 +207,7 @@ export default function FundingCTA() {
                                             </button>
                                         </div>
 
-                                        <div className="text-center mt-3">
+                                        <div className="text-center mt-2">
                                             <a 
                                                 href="https://www.partners.es/" 
                                                 target="_blank" 
