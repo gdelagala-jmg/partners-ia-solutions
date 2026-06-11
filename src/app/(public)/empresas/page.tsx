@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import EmpresasHero from '@/components/empresas/EmpresasHero'
+import EmpresasValues from '@/components/empresas/EmpresasValues'
 import EmpresasSolutions from '@/components/empresas/EmpresasSolutions'
 import EmpresasProcess from '@/components/empresas/EmpresasProcess'
 import EmpresasFormPortal from '@/components/empresas/EmpresasFormPortal'
@@ -13,6 +14,7 @@ export default function EmpresasPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <EmpresasHero />
+            <EmpresasValues />
             <EmpresasSolutions />
             <EmpresasProcess />
             <EmpresasFormPortal />

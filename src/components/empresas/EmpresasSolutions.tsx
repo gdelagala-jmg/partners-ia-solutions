@@ -59,12 +59,12 @@ export default function EmpresasSolutions() {
             
             <CardGrid columns={3}>
                 {solutions.map((solution, index) => (
-                    <div key={index} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
-                        <div className={`w-14 h-14 ${solution.bg} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                    <div key={index} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 hover:-translate-y-1 hover:border-blue-100 transition-all duration-300 group flex flex-col h-full">
+                        <div className={`w-14 h-14 ${solution.bg} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
                             <solution.icon className={`w-7 h-7 ${solution.color}`} />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-3">{solution.title}</h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors">{solution.title}</h3>
+                        <p className="text-gray-600 leading-relaxed flex-grow">
                             {solution.description}
                         </p>
                     </div>
