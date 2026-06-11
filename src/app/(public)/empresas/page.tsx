@@ -4,6 +4,7 @@ import EmpresasValues from '@/components/empresas/EmpresasValues'
 import EmpresasSolutions from '@/components/empresas/EmpresasSolutions'
 import EmpresasProcess from '@/components/empresas/EmpresasProcess'
 import EmpresasFormPortal from '@/components/empresas/EmpresasFormPortal'
+import FundingCTA from '@/components/empresas/FundingCTA'
 
 export const metadata: Metadata = {
     title: 'Soluciones IA para Empresas | Automatización y Optimización',
@@ -18,6 +19,9 @@ export default function EmpresasPage() {
             <EmpresasSolutions />
             <EmpresasProcess />
             <EmpresasFormPortal />
+            
+            {/* Funding CTA Floater */}
+            <FundingCTA />
         </div>
     )
 }
