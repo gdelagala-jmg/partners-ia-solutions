@@ -4,6 +4,16 @@ import { forwardRef, useImperativeHandle, useRef, useState, useEffect } from 're
 import Script from 'next/script'
 import { useSecurity } from '@/context/SecurityContext'
 
+declare global {
+    interface Window {
+        turnstile?: {
+            render: (element: string | HTMLElement, options: Record<string, unknown>) => string;
+            reset: (widgetId: string) => void;
+            remove: (widgetId: string) => void;
+        }
+    }
+}
+
 export interface TurnstileHandle {
     reset: () => void
 }
@@ -18,27 +28,34 @@ interface TurnstileProps {
 const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
     function TurnstileCaptcha({ onVerify, onError, onExpire, appearance = 'interaction-only' }, ref) {
         const containerRef = useRef<HTMLDivElement>(null)
-        const [widgetId, setWidgetId] = useState<string | null>(null)
+        const widgetIdRef = useRef<string | null>(null)
         const [isLoaded, setIsLoaded] = useState(false)
-        // mounted prevents ANY client-only rendering during SSR → fixes hydration error #418
         const [mounted, setMounted] = useState(false)
         const { formSecurityEnabled } = useSecurity()
 
+        // Keep refs of callbacks to avoid re-rendering on function identity changes
+        const callbacksRef = useRef({ onVerify, onError, onExpire })
+        useEffect(() => {
+            callbacksRef.current = { onVerify, onError, onExpire }
+        }, [onVerify, onError, onExpire])
+
         useEffect(() => {
             setMounted(true)
+            if (typeof window !== 'undefined' && window.turnstile) {
+                setIsLoaded(true)
+            }
         }, [])
 
         useImperativeHandle(ref, () => ({
             reset() {
-                if (widgetId && (window as any).turnstile) {
-                    (window as any).turnstile.reset(widgetId)
+                if (widgetIdRef.current && window.turnstile) {
+                    window.turnstile.reset(widgetIdRef.current)
                 }
             }
         }))
 
         useEffect(() => {
-            // All guards: only run on client, only when security is enabled, only once per widget
-            if (!mounted || !formSecurityEnabled || !isLoaded || !containerRef.current || widgetId) return
+            if (!mounted || !formSecurityEnabled || !isLoaded || !containerRef.current || widgetIdRef.current) return
 
             const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
             if (!siteKey) {
@@ -46,28 +63,29 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                 return
             }
 
-            if ((window as any).turnstile) {
+            if (window.turnstile) {
                 try {
-                    const id = (window as any).turnstile.render(containerRef.current, {
+                    const id = window.turnstile.render(containerRef.current, {
                         sitekey: siteKey,
-                        callback: (token: string) => onVerify(token),
-                        'error-callback': () => onError?.(),
-                        'expired-callback': () => onExpire?.(),
+                        callback: (token: string) => callbacksRef.current.onVerify(token),
+                        'error-callback': () => callbacksRef.current.onError?.(),
+                        'expired-callback': () => callbacksRef.current.onExpire?.(),
                         appearance: appearance,
                         theme: 'light'
                     })
-                    setWidgetId(id)
+                    widgetIdRef.current = id
                 } catch (err) {
                     console.error('[Turnstile] Render failed:', err)
                 }
             }
 
             return () => {
-                if (widgetId && (window as any).turnstile) {
-                    try { (window as any).turnstile.remove(widgetId) } catch (e) {}
+                if (widgetIdRef.current && window.turnstile) {
+                    try { window.turnstile.remove(widgetIdRef.current) } catch {}
+                    widgetIdRef.current = null
                 }
             }
-        }, [mounted, isLoaded, widgetId, formSecurityEnabled, onVerify, onError, onExpire, appearance])
+        }, [mounted, isLoaded, formSecurityEnabled, appearance])
 
         const siteKey = typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY : null
 
