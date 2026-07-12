@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         const captcha = await verifyTurnstileToken(turnstileToken, ip)
         if (!captcha.success) {
             incrementRateLimit(ip)
-            return NextResponse.json({ error: captcha.error }, { status: 403 })
+            return NextResponse.json({ error: captcha.error }, { status: captcha.status || 403 })
         }
 
         // 1. Save to Database

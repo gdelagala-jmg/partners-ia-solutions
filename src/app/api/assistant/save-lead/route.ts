@@ -25,7 +25,7 @@ export async function POST(req: Request) {
         incrementRateLimit(ip)
         return NextResponse.json(
             { error: check.error },
-            { status: 403 }
+            { status: check.status || 403 }
         )
     }
 
