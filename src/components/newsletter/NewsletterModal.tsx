@@ -243,8 +243,8 @@ export default function NewsletterModal() {
                                     ].join(' ')}
                                 />
 
-                                {/* Turnstile CAPTCHA */}
-                                <div className="flex justify-center py-1">
+                                <div className="flex flex-col gap-2 mt-1">
+                                    {/* Turnstile CAPTCHA */}
                                     <TurnstileCaptcha
                                         ref={captchaRef}
                                         onVerify={(token) => setTurnstileToken(token)}
@@ -252,9 +252,8 @@ export default function NewsletterModal() {
                                         onError={() => setTurnstileToken(null)}
                                         appearance="interaction-only"
                                     />
-                                </div>
 
-                                <button
+                                    <button
                                     type="submit"
                                     disabled={status === 'loading'}
                                     className={[
@@ -270,6 +269,7 @@ export default function NewsletterModal() {
                                         : <><Send className="w-4 h-4" /> Suscribirme</>
                                     }
                                 </button>
+                                </div>
                             </motion.form>
                         )}
                     </AnimatePresence>

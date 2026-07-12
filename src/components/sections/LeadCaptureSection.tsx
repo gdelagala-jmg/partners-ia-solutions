@@ -341,16 +341,15 @@ export default function LeadCaptureSection({ spacing = 'standard' }: { spacing?:
                                     </label>
                                 </div>
 
-                                {/* Error */}
-                                {status === 'error' && (
-                                    <div className="md:col-span-2 flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm">
-                                        <AlertCircle size={16} className="shrink-0" />
-                                        <span>{errorMsg}</span>
-                                    </div>
-                                )}
+                                {/* Security, Error, and Submit */}
+                                <div className="md:col-span-2 flex flex-col gap-4 mt-2">
+                                    {status === 'error' && (
+                                        <div className="flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm">
+                                            <AlertCircle size={16} className="shrink-0" />
+                                            <span>{errorMsg}</span>
+                                        </div>
+                                    )}
 
-                                 {/* Security - Visible challenge if needed */}
-                                <div className="flex justify-center my-4">
                                     <TurnstileCaptcha 
                                         ref={captchaRef}
                                         onVerify={setCaptchaToken} 
@@ -358,10 +357,8 @@ export default function LeadCaptureSection({ spacing = 'standard' }: { spacing?:
                                         onExpire={() => setCaptchaToken(null)}
                                         appearance="interaction-only"
                                     />
-                                </div>
 
-                                {/* Submit */}
-                                <div className="md:col-span-2 pt-2">
+                                    <div className="pt-2">
                                     <button
                                         type="submit"
                                         disabled={loading}
@@ -379,6 +376,7 @@ export default function LeadCaptureSection({ spacing = 'standard' }: { spacing?:
                                             </>
                                         )}
                                     </button>
+                                    </div>
                                     
                                     {/* Primera Capa Informativa */}
                                     <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded-xl text-xs text-gray-500 space-y-2">

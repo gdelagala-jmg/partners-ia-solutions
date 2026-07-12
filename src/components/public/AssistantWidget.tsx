@@ -334,31 +334,31 @@ const formatMessage = (text: string) => {
                         />
                       </div>
 
-                      {/* Turnstile */}
-                      <div className="flex justify-center scale-90 -mx-4">
-                        <TurnstileCaptcha
-                          ref={captchaRef}
-                          onVerify={setTurnstileToken}
-                          onExpire={() => setTurnstileToken(null)}
-                          onError={() => setTurnstileToken(null)}
-                          appearance="interaction-only"
-                        />
+                      <div className="flex flex-col gap-2 mt-1">
+                          {/* Turnstile */}
+                          <TurnstileCaptcha
+                            ref={captchaRef}
+                            onVerify={setTurnstileToken}
+                            onExpire={() => setTurnstileToken(null)}
+                            onError={() => setTurnstileToken(null)}
+                            appearance="interaction-only"
+                          />
+
+                          {/* Error Message */}
+                          {errorMsg && (
+                            <div className="p-2 bg-red-500/20 border border-red-500/30 rounded-xl text-red-200 text-[10px] flex items-center gap-2">
+                              <AlertCircle size={12} />
+                              {errorMsg}
+                            </div>
+                          )}
+
+                          <button 
+                            type="submit"
+                            className="w-full bg-white text-black font-black py-2.5 rounded-xl text-[10px] hover:bg-gray-200 transition-all active:scale-95 uppercase tracking-widest"
+                          >
+                            Enviar y Continuar
+                          </button>
                       </div>
-
-                      {/* Error Message */}
-                      {errorMsg && (
-                        <div className="p-2 bg-red-500/20 border border-red-500/30 rounded-xl text-red-200 text-[10px] flex items-center gap-2">
-                          <AlertCircle size={12} />
-                          {errorMsg}
-                        </div>
-                      )}
-
-                      <button 
-                        type="submit"
-                        className="w-full bg-white text-black font-black py-2.5 rounded-xl text-[10px] hover:bg-gray-200 transition-all active:scale-95 uppercase tracking-widest"
-                      >
-                        Enviar y Continuar
-                      </button>
                     </form>
                   </div>
                 </motion.div>

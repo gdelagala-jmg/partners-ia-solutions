@@ -186,8 +186,8 @@ export default function MaintenanceView() {
                                             </div>
                                         </div>
 
-                                        {/* Turnstile CAPTCHA */}
-                                        <div className="flex justify-center py-1">
+                                        <div className="flex flex-col gap-2 mt-1">
+                                            {/* Turnstile CAPTCHA */}
                                             <TurnstileCaptcha
                                                 ref={captchaRef}
                                                 onVerify={(token) => setTurnstileToken(token)}
@@ -195,36 +195,36 @@ export default function MaintenanceView() {
                                                 onError={() => setTurnstileToken(null)}
                                                 appearance="interaction-only"
                                             />
-                                        </div>
 
-                                        {error && (
-                                            <motion.div 
-                                                initial={{ opacity: 0, y: -10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                className="flex items-center space-x-2 text-red-500 text-xs font-semibold bg-red-50 p-3 rounded-xl border border-red-100"
-                                            >
-                                                <AlertCircle size={14} />
-                                                <span>{error}</span>
-                                            </motion.div>
-                                        )}
-
-                                        <button 
-                                            type="submit" 
-                                            disabled={isSubmitting}
-                                            className="w-full group relative py-4 bg-[#0071E3] hover:bg-[#0077ED] disabled:bg-blue-400 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center space-x-2 overflow-hidden"
-                                        >
-                                            <motion.div 
-                                                className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" 
-                                            />
-                                            {isSubmitting ? (
-                                                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                                            ) : (
-                                                <>
-                                                    <span className="relative z-10">Notificarme</span>
-                                                    <Send size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                                </>
+                                            {error && (
+                                                <motion.div 
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="flex items-center space-x-2 text-red-500 text-xs font-semibold bg-red-50 p-3 rounded-xl border border-red-100"
+                                                >
+                                                    <AlertCircle size={14} />
+                                                    <span>{error}</span>
+                                                </motion.div>
                                             )}
-                                        </button>
+
+                                            <button 
+                                                type="submit" 
+                                                disabled={isSubmitting}
+                                                className="w-full group relative py-4 bg-[#0071E3] hover:bg-[#0077ED] disabled:bg-blue-400 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center space-x-2 overflow-hidden"
+                                            >
+                                                <motion.div 
+                                                    className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" 
+                                                />
+                                                {isSubmitting ? (
+                                                    <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                                ) : (
+                                                    <>
+                                                        <span className="relative z-10">Notificarme</span>
+                                                        <Send size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                             )}

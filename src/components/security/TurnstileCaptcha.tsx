@@ -102,7 +102,7 @@ const TurnstileCaptcha = forwardRef<TurnstileHandle, TurnstileProps>(
                         />
                         <div
                             ref={containerRef}
-                            className="flex justify-center my-4 min-h-[65px]"
+                            className="flex justify-center"
                         />
                     </>
                 )}
