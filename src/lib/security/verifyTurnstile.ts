@@ -20,62 +20,49 @@ const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/sit
 export interface TurnstileResult {
     success: boolean
     error?: string
+    status?: number
 }
-
-export type SecurityPolicy = 'strict' | 'fail-open'
 
 /**
  * Verifies a Cloudflare Turnstile challenge token.
  *
  * @param token  - The cf-turnstile-response token from the client form.
  * @param ip     - Optional: visitor IP for Cloudflare's stricter validation.
- * @param policy - Policy to apply if verification fails. 'strict' (default) blocks, 'fail-open' logs but allows.
  */
 export async function verifyTurnstileToken(
     token: string | null | undefined,
-    ip?: string | null,
-    policy: SecurityPolicy = 'strict'
+    ip?: string | null
 ): Promise<TurnstileResult> {
     const secretKey = process.env.TURNSTILE_SECRET_KEY
-    const isDev = process.env.NODE_ENV !== 'production'
     const isSecurityEnabled = process.env.ENABLE_FORM_SECURITY === 'true'
-
-    // ── Development bypass ──────────────────────────────────────────────────
-    if (isDev) {
-        return { success: true }
-    }
 
     // ── Progressive/Rollback bypass ──────────────────────────────────────────
     if (!isSecurityEnabled) {
         return { success: true }
     }
 
-    // Helper to handle failure based on policy
-    const handleFailure = (reason: string, errorMsg: string): TurnstileResult => {
-        logFailedAttempt(reason, ip, policy)
+    // Helper to handle failure
+    const handleFailure = (reason: string, errorMsg: string, status: number = 403): TurnstileResult => {
+        logFailedAttempt(reason, ip)
         
-        if (policy === 'fail-open') {
-            return { success: true }
-        }
-
         return {
             success: false,
             error: errorMsg,
+            status
         }
     }
 
     // ── Production checks ────────────────────────────────────────────────────
     if (!secretKey) {
-        // Production: key missing AND security enabled → only hard block if policy is strict
         console.error(
-            '[Turnstile] 🚫 TURNSTILE_SECRET_KEY is missing in production!'
+            '[Turnstile] 🚫 TURNSTILE_SECRET_KEY is missing in production but ENABLE_FORM_SECURITY is true!'
         )
-        return handleFailure('MISSING_SECRET_KEY', 'Security configuration error. Please try again later.')
+        return handleFailure('MISSING_SECRET_KEY', 'Security configuration error. Please try again later.', 503)
     }
 
     // ── Token missing ────────────────────────────────────────────────────────
     if (!token) {
-        return handleFailure('TOKEN_MISSING', 'Se requiere completar la verificación de seguridad.')
+        return handleFailure('TOKEN_MISSING', 'Se requiere completar la verificación de seguridad.', 403)
     }
 
     // ── Cloudflare verification ──────────────────────────────────────────────
@@ -92,7 +79,7 @@ export async function verifyTurnstileToken(
 
         if (!cfResponse.ok) {
             console.error('[Turnstile] Cloudflare API returned non-OK status:', cfResponse.status)
-            return handleFailure('CF_API_ERROR', 'Error al verificar la seguridad. Inténtalo de nuevo.')
+            return handleFailure('CF_API_ERROR', 'Error al verificar la seguridad. Inténtalo de nuevo.', 403)
         }
 
         const data: {
@@ -104,13 +91,13 @@ export async function verifyTurnstileToken(
 
         if (!data.success) {
             const codes = data['error-codes']?.join(', ') || 'unknown'
-            return handleFailure(`CF_VERIFY_FAIL:${codes}`, 'Verificación de seguridad fallida. Por favor, recarga la página e inténtalo de nuevo.')
+            return handleFailure(`CF_VERIFY_FAIL:${codes}`, 'Verificación de seguridad fallida. Por favor, recarga la página e inténtalo de nuevo.', 403)
         }
 
         return { success: true }
     } catch (err) {
         console.error('[Turnstile] Unexpected error during verification:', err)
-        return handleFailure('EXCEPTION', 'Error inesperado en la verificación de seguridad.')
+        return handleFailure('EXCEPTION', 'Error inesperado en la verificación de seguridad.', 403)
     }
 }
 
@@ -143,8 +130,8 @@ export function incrementRateLimit(ip: string): void {
     }
 }
 
-function logFailedAttempt(reason: string, ip: string | null | undefined, policy: SecurityPolicy): void {
+function logFailedAttempt(reason: string, ip: string | null | undefined): void {
     console.warn(
-        `[Turnstile] 🚫 CAPTCHA FAILED | policy=${policy} | reason=${reason} | ip=${ip ?? 'unknown'} | ts=${new Date().toISOString()}`
+        `[Turnstile] 🚫 CAPTCHA FAILED | reason=${reason} | ip=${ip ?? 'unknown'} | ts=${new Date().toISOString()}`
     )
 }

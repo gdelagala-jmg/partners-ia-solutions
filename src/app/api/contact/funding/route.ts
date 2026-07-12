@@ -1,16 +1,28 @@
 import { NextResponse } from 'next/server'
 import { sendTelegramNotification } from '@/lib/telegram'
+import { verifyTurnstileToken, incrementRateLimit } from '@/lib/security/verifyTurnstile'
 
 export async function POST(req: Request) {
     try {
         const body = await req.json()
-        const { name, company, phone } = body
+        const { name, company, phone, turnstileToken } = body
+        const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0'
 
         // 1. Validate required fields
         if (!name || !company || !phone) {
             return NextResponse.json(
                 { error: 'Missing required fields' },
                 { status: 400 }
+            )
+        }
+
+        // 2. Turnstile Verification
+        const captcha = await verifyTurnstileToken(turnstileToken, ip)
+        if (!captcha.success) {
+            incrementRateLimit(ip)
+            return NextResponse.json(
+                { error: captcha.error },
+                { status: captcha.status || 403 }
             )
         }
 

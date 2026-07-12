@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Sparkles, Zap, Target, X, Loader2 } from 'lucide-react'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
+import { useSecurity } from '@/context/SecurityContext'
+import { ArrowRight, Sparkles, Zap, Target, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PodcastHomeSection from '@/components/sections/PodcastHomeSection'
 import LatestNewsSection from '@/components/sections/LatestNewsSection'
@@ -28,6 +30,9 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ featuredSolutions }: HomeClientProps) {
+    const { formSecurityEnabled } = useSecurity()
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const turnstileRef = useRef<TurnstileHandle>(null)
     const [displaySolutions, setDisplaySolutions] = useState<HomeSolution[]>([])
     const [isDemoOpen, setIsDemoOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -80,12 +85,21 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
 
     const handleDemoSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        if (formSecurityEnabled && !turnstileToken) {
+            alert('Por favor, completa la verificación de seguridad antes de enviar.')
+            return
+        }
+
         setIsSubmitting(true)
         try {
             const res = await fetch('/api/demos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(demoData)
+                body: JSON.stringify({
+                    ...demoData,
+                    turnstileToken
+                })
             })
             if (res.ok) {
                 setDemoSuccess(true)
@@ -93,12 +107,19 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                     setIsDemoOpen(false)
                     setDemoSuccess(false)
                     setDemoData({ name: '', email: '', phone: '', solutionSlug: '' })
+                    setTurnstileToken(null)
+                    turnstileRef.current?.reset()
                 }, 3000)
             } else {
                 alert('Hubo un error al enviar tu solicitud. Inténtalo de nuevo.')
+                turnstileRef.current?.reset()
+                setTurnstileToken(null)
             }
         } catch (error) {
-            alert('Error de red. Inténtalo de nuevo.')
+            console.error("Failed to submit demo:", error)
+            alert('Error de conexión al enviar. Inténtalo de nuevo.')
+            turnstileRef.current?.reset()
+            setTurnstileToken(null)
         } finally {
             setIsSubmitting(false)
         }
@@ -413,6 +434,15 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                                 </div>
                                             </div>
                                         </div>
+
+                                        {formSecurityEnabled && (
+                                            <div className="pt-2 flex justify-center">
+                                                <TurnstileCaptcha
+                                                    ref={turnstileRef}
+                                                    onVerify={(token) => setTurnstileToken(token)}
+                                                />
+                                            </div>
+                                        )}
 
                                         <div className="pt-2">
                                             <button

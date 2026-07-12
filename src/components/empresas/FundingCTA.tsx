@@ -1,9 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { X, Lightbulb, Loader2, CheckCircle2 } from 'lucide-react'
+import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
+import { useSecurity } from '@/context/SecurityContext'
 
 export default function FundingCTA() {
+    const { formSecurityEnabled } = useSecurity()
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+    const turnstileRef = useRef<TurnstileHandle>(null)
     const [isOpen, setIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
@@ -11,6 +16,12 @@ export default function FundingCTA() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        if (formSecurityEnabled && !turnstileToken) {
+            setError('Por favor, completa la verificación de seguridad antes de enviar.')
+            return
+        }
+
         setIsLoading(true)
         setError('')
 
@@ -19,6 +30,7 @@ export default function FundingCTA() {
             name: formData.get('name'),
             company: formData.get('company'),
             phone: formData.get('phone'),
+            turnstileToken,
         }
 
         try {
@@ -29,12 +41,16 @@ export default function FundingCTA() {
             })
 
             if (!res.ok) {
-                throw new Error('Error al enviar la solicitud')
+                const errorData = await res.json().catch(() => ({}))
+                throw new Error(errorData.error || 'Error al enviar la solicitud')
             }
 
             setIsSuccess(true)
         } catch (err) {
-            setError('Hubo un problema al procesar tu solicitud. Por favor, inténtalo de nuevo.')
+            const message = err instanceof Error ? err.message : 'Hubo un problema al procesar tu solicitud. Por favor, inténtalo de nuevo.'
+            setError(message)
+            turnstileRef.current?.reset()
+            setTurnstileToken(null)
         } finally {
             setIsLoading(false)
         }
@@ -46,6 +62,8 @@ export default function FundingCTA() {
         setTimeout(() => {
             setIsSuccess(false)
             setError('')
+            setTurnstileToken(null)
+            turnstileRef.current?.reset()
         }, 300)
     }
 
@@ -192,6 +210,15 @@ export default function FundingCTA() {
                                                 </a>
                                             </label>
                                         </div>
+
+                                        {formSecurityEnabled && (
+                                            <div className="pt-2 flex justify-center">
+                                                <TurnstileCaptcha
+                                                    ref={turnstileRef}
+                                                    onVerify={(token) => setTurnstileToken(token)}
+                                                />
+                                            </div>
+                                        )}
 
                                         <div className="pt-1">
                                             <button

@@ -38,14 +38,13 @@ export async function POST(req: Request) {
         const { email, sourceUrl, sourceLocation, turnstileToken } = result.data
 
         // ── Turnstile verification ───────────────────────────────────────────
-        // NEWSLETTER: Fail-open policy (prioritise lead capture)
-        const captcha = await verifyTurnstileToken(turnstileToken, ip, 'fail-open')
+        const captcha = await verifyTurnstileToken(turnstileToken, ip)
         if (!captcha.success) {
-            // This block will only be hit if policy was strict (default) or if 
-            // the system had a critical failure that even fail-open couldn't bypass
-            // (e.g. key missing in production which is a config error).
             incrementRateLimit(ip)
-            return NextResponse.json({ error: captcha.error }, { status: 403 })
+            return NextResponse.json(
+                { error: captcha.error },
+                { status: captcha.status || 403 }
+            )
         }
 
         // Check if already subscribed
