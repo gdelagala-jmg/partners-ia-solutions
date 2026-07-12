@@ -211,27 +211,27 @@ export default function FundingCTA() {
                                             </label>
                                         </div>
 
-                                        {formSecurityEnabled && (
-                                            <div className="pt-2 flex justify-center">
+                                        <div className="flex flex-col gap-2 mt-1">
+                                            {formSecurityEnabled && (
                                                 <TurnstileCaptcha
                                                     ref={turnstileRef}
                                                     onVerify={(token) => setTurnstileToken(token)}
                                                 />
-                                            </div>
-                                        )}
+                                            )}
 
-                                        <div className="pt-1">
-                                            <button
-                                                type="submit"
-                                                disabled={isLoading}
-                                                className="w-full flex items-center justify-center gap-2 bg-white text-blue-900 font-bold py-2 px-6 rounded-full hover:bg-gray-50 transition-colors shadow-lg shadow-white/10 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
-                                            >
-                                                {isLoading ? (
-                                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                                ) : (
-                                                    'Consulta con un Experto'
-                                                )}
-                                            </button>
+                                            <div className="pt-1">
+                                                <button
+                                                    type="submit"
+                                                    disabled={isLoading}
+                                                    className="w-full flex items-center justify-center gap-2 bg-white text-blue-900 font-bold py-2 px-6 rounded-full hover:bg-gray-50 transition-colors shadow-lg shadow-white/10 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
+                                                >
+                                                    {isLoading ? (
+                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                    ) : (
+                                                        'Consulta con un Experto'
+                                                    )}
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <div className="text-center mt-2">

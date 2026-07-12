@@ -435,31 +435,31 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                                             </div>
                                         </div>
 
-                                        {formSecurityEnabled && (
-                                            <div className="pt-2 flex justify-center">
+                                        <div className="flex flex-col gap-2 mt-2">
+                                            {formSecurityEnabled && (
                                                 <TurnstileCaptcha
                                                     ref={turnstileRef}
                                                     onVerify={(token) => setTurnstileToken(token)}
                                                 />
-                                            </div>
-                                        )}
+                                            )}
 
-                                        <div className="pt-2">
-                                            <button
-                                                type="submit"
-                                                disabled={isSubmitting}
-                                                className="w-full py-3.5 sm:py-4 bg-[#1D1D1F] hover:bg-black text-white rounded-2xl font-bold transition-all transform active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
-                                            >
-                                                {isSubmitting ? (
-                                                    <>
-                                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                                        Enviando...
-                                                    </>
-                                                ) : 'Solicitar Demo Ahora'}
-                                            </button>
-                                            <p className="mt-4 text-[11px] text-center text-gray-400 font-medium">
-                                                Tus datos están protegidos y no los compartimos con terceros.
-                                            </p>
+                                            <div className="pt-2">
+                                                <button
+                                                    type="submit"
+                                                    disabled={isSubmitting}
+                                                    className="w-full py-3.5 sm:py-4 bg-[#1D1D1F] hover:bg-black text-white rounded-2xl font-bold transition-all transform active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
+                                                >
+                                                    {isSubmitting ? (
+                                                        <>
+                                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                            Enviando...
+                                                        </>
+                                                    ) : 'Solicitar Demo Ahora'}
+                                                </button>
+                                                <p className="mt-4 text-[11px] text-center text-gray-400 font-medium">
+                                                    Tus datos están protegidos y no los compartimos con terceros.
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>

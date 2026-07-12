@@ -85,8 +85,8 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                     </button>
                 </form>
-                {/* Turnstile - visible challenge if needed */}
-                <div className="flex justify-center">
+                <div className="flex flex-col gap-2 mt-2">
+                    {/* Turnstile - visible challenge if needed */}
                     <TurnstileCaptcha
                         ref={captchaRef}
                         onVerify={(token) => setTurnstileToken(token)}
@@ -94,8 +94,7 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         onError={() => setTurnstileToken(null)}
                         appearance="interaction-only"
                     />
-                </div>
-                <AnimatePresence mode="wait">
+                    <AnimatePresence mode="wait">
                     {status === 'success' && (
                         <motion.p 
                             initial={{ opacity: 0, y: -10 }} 
@@ -116,7 +115,8 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                             <AlertCircle className="w-3 h-3 mr-1" /> {message}
                         </motion.p>
                     )}
-                </AnimatePresence>
+                    </AnimatePresence>
+                </div>
                 <p className="text-[10px] text-gray-400 italic">
                     Sin spam. Solo contenido relevante. Baja cuando quieras.
                 </p>
@@ -166,8 +166,8 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                     </button>
                 </form>
 
-                {/* Turnstile — invisible challenge, shown only when Cloudflare needs it */}
-                <div className="flex justify-center mt-4">
+                <div className="flex flex-col mt-2">
+                    {/* Turnstile — invisible challenge, shown only when Cloudflare needs it */}
                     <TurnstileCaptcha
                         ref={captchaRef}
                         onVerify={(token) => setTurnstileToken(token)}
@@ -175,9 +175,8 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         onError={() => setTurnstileToken(null)}
                         appearance="interaction-only"
                     />
-                </div>
 
-                <AnimatePresence mode="wait">
+                    <AnimatePresence mode="wait">
                     {status === 'success' && (
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.95, y: 10 }} 
@@ -200,6 +199,7 @@ export default function NewsletterForm({ variant = 'inline' }: NewsletterFormPro
                         </motion.div>
                     )}
                 </AnimatePresence>
+                </div>
 
                 <p className="mt-6 text-[11px] text-gray-400 leading-relaxed max-w-sm mx-auto">
                     Al suscribirte, aceptas nuestra política de privacidad y el tratamiento de tus datos según el RGPD. Sin spam, puedes darte de baja en cualquier momento.

@@ -244,8 +244,8 @@ export default function LeadForm({
                     {errors.consent && <p className="text-[11px] text-red-500 font-medium mt-1.5 ml-8">{errors.consent.message}</p>}
                 </div>
 
-                {/* Turnstile CAPTCHA — invisible by default, renders challenge only if needed */}
-                <div className="flex justify-center mt-2">
+                <div className="flex flex-col mt-2">
+                    {/* Turnstile CAPTCHA — invisible by default, renders challenge only if needed */}
                     <TurnstileCaptcha
                         ref={captchaRef}
                         onVerify={(token) => setTurnstileToken(token)}
@@ -253,26 +253,25 @@ export default function LeadForm({
                         onError={() => setTurnstileToken(null)}
                         appearance="interaction-only"
                     />
-                </div>
 
-                {/* Error Message */}
-                <AnimatePresence>
-                    {status === 'error' && (
-                        <motion.div 
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className={`p-4 rounded-xl flex items-center gap-3 text-sm ${
-                                isPremium ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-red-50 border border-red-100 text-red-600'
-                            }`}
-                        >
-                            <AlertCircle size={18} className="flex-shrink-0" />
-                            <p>{errorMessage}</p>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                    {/* Error Message */}
+                    <AnimatePresence>
+                        {status === 'error' && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className={`mt-4 p-4 rounded-xl flex items-center gap-3 text-sm ${
+                                    isPremium ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-red-50 border border-red-100 text-red-600'
+                                }`}
+                            >
+                                <AlertCircle size={18} className="flex-shrink-0" />
+                                <p>{errorMessage}</p>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
-                {/* Submit Button */}
+                    {/* Submit Button */}
                 <button
                     type="submit"
                     disabled={status === 'loading'}
@@ -297,6 +296,7 @@ export default function LeadForm({
                     {/* Shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </button>
+                </div>
             </form>
         </div>
     )
