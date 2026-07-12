@@ -259,8 +259,8 @@ export default function ContactPage() {
                                         {errors.privacyAccepted && <p className="mt-1.5 text-xs text-red-600">{errors.privacyAccepted.message}</p>}
                                     </div>
 
-                                    {/* Turnstile CAPTCHA */}
-                                    <div className="flex justify-center py-2">
+                                    <div className="flex flex-col gap-4 mt-2">
+                                        {/* Turnstile CAPTCHA */}
                                         <TurnstileCaptcha
                                             ref={captchaRef}
                                             onVerify={setTurnstileToken}
@@ -268,16 +268,15 @@ export default function ContactPage() {
                                             onError={() => setTurnstileToken(null)}
                                             appearance="interaction-only"
                                         />
-                                    </div>
 
-                                    {errorMsg && (
-                                        <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 text-sm flex items-center gap-2">
-                                            <AlertCircle size={16} />
-                                            {errorMsg}
-                                        </div>
-                                    )}
+                                        {errorMsg && (
+                                            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 text-sm flex items-center gap-2">
+                                                <AlertCircle size={16} />
+                                                {errorMsg}
+                                            </div>
+                                        )}
 
-                                    <button
+                                        <button
                                         type="submit"
                                         disabled={isSubmitting}
                                         className="w-full px-6 py-3.5 bg-black text-white font-medium rounded-xl hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 hover:scale-105 shadow-lg"
@@ -294,6 +293,7 @@ export default function ContactPage() {
                                             </>
                                         )}
                                     </button>
+                                    </div>
                                     
                                     {/* Primera Capa Informativa */}
                                     <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded-xl text-xs text-gray-500 space-y-2">
