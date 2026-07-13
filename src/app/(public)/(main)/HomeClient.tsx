@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import TurnstileCaptcha, { type TurnstileHandle } from '@/components/security/TurnstileCaptcha'
 import { useSecurity } from '@/context/SecurityContext'
@@ -25,63 +25,31 @@ interface HomeSolution {
     type: string
 }
 
-interface HomeClientProps {
-    featuredSolutions: HomeSolution[]
+interface HomeEditorial {
+    id: string
+    badge: string
+    titleLine1: string
+    titleLine2: string
+    subtitle: string
+    ctaText: string
+    ctaUrl: string
 }
 
-export default function HomeClient({ featuredSolutions }: HomeClientProps) {
+interface HomeClientProps {
+    featuredSolutions: HomeSolution[]
+    editorial: HomeEditorial
+    mainChannelHtml?: string
+    initialNewsPosts?: any[]
+}
+
+export default function HomeClient({ featuredSolutions, editorial, mainChannelHtml, initialNewsPosts }: HomeClientProps) {
     const { formSecurityEnabled } = useSecurity()
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
     const turnstileRef = useRef<TurnstileHandle>(null)
-    const [displaySolutions, setDisplaySolutions] = useState<HomeSolution[]>([])
     const [isDemoOpen, setIsDemoOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [demoData, setDemoData] = useState({ name: '', email: '', phone: '', solutionSlug: '' })
     const [demoSuccess, setDemoSuccess] = useState(false)
-
-    // FALLBACK Y ESTADO EDITORIAL
-    const FALLBACK_HERO = {
-        id: 'static-fallback',
-        badge: "Liderando la Revolución de la IA",
-        titleLine1: "Transformamos el Futuro",
-        titleLine2: "Con Inteligencia Artificial",
-        subtitle: "Diseñamos, construimos y desplegamos ecosistemas inteligentes que automatizan procesos y escalan negocios.",
-        ctaText: "Explorar Soluciones",
-        ctaUrl: "/soluciones"
-    }
-    const [editorial, setEditorial] = useState(FALLBACK_HERO)
-
-    useEffect(() => {
-        // Shuffle and pick 6 random solutions
-        const shuffled = [...featuredSolutions].sort(() => 0.5 - Math.random())
-        setDisplaySolutions(shuffled.slice(0, 6))
-
-        // FETCH EDITORIAL CONTENT (HOME HERO)
-        const fetchEditorial = async () => {
-            try {
-                const res = await fetch('/api/editorial?page=home&section=hero')
-                if (res.ok) {
-                    const data = await res.json()
-                    if (Array.isArray(data) && data.length > 0) {
-                        // Selección controlada: uno aleatorio de los activos
-                        const selected = data[Math.floor(Math.random() * data.length)]
-                        setEditorial({
-                            id: selected.id,
-                            badge: selected.badge || FALLBACK_HERO.badge,
-                            titleLine1: selected.titleLine1 || FALLBACK_HERO.titleLine1,
-                            titleLine2: selected.titleLine2 || FALLBACK_HERO.titleLine2,
-                            subtitle: selected.subtitle || FALLBACK_HERO.subtitle,
-                            ctaText: selected.ctaText || FALLBACK_HERO.ctaText,
-                            ctaUrl: selected.ctaUrl || FALLBACK_HERO.ctaUrl,
-                        })
-                    }
-                }
-            } catch (error) {
-                console.error("Editorial API failed, using hardcoded fallback", error)
-            }
-        }
-        fetchEditorial()
-    }, [featuredSolutions])
 
     const handleDemoSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -225,11 +193,11 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
                         className="!mb-6 md:!mb-8" 
                     />
 
-                    {displaySolutions.length === 0 ? (
+                    {featuredSolutions.length === 0 ? (
                         <div className="text-center text-gray-500 bg-white py-8 rounded-2xl border border-gray-100">Cargando soluciones...</div>
                     ) : (
                         <CardGrid columns={3}>
-                            {displaySolutions.map((solution) => (
+                            {featuredSolutions.map((solution) => (
                                 <Link
                                     key={solution.id}
                                     href={`/soluciones/${solution.slug}`}
@@ -289,8 +257,8 @@ export default function HomeClient({ featuredSolutions }: HomeClientProps) {
             </section>
 
 
-            <PodcastHomeSection />
-            <LatestNewsSection spacing="compact" />
+            <PodcastHomeSection mainChannelHtml={mainChannelHtml} />
+            <LatestNewsSection spacing="compact" initialPosts={initialNewsPosts} />
 
             {/* Newsletter Section */}
             <section id="newsletter" className="py-8 md:py-12 bg-white scroll-mt-20">

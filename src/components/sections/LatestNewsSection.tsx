@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Calendar, Tag, Newspaper, Building2 } from 'lucide-react'
@@ -21,28 +20,15 @@ interface NewsPost {
     content: string
 }
 
-export default function LatestNewsSection({ spacing = 'standard' }: { spacing?: 'compact' | 'standard' } = {}) {
-    const [posts, setPosts] = useState<NewsPost[]>([])
-    const [loading, setLoading] = useState(true)
+export default function LatestNewsSection({ 
+    spacing = 'standard',
+    initialPosts = []
+}: { 
+    spacing?: 'compact' | 'standard'
+    initialPosts?: NewsPost[]
+}) {
 
-    useEffect(() => {
-        const fetchNews = async () => {
-            try {
-                const res = await fetch('/api/news?limit=6')
-                if (res.ok) {
-                    const data = await res.json()
-                    setPosts(data)
-                }
-            } catch (error) {
-                console.error('Error fetching news:', error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchNews()
-    }, [])
-
-    if (!loading && posts.length === 0) return null
+    if (initialPosts.length === 0) return null
 
     const paddingClass = spacing === 'compact' ? 'py-10 md:py-14' : 'py-7 md:py-10 lg:py-16'
 
@@ -68,15 +54,8 @@ export default function LatestNewsSection({ spacing = 'standard' }: { spacing?: 
                     </Link>
                 </div>
 
-                {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-80 bg-gray-200 rounded-2xl animate-pulse" />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {posts.map((post, idx) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {initialPosts.map((post, idx) => (
                             <motion.article
                                 key={post.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -151,8 +130,7 @@ export default function LatestNewsSection({ spacing = 'standard' }: { spacing?: 
                             </motion.article>
                         ))}
                     </div>
-                )}
-            </div>
+                </div>
         </section>
     )
 }
